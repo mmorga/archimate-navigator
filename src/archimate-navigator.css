@@ -1,0 +1,88 @@
+.archimate-view-nav {
+    background: #f5f5f5;
+    margin-top: 0;
+    padding-top: 9px;
+    overflow: scroll;
+}
+
+.archimate-view-nav ul {
+    list-style-type: none;
+    padding-left: 0.5em;
+}
+
+.archimate-view-nav ul ul {
+    padding-left: 1.5em;
+}
+
+.archimate-view-nav .panel {
+    margin-bottom: 0;
+}
+
+.archimate-diagram-navbar {
+    margin: -7px -7px 0 -7px;
+}
+
+.archimate-diagram-view {
+    padding: 0.5em;
+    background: white;
+    overflow: scroll;
+}
+
+.archimate-svg-content {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+}
+
+.archimate-diagram-float {
+    position: fixed;
+    right: 10px;
+    top: 50px;
+}
+
+.archimate-diagram-float a, .archimate-diagram-float button {
+    background-color: rgba(255,255,255,20);
+    color: #337ab7;
+}
+
+.archimate-diagram-header {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+.archimate-diagram-info {
+    background: #f5f5f5;
+    border-top: 8px double #9d9d9d;
+    min-width: 100%;
+}
+
+.archimate-selected-element-highlight {
+    animation: archimate-dash 1s linear 0s infinite;
+    fill: none;
+    stroke: url(#archimate-highlight-color);
+    stroke-width: 2px;
+    stroke-dasharray: 10;
+}
+
+@keyframes archimate-dash {
+    from {
+        strok-dashoffset: 0;
+    }
+    to {
+        stroke-dashoffset: 19;
+    }
+}
+
+/* Reset HTML elements used in SVG ArchiMate diagrams to prevent site
+   styles from leaking into the SVG */
+
+svg p {
+    line-height: normal;
+    width: auto;
+}
+
+svg table {
+border: 0;
+margin: 0;
+max-width: none;
+width: auto;
+}

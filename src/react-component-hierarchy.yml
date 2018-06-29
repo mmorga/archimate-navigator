@@ -1,0 +1,123 @@
+%YAML 1.1
+---
+# React Component Hierarchy
+
+ArchimateNavigator:
+  state:
+    - selectedDiagram: Model.Diagram
+    - selectedEntityId: string
+    - graphQuery: string
+    - sidebarTab: number
+  props: []
+  children:
+    ArchimateSidebar:
+      state: []
+      props:
+        - key: number                            # Selected sidebar tab (Diagrams, Info, Search, Graph)
+      children:
+        - ArchimateDiagramTree:
+            state:
+              - data: Model.Data                 # located in "index.json"
+            props: []
+            children:
+              - Folder:
+                  state:
+                    - collapse: Boolean          # Folder open/close state (would be nice to save to local storage)
+                  props:
+                    - folder: Model.Folder
+                  children:
+                    - Folder
+                    - DiagramLink
+              - DiagramLink:
+                  state: []
+                  props:
+                    - diagram: Model.Diagram     # Content from ArchimateDiagramTree.state.data
+                  children: []
+        - ArchimateInfo:
+            state:
+              - data: Model.EntityInfo           # located in "entities/${id}.json"
+            props:
+              - selectedDiagram: string          # Content from ArchimateNavigator.state.selectedDiagram
+              - selectedId: string               # Content from ArchimateNavigator.state.selectedEntityId
+            children:
+              - EntityIdPanel:
+                  state: []
+                  props:
+                    - name: string              # Content from ArchimateInfo.state.data
+                    - type: string              # Content from ArchimateInfo.state.data
+                    - viewpoint: string         # Content from ArchimateInfo.state.data
+                  children:
+                    - Panel:
+                        state:
+                          - collapse: Boolean   # Panel collapse state
+                        props:
+                          - header?: string     # Panel header
+                        children: []
+              - DocumentationPanel:
+                  state: []
+                  props:
+                    - documentation: Model.Documentation[] # Content from ArchimateInfo.state.data
+                  children:
+                    - Panel
+              - PropertiesPanel:
+                  state: []
+                  props:
+                    - properties: Model.Property[]  # Content from ArchimateInfo.state.data
+                  children:
+                    - Panel
+              - ReferencesPanel:
+                  state: []
+                  props:
+                    - views: Model.View[]                   # Content from ArchimateInfo.state.data
+                    - entities: Model.Entity[]              # Content from ArchimateInfo.state.data
+                    - relationships: Model.Relationship[]   # Content from ArchimateInfo.state.data
+                  children:
+                    - Panel
+                    - ViewsTable:
+                        state: []
+                        props:
+                          - views: Model.View[]             # Content from ArchimateInfo.state.data
+                        children: []
+                    - EntitiesTable:
+                        state: []
+                        props:
+                          - entities: Model.Entity[]        # Content from ArchimateInfo.state.data
+                        children: []
+                    - RelationshipsTable:
+                        state: []
+                        props:
+                          - relationships: Model.Relationship[]  # Content from ArchimateInfo.state.data
+                        children: []
+        - ArchimateSearch:                                 # Loads from "search-index.json"
+            state:
+              - fuse: Fuse                                 # Fuse search engine
+              - results: FuseResult[]                      # Results from query
+              - search: string                             # Search query
+            props:
+              - search: string                             # Search query
+            children: []
+        - ArchimateGraphTab:
+            state:
+              - query: string                    # Cypher Query
+              - results: any[]                   # Graph query results
+            props:
+              - query: string                    # Cypher Query
+            children:
+              - Panel
+    ArchimateDiagramView:
+      state:
+        - key: number              # Selected Diagram View: 1: Diagram, 2: Graph, 3: Table
+      props: []
+      children:
+        - ArchimateHeader:
+            state:
+              - key: number        # Selected Diagram View: 1: Diagram, 2: Graph, 3: Table
+            props:
+              - name: string       # Selected Diagram Name (Could be a graph name?)
+              - viewpoint: string  # Selected Diagram Viewpoint name 
+            children: []
+        - ArchimateBlankSvg:
+            state: []
+            props: []
+            children: []
+
