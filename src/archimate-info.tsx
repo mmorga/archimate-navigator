@@ -21,13 +21,13 @@ export default class ArchimateInfo extends React.PureComponent<IProps> {
     }
 
     public render() {
-        if (!this.props.entity) {
-            return (<div>{this.props.entity}</div>);
-        }
         // let viewpoint = "";
         let elements = null;
         let relationships = null;
         let views = null;
+        let documentation = null;
+        let properties = null;
+
         if (this.props.entity instanceof Diagram) {
             const diagram = this.props.entity as Diagram;
             // viewpoint = diagram.viewpoint;
@@ -49,18 +49,23 @@ export default class ArchimateInfo extends React.PureComponent<IProps> {
         if ((this.props.entity instanceof Diagram) ||
             (this.props.entity instanceof Element) ||
             (this.props.entity instanceof Relationship)) {
+            const viewsEntity = this.props.entity as IHasViews;
             views = (
                 <ViewsTable
-                    views={(this.props.entity as IHasViews).views}
+                    views={viewsEntity.views}
                     entityClicked={this.props.entityClicked}
                 />
             );
         }
+        if (this.props.entity) {
+            documentation = <DocumentationPanel documentation={this.props.entity.documentation || []} />
+            properties = <PropertiesPanel properties={this.props.entity.properties || []} />
+        }
         return (
             <div>
                 <EntityIdPanel entity={this.props.entity} />
-                <DocumentationPanel documentation={this.props.entity.documentation || []} />
-                <PropertiesPanel properties={this.props.entity.properties || []} />
+                {documentation}
+                {properties}
                 {elements}
                 {relationships}
                 {views}

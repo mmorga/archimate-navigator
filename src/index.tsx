@@ -6,11 +6,8 @@ import ArchimateNavigator from './archimate-navigator';
 import './index.css';
 import registerServiceWorker from './registerServiceWorker';
 
-// $('[data-toggle="tooltip"]').tooltip();
-// const messageCollection = document.querySelector(".archimate-message").children;
-
 ReactDOM.render(
-  <ArchimateNavigator />,
+  <ArchimateNavigator modelUrl="/archimate/index.json" />,
   document.getElementById('root') as HTMLElement
 );
 registerServiceWorker();

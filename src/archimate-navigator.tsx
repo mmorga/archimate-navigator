@@ -3,12 +3,12 @@ import {Col, Grid, Row, Tab, Tabs} from "react-bootstrap";
 import ArchimateBlankSvg from "./archimate-blank-svg";
 import * as DiagramFuncs from "./archimate-diagram";
 import ArchimateDiagramTree from "./archimate-diagram-tree";
+import ArchimateDiagramView from "./archimate-diagram-view";
 import ArchimateGraphTab from "./archimate-graph-tab";
 import ArchimateHeader, {ActiveView} from "./archimate-header";
 import ArchimateInfo from "./archimate-info";
 import Model from "./archimate-model";
 import "./archimate-navigator.css"
-// import ArchimateModelStore from "./archimate-model-store";
 import CypherQuery from "./cypher-query";
 import Diagram from "./diagram";
 import Entity from "./entity";
@@ -25,21 +25,31 @@ enum SidebarTab {
 }
 
 interface IProps {
+    graphQuery?: string;
+    modelUrl: string;
     selectedDiagram?: Diagram;
     selectedEntity?: Entity;
+    selectedView?: ActiveView;
+    sidebarTabKey?: SidebarTab;
 }
 
 interface IState {
-    selectedDiagram?: Diagram;
+    // diagramDiv? : Element | null;
     diagramSvg?: Svg;
-    graphSvg?: Svg;
-    selectedEntity?: Entity;
+    error?: string;
+    graphModelStore?: GraphModelStore;
     graphQuery?: string;
     graphQueryResults: any[];
-    sampleQueries: CypherQuery[];
-    sidebarTabKey: SidebarTab;
-    selectedView: ActiveView;
+    graphSvg?: Svg;
+    graphViz?: GraphVisualization;
+    isLoaded: boolean;
     model: Model;
+    req?: XMLHttpRequest;
+    sampleQueries: CypherQuery[];
+    selectedDiagram?: Diagram;
+    selectedEntity?: Entity;
+    selectedView: ActiveView;
+    sidebarTabKey: SidebarTab;
 }
 
 const SAMPLE_QUERIES: CypherQuery[] = [
@@ -68,51 +78,62 @@ export default class ArchimateNavigator extends React.Component<IProps, IState> 
 
     public state: IState;
 
-    private graphModelStore: GraphModelStore;
-    // private store: ArchimateModelStore;
-    private req?: XMLHttpRequest;
-    // private diagramDiv : Element | null;
-    private graphViz?: GraphVisualization;
-
     constructor(props: IProps) {
         super(props);
         this.state = {
             diagramSvg: undefined,
-            graphQuery: undefined,
+            graphModelStore: new GraphModelStore(),
+            graphQuery: props.graphQuery,
             graphQueryResults: [],
             graphSvg: undefined,
+            graphViz: undefined,
+            isLoaded: false,
             model: new Model([], []),
+            req: undefined,
             sampleQueries: SAMPLE_QUERIES,
-            selectedDiagram: undefined,
-            selectedEntity: undefined,
-            selectedView: ActiveView.Diagram,
-            sidebarTabKey: SidebarTab.DiagramTreeTab,
+            selectedDiagram: props.selectedDiagram,
+            selectedEntity: props.selectedEntity,
+            selectedView: props.selectedView || ActiveView.Diagram,
+            sidebarTabKey: props.sidebarTabKey || SidebarTab.DiagramTreeTab,
         };
-        // this.diagramDiv = null;
-        // this.store = new ArchimateModelStore(this.storeCallback);
-        this.graphModelStore = new GraphModelStore();
-        this.req = undefined;
-        this.graphViz = undefined;
+    }
 
-        // $(() => {
-        // Initialize Bootstrap Tooltips
-        // $('[data-toggle="tooltip"]').tooltip();
+    public componentDidMount() {
+        fetch(this.props.modelUrl)
+            .then(res => res.json())
+            .then(
+                (result) => {
+                  this.setState({
+                    isLoaded: true,
+                    model: new Model(result.entities, result.folders),
+                  });
+                },
+                // Note: it's important to handle errors here
+                // instead of a catch() block so that we don't swallow
+                // exceptions from actual bugs in components.
+                (error) => {
+                  this.setState({
+                    error,
+                    isLoaded: true,
+                  });
+                }
+            )
     }
 
     public render() {
-        const diagramName = this.state.selectedDiagram ? this.state.selectedDiagram.name : "";
-        const viewpoint = this.state.selectedDiagram ? this.state.selectedDiagram.viewpoint : "";
-        const diagramClass = `archimate-svg-content ${this.state.selectedView === ActiveView.Diagram ? "" : "hidden"}`;
-        const graphClass = `archimate-svg-content ${this.state.selectedView === ActiveView.Graph ? "" : "hidden"}`;
-        const tableClass = `archimate-table-content ${this.state.selectedView === ActiveView.Table ? "" : "hidden"}`;
+        const diagramName = this.props.selectedDiagram ? this.props.selectedDiagram.name : "";
+        const viewpoint = this.props.selectedDiagram ? this.props.selectedDiagram.viewpoint : "";
         return (
             <Grid bsClass="container-fluid">
+                <Row>
+                    <Col xs={12} md={12}>${this.state.error}</Col>
+                </Row>
                 <Row className="show-grid">
                     <Col xs={12} md={3} className="archimate-view-nav">
                         <Tabs
                             animation={false}
                             defaultActiveKey={SidebarTab.DiagramTreeTab}
-                            activeKey={this.state.sidebarTabKey}
+                            activeKey={this.props.sidebarTabKey}
                             onSelect={this.handleSelectSidebarTab}
                             id="archimate-sidebar-tabs"
                         >
@@ -136,7 +157,7 @@ export default class ArchimateNavigator extends React.Component<IProps, IState> 
                             </Tab>
                             <Tab eventKey={SidebarTab.GraphTab} title="Graph">
                                 <ArchimateGraphTab
-                                    query={this.state.graphQuery}
+                                    query={this.props.graphQuery}
                                     results={this.state.graphQueryResults}
                                     runQuery={this.runQuery}
                                     sampleQueries={this.state.sampleQueries}
@@ -148,7 +169,7 @@ export default class ArchimateNavigator extends React.Component<IProps, IState> 
                         <ArchimateHeader
                             name={diagramName}
                             viewpoint={viewpoint}
-                            viewKey={this.state.selectedView}
+                            viewKey={this.state.selectedView || ActiveView.Diagram}
                             viewSelected={this.viewSelected}
                             zoomIn={this.zoomIn}
                             zoomOut={this.zoomOut}
@@ -156,61 +177,52 @@ export default class ArchimateNavigator extends React.Component<IProps, IState> 
                             selectedDiagram={this.state.selectedDiagram}
                             selectedSvg={this.selectedSvg()}
                         />
-                        <div
-                            id="archimate-current-diagram"
-                            className={diagramClass}
-                            // ref={(div) => { this.diagramDiv = div; }}
-                            onClick={this.diagramClicked}
-                        >
-                            {this.jumboTron()}
-                        </div>
-                        <div id="archimate-current-graph" className={graphClass}>
-                            <ArchimateBlankSvg svgRefCallback={this.svgRefCallback} />
-                        </div>
-                        <div id="archimate-table-view" className={tableClass}>
-                            <p>Hi - I'm going to be the table view very soon now</p>
-                        </div>
+                        {this.mainView()}
                     </Col>
                 </Row>
             </Grid>
         );
     }
 
+    private mainView() {
+        switch(this.state.selectedView) {
+            case ActiveView.Diagram:
+            default:
+                return (
+                    <ArchimateDiagramView
+                        selectedDiagram={this.state.selectedDiagram}
+                        entityClicked={this.linkClicked}
+                        diagramClicked={this.diagramClicked} />
+                );
+            case ActiveView.Graph:
+                return (<div id="archimate-current-graph">
+                            <ArchimateBlankSvg svgRefCallback={this.svgRefCallback} />
+                        </div>);
+            case ActiveView.Table:
+                return (<div id="archimate-table-view">
+                            <p>Hi - I'm going to be the table view very soon now</p>
+                        </div>);
+        }
+    }
+
     // TODO: tell the graph viz to stop and shutdown (if it exists) prior to creating a new one.
     private svgRefCallback = (svg: SVGSVGElement): void => {
         this.setState({graphSvg: svg ? new Svg(svg, "#main-graph-group") : undefined});
         if (svg) {
-            this.graphViz = new GraphVisualization(svg);
+            this.state.graphViz = new GraphVisualization(svg);
         }
     }
 
     private runQuery = (query: string) => {
         this.setState({graphQuery: query});
-        this.graphModelStore.runQuery(query, this.graphDataCallback);
+        this.state.graphModelStore!.runQuery(query, this.graphDataCallback);
     }
 
     private graphDataCallback = (graph: ID3Graph) => {
-        if (this.graphViz) {
-            this.graphViz.showGraph(graph);
+        if (this.state.graphViz) {
+            this.state.graphViz.showGraph(graph);
         }
     }
-
-    // Called by the ArchimateModelStore once a model is loaded.
-    // private storeCallback = (model: Model) => {
-    //     this.setState({model});
-    //     const hash = location.hash;
-    //     if (hash.length > 1) {
-    //         const id = hash.split("#")[1];
-    //         let diagram: Diagram | null = null;
-    //         try {
-    //             diagram = model.diagram(id);
-    //         } catch (err) {
-    //             // TODO: report this error
-    //             console.log(err.message);
-    //         }
-    //         this.linkClicked(diagram);
-    //     }
-    // }
 
     // Called when a sidebar tab is clicked.
     private handleSelectSidebarTab = (eventKey: any) => {
@@ -218,18 +230,6 @@ export default class ArchimateNavigator extends React.Component<IProps, IState> 
         if ((eventKey === SidebarTab.GraphTab) && (this.state.selectedView === ActiveView.Diagram)) {
             this.setState({selectedView: ActiveView.Graph});
         }
-    }
-
-    // Displays the welcome message if there isn't a selected diagram and there are children in this element
-    private jumboTron() {
-        if ((!this.state.diagramSvg) && (this.props.children)) {
-            return (
-                <div className="jumbotron" id="archimate-splash-content">
-                    {this.props.children}
-                </div>
-            );
-        }
-        return null;
     }
 
     // A diagram has been clicked. Need to find the id of the entity that has been clicked and
@@ -260,7 +260,6 @@ export default class ArchimateNavigator extends React.Component<IProps, IState> 
         });
         if (diagram && (diagram.id) && (diagram.id.length > 0)) {
             location.hash = `#${diagram.id}`;
-            this.loadDiagram(diagram.path);
         }
     }
 
@@ -277,33 +276,6 @@ export default class ArchimateNavigator extends React.Component<IProps, IState> 
         if (entity instanceof Diagram) {
             this.diagramLinkClicked(normalizedEntity as Diagram);
         }
-    }
-
-    private loadDiagram(uri: string) {
-        this.req = new XMLHttpRequest();
-        this.req.addEventListener<"load">("load", this.diagramLoaded);
-        this.req.addEventListener<"error">("error", this.diagramError);
-        this.req.open("GET", uri, true);
-        this.req.send();
-    }
-
-    private diagramLoaded = (evt: Event): void => {
-        // const svgEl = this.req!.responseXML.querySelector("svg");
-        // TODO: implement this
-        // svgEl.setAttribute("data-id", this.state.selectedDiagram.id);
-        // let svg = null;
-        // if (svgEl) {
-        //     while (this.diagramDiv.hasChildNodes()) {
-        //         this.diagramDiv.removeChild(this.diagramDiv.lastChild);
-        //     }
-        //     const addedSvg = this.diagramDiv.appendChild(svgEl);
-        //     svg = svgEl ? new Svg(svgEl) : null;
-        // }
-        // this.setState({diagramSvg: svg});
-    }
-
-    private diagramError = (evt: ErrorEvent) => {
-        alert("Unable to load diagram");
     }
 
     private viewSelected = (view: ActiveView): void => {

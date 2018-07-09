@@ -6,7 +6,7 @@ import Panel from "./panel";
 import Relationship from "./relationship";
 
 interface IProps {
-    entity: Entity;
+    entity?: Entity;
 }
 
 export default class EntityIdPanel extends React.PureComponent<IProps> {
@@ -34,21 +34,25 @@ export default class EntityIdPanel extends React.PureComponent<IProps> {
                 <td>{(entity as Element).elementType}</td>
             </tr>
         ) : null;
+        const undefinedRow = (entity === undefined) ? "Nothing Selected" : null;
+        const name = entity ? entity.name : null;
+        const entityType = entity ? entity.type : null;
         return (
             <Panel>
                 <table className="table">
                     <tbody>
                         <tr>
                             <th>Name</th>
-                            <td>{entity.name}</td>
+                            <td>{name}</td>
                         </tr>
                         <tr>
                             <th>Type</th>
-                            <td>{entity.type}</td>
+                            <td>{entityType}</td>
                         </tr>
                         {diagramRow}
                         {relationshipRow}
                         {elementRow}
+                        {undefinedRow}
                     </tbody>
                 </table>
             </Panel>
