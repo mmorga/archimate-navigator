@@ -110,7 +110,6 @@ export default class ArchimateHeader extends React.PureComponent<IProps> {
     }
 
     private handleSelect = (key: ActiveView) => {
-        event!.preventDefault();
         if (this.props.viewSelected) {
             this.props.viewSelected(key);
         }

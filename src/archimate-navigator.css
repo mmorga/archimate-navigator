@@ -81,8 +81,8 @@ svg p {
 }
 
 svg table {
-border: 0;
-margin: 0;
-max-width: none;
-width: auto;
+    border: 0;
+    margin: 0;
+    max-width: none;
+    width: auto;
 }

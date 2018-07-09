@@ -11,6 +11,7 @@
     "react": "^16.4.1",
     "react-bootstrap": "^0.32.1",
     "react-dom": "^16.4.1",
+    "react-inlinesvg": "^0.8.1",
     "react-scripts-ts": "2.16.0",
     "svg-text": "^0.5.1"
   },
