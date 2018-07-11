@@ -1,5 +1,5 @@
 import * as React from "react";
-import CypherQuery from "../graph/cypher-query";
+import CypherQuery from "../../graph/cypher-query";
 
 interface IProps {
     query: CypherQuery;

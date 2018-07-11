@@ -1,8 +1,8 @@
 import * as React from "react";
-import Entity from "../old-model/entity";
-import OldDiagram from "../old-model/old-diagram";
-import EntityLink from "./entity-link";
-import Panel from "./panel";
+import Entity from "../../../old-model/entity";
+import OldDiagram from "../../../old-model/old-diagram";
+import EntityLink from "../entity-link";
+import Panel from "../panel";
 
 interface IProps {
     views: OldDiagram[];

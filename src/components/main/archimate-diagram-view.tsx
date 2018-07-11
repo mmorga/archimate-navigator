@@ -1,8 +1,8 @@
 import * as React from "react";
 import {Alert} from "react-bootstrap";
-import SVG from "react-inlinesvg";
-import Entity from "../old-model/entity";
-import OldDiagram from "../old-model/old-diagram";
+import Entity from "../../old-model/entity";
+import OldDiagram from "../../old-model/old-diagram";
+import SVG from "../../react-inlinesvg";
 
 interface IProps {
     selectedDiagram?: OldDiagram;

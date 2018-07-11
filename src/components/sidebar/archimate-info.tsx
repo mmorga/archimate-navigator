@@ -1,14 +1,14 @@
 import * as React from "react";
-import Element from "../old-model/element";
-import Entity from "../old-model/entity";
-import OldDiagram, {IHasViews} from "../old-model/old-diagram";
-import Relationship, {IHasRelationships} from "../old-model/relationship";
-import DocumentationPanel from "./documentation-panel";
-import ElementsTable from "./elements-table";
-import EntityIdPanel from "./entity-id-panel";
-import PropertiesPanel from "./properties-panel";
-import RelationshipsTable from "./relationships-table";
-import ViewsTable from "./views-table";
+import Element from "../../old-model/element";
+import Entity from "../../old-model/entity";
+import OldDiagram, {IHasViews} from "../../old-model/old-diagram";
+import Relationship, {IHasRelationships} from "../../old-model/relationship";
+import DocumentationPanel from "./info/documentation-panel";
+import ElementsTable from "./info/elements-table";
+import EntityIdPanel from "./info/entity-id-panel";
+import PropertiesPanel from "./info/properties-panel";
+import RelationshipsTable from "./info/relationships-table";
+import ViewsTable from "./info/views-table";
 
 interface IProps {
     entity?: Entity;

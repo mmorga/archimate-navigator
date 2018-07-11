@@ -1,6 +1,6 @@
 import * as React from "react";
-import { IEntity } from "../old-model/entity";
-import Folder from "../old-model/folder";
+import { IEntity } from "../../old-model/entity";
+import Folder from "../../old-model/folder";
 import EntityLink from "./entity-link";
 import FolderItem from "./folder-item";
 

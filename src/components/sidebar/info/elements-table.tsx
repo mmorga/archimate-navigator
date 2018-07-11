@@ -1,8 +1,8 @@
 import * as React from "react";
-import Element from "../old-model/element";
-import Entity from "../old-model/entity";
-import EntityLink from "./entity-link";
-import Panel from "./panel";
+import Element from "../../../old-model/element";
+import Entity from "../../../old-model/entity";
+import EntityLink from "../entity-link";
+import Panel from "../panel";
 
 interface IProps {
     elements: Element[];

@@ -1,6 +1,6 @@
 import Fuse from "fuse.js";
 import React from "react";
-import Entity from "../old-model/entity";
+import Entity from "../../old-model/entity";
 import SearchResult from "./search-result";
 
 // interface FuseResult {

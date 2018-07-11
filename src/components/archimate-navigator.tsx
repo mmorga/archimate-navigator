@@ -8,13 +8,13 @@ import Model from "../old-model/archimate-model";
 import Entity, { IEntity } from "../old-model/entity";
 import OldDiagram from "../old-model/old-diagram";
 import ArchimateBlankSvg from "./archimate-blank-svg";
-import ArchimateDiagramTree from "./archimate-diagram-tree";
-import ArchimateDiagramView from "./archimate-diagram-view";
-import ArchimateGraphTab from "./archimate-graph-tab";
 import ArchimateHeader, {ActiveView} from "./archimate-header";
-import ArchimateInfo from "./archimate-info";
 import "./archimate-navigator.css"
-import ArchimateSearch from "./search";
+import ArchimateDiagramView from "./main/archimate-diagram-view";
+import ArchimateDiagramTree from "./sidebar/archimate-diagram-tree";
+import ArchimateGraphTab from "./sidebar/archimate-graph-tab";
+import ArchimateInfo from "./sidebar/archimate-info";
+import ArchimateSearch from "./sidebar/search";
 import Svg from "./svg";
 
 enum SidebarTab {

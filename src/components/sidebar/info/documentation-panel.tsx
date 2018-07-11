@@ -1,6 +1,6 @@
 import * as React from "react";
-import Documentation from "../old-model/documentation";
-import Panel from "./panel";
+import Documentation from "../../../old-model/documentation";
+import Panel from "../panel";
 
 interface IProps {
     documentation: Documentation[];

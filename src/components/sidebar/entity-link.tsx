@@ -1,5 +1,5 @@
 import * as React from "react";
-import Entity from "../old-model/entity";
+import Entity from "../../old-model/entity";
 
 interface IProps {
     entity: Entity;
