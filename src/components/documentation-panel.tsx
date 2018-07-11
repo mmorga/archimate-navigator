@@ -1,5 +1,5 @@
 import * as React from "react";
-import Documentation from "./documentation";
+import Documentation from "../old-model/documentation";
 import Panel from "./panel";
 
 interface IProps {

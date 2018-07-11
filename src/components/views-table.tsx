@@ -1,7 +1,7 @@
 import * as React from "react";
-import Entity from "./entity";
+import Entity from "../old-model/entity";
+import OldDiagram from "../old-model/old-diagram";
 import EntityLink from "./entity-link";
-import OldDiagram from "./old-diagram";
 import Panel from "./panel";
 
 interface IProps {

@@ -1,12 +1,12 @@
 import * as React from "react";
+import Element from "../old-model/element";
+import Entity from "../old-model/entity";
+import OldDiagram, {IHasViews} from "../old-model/old-diagram";
+import Relationship, {IHasRelationships} from "../old-model/relationship";
 import DocumentationPanel from "./documentation-panel";
-import Element from "./element";
 import ElementsTable from "./elements-table";
-import Entity from "./entity";
 import EntityIdPanel from "./entity-id-panel";
-import OldDiagram, {IHasViews} from "./old-diagram";
 import PropertiesPanel from "./properties-panel";
-import Relationship, {IHasRelationships} from "./relationship";
 import RelationshipsTable from "./relationships-table";
 import ViewsTable from "./views-table";
 

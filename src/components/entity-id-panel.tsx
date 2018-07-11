@@ -1,9 +1,9 @@
 import * as React from "react";
-import Element from "./element";
-import Entity from "./entity";
-import OldDiagram from "./old-diagram";
+import Element from "../old-model/element";
+import Entity from "../old-model/entity";
+import OldDiagram from "../old-model/old-diagram";
+import Relationship from "../old-model/relationship";
 import Panel from "./panel";
-import Relationship from "./relationship";
 
 interface IProps {
     entity?: Entity;

@@ -1,5 +1,5 @@
 import * as React from "react";
-import CypherQuery from "./cypher-query";
+import CypherQuery from "../graph/cypher-query";
 import Panel from "./panel";
 import QueryItem from "./query-item";
 

@@ -1,7 +1,7 @@
 import * as React from "react";
-import { IEntity } from "./entity";
+import { IEntity } from "../old-model/entity";
+import Folder from "../old-model/folder";
 import EntityLink from "./entity-link";
-import Folder from "./folder";
 import FolderItem from "./folder-item";
 
 interface IProps {

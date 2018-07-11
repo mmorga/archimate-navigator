@@ -1,6 +1,6 @@
 import * as React from "react";
+import Property from "../old-model/property";
 import Panel from "./panel";
-import Property from "./property";
 
 interface IProps {
     properties: Property[];

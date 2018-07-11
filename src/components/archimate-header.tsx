@@ -1,5 +1,5 @@
 import * as React from "react";
-import OldDiagram from "./old-diagram";
+import OldDiagram from "../old-model/old-diagram";
 import Svg from "./svg";
 
 export enum ActiveView {

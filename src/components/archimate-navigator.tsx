@@ -1,19 +1,19 @@
 import * as React from "react";
 import {Col, Grid, Row, Tab, Tabs} from "react-bootstrap";
+import CypherQuery from "../graph/cypher-query";
+import GraphModelStore from "../graph/graph-model-store";
+import GraphVisualization, {ID3Graph} from "../graph/graph-visualization";
+import * as DiagramFuncs from "../old-model/archimate-diagram";
+import Model from "../old-model/archimate-model";
+import Entity, { IEntity } from "../old-model/entity";
+import OldDiagram from "../old-model/old-diagram";
 import ArchimateBlankSvg from "./archimate-blank-svg";
-import * as DiagramFuncs from "./archimate-diagram";
 import ArchimateDiagramTree from "./archimate-diagram-tree";
 import ArchimateDiagramView from "./archimate-diagram-view";
 import ArchimateGraphTab from "./archimate-graph-tab";
 import ArchimateHeader, {ActiveView} from "./archimate-header";
 import ArchimateInfo from "./archimate-info";
-import Model from "./archimate-model";
 import "./archimate-navigator.css"
-import CypherQuery from "./cypher-query";
-import Entity, { IEntity } from "./entity";
-import GraphModelStore from "./graph-model-store";
-import GraphVisualization, {ID3Graph} from "./graph-visualization";
-import OldDiagram from "./old-diagram";
 import ArchimateSearch from "./search";
 import Svg from "./svg";
 
