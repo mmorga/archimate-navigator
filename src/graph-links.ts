@@ -1,5 +1,4 @@
-// import * as d3selection from "d3-selection";
-import {ILink, INode, SelectionType} from "./graph-visualization";
+import { ILink, INode, ParentGroupType } from "./graph-visualization";
 
 interface ILine {
     x1: number;
@@ -18,22 +17,22 @@ interface IPoint {
  *
  * ILink additions, moves, and deletions are handled in this function
  *
- * @param {SelectionType} svg D3 selection of the graph
+ * @param {ParentGroupType} svg D3 selection of the graph
  * @param {ILink[]} links List of links for this update
  * @return void
  */
 export default class GraphLinks {
-    private svg: SelectionType;
+    private svg: ParentGroupType;
     private nodeHeight: number;
     private nodeWidth: number;
 
-    constructor(svg: SelectionType, nodeHeight: number, nodeWidth: number) {
+    constructor(svg: ParentGroupType, nodeHeight: number, nodeWidth: number) {
         this.svg = svg;
         this.nodeHeight = nodeHeight;
         this.nodeWidth = nodeWidth;
     }
 
-    public transformSelection(sel: SelectionType): void {
+    public transformSelection(sel: ParentGroupType): void {
         this.svg = sel;
     }
 

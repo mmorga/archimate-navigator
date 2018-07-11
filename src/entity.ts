@@ -11,7 +11,7 @@ export interface IEntity {
     readonly type: string;  // Model, Element, Relationship, or View
 }
 
-export default class Entity {
+export default class Entity implements IEntity {
     public readonly id: string;
     public readonly name?: string;
     public readonly href?: string;

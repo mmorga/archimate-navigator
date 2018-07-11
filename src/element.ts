@@ -1,6 +1,6 @@
 import Model from "./archimate-model";
-import Diagram, {IHasViews} from "./diagram";
 import Entity, {IEntity} from "./entity";
+import OldDiagram, {IHasViews} from "./old-diagram";
 import Relationship, {IHasRelationships} from "./relationship";
 
 export interface IElement extends IEntity {
@@ -12,7 +12,7 @@ export interface IElement extends IEntity {
 export default class Element extends Entity implements IHasRelationships, IHasViews {
     public readonly elementType: string;
     public relationships: Relationship[];
-    public views: Diagram[];
+    public views: OldDiagram[];
     private relationshipIds: string[];
     private viewIds: string[];
 

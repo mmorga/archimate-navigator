@@ -1,10 +1,10 @@
 import * as React from "react";
-import Diagram, {IHasViews} from "./diagram";
 import DocumentationPanel from "./documentation-panel";
 import Element from "./element";
 import ElementsTable from "./elements-table";
 import Entity from "./entity";
 import EntityIdPanel from "./entity-id-panel";
+import OldDiagram, {IHasViews} from "./old-diagram";
 import PropertiesPanel from "./properties-panel";
 import Relationship, {IHasRelationships} from "./relationship";
 import RelationshipsTable from "./relationships-table";
@@ -28,8 +28,8 @@ export default class ArchimateInfo extends React.PureComponent<IProps> {
         let documentation = null;
         let properties = null;
 
-        if (this.props.entity instanceof Diagram) {
-            const diagram = this.props.entity as Diagram;
+        if (this.props.entity instanceof OldDiagram) {
+            const diagram = this.props.entity as OldDiagram;
             // viewpoint = diagram.viewpoint;
             elements = (
                 <ElementsTable
@@ -38,7 +38,7 @@ export default class ArchimateInfo extends React.PureComponent<IProps> {
                 />
             );
         }
-        if ((this.props.entity instanceof Diagram) || (this.props.entity instanceof Element)) {
+        if ((this.props.entity instanceof OldDiagram) || (this.props.entity instanceof Element)) {
             relationships = (
                 <RelationshipsTable
                     relationships={(this.props.entity as IHasRelationships).relationships}
@@ -46,7 +46,7 @@ export default class ArchimateInfo extends React.PureComponent<IProps> {
                 />
             );
         }
-        if ((this.props.entity instanceof Diagram) ||
+        if ((this.props.entity instanceof OldDiagram) ||
             (this.props.entity instanceof Element) ||
             (this.props.entity instanceof Relationship)) {
             const viewsEntity = this.props.entity as IHasViews;

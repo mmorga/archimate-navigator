@@ -4,37 +4,40 @@ import Entity, {IEntity} from "./entity";
 import Relationship, {IHasRelationships} from "./relationship";
 
 export interface IHasViews {
-    readonly views: Diagram[];
+    readonly views: OldDiagram[];
 }
 
 export interface IDiagram extends IEntity {
     readonly viewpoint?: string;
-    readonly elements?: string[];
-    readonly relationships?: string[];
-    readonly views?: string[];
+    readonly elementIds?: string[];
+    readonly relationshipIds?: string[];
+    readonly viewIds?: string[];
     readonly path: string;
 }
 
-export default class Diagram extends Entity implements IHasRelationships {
+export default class OldDiagram extends Entity implements IHasRelationships, IDiagram {
     public readonly viewpoint: string;
     public elements: Element[];
     public relationships: Relationship[];
-    public views: Diagram[];
+    public views: OldDiagram[];
     public readonly path: string;
-    private elementIds: string[];
-    private relationshipIds: string[];
-    private viewIds: string[];
+    public elementIds: string[];
+    public relationshipIds: string[];
+    public viewIds: string[];
 
     constructor(args: IDiagram) {
         super(args);
         this.viewpoint = args.viewpoint || "Total";
-        this.elementIds = args.elements || [];
-        this.relationshipIds = args.relationships || [];
-        this.viewIds = args.views || [];
+        this.elements = [];
+        this.relationships = [];
+        this.views = [];
+        this.elementIds = args.elementIds || [];
+        this.relationshipIds = args.relationshipIds || [];
+        this.viewIds = args.viewIds || [];
         this.path = args.path || `svg/${args.id}.svg`;
     }
 
-    public normalize(model: Model, depth = 2): Diagram {
+    public normalize(model: Model, depth = 2): OldDiagram {
         if (this.isNormalized() && depth < 0) {
             return this;
         }

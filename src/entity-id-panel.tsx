@@ -1,7 +1,7 @@
 import * as React from "react";
-import Diagram from "./diagram";
 import Element from "./element";
 import Entity from "./entity";
+import OldDiagram from "./old-diagram";
 import Panel from "./panel";
 import Relationship from "./relationship";
 
@@ -16,7 +16,7 @@ export default class EntityIdPanel extends React.PureComponent<IProps> {
 
     public render() {
         const entity = this.props.entity;
-        const diagramRow = (entity instanceof Diagram) ? (
+        const diagramRow = (entity instanceof OldDiagram) ? (
             <tr key="viewpoint">
                 <th>Viewpoint</th>
                 <td>{entity.viewpoint}</td>

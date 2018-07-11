@@ -1,11 +1,11 @@
 import * as React from "react";
-import Diagram from "./diagram";
 import Entity from "./entity";
 import EntityLink from "./entity-link";
+import OldDiagram from "./old-diagram";
 import Panel from "./panel";
 
 interface IProps {
-    views: Diagram[];
+    views: OldDiagram[];
     entityClicked: (entity: Entity) => void;
 }
 

@@ -10,10 +10,10 @@ import ArchimateInfo from "./archimate-info";
 import Model from "./archimate-model";
 import "./archimate-navigator.css"
 import CypherQuery from "./cypher-query";
-import Diagram from "./diagram";
-import Entity from "./entity";
+import Entity, { IEntity } from "./entity";
 import GraphModelStore from "./graph-model-store";
 import GraphVisualization, {ID3Graph} from "./graph-visualization";
+import OldDiagram from "./old-diagram";
 import ArchimateSearch from "./search";
 import Svg from "./svg";
 
@@ -27,7 +27,7 @@ enum SidebarTab {
 interface IProps {
     graphQuery?: string;
     modelUrl: string;
-    selectedDiagram?: Diagram;
+    selectedDiagram?: OldDiagram;
     selectedEntity?: Entity;
     selectedView?: ActiveView;
     sidebarTabKey?: SidebarTab;
@@ -46,7 +46,7 @@ interface IState {
     model: Model;
     req?: XMLHttpRequest;
     sampleQueries: CypherQuery[];
-    selectedDiagram?: Diagram;
+    selectedDiagram?: OldDiagram;
     selectedEntity?: Entity;
     selectedView: ActiveView;
     sidebarTabKey: SidebarTab;
@@ -206,7 +206,7 @@ export default class ArchimateNavigator extends React.Component<IProps, IState> 
     }
 
     // TODO: tell the graph viz to stop and shutdown (if it exists) prior to creating a new one.
-    private svgRefCallback = (svg: SVGSVGElement): void => {
+    private svgRefCallback = (svg: SVGSVGElement | undefined): void => {
         this.setState({graphSvg: svg ? new Svg(svg, "#main-graph-group") : undefined});
         if (svg) {
             this.state.graphViz = new GraphVisualization(svg);
@@ -240,18 +240,19 @@ export default class ArchimateNavigator extends React.Component<IProps, IState> 
             return;
         }
         const entity = this.state.model.entity(id);
-        if (entity instanceof Diagram) {
+        if (entity instanceof OldDiagram) {
             /* let diagram : Model.DiagramEntity = <Diagram>entity;*/
-            this.setState({selectedDiagram: entity as Diagram});
+            this.setState({selectedDiagram: entity as OldDiagram});
         }
         this.setState({selectedEntity: entity});
     }
 
-    private diagramLinkClicked = (diagram: Diagram) => {
-        if (!diagram) {
+    private diagramLinkClicked = (entity: IEntity) => {
+        if (!entity) {
             this.setState({selectedDiagram: undefined});
             return;
         }
+        const diagram = entity as OldDiagram;
         const normalizedDiagram = diagram.isNormalized() ? diagram : this.state.model.diagram(diagram.id);
         this.setState({
             selectedDiagram: normalizedDiagram,
@@ -273,8 +274,8 @@ export default class ArchimateNavigator extends React.Component<IProps, IState> 
             selectedEntity: normalizedEntity,
             sidebarTabKey: SidebarTab.InfoTab,
         });
-        if (entity instanceof Diagram) {
-            this.diagramLinkClicked(normalizedEntity as Diagram);
+        if (entity instanceof OldDiagram) {
+            this.diagramLinkClicked(normalizedEntity as OldDiagram);
         }
     }
 

@@ -1,18 +1,17 @@
-// import * as d3selection from "d3-selection";
-import {INode, SelectionType} from "./graph-visualization";
+import { INode, ParentGroupType, SelectionType } from "./graph-visualization";
 
 export default class GraphNodes {
-    private svg: SelectionType;
+    private svg: ParentGroupType;
     private nodeHeight: number;
     private nodeWidth: number;
 
-    constructor(svg: SelectionType, nodeWidth: number, nodeHeight: number) {
+    constructor(svg: ParentGroupType, nodeWidth: number, nodeHeight: number) {
         this.svg = svg;
         this.nodeWidth = nodeWidth;
         this.nodeHeight = nodeHeight;
     }
 
-    public transformSelection(sel: SelectionType): void {
+    public transformSelection(sel: ParentGroupType): void {
         this.svg = sel;
     }
 
@@ -20,13 +19,22 @@ export default class GraphNodes {
      * Updates the nodes for each tick of the D3 Force simulation
      */
     public updateNodes(nodes: INode[]): void {
+        // tslint:disable-next-line:variable-name
+        const nodesFunc = function(this: SVGGElement, _datum: undefined, _index: number, _groups: SVGGElement[] | ArrayLike<SVGGElement>) {
+            return nodes;
+        }
+        
+        // tslint:disable-next-line:variable-name
+        const idFunc = function(this: SVGGElement, datum: INode, _index: number, _groups: SVGGElement[] | ArrayLike<SVGGElement>) {
+            return datum.id;
+        }
         // Update…
-        const g = this.svg.selectAll("g")
-            .data(nodes, (d: INode) => d.id)
+        const g = this.svg.selectAll<SVGGElement, INode>("g")
+            .data<INode>(nodesFunc, idFunc)
             .attr("transform", this.translate);
 
         // Enter…
-        g.enter().append("g")
+        g.enter().append<SVGGElement>("g")
             .attr("id", (d: INode) => d.nodeId)
             .attr("class", (d: INode) => `node archimate-${d.nodeType}`)
             .attr("transform", this.translate)

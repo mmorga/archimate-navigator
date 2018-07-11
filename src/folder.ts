@@ -1,6 +1,6 @@
 import Model from "./archimate-model";
-import Diagram from "./diagram";
 import Entity, {IEntity} from "./entity";
+import OldDiagram from "./old-diagram";
 
 export interface IFolder extends IEntity {
     readonly folders?: IFolder[];
@@ -9,7 +9,7 @@ export interface IFolder extends IEntity {
 
 export default class Folder extends Entity {
     public folders: Folder[];
-    public diagrams: Diagram[];
+    public diagrams: OldDiagram[];
     private readonly diagramIds: string[];
     private readonly iFolders: IFolder[];
 

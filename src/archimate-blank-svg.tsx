@@ -1,12 +1,12 @@
 import * as React from "react";
 
 export interface IProps {
-    svgRefCallback: (svg: SVGSVGElement | null) => void;
+    svgRefCallback: (svg: SVGSVGElement | undefined) => void;
 }
 
 /* tslint:disable:max-line-length whitespace */
 export default class ArchimateBlankSvg extends React.PureComponent<IProps> {
-    private svg: SVGSVGElement | null;
+    private svg?: SVGSVGElement;
 
     constructor(props: IProps) {
         super(props);
@@ -244,7 +244,7 @@ table.properties>caption {
 */
     `;
         return (
-            <svg ref={(svg) => {this.svg = svg;}} xmlns="http://www.w3.org/2000/svg" version="1.1" width="1000" height="1000" viewBox="0 0 1000 1000">
+            <svg ref={(svg) => {this.svg = svg ? svg : undefined;}} xmlns="http://www.w3.org/2000/svg" version="1.1" width="1000" height="1000" viewBox="0 0 1000 1000">
 
                 <style type="text/css">
                     {archimateCss}
@@ -485,7 +485,7 @@ table.properties>caption {
     }
 
     public componentWillUnmount() {
-        this.svg = null;
+        this.svg = undefined;
         if (this.props.svgRefCallback) {
             this.props.svgRefCallback(this.svg);
         }

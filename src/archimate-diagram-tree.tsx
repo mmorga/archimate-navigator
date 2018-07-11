@@ -1,13 +1,12 @@
 import * as React from "react";
-// import Diagram from "./diagram";
-import Entity from "./entity";
+import { IEntity } from "./entity";
 import EntityLink from "./entity-link";
 import Folder from "./folder";
 import FolderItem from "./folder-item";
 
 interface IProps {
     views: Folder;
-    entityClicked: (entity: Entity) => void;
+    entityClicked: (entity: IEntity) => void;
 }
 
 export default class ArchimateDiagramTree extends React.PureComponent<IProps> {

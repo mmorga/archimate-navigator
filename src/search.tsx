@@ -1,5 +1,5 @@
-import * as Fuse from "fuse.js";
-import * as React from "react";
+import Fuse from "fuse.js";
+import React from "react";
 import Entity from "./entity";
 import SearchResult from "./search-result";
 

@@ -3,9 +3,9 @@ import * as d3zoom from "d3-zoom";
 
 export default class Svg {
     private readonly svgEl: SVGSVGElement;
-    private readonly svg: d3selection.Selection<SVGSVGElement, {}, null, undefined>;
+    private readonly svg: d3selection.Selection<SVGSVGElement, undefined, d3selection.BaseType, undefined>;
     private readonly transformSelector?: string;
-    private readonly zoom: d3zoom.ZoomBehavior<Element, {}>;
+    private readonly zoom: d3zoom.ZoomBehavior<SVGSVGElement, undefined>;
     private resizeTimeout?: NodeJS.Timer;
 
     constructor(svg: SVGSVGElement, transformSelector?: string) {
@@ -13,7 +13,7 @@ export default class Svg {
         this.svg = d3selection.select(svg);
         this.transformSelector = transformSelector;
         this.resizeTimeout = undefined;
-        this.zoom = d3zoom.zoom().on("zoom", this.handleZoom);
+        this.zoom = d3zoom.zoom<SVGSVGElement, undefined>().on("zoom", this.handleZoom);
         this.initDisplay();
     }
 
@@ -34,11 +34,11 @@ export default class Svg {
         alert("TODO");
     }
 
-    public transformSelection = (): d3selection.Selection<d3selection.BaseType, {}, null, undefined> => {
+    public transformSelection = (): d3selection.Selection<SVGSVGElement, undefined, d3selection.BaseType, undefined> => {
         if (!this.transformSelector) {
             return this.svg;
         }
-        const sel = this.svg.select(this.transformSelector);
+        const sel = this.svg.select<SVGSVGElement>(this.transformSelector);
         return sel || this.svg;
     }
 

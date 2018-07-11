@@ -1,7 +1,7 @@
-import Diagram, {IDiagram} from "./diagram";
 import Element, {IElement} from "./element";
 import Entity, {IEntity} from "./entity";
 import Folder, {IFolder} from "./folder";
+import OldDiagram, {IDiagram} from "./old-diagram";
 import Relationship, {IRelationship} from "./relationship";
 
 export default class Model {
@@ -13,7 +13,7 @@ export default class Model {
         this.folders = this.buildFolders(folders);
     }
 
-    public entity(id: string, depth = 2): Entity | Element | Relationship | Diagram {
+    public entity(id: string, depth = 2): Entity | Element | Relationship | OldDiagram {
         const idx = this.entities.findIndex((e: Entity) => (e.id === id));
         let entity = this.entities[idx];
         if (idx === -1) {
@@ -47,10 +47,10 @@ export default class Model {
         throw new Error(`Expected a Relationship Entity for id ${id}, was: "${entity ? entity.type : "null"}"`);
     }
 
-    public diagram(id: string, depth = 2): Diagram {
+    public diagram(id: string, depth = 2): OldDiagram {
         const entity = this.entity(id, depth);
-        if (entity instanceof Diagram) {
-            return entity as Diagram;
+        if (entity instanceof OldDiagram) {
+            return entity as OldDiagram;
         }
         throw new Error(`Expected a Diagram Entity for id ${id}, was: "${entity ? entity.type : "null"}"`);
     }
@@ -70,7 +70,7 @@ export default class Model {
         case "Element":
             return new Element(entity as IElement);
         case "Diagram":
-            return new Diagram(entity as IDiagram);
+            return new OldDiagram(entity as IDiagram);
         default:
             return new Entity(entity);
         }

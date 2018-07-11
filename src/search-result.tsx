@@ -1,8 +1,8 @@
 import * as React from "react";
-import Diagram from "./diagram";
 import Element from "./element";
 import Entity from "./entity";
 import EntityLink from "./entity-link";
+import OldDiagram from "./old-diagram";
 import Relationship from "./relationship";
 
 interface IProps {
@@ -34,7 +34,7 @@ export default class SearchResult extends React.PureComponent<IProps> {
             entityType = entity.elementType || entityType;
         } else if (entity instanceof Relationship) {
             entityType = entity.relationshipType || entityType;
-        } else if (entity instanceof Diagram) {
+        } else if (entity instanceof OldDiagram) {
             entityType = entity.viewpoint || "Total";
         }
         return entityType;

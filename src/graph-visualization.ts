@@ -8,7 +8,8 @@ import GraphNodes from "./graph-nodes";
 /**
  * Helper to simplify function typing
  */
-export type SelectionType = d3selection.Selection<d3selection.BaseType, any, d3selection.BaseType, any>;
+export type SelectionType = d3selection.Selection<SVGGElement, INode, d3selection.BaseType, undefined>;
+export type ParentGroupType = d3selection.Selection<SVGGElement, undefined, d3selection.BaseType, undefined>;
 
 /**
  * INode data type for ArchiMate elements
@@ -20,6 +21,10 @@ export interface INode extends d3force.SimulationNodeDatum {
     nodeType: string;
     labels: string[];
     nodeId: string;
+}
+
+export function inodeKeyFunc(this: SVGGElement, datum: INode, index: number, groups: SVGGElement[]) { 
+    return datum.id;
 }
 
 /**
@@ -45,8 +50,8 @@ export default class GraphVisualization {
      * Attributes governing the size of nodes in the graph SVG
      */
     private svgEl: SVGSVGElement;
-    private svg: SelectionType;
-    private graph: ID3Graph;
+    private svg: d3selection.Selection<SVGSVGElement, undefined, d3selection.BaseType, undefined>;
+    private graph?: ID3Graph;
     private graphNodes: GraphNodes;
     private graphLinks: GraphLinks;
 
@@ -60,11 +65,11 @@ export default class GraphVisualization {
         this.graphLinks = new GraphLinks(this.transformSelection(), this.nodeWidth, this.nodeHeight);
     }
 
-    public transformSelection(): SelectionType {
-        const sel = this.svg.select("#main-graph-group");
+    public transformSelection(): ParentGroupType {
+        const sel = this.svg.select<SVGGElement>("#main-graph-group");
         if (sel.empty()) {
            return this.svg
-                .append("g")
+                .append<SVGGElement>("g")
                 .attr("id", "main-graph-group")
                 .attr("transform", "translate(0,0)"); // TODO: this should be handled by the SVG class attached.
         }
@@ -89,8 +94,8 @@ export default class GraphVisualization {
         d3force.forceSimulation(graph.nodes)
             .force("center", d3force.forceCenter(clientRect.width / 2, clientRect.height / 2))
             .force("collide", d3force.forceCollide(this.nodeWidth))
-            .force("link", d3force.forceLink(graph.links)
-                   .id((d: INode) => d.id)
+            .force("link", d3force.forceLink<INode, ILink>(graph.links)
+                   .id((node: INode, i: number, nodesData: INode[]) => node.id)
                    // TODO: experiment with this
                    .distance(this.adjustLinkDistance),
                    // .strength(adjustLinkStrength)
@@ -124,8 +129,8 @@ export default class GraphVisualization {
      * Not to be called directly
      */
     private ticked = () => {
-        this.graphNodes.updateNodes(this.graph.nodes);
-        this.graphLinks.updateLinks(this.graph.links);
+        this.graphNodes.updateNodes(this.graph!.nodes);
+        this.graphLinks.updateLinks(this.graph!.links);
         // resetViewBoxUnlessZoomed();  // TODO: hook this up with Svg class instance
     }
 

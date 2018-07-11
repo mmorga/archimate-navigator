@@ -1,5 +1,5 @@
 import * as React from "react";
-import Diagram from "./diagram";
+import OldDiagram from "./old-diagram";
 import Svg from "./svg";
 
 export enum ActiveView {
@@ -16,7 +16,7 @@ interface IProps {
     zoomIn: () => void;
     zoomOut: () => void;
     zoomFull: () => void;
-    selectedDiagram?: Diagram;
+    selectedDiagram?: OldDiagram;
     selectedSvg?: Svg;
 }
 

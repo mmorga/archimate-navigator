@@ -1,18 +1,18 @@
 import * as React from "react";
 import {Alert} from "react-bootstrap";
 import SVG from 'react-inlinesvg';
-import Diagram from "./diagram";
 import Entity from "./entity";
+import OldDiagram from "./old-diagram";
 
 interface IProps {
-    selectedDiagram?: Diagram;
+    selectedDiagram?: OldDiagram;
     selectedEntity?: Entity;
     entityClicked: (entity: Entity) => void;
     diagramClicked: (event: React.MouseEvent<Element>) => void;
 }
 
 interface IState {
-    loadedDiagram?: Diagram;
+    loadedDiagram?: OldDiagram;
     selectedEntity?: Entity;
     svg: void | Document;
     error?: any;
@@ -36,7 +36,7 @@ export default class ArchimateDiagramView extends React.PureComponent<IProps, IS
 
     public render() {
         if (this.props.selectedDiagram) {
-            const selectedDiagram = this.props.selectedDiagram as Diagram;
+            const selectedDiagram = this.props.selectedDiagram as OldDiagram;
             const path = `archimate/${selectedDiagram.path}`;
             return (
                 <SVG
@@ -55,10 +55,10 @@ export default class ArchimateDiagramView extends React.PureComponent<IProps, IS
         }
     }
 
-    public myOnLoadHandler(src?: string, cached?: boolean) {
+    public myOnLoadHandler(src?: string | React.SyntheticEvent<SVG>, cached?: boolean) {
         this.setState({
-            isCached: cached,
-            loadedSrc: src,
+            isCached: cached || false,
+            loadedSrc: (src as string) || "No source",
         });
     }
 
