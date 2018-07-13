@@ -1,12 +1,11 @@
 import * as React from "react";
-import Element from "../../../old-model/element";
-import Entity from "../../../old-model/entity";
+import { Element, IEntity } from "../../../archimate-model";
 import EntityLink from "../entity-link";
 import Panel from "../panel";
 
 interface IProps {
     elements: Element[];
-    elementClicked: (entity: Entity) => void;
+    elementClicked: (entity: IEntity) => void;
 }
 
 export default class ElementsTable extends React.PureComponent<IProps> {
@@ -34,7 +33,7 @@ export default class ElementsTable extends React.PureComponent<IProps> {
                             />
                         </td>
                         <td>
-                            {element.elementType}
+                            {element.type}
                         </td>
                     </tr>
                 );

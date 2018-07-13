@@ -1,0 +1,16 @@
+export enum RelationshipType {
+  Composition = "CompositionRelationship",
+  Aggregation = "AggregationRelationship",
+  Assignment = "AssignmentRelationship",
+  Realization = "RealizationRelationship",
+  Serving = "ServingRelationship",
+  Access = "AccessRelationship",
+  Influence = "InfluenceRelationship",
+  Triggering = "TriggeringRelationship",
+  Flow = "FlowRelationship",
+  Specialization = "SpecializationRelationship",
+  Association = "AssociationRelationship",
+  Junction = "JunctionRelationship",
+  AndJunction = "AndJunctionRelationship",
+  OrJunction = "OrJunctionRelationship",
+}
