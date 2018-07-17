@@ -16,7 +16,7 @@ export default class PropertiesPanel extends React.PureComponent<IProps> {
     let tableRows = null;
     if (properties.length === 0) {
       tableRows = [
-        <tr key={undefined}>
+        <tr key={"no-properties"}>
           <td colSpan={2}>No Properties</td>
         </tr>
       ];
@@ -33,7 +33,7 @@ export default class PropertiesPanel extends React.PureComponent<IProps> {
       <Panel header="Properties">
         <table className="table">
           <thead>
-            <tr>
+            <tr key="properties-header">
               <th>Property</th>
               <th>Value</th>
             </tr>

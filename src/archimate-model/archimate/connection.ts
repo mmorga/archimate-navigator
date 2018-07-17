@@ -41,7 +41,7 @@ export class Connection {
   }
 
   public element() {
-   return this.relationship;
+    return this.model.lookup(this.relationship);
   }
 
   public toString() {

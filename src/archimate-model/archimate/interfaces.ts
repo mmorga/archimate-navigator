@@ -85,6 +85,8 @@ export interface IDiagram extends IEntity, IHasRelationships, IHasViews {
   background?: string;
   connections: object[];
   path: string;
+
+  elements(): IElement[];
 }
 
 export interface IOrganization extends IEntity {

@@ -1,5 +1,7 @@
 import * as React from "react";
 import { Diagram, IEntity } from "../../archimate-model";
+import ArchimateSvg from "./archimate-svg";
+import ArchimateViewNode from "./archimate-view-node";
 
 interface IProps {
   selectedDiagram?: Diagram;
@@ -37,8 +39,11 @@ export default class ArchimateDiagramView extends React.PureComponent<
   public render() {
     if (this.props.selectedDiagram) {
       const selectedDiagram = this.props.selectedDiagram as Diagram;
-      const path = `archimate/${selectedDiagram.path}`;
-      return <p>Watch this space. Coming soon. {path}</p>;
+      return (
+        <ArchimateSvg title={this.props.selectedDiagram.name} desc={this.props.selectedDiagram.documentation} viewBox={this.props.selectedDiagram.calculateMaxExtents()}>
+            { selectedDiagram.nodes.map(node => (<ArchimateViewNode key={node.id} viewNode={node} />)) }
+        </ArchimateSvg>
+      );
     } else {
       // const svg = this.state.svg;
       return (

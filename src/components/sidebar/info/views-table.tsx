@@ -18,7 +18,7 @@ export default class ViewsTable extends React.PureComponent<IProps> {
     let tableRows = null;
     if (views.length === 0) {
       tableRows = [
-        <tr key={undefined}>
+        <tr key={"views-table-no-views"}>
           <td colSpan={2}>No Views</td>
         </tr>
       ];
@@ -40,7 +40,7 @@ export default class ViewsTable extends React.PureComponent<IProps> {
       <Panel header="Views">
         <table className="table archimate-views-table">
           <thead>
-            <tr key="header">
+            <tr key="views-table-header">
               <th>View</th>
               <th>Viewpoint</th>
             </tr>

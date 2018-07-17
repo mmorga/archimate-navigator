@@ -1,6 +1,7 @@
 export * from "./archimate/access-type";
 export * from "./archimate/diagram-type";
 export * from "./archimate/element-type";
+export * from "./archimate/layers";
 export * from "./archimate/relationship-type";
 export * from "./archimate/viewpoint-type";
 export * from "./archimate/bounds";

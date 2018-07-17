@@ -14,12 +14,16 @@ export default class EntityLink extends React.PureComponent<IProps> {
 
   public render() {
     const text = this.props.text ? this.props.text : this.props.entity!.name;
-    return (
-      <a href={this.props.entity!.href} onClick={this.entityClicked}>
-        {this.props.children}
-        {text}
-      </a>
-    );
+    if (this.props.entity) {
+      return (
+        <a href={this.props.entity!.href} onClick={this.entityClicked}>
+          {this.props.children}
+          {text}
+        </a>
+      );
+    } else {
+      return undefined;
+    }
   }
 
   private entityClicked = (event: React.MouseEvent<HTMLAnchorElement>) => {

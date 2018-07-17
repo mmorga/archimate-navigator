@@ -1,5 +1,5 @@
 import * as React from "react";
-import { IEntity, IRelationship } from "../../../archimate-model";
+import { IEntity, IRelationship, Relationship } from "../../../archimate-model";
 import EntityLink from "../entity-link";
 import Panel from "../panel";
 
@@ -25,7 +25,7 @@ export default class RelationshipsTable extends React.PureComponent<IProps> {
         </tr>
       ];
     } else {
-      tableRows = relationships.map(relationship => (
+      tableRows = relationships.filter(r => r !== undefined).filter(r => r instanceof Relationship).map(relationship => (
         <tr key={relationship.id}>
           <td>
             <EntityLink
@@ -35,22 +35,10 @@ export default class RelationshipsTable extends React.PureComponent<IProps> {
             />
           </td>
           <td>
-            <EntityLink
-              entity={relationship.sourceElement()}
-              entityClicked={this.props.entityClicked}
-              text={`${relationship.sourceElement()!.name} (${
-                relationship.sourceElement()!.type
-              })`}
-            />
+            {this.relationshipRefLink(relationship.sourceElement())}
           </td>
           <td>
-            <EntityLink
-              entity={relationship.targetElement()}
-              entityClicked={this.props.entityClicked}
-              text={`${relationship.targetElement()!.name} (${
-                relationship.targetElement()!.type
-              })`}
-            />
+            {this.relationshipRefLink(relationship.targetElement())}
           </td>
         </tr>
       ));
@@ -69,6 +57,20 @@ export default class RelationshipsTable extends React.PureComponent<IProps> {
           <tbody id="archimate-element-relationships">{tableRows}</tbody>
         </table>
       </Panel>
+    );
+  }
+
+  private relationshipRefLink(refMaybe: IEntity | undefined) {
+    if (refMaybe === undefined) {
+      return "";
+    }
+    const ref = refMaybe as IEntity;
+    return (
+      <EntityLink
+        entity={ref}
+        entityClicked={this.props.entityClicked}
+        text={`${ref.name} (${ ref.type })`}
+      />
     );
   }
 

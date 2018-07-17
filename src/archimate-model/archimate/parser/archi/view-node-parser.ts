@@ -42,11 +42,14 @@ export class ViewNodeParser {
     viewNode.id = getStringAttribute(child, "id") || this.model.makeUniqueId();
     viewNode.name = getStringAttribute(child, "name");
     viewNode.documentation = this.documentationParser.value(child);
-    viewNode.type = getNSStringAttribute(
-      child,
-      "type",
-      "http://www.w3.org/2001/XMLSchema-instance"
-    ) || "";
+    viewNode.type = (
+      getNSStringAttribute(
+        child,
+        "type",
+        "http://www.w3.org/2001/XMLSchema-instance"
+      ) || ""
+    ).replace("archimate:", "");
+
     // viewNode.style = TODO: write style parser
     viewNode.viewRefs = getStringAttribute(child, "model");
     viewNode.content = this.contentParser.content(child);
@@ -71,5 +74,5 @@ export class ViewNodeParser {
       viewNode.bounds
     );
     return [viewNode].concat(viewNodeParser.viewNodes(child));
-  }
+   }
 }

@@ -1,0 +1,240 @@
+.archimate-svg {
+  font-family: "Lucida Grande";
+  font-size: 11px;
+}
+
+p {
+  fill: black;
+  margin: 0;
+  stroke: none;
+}
+
+path {
+  fill: inherit;
+  stroke: inherit;
+  stroke-width: 1px;
+}
+
+.entity-name {
+  text-align: center;
+  vertical-align: top;
+}
+
+.entity>.properties {
+  visibility: hidden;
+}
+
+.entity:hover>.properties {
+  visibility: visible;
+  z-index: 1000;
+}
+
+table.properties {
+  background-color: whitesmoke;
+  border: 2px solid gray;
+}
+
+table.properties>caption {
+  background-color: gray;
+  border: 2px solid gray;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+.archimate-decoration {
+  fill:rgba(0,0,0,0.1);
+  stroke: inherit;
+}
+
+.archimate-badge {
+  fill: none;
+  stroke: black;
+  stroke-width: 1px;
+}
+
+.archimate-badge-spacer {
+  float: right;
+  height: 20px;
+  width: 20px;
+}
+
+.archimate-icon {
+  fill: none;
+  stroke: black;
+}
+
+.archimate-default-element {
+  fill: #ddd;
+  stroke: #999;
+}
+
+.archimate-location-background {
+  fill: #f9b77a;
+  stroke: #ae8055;
+}
+
+.archimate-strategy-background {
+  fill: #eddfac;
+  stroke: #44423b;
+}
+
+.archimate-business-background {
+  fill: #fffeb9;
+  stroke: #b2b181;
+}
+
+.archimate-business-decoration {
+  fill: rgb(229, 229, 162);
+  stroke: rgb(178, 178, 126);
+}
+
+.archimate-application-background {
+  fill: #ccfdfe;
+  stroke: #80b2b2;
+}
+
+.archimate-application-decoration {
+  fill: rgb(162, 229, 229);
+  stroke: rgb(126, 178, 178);
+}
+
+.archimate-infrastructure-background {
+  fill: #cae6b9;
+  stroke: #8ca081;
+}
+
+.archimate-infrastructure-decoration {
+  fill: #b4cfa4;
+  stroke: #9bb28d;
+}
+
+.archimate-physical-background {
+  fill: #cdfeb2;
+  stoke: #313331;
+}
+
+.archimate-motivation-background {
+  fill: #cccdfd;
+  stroke: #8e8fb1;
+}
+
+.archimate-motivation2-background {
+  fill: #cccdfd;
+  stroke: #8e8fb1;
+}
+
+.archimate-implementation-background {
+  fill: #fee0e0;
+  stroke: #b19c9c;
+}
+
+.archimate-implementation2-background {
+  fill: #e0ffe0;
+  stroke: #9cb29c;
+}
+
+.archimate-implementation2-decoration {
+  fill: #c9e5c9;
+  stroke: #9cb29c;
+}
+
+.archimate-note-background {
+  fill: #fff;
+  stroke: #b2b2b2;
+}
+
+.archimate-group-background {
+  fill: #d2d7d7;
+  stroke: #939696;
+}
+
+.archimate-grouping-background {
+  fill: #ffffff;
+  stroke: #b2b2b2;
+  stroke-dasharray: 8,4;
+}
+
+.archimate-sticky-background {
+  fill: #fffeb9;
+  stroke: #b2b181;
+}
+
+.archimate-junction-background {
+  fill: black;
+  stroke: black;
+}
+
+.archimate-or-junction-background {
+  fill: white;
+  stroke: black;
+}
+
+.archimate-diagram-model-reference-background {
+  fill: #dcebeb;
+  stroke: #9aa4a4;
+}
+
+.archimate-default-background {
+  fill: #ddd;
+  stroke: #999;
+}
+
+/* Relationships */
+.archimate-relationship {
+  fill: none;
+  stroke: black;
+  stroke-width: 1px;
+}
+
+.archimate-relationship-name {
+  font-size: 9px;
+}
+
+.archimate-assignment {
+  marker-end: url(#archimate-filled-arrow);
+  marker-start: url(#archimate-dot-marker);
+}
+
+.archimate-composition {
+  marker-start: url(#archimate-filled-diamond);
+}
+
+.archimate-used-by {
+  marker-end: url(#archimate-used-by-arrow);
+}
+
+.archimate-serving {
+  marker-end: url(#archimate-used-by-arrow);
+}
+
+.archimate-aggregation {
+  marker-start: url(#archimate-hollow-diamond);
+}
+
+.archimate-access {
+  marker-end: url(#archimate-open-arrow);
+  stroke-dasharray: 2, 3;
+}
+
+.archimate-realization {
+  marker-end: url(#archimate-hollow-arrow);
+  stroke-dasharray: 5, 3;
+}
+
+.archimate-specialization {
+  marker-end: url(#archimate-hollow-arrow);
+}
+
+.archimate-influence {
+  marker-end: url(#archimate-open-arrow);
+  stroke-dasharray: 5, 3;
+}
+
+.archimate-triggering {
+  marker-end: url(#archimate-filled-arrow);
+}
+
+.archimate-flow {
+  marker-end: url(#archimate-filled-arrow);
+  stroke-dasharray: 3, 3;
+}

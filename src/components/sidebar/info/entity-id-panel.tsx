@@ -24,24 +24,24 @@ export default class EntityIdPanel extends React.PureComponent<IProps> {
           <th>Viewpoint</th>
           <td>{entity.viewpoint}</td>
         </tr>
-      ) : null;
+      ) : undefined;
     const relationshipRow =
       entity instanceof Relationship ? (
         <tr key="relationship-type">
           <th>Relationship Type</th>
           <td>{entity.type}</td>
         </tr>
-      ) : null;
+      ) : undefined;
     const elementRow =
       entity instanceof Element ? (
         <tr key="element-type">
           <th>Element Type</th>
           <td>{(entity as Element).type}</td>
         </tr>
-      ) : null;
-    const undefinedRow = entity === undefined ? "Nothing Selected" : null;
-    const name = entity ? entity.name : null;
-    const entityType = entity ? entity.type : null;
+      ) : undefined;
+    const undefinedRow = entity === undefined ? (<tr><td>Nothing Selected</td></tr>) : undefined;
+    const name = entity ? entity.name : undefined;
+    const entityType = entity ? entity.type : undefined;
     return (
       <Panel>
         <table className="table">

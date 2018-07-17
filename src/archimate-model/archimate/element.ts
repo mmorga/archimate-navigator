@@ -1,5 +1,6 @@
 import { ElementType } from "./element-type";
 import {
+  IDiagram,
   IEntity,
   IHasRelationships,
   IModel,
@@ -21,6 +22,7 @@ export class Element implements IEntity, IHasRelationships {
   public properties: IProperty[];
   public href?: string;
   private model: IModel;
+  private diagramCache?: IDiagram[];
 
   constructor(model: IModel, type: ElementType, id?: string, name?: string) {
     this.model = model;
@@ -50,7 +52,10 @@ export class Element implements IEntity, IHasRelationships {
   // Diagrams that this entity is referenced in.
   // TODO: memoize the response
   public diagrams() {
-    // return this.model.diagrams.filter(dia => dia.references(this.id));
-    return this.model.diagrams;
+    if (this.diagramCache) {
+      return this.diagramCache;
+    }
+    this.diagramCache = this.model.diagrams.filter(dia => dia.elements().find(el => el === this));
+    return this.diagramCache;
   }
 }

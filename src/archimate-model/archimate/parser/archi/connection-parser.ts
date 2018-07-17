@@ -45,7 +45,7 @@ export class ConnectionParser {
     connection.bendpoints = []; // TODO
     connection.source = getStringAttribute(child, "source");
     connection.target = getStringAttribute(child, "target");
-    connection.relationship = getStringAttribute(child, "relationship");
+    connection.relationship = getStringAttribute(child, "archimateRelationship");
     // viewNode.style = TODO: write style parser
     this.diagram.connections.push(connection);
     return connection;

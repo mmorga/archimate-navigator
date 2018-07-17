@@ -1,6 +1,6 @@
-import { Bounds } from "./bounds";
+import { Bounds, zeroBounds } from "./bounds";
 import { Diagram } from "./diagram";
-import { IModel, IProperty, IViewNode } from "./interfaces";
+import { IEntity, IModel, IProperty, IViewNode } from "./interfaces";
 
 // Graphical node type. It can contain child node types.
 // This can be specialized as Label and Container
@@ -45,7 +45,7 @@ export class ViewNode implements IViewNode {
 
   // ArchiMate ViewNodeType Attributes
 
-  public bounds?: Bounds;
+  public bounds: Bounds;
 
   // ArchiMate Container Attributes
   // container doesn't distinguish between nodes and connections
@@ -76,16 +76,30 @@ export class ViewNode implements IViewNode {
   public xpathPath?: string;
 
   private model: IModel;
+  private entity?: IEntity;
 
   constructor(model: IModel, diagram: Diagram) {
     this.model = model;
     this.id = this.model.makeUniqueId();
     this.diagram = diagram;
     this.type = "ViewNode";
+    this.bounds = zeroBounds();
   }
 
   public toString() {
     return `ViewNode[${this.name || ""}](${this.element ? this.element : ""})`;
+  }
+
+  public elementInstance(): IEntity | undefined {
+    if (this.entity) {
+      return this.entity;
+    }
+    if (this.viewRefs) {
+      this.entity = this.model.lookup(this.viewRefs);
+      return this.entity;
+    }
+    this.entity = this.model.lookup(this.element);
+    return this.entity;
   }
 
   // description() {
