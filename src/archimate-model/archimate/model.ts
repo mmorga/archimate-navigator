@@ -84,7 +84,7 @@ class Model implements IModel {
     // }
   }
 
-  public register(node: IEntity) {
+  public register(node: IEntity): void {
     this.indexHash.set(node.id, node);
   }
 
@@ -154,6 +154,13 @@ class Model implements IModel {
     return this.indexHash;
   }
 
+  // @todo maybe move to [ViewNode]
+  private indexViewNodes(ref: Diagram): Diagram {
+    ref.nodes.forEach(node => this.indexHash.set(node.id, node));
+    ref.connections.forEach(con => this.indexHash.set(con.id, con));
+    return ref;
+  }
+
   // default_organization_for(item)
   //   case item
   //   when Element
@@ -216,15 +223,6 @@ class Model implements IModel {
     // ref.organizations.forEach(org => {
     //   (this as Model).indexHash[org.id] = this.indexOrganizations(org)
     // });
-    return ref;
-  }
-
-  // @todo maybe move to [ViewNode]
-  private indexViewNodes(ref: IEntity) {
-    // ref.nodes.each do |node|
-    //   this.indexHash[node.id] = indexViewNodes(node)
-    // }
-    // ref.connections.each { |con| this.indexHash[con.id] = con }
     return ref;
   }
 }

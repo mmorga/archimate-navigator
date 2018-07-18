@@ -40,7 +40,7 @@ export class ConnectionParser {
       child,
       "type",
       "http://www.w3.org/2001/XMLSchema-instance"
-    );
+    ) || "Connection";
     connection.bendpoints = this.bendpointParser.bendpoints(child);
     connection.source = getStringAttribute(child, "source");
     connection.target = getStringAttribute(child, "target");

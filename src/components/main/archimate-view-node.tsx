@@ -195,6 +195,7 @@ export default class ArchimateViewNode extends React.PureComponent<IProps, IStat
       badgeBounds: this.nodeBadgeBounds(),
       entityShapeFunc: this.nodePath,
       margin: 14,
+      textBounds: this.nodeTextBounds(),
     });
 
     const noteState = defaultState.with({
@@ -228,7 +229,10 @@ export default class ArchimateViewNode extends React.PureComponent<IProps, IStat
         if (this.props.viewNode.childType === "1") {
           return badgedRoundedRect.with({ badge: "#archimate-event-badge" });
         } else {
-          return defaultState.with({ entityShapeFunc: this.eventPath });
+          return defaultState.with({
+            entityShapeFunc: this.eventPath,
+            textBounds: this.eventTextBounds(),
+          });
         }
       case "ApplicationFunction":
       case "BusinessFunction":
@@ -250,7 +254,10 @@ export default class ArchimateViewNode extends React.PureComponent<IProps, IStat
       case "BusinessProcess":
       case "TechnologyProcess":
         if (this.props.viewNode.childType === "1") {
-          return defaultState.with({ entityShapeFunc: this.processPath });
+          return defaultState.with({
+            entityShapeFunc: this.processPath,
+            textBounds: this.processTextBounds(),
+          });
         } else {
           return badgedRoundedRect.with({ badge: "#archimate-process-badge" });
         }
@@ -292,7 +299,9 @@ export default class ArchimateViewNode extends React.PureComponent<IProps, IStat
           return defaultState.with({ entityShapeFunc: this.devicePath });
         }
       case "DiagramModelReference":
-        return defaultState.with({
+      case "ArchimateDiagramModel":
+      case "DiagramModel":
+        return badgedRect.with({
           backgroundClass: "archimate-diagram-model-reference-background",
           badge: "#archimate-diagram-model-reference-badge",
           // optionalLinkFunc: this.diagramOptionalLink,
@@ -533,14 +542,18 @@ export default class ArchimateViewNode extends React.PureComponent<IProps, IStat
     );
   }
 
+  private eventTextBounds(): Bounds {
+    const textBounds = this.defaultTextBounds();
+    const notchX = 18;
+    return new Bounds(textBounds.left() + notchX * 0.8, textBounds.top(), textBounds.width - notchX, textBounds.height);
+  }
+
   private eventPath(): React.ReactFragment {
     const bounds = this.props.viewNode.bounds;
     const notchX = 18;
     const notchHeight = bounds.height / 2.0;
     const eventWidth = bounds.width * 0.85;
     const rx = 17;
-    const textBounds = this.defaultTextBounds();
-    this.setState({textBounds: new Bounds(textBounds.left() + notchX * 0.8, textBounds.top(), textBounds.width - notchX, textBounds.height)});
     const d = [
         "M", bounds.left, bounds.top,
         "l", notchX, notchHeight,
@@ -579,6 +592,15 @@ export default class ArchimateViewNode extends React.PureComponent<IProps, IStat
     );
   }
 
+  private processTextBounds(): Bounds {
+    const bounds = this.props.viewNode.bounds;
+    const shaftTop = bounds.top() + bounds.height * 0.15;
+    const shaftBottom = bounds.bottom() - bounds.height * 0.15;
+    const left = bounds.left();
+    const textBounds = new Bounds(left, shaftTop, bounds.width - bounds.height * 0.25, shaftBottom - shaftTop);
+    return textBounds.reducedBy(2);
+  }
+
   private processPath(): React.ReactFragment {
     const bounds = this.props.viewNode.bounds;
     const top = bounds.top();
@@ -590,10 +612,6 @@ export default class ArchimateViewNode extends React.PureComponent<IProps, IStat
     const left = bounds.left();
     const arrowBack = bounds.right() - bounds.height * 0.5;
     const right = bounds.right();
-
-    const textBounds = new Bounds(left, shaftTop, bounds.width - bounds.height * 0.25, shaftBottom - shaftTop);
-    this.setState({textBounds: textBounds.reducedBy(2)});
-
     return (
       <path
         d={[
@@ -711,7 +729,7 @@ export default class ArchimateViewNode extends React.PureComponent<IProps, IStat
     return (
       <path
           d={[
-              "M", bounds.left, bounds.top,
+              "M", bounds.left(), bounds.top(),
               "v", bounds.height - 8,
               "c", 0.167 * bounds.width, 0.133 * bounds.height,
               0.336 * bounds.width, 0.133 * bounds.height,
@@ -757,19 +775,24 @@ export default class ArchimateViewNode extends React.PureComponent<IProps, IStat
     );
   }
 
+  private nodeTextBounds(): Bounds {
+    const bounds = this.props.viewNode.bounds;
+    const margin = 14;
+    const nodeBoxHeight = bounds.height - margin;
+    const nodeBoxWidth = bounds.width - margin;
+    return new Bounds(bounds.left() + 1, bounds.top() + margin + 1, nodeBoxWidth - 2, nodeBoxHeight - 2);
+  }
+
   private nodePath(): React.ReactFragment {
     const bounds = this.props.viewNode.bounds;
     const margin = this.state.margin || 14;
     const nodeBoxHeight = bounds.height - margin;
     const nodeBoxWidth = bounds.width - margin;
-    this.setState({
-      textBounds: new Bounds(bounds.left() + 1, bounds.top() + margin + 1, nodeBoxWidth - 2, nodeBoxHeight - 2),
-    });
     return (
       <g className={this.state.backgroundClass} style={this.shapeStyle()}>
         <path 
           d={[
-              "M", bounds.left, bounds.bottom,
+              "M", bounds.left(), bounds.bottom(),
               "v", -nodeBoxHeight,
               "l", margin, -margin,
               "h", nodeBoxWidth,

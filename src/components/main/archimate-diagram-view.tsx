@@ -1,5 +1,6 @@
 import * as React from "react";
 import { Diagram, IEntity } from "../../archimate-model";
+import ArchimateConnection from "./archimate-connection";
 import ArchimateSvg from "./archimate-svg";
 import ArchimateViewNode from "./archimate-view-node";
 
@@ -31,7 +32,7 @@ export default class ArchimateDiagramView extends React.PureComponent<
     this.state = {
       isCached: false,
       selectedEntity: this.props.selectedEntity,
-      svg: undefined,
+      svg: undefined
     };
   }
 
@@ -39,11 +40,16 @@ export default class ArchimateDiagramView extends React.PureComponent<
     if (this.props.selectedDiagram) {
       const selectedDiagram = this.props.selectedDiagram as Diagram;
       return (
-        <ArchimateSvg 
-              key={this.props.selectedDiagram.id}
-              diagram={this.props.selectedDiagram}
+        <ArchimateSvg
+          key={this.props.selectedDiagram.id}
+          diagram={this.props.selectedDiagram}
         >
-          { selectedDiagram.nodes.map(node => (<ArchimateViewNode key={node.id} viewNode={node} />)) }
+          {selectedDiagram.nodes.map(node => (
+            <ArchimateViewNode key={node.id} viewNode={node} />
+          ))}
+          {selectedDiagram.connections.map(conn => (
+            <ArchimateConnection key={conn.id} connection={conn} />
+          ))}
         </ArchimateSvg>
       );
     } else {

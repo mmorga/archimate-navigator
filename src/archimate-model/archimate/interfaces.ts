@@ -173,4 +173,5 @@ export interface IModel extends IEntity, IHasOrganizations {
 
   lookup(id: string | undefined): IEntity | undefined;
   makeUniqueId(): string;
+  register(entity: IEntity): void;
 }

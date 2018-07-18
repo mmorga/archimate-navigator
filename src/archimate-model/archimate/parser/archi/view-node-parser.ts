@@ -62,6 +62,7 @@ export class ViewNodeParser {
     viewNode.element = getStringAttribute(child, "archimateElement");
     viewNode.childType = getStringAttribute(child, "type");
     this.diagram.nodes.push(viewNode);
+    this.model.register(viewNode);
     const connectionParser = new ConnectionParser(
       this.model,
       this.diagram,

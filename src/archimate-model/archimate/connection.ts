@@ -1,5 +1,5 @@
 import { Bounds, zeroBounds } from "./bounds";
-import { IModel } from "./interfaces";
+import { IEntity, IModel, IProperty } from "./interfaces";
 import { Point } from "./point";
 import { ViewNode } from "./view-node";
 
@@ -14,11 +14,11 @@ import { ViewNode } from "./view-node";
 // connection's label, documentation and properties can be provided and will
 // be additional to (or over-ride) those contained in the referenced
 // ArchiMate relationship.
-export class Connection {
+export class Connection implements IEntity {
   public id: string;
   public name?: string;
   public documentation?: string;
-  public type?: string;
+  public type: string;
   public sourceAttachment?: string; // Location
   public bendpoints: Point[] = []; // Location[]
   public targetAttachment?: string; // Location
@@ -26,12 +26,16 @@ export class Connection {
   public target?: string;
   public relationship?: string;
   public style?: string; // Style
+  public properties: IProperty[] = [];
 
   private model: IModel;
+  private sourceEntity?: IEntity;
+  private targetEntity?: IEntity;
 
   constructor(model: IModel) {
     this.model = model;
     this.id = model.makeUniqueId();
+    this.type = "Connection";
   }
 
   public typeName() {
@@ -68,14 +72,16 @@ export class Connection {
     if (this.source === undefined) {
       return undefined;
     }
-    return this.model.lookup(this.source);
+    this.sourceEntity = this.model.lookup(this.source);
+    return this.sourceEntity;
   }
 
   public targetViewNode() {
     if (this.target === undefined) {
       return undefined;
     }
-    return this.model.lookup(this.target);
+    this.targetEntity = this.model.lookup(this.target);
+    return this.targetEntity;
   }
 
   public sourceBounds(): Bounds | undefined {

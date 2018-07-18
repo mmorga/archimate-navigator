@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Connection } from "../../archimate-model";
+import { Connection, IEntity } from "../../archimate-model";
 import Path from "./path";
 
 interface IProps {
@@ -8,6 +8,8 @@ interface IProps {
 
 interface IState {
   path: Path;
+  sourceEntity: IEntity | undefined;
+  targetEntity: IEntity | undefined;
 }
 
 export default class ArchimateConnection extends React.PureComponent<IProps, IState> {
@@ -15,6 +17,8 @@ export default class ArchimateConnection extends React.PureComponent<IProps, ISt
     super(props);
     this.state = {
       path: new Path(this.props.connection),
+      sourceEntity: this.props.connection.sourceViewNode(),
+      targetEntity: this.props.connection.targetViewNode(),
     };
   }
 
@@ -26,7 +30,7 @@ export default class ArchimateConnection extends React.PureComponent<IProps, ISt
           <title>{this.props.connection.documentation}</title>
         </path>
         {this.lineText()}
-        </React.Fragment>
+      </React.Fragment>
     );
   }
 
@@ -111,8 +115,8 @@ export default class ArchimateConnection extends React.PureComponent<IProps, ISt
   // TODO: StringRefinements refinement isn't working in this class, so added this method here. Investigate.
   private css_classify(str: string): string {
     return str.replace(/::/, '/')
-      .replace(/([A-Z]+)([A-Z][a-z])/, '\1-\2')
-      .replace(/([a-z\d])([A-Z])/, '\1-\2')
+      .replace(/([A-Z]+)([A-Z][a-z])/, '$1-$2')
+      .replace(/([a-z\d])([A-Z])/, '$1-$2')
       .toLowerCase();
   }
 }

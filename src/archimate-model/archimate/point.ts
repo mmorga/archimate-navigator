@@ -23,6 +23,9 @@ export class Point {
   // Returns true if this location is inside the bounds argument
   // @param bounds [Bounds]
   public inside(bounds: IBounds): boolean {
+    if (bounds === undefined) {
+      return false;
+    }
     return bounds.xRange().cover(this.x) &&
       bounds.yRange().cover(this.y);
   }
