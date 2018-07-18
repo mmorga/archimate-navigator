@@ -3,6 +3,7 @@
     margin-top: 0;
     padding-top: 9px;
     overflow: scroll;
+    height: 98vh;
 }
 
 .archimate-view-nav ul {
@@ -22,15 +23,20 @@
     margin: -7px -7px 0 -7px;
 }
 
-.archimate-diagram-view {
-    padding: 0.5em;
+.archimate-svg-container {
+    border: 1px solid blue;
     background: white;
+    height: 100%;
+    margin: 0;
     overflow: scroll;
+    padding: 0.5em;
+    position: relative;
+    width: 100%;
 }
 
-.archimate-svg-content {
-    width: 100%;
-    height: 100%;
+.archimate-diagram-view {
+    background: white;
+    height: 98vh;
     padding: 0;
 }
 

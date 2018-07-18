@@ -2,18 +2,16 @@ import { Bounds } from "../../bounds";
 import { Connection } from "../../connection";
 import { Diagram } from "../../diagram";
 import { IModel } from "../../interfaces";
+import { BendpointParser } from "./bendpoint-parser";
 import { DocumentationParser } from "./documentation-parser";
 import { getNSStringAttribute, getStringAttribute } from "./dom-helpers";
-
-// TODO:
-// when "bendpoint"
-//   Location
 
 export class ConnectionParser {
   public model: IModel;
   public diagram: Diagram;
   public offset: Bounds;
   private documentationParser: DocumentationParser;
+  private bendpointParser: BendpointParser;
 
   constructor(model: IModel, diagram: Diagram, offset: Bounds) {
     this.model = model;
@@ -21,6 +19,7 @@ export class ConnectionParser {
     this.offset = offset;
     this.createConnection = this.createConnection.bind(this);
     this.documentationParser = new DocumentationParser();
+    this.bendpointParser = new BendpointParser();
   }
 
   public connections(parent: Element): Connection[] {
@@ -42,7 +41,7 @@ export class ConnectionParser {
       "type",
       "http://www.w3.org/2001/XMLSchema-instance"
     );
-    connection.bendpoints = []; // TODO
+    connection.bendpoints = this.bendpointParser.bendpoints(child);
     connection.source = getStringAttribute(child, "source");
     connection.target = getStringAttribute(child, "target");
     connection.relationship = getStringAttribute(child, "archimateRelationship");

@@ -148,8 +148,8 @@ export class Diagram implements IDiagram {
     const minY = nodeVals.map(v => v[1]).reduce(minFunc);
     const maxY = nodeVals.map(v => v[1] + v[3]).reduce(maxFunc);
     return {
-      height: maxY - minY + 10,
-      width: maxX - minX + 10,
+      height: maxY - minY + 20,
+      width: maxX - minX + 20,
       x: minX - 10,
       y: minY - 10,
     };

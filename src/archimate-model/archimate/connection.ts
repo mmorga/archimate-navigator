@@ -1,7 +1,7 @@
-import { zeroBounds } from "./bounds";
+import { Bounds, zeroBounds } from "./bounds";
 import { IModel } from "./interfaces";
-// import { Diagram } from "./diagram";
-// import { Model } from "./model";
+import { Point } from "./point";
+import { ViewNode } from "./view-node";
 
 // Graphical connection type.
 //
@@ -20,19 +20,17 @@ export class Connection {
   public documentation?: string;
   public type?: string;
   public sourceAttachment?: string; // Location
-  public bendpoints: string[] = []; // Location[]
+  public bendpoints: Point[] = []; // Location[]
   public targetAttachment?: string; // Location
   public source?: string;
   public target?: string;
   public relationship?: string;
   public style?: string; // Style
 
-  // public diagram: Diagram;
   private model: IModel;
 
-  constructor(model: IModel /*, diagram: Diagram*/) {
+  constructor(model: IModel) {
     this.model = model;
-    // this.diagram = diagram;
     this.id = model.makeUniqueId();
   }
 
@@ -45,7 +43,8 @@ export class Connection {
   }
 
   public toString() {
-    return `${this.typeName} ${this.source || "nothing"} -> ${this.target || "nothing"}`;
+    return `${this.typeName} ${this.source || "nothing"} -> ${this.target ||
+      "nothing"}`;
   }
 
   // public description() {
@@ -79,15 +78,15 @@ export class Connection {
     return this.model.lookup(this.target);
   }
 
-  // public sourceBounds() {
-  //   const svn = this.sourceViewNode();
-  //   return svn ? (svn as ViewNode).absolutePosition() : undefined;
-  // }
+  public sourceBounds(): Bounds | undefined {
+    const svn = this.sourceViewNode();
+    return svn ? (svn as ViewNode).bounds : undefined;
+  }
 
-  // public targetBounds() {
-  //   const tvn = this.targetViewNode();
-  //   return tvn ? (tvn as ViewNode).absolutePosition() : undefined;
-  // }
+  public targetBounds(): Bounds | undefined {
+    const tvn = this.targetViewNode();
+    return tvn ? (tvn as ViewNode).bounds : undefined;
+  }
 
   // This is used when rendering a connection to connection relationship.
   public nodes() {

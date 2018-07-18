@@ -18,6 +18,7 @@ interface IProps {
   zoomFull: () => void;
   selectedDiagram?: Diagram;
   selectedSvg?: Svg;
+  diagramZoom: number;
 }
 
 export default class ArchimateHeader extends React.PureComponent<IProps> {
@@ -85,24 +86,25 @@ export default class ArchimateHeader extends React.PureComponent<IProps> {
               role="group"
               aria-label="Diagram Controls"
             >
+              {this.props.diagramZoom}%
               <button
                 className="btn btn-default btn-sm navbar-btn"
                 onClick={this.zoomIn}
-                disabled={!this.props.selectedSvg}
+                disabled={!this.props.selectedDiagram}
               >
                 <span className="glyphicon glyphicon-zoom-in" />
               </button>
               <button
                 className="btn btn-default btn-sm navbar-btn"
                 onClick={this.zoomOut}
-                disabled={!this.props.selectedSvg}
+                disabled={!this.props.selectedDiagram}
               >
                 <span className="glyphicon glyphicon-zoom-out" />
               </button>
               <button
                 className="btn btn-default btn-sm navbar-btn"
                 onClick={this.zoomFull}
-                disabled={!this.props.selectedSvg}
+                disabled={!this.props.selectedDiagram}
               >
                 <span className="glyphicon glyphicon-fullscreen" />
               </button>

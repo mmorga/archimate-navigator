@@ -1,6 +1,33 @@
 import { AccessType } from "./access-type";
 import { Bounds } from "./bounds";
 
+export interface IPoint {
+  x: number;
+  y: number;
+
+  subtract(other: IPoint): number;
+  toString(): string;
+  inside(bounds: IBounds): boolean;
+}
+
+export interface IRange {
+  begin: number;
+  end: number;
+
+  overlapMidpoint(r: IRange): number | undefined;
+  cover(n: number): boolean;
+}
+
+export interface IBounds {
+  x?: number;
+  y?: number;
+  width: number;
+  height: number;
+
+  xRange(): IRange;
+  yRange(): IRange;
+}
+
 export interface IIdentifiable {
   id: string;
 }

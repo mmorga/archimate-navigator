@@ -1,4 +1,15 @@
-export class Bounds {
+import { IBounds, IPoint } from "./interfaces";
+import Range from "./range";
+
+export class Bounds implements IBounds {
+  public static fromLocation(location: IPoint): Bounds {
+    return new Bounds(location.x, location.y, 0, 0);
+  }
+
+  public static zeroBounds(): Bounds {
+    return new Bounds(0, 0, 0, 0);
+  }
+
   public x?: number;
   public y?: number;
   public width: number;
@@ -19,13 +30,13 @@ export class Bounds {
     return `Bounds(x: ${this.x}, y: ${this.y}, width: ${this.width}, height: ${this.height})`;
   }
 
-  // public xRange() {
-  //   return new Range(this.left(), this.right());
-  // }
+  public xRange() {
+    return new Range(this.left(), this.right());
+  }
 
-  // public yRange() {
-  //   return new Range(this.top(), bottom())
-  // }
+  public yRange() {
+    return new Range(this.top(), this.bottom())
+  }
 
   public top() {
     return this.y || 0;
@@ -82,8 +93,4 @@ export class Bounds {
 
 export function zeroBounds() {
   return new Bounds(0, 0, 0, 0);
-}
-
-export function fromLocation(location: {x: number, y: number}) {
-  return new Bounds(location.x, location.y, 0, 0);
 }

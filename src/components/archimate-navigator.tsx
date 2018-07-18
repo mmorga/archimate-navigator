@@ -31,8 +31,8 @@ interface IProps {
 }
 
 interface IState {
-  // diagramDiv? : Element | null;
   diagramSvg?: Svg;
+  diagramZoom: number;
   error?: any;
   graphModelStore?: GraphModelStore;
   graphQuery?: string;
@@ -81,6 +81,7 @@ export default class ArchimateNavigator extends React.Component<
     super(props);
     this.state = {
       diagramSvg: undefined,
+      diagramZoom: 100,
       graphModelStore: new GraphModelStore(),
       graphQuery: props.graphQuery,
       graphQueryResults: [],
@@ -188,8 +189,11 @@ export default class ArchimateNavigator extends React.Component<
               zoomFull={this.zoomFull}
               selectedDiagram={this.state.selectedDiagram}
               selectedSvg={this.selectedSvg()}
+              diagramZoom={this.state.diagramZoom}
             />
-            {this.mainView()}
+            <div className="archimate-svg-container" style={{height: window.innerHeight - 70}}>
+              {this.mainView()}
+            </div>
           </Col>
         </Row>
       </Grid>
@@ -222,9 +226,11 @@ export default class ArchimateNavigator extends React.Component<
       default:
         return (
           <ArchimateDiagramView
+            key={this.state.selectedDiagram ? this.state.selectedDiagram.id : "archimate-no-diagram"}
             selectedDiagram={this.state.selectedDiagram}
             entityClicked={this.linkClicked}
             diagramClicked={this.diagramClicked}
+            diagramZoom={this.state.diagramZoom}
           />
         );
       case ActiveView.Graph:
@@ -339,27 +345,15 @@ export default class ArchimateNavigator extends React.Component<
   };
 
   private zoomIn = (): void => {
-    const svg = this.selectedSvg();
-    if (!svg) {
-      return;
-    }
-    svg.zoomIn();
+    this.setState({diagramZoom: this.state.diagramZoom + (this.state.diagramZoom / 10)});
   };
 
   private zoomOut = (): void => {
-    const svg = this.selectedSvg();
-    if (!svg) {
-      return;
-    }
-    svg.zoomOut();
+    this.setState({diagramZoom: this.state.diagramZoom - (this.state.diagramZoom / 10)});
   };
 
   private zoomFull = (): void => {
-    const svg = this.selectedSvg();
-    if (!svg) {
-      return;
-    }
-    svg.zoomFull();
+    this.setState({diagramZoom: 100});
   };
 
   // private openInNewWindow = (): void => {};

@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Diagram } from "../../archimate-model";
 import "./archimate-svg.css";
 
 export interface IViewBox {
@@ -9,9 +10,7 @@ export interface IViewBox {
 }
 
 interface IProps {
-  title?: string;
-  desc?: string;
-  viewBox?: IViewBox;
+  diagram: Diagram;
 }
 
 interface IState {
@@ -22,7 +21,7 @@ export default class ArchimateSvg extends React.PureComponent<IProps, IState> {
   constructor(props: IProps) {
     super(props);
     this.state = {
-      viewBox: this.props.viewBox
+      viewBox: this.props.diagram.calculateMaxExtents(),
     }
     this.svgLoaded = this.svgLoaded.bind(this);
     this.svgResized = this.svgResized.bind(this);
@@ -32,16 +31,17 @@ export default class ArchimateSvg extends React.PureComponent<IProps, IState> {
     const style2: React.CSSProperties = {fill:"none",stroke:"inherit",strokeWidth:1,strokeLinecap:"butt",strokeLinejoin:"miter"};
     const style3: React.CSSProperties = {fill:"none",stroke:"inherit",strokeWidth:1,strokeLinecap:"round",strokeLinejoin:"round"};
     const style4: React.CSSProperties = {fill:"none",stroke:"inherent",strokeWidth:0.7};
+    const vb: SVGRect = this.state.viewBox || {x: 0, y: 0, width: 800, height: 800};
     return (
       <svg 
         className="archimate-svg"
         version="1.1"
-        viewBox={`${this.viewBox()}`}
+        viewBox={`${vb.x} ${vb.y} ${vb.width} ${vb.height}`}
         onLoad={this.svgLoaded}
-        onresize={this.svgResized}
+        // onresize={this.svgResized}
         >
-        <title>{ this.props.title }</title>
-        <desc>{ this.props.desc }</desc>
+        <title>{ this.props.diagram.name }</title>
+        <desc>{ this.props.diagram.documentation }</desc>
         <defs>
           <symbol id="archimate-material-badge" className="archimate-badge" viewBox="0 0 20 20">
             <path style={{fill:"none",stroke:"inherit",strokeWidth:1,strokeLinejoin:"miter"}} d="M 15.443383,8.5890552 5.0182941,17.265414 -7.7081977,12.575201 -10.0096,-0.7913701 0.41548896,-9.4677289 13.141981,-4.7775163 Z" transform="matrix(0.59818877,-0.22354387,0.22387513,0.59808805,7.5647066,7.7263348)" />
@@ -221,14 +221,5 @@ export default class ArchimateSvg extends React.PureComponent<IProps, IState> {
   
   public svgResized(evt: React.SyntheticEvent<SVGSVGElement>) {
     this.svgLoaded(evt);
-  }
-  
-  public viewBox() {
-    if (this.state.viewBox) {
-      const vb = this.state.viewBox as IViewBox; 
-      return `${vb.x} ${vb.y} ${vb.width} ${vb.height}`;
-    } else {
-      return "0 0 800 800";
-    }
   }
 }
