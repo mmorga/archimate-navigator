@@ -1,5 +1,6 @@
 import * as React from "react";
 import { Bounds, IEntity, Layer, ViewNode, zeroBounds } from "../../archimate-model";
+import "./archimate-svg.css";
 import EntityLabel from "./entity-label";
 
 interface IProps {

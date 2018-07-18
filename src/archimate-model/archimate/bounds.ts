@@ -1,8 +1,9 @@
 import { IBounds, IPoint } from "./interfaces";
+import { Point } from "./point";
 import Range from "./range";
 
 export class Bounds implements IBounds {
-  public static fromLocation(location: IPoint): Bounds {
+  public static fromPoint(location: IPoint): Bounds {
     return new Bounds(location.x, location.y, 0, 0);
   }
 
@@ -54,8 +55,9 @@ export class Bounds implements IBounds {
     return this.x || 0;
   }
 
-  public center() {
-    return new Bounds(this.left() + this.width / 2.0, this.top() + this.height / 2.0, 0, 0);
+  public center(): Point {
+    // return new Bounds(this.left() + this.width / 2.0, this.top() + this.height / 2.0, 0, 0);
+    return new Point(this.left() + this.width / 2.0, this.top() + this.height / 2.0);
   }
 
   public above(other: Bounds) {

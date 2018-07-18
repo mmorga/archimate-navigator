@@ -38,6 +38,7 @@ export default class ArchimateSvg extends React.PureComponent<IProps, IState> {
         version="1.1"
         viewBox={`${vb.x} ${vb.y} ${vb.width} ${vb.height}`}
         onLoad={this.svgLoaded}
+        zoomAndPan="magnify"
         // onresize={this.svgResized}
         >
         <title>{ this.props.diagram.name }</title>

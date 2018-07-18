@@ -1,3 +1,4 @@
+import { Connection } from "../../connection";
 import { ParserError } from "../../interfaces";
 import { Model } from "../../model";
 import { DocumentationParser } from "./documentation-parser";
@@ -31,15 +32,16 @@ export class ArchiFileReader {
   }
 
   private fixBendpoints(model: Model) {
-    // model
-    //   .diagrams
-    //   .flat_map(&:connections)
-    //   .each do |connection|
-    //     connection.bendpoints.each do |bendpoint|
-    //       bendpoint.x += connection.start_location.x.to_i
-    //       bendpoint.y += connection.start_location.y.to_i
-    //     end
-    //   end
+    const dConns = model.diagrams.map(d => d.connections);
+    const connections: Connection[] = new Array<Connection>().concat(
+      ...dConns
+    );
+    connections.forEach(connection => {
+      connection.bendpoints.forEach(bendpoint => {
+        bendpoint.x += connection.startLocation().x;
+        bendpoint.y += connection.startLocation().y;
+      });
+    });
     return model;
   }
 }

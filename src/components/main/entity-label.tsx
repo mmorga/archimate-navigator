@@ -129,7 +129,7 @@ export default class EntityLabel extends React.PureComponent<IProps, IState> {
     case "end":
       return textBounds.right() - this.props.badgeBounds.width;
     default:
-      return textBounds.center().left() - (this.props.badgeBounds.width / 2.0);
+      return textBounds.center().x - (this.props.badgeBounds.width / 2.0);
     }
   }
 

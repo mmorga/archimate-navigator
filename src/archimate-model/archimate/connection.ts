@@ -20,9 +20,9 @@ export class Connection implements IEntity {
   public name?: string;
   public documentation?: string;
   public type: string;
-  public sourceAttachment?: string; // Location
-  public bendpoints: Point[] = []; // Location[]
-  public targetAttachment?: string; // Location
+  public sourceAttachment?: Point;
+  public bendpoints: Point[] = [];
+  public targetAttachment?: Point;
   public source: string;
   public target: string;
   public relationship?: string;
@@ -63,13 +63,13 @@ export class Connection implements IEntity {
   //   ].compact.join(" ")
   // }
 
-  // public startLocation() {
-  //   return this.sourceAttachment || this.sourceBounds().center();
-  // }
+  public startLocation(): Point {
+    return this.sourceAttachment || this.sourceBounds().center();
+  }
 
-  // public endLocation() {
-  //   return this.targetAttachment || this.targetBounds().center();
-  // }
+  public endLocation(): Point {
+    return this.targetAttachment || this.targetBounds().center();
+  }
 
   public sourceViewNode(): ViewNode | Connection {
     if (this.sourceEntity) {

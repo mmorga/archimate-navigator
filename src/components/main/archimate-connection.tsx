@@ -1,5 +1,6 @@
 import * as React from "react";
 import { Connection, Path, ViewNode } from "../../archimate-model";
+import "./archimate-svg.css";
 
 interface IProps {
   connection: Connection;
@@ -76,7 +77,6 @@ export default class ArchimateConnection extends React.PureComponent<IProps, ISt
   }
 
   private text_position(): number {
-    // TODO: const tp = this.props.connection.style ? this.props.connection.style.textPosition : undefined;
     const optTp: number | undefined = undefined;
     if (optTp === undefined) {
       return 0.5;
@@ -118,6 +118,7 @@ export default class ArchimateConnection extends React.PureComponent<IProps, ISt
 
   private css_classify(str: string): string {
     return str.replace(/::/, '/')
+      .replace("Relationship", "")
       .replace(/([A-Z]+)([A-Z][a-z])/, '$1-$2')
       .replace(/([a-z\d])([A-Z])/, '$1-$2')
       .toLowerCase();
