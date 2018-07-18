@@ -1,4 +1,5 @@
 import { Bounds, zeroBounds } from "./bounds";
+import { Connection } from "./connection";
 import { Diagram } from "./diagram";
 import { IEntity, IModel, IProperty, IViewNode } from "./interfaces";
 
@@ -121,7 +122,17 @@ export class ViewNode implements IViewNode {
   // }
 
   // @todo Is this true for all or only Archi models?
-  // public absolutePosition(): Bounds {
+  public absolutePosition(): Bounds {
+    return this.bounds;
+  }
+
+  public inside(other: ViewNode | Connection): boolean {
+    if (other instanceof Connection) {
+      return false;
+    }
+    return this.bounds.inside((other as ViewNode).bounds);
+  }
+
   //   const offset = this.bounds || zeroBounds();
   //   const el = this.parent;
   //   while (el.respond_to?(:bounds) && el.bounds) {

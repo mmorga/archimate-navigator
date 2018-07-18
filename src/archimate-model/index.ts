@@ -7,6 +7,8 @@ export * from "./archimate/viewpoint-type";
 export * from "./archimate/range";
 export * from "./archimate/bounds";
 export * from "./archimate/point";
+export * from "./archimate/path";
+export * from "./archimate/segment";
 export * from "./archimate/interfaces";
 export * from "./archimate/property";
 export * from "./archimate/connection";

@@ -137,6 +137,9 @@ export class ExtendableError extends Error {
 export class ParserError extends ExtendableError {}
 
 // tslint:disable-next-line:max-classes-per-file
+export class LogicError extends ExtendableError {}
+
+// tslint:disable-next-line:max-classes-per-file
 export class UnsupportedFormat extends ExtendableError {
   public xmlns?: string;
 

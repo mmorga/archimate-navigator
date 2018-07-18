@@ -1,9 +1,11 @@
-import { Bounds, Connection, Point, zeroBounds } from "../../archimate-model";
-import Segment from "./segment";
+import { Bounds, zeroBounds } from "./bounds";
+import { Connection } from "./connection";
+import { Point } from "./point";
+import { Segment } from "./segment";
 
-const LINE_CURVE_RADIUS = 5;
+// const LINE_CURVE_RADIUS = 5;
 
-export default class Path {
+export class Path {
   public connection: Connection;
   public points: Point[];
   public segments: Segment[];
@@ -31,9 +33,18 @@ export default class Path {
   // For cases with more bendpoints (with values d, e, ...)
   // repeat the above section with c as the new a value (so then [c, d, e], [d, e, f], etc.)
   public d(): string {
+    const dCmds = [];
+
+    // Starting point
+    dCmds.push(this.move_to(this.points[0]));
+
+    // Bendpoints
+
+    // Ending point
+    dCmds.push(this.line_to(this.points[1]));
 
     return (
-      [this.move_to(this.points[0]), this.line_to(this.points[1])].join(" ")
+      dCmds.join(" ")
     );
     // return (
     //   [this.move_to(this.points[0])]
@@ -61,6 +72,11 @@ export default class Path {
     return pt ? (pt as Point) : new Point(0.0, 0.0);
   }
 
+  // this.return Point mid-point on Path
+  public midpoint(): Point {
+    return this.point(0.5);
+  }
+    
   // Takes the bounds of two objects and returns the optimal points
   // between from the edge of `a` to the edge of `b`
   // if left/right range of both overlap, use centerpoint of overlap range as x val
@@ -104,15 +120,16 @@ export default class Path {
     return [new Point(ax, ay), new Point(bx, by)];
   }
 
-  private normalizedBendPoints(): Bounds[] {
-    return (
-      this.connection
-        .bendpoints
-        .filter(bendpoint => [this.sourceBounds, this.targetBounds]
-            .some(bounds => bendpoint.inside(bounds)))
-        .map(bendpoint => Bounds.fromLocation(bendpoint))
-    );
-  }
+  // private normalizedBendPoints(): Bounds[] {
+  //   return (
+  //     this.connection
+  //       .bendpoints
+  //       .filter(bendpoint => {
+  //         return ![this.sourceBounds, this.targetBounds].some(bounds => bendpoint.inside(bounds));
+  //       })
+  //       .map(bendpoint => Bounds.fromLocation(bendpoint))
+  //   );
+  // }
 
   private calcPoints(): Point[] {
     const bounds = new Array<Bounds>().concat(
@@ -137,19 +154,14 @@ export default class Path {
   }
 
   // Returns the lengths of each segment of the line
-  private segmentLengths(): number[] {
-    return this.segments.map(s => s.length());
-  }
+  // private segmentLengths(): number[] {
+  //   return this.segments.map(s => s.length());
+  // }
 
   // this.return Float length of this path
-  private length(): number {
-    return this.segmentLengths().reduce((total, length) => total + length, 0);
-  }
-
-  // this.return Point mid-point on Path
-  private midpoint() {
-    this.point(0.5)
-  }
+  // private length(): number {
+  //   return this.segmentLengths().reduce((total, length) => total + length, 0);
+  // }
 
   private move_to(point: Point): string {
     return `M ${point}`;
@@ -159,28 +171,28 @@ export default class Path {
     return `L ${point}`;
   }
 
-  private q_curve(cp: Point, pt: Point): string {
-    return `Q ${cp} ${pt}`;
-  }
+  // private q_curve(cp: Point, pt: Point): string {
+  //   return `Q ${cp} ${pt}`;
+  // }
 
-  private curve_segment(a: Point, b: Point, c: Point): string[] {
-    const pt1 = new Segment(a, b).fromEnd(LINE_CURVE_RADIUS);
-    const pt2 = new Segment(b, c).fromStart(LINE_CURVE_RADIUS);
-    return [
-      this.line_to(pt1),
-      this.q_curve(b, pt2)
-    ]
-  }
+  // private curve_segment(a: Point, b: Point, c: Point): string[] {
+  //   const pt1 = new Segment(a, b).fromEnd(LINE_CURVE_RADIUS);
+  //   const pt2 = new Segment(b, c).fromStart(LINE_CURVE_RADIUS);
+  //   return [
+  //     this.line_to(pt1),
+  //     this.q_curve(b, pt2)
+  //   ]
+  // }
 
-  private eachCons(ary: Point[], n: number): Point[][] {
-    const len = ary.length - n;
-    if (len < 1) {
-      return [];
-    }
-    const res = new Array(len);
-    for (let i = 0; i < len; ++i) {
-      res[i] = i;
-    }
-    return res.map(i => [ary[i], ary[i+1], ary[i+2]]);
-  }
+  // private eachCons(ary: Point[], n: number): Point[][] {
+  //   const len = ary.length - n;
+  //   if (len < 1) {
+  //     return [];
+  //   }
+  //   const res = new Array(len);
+  //   for (let i = 0; i < len; ++i) {
+  //     res[i] = i;
+  //   }
+  //   return res.map(i => [ary[i], ary[i+1], ary[i+2]]);
+  // }
 }

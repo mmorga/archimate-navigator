@@ -1,6 +1,5 @@
 import * as React from "react";
-import { Connection, IEntity } from "../../archimate-model";
-import Path from "./path";
+import { Connection, Path, ViewNode } from "../../archimate-model";
 
 interface IProps {
   connection: Connection;
@@ -8,8 +7,8 @@ interface IProps {
 
 interface IState {
   path: Path;
-  sourceEntity: IEntity | undefined;
-  targetEntity: IEntity | undefined;
+  sourceEntity: ViewNode | Connection;
+  targetEntity: ViewNode | Connection;
 }
 
 export default class ArchimateConnection extends React.PureComponent<IProps, IState> {
@@ -23,7 +22,12 @@ export default class ArchimateConnection extends React.PureComponent<IProps, ISt
   }
 
   public render() {
+    // If the target is contained in the source, then don't render this connection
     // return if connection.source.nodes.include?(connection.target)
+    if ((this.state.sourceEntity === undefined) || (this.state.targetEntity === undefined) ||
+        (this.state.targetEntity.inside(this.state.sourceEntity))) {
+      return null;
+    }
     return (
       <React.Fragment>
         <path {...this.pathAttrs()}>
@@ -112,7 +116,6 @@ export default class ArchimateConnection extends React.PureComponent<IProps, ISt
     return ["archimate", this.css_classify(type)].join("-") + " archimate-relationship";
   }
 
-  // TODO: StringRefinements refinement isn't working in this class, so added this method here. Investigate.
   private css_classify(str: string): string {
     return str.replace(/::/, '/')
       .replace(/([A-Z]+)([A-Z][a-z])/, '$1-$2')

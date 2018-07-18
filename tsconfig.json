@@ -40,6 +40,8 @@
     "src/archimate-model/archimate/range.ts",
     "src/archimate-model/archimate/bounds.ts",
     "src/archimate-model/archimate/point.ts",
+    "src/archimate-model/archimate/path.ts",
+    "src/archimate-model/archimate/segment.ts",
     "src/archimate-model/archimate/interfaces.ts",
     "src/archimate-model/archimate/property.ts",
     "src/archimate-model/archimate/connection.ts",

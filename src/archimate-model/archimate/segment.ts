@@ -1,6 +1,6 @@
-import { Point } from "../../archimate-model";
+import { Point } from "./point";
 
-export default class Segment {
+export class Segment {
   public a: Point;
   public b: Point;
 

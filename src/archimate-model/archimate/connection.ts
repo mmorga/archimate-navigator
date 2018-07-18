@@ -1,5 +1,6 @@
-import { Bounds, zeroBounds } from "./bounds";
-import { IEntity, IModel, IProperty } from "./interfaces";
+import { Bounds } from "./bounds";
+import { IEntity, IModel, IProperty, LogicError } from "./interfaces";
+import { Path } from "./path";
 import { Point } from "./point";
 import { ViewNode } from "./view-node";
 
@@ -22,20 +23,22 @@ export class Connection implements IEntity {
   public sourceAttachment?: string; // Location
   public bendpoints: Point[] = []; // Location[]
   public targetAttachment?: string; // Location
-  public source?: string;
-  public target?: string;
+  public source: string;
+  public target: string;
   public relationship?: string;
   public style?: string; // Style
   public properties: IProperty[] = [];
 
   private model: IModel;
-  private sourceEntity?: IEntity;
-  private targetEntity?: IEntity;
+  private sourceEntity?: ViewNode | Connection;
+  private targetEntity?: ViewNode | Connection;
 
-  constructor(model: IModel) {
+  constructor(model: IModel, type: string, source: string, target: string) {
     this.model = model;
     this.id = model.makeUniqueId();
-    this.type = "Connection";
+    this.type = type;
+    this.source = source;
+    this.target = target;
   }
 
   public typeName() {
@@ -68,30 +71,32 @@ export class Connection implements IEntity {
   //   return this.targetAttachment || this.targetBounds().center();
   // }
 
-  public sourceViewNode() {
-    if (this.source === undefined) {
-      return undefined;
+  public sourceViewNode(): ViewNode | Connection {
+    if (this.sourceEntity) {
+      return this.sourceEntity;
     }
-    this.sourceEntity = this.model.lookup(this.source);
+    this.sourceEntity = this.srcTargetLookup(this.source);
     return this.sourceEntity;
   }
 
   public targetViewNode() {
-    if (this.target === undefined) {
-      return undefined;
+    if (this.targetEntity) {
+      return this.targetEntity;
     }
-    this.targetEntity = this.model.lookup(this.target);
+    this.targetEntity = this.srcTargetLookup(this.target);
     return this.targetEntity;
   }
 
-  public sourceBounds(): Bounds | undefined {
-    const svn = this.sourceViewNode();
-    return svn ? (svn as ViewNode).bounds : undefined;
+  public sourceBounds(): Bounds {
+    return this.sourceViewNode().absolutePosition();
   }
 
-  public targetBounds(): Bounds | undefined {
-    const tvn = this.targetViewNode();
-    return tvn ? (tvn as ViewNode).bounds : undefined;
+  public targetBounds(): Bounds {
+    return this.targetViewNode().absolutePosition();
+  }
+
+  public inside(other: ViewNode | Connection): boolean {
+    return false;
   }
 
   // This is used when rendering a connection to connection relationship.
@@ -99,11 +104,9 @@ export class Connection implements IEntity {
     return [];
   }
 
-  // TODO: Implement me
   public absolutePosition() {
-    // pt = Svg::Path.new(self).midpoint
-    // return Bounds.new(x: pt.x, y: pt.y, width: 0, height: 0)
-    return zeroBounds();
+    const pt = new Path(this).midpoint();
+    return new Bounds(pt.x, pt.y, 0, 0);
   }
 
   // public replace_item_with(item, replacement) {
@@ -116,4 +119,20 @@ export class Connection implements IEntity {
   //     raise "Trying to replace #{item} that I don't reference"
   //   }
   // }
+
+  private srcTargetLookup(id: string): ViewNode | Connection {
+    const entity = this.model.lookup(id);
+    if (entity === undefined) {
+      throw new LogicError("Lookup failed for srcTargetLookup");
+    }
+    let srcOrTarget: ViewNode | Connection;
+    if (entity instanceof ViewNode) {
+      srcOrTarget = entity as ViewNode;
+    } else if (entity instanceof Connection) {
+      srcOrTarget = entity as Connection;
+    } else {
+      throw new LogicError("Lookup returned unexpected type")
+    }    
+    return srcOrTarget;
+  }
 }

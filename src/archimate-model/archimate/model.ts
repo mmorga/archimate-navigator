@@ -17,7 +17,7 @@ function emptyIndexHash() {
 // This is the root model type.
 // It is a container for the elements, relationships, diagrams and
 // organizations of the model.
-class Model implements IModel {
+export class Model implements IModel {
   // unique identifier of this model
   public id: string = "";
   // name of the model
@@ -226,5 +226,3 @@ class Model implements IModel {
     return ref;
   }
 }
-
-export { Model };
