@@ -1,3 +1,4 @@
+import createPanZoom from "panzoom";
 import * as React from "react";
 import { Diagram } from "../../archimate-model";
 import "./archimate-svg.css";
@@ -18,6 +19,8 @@ interface IState {
 }
 
 export default class ArchimateSvg extends React.PureComponent<IProps, IState> {
+  private svgTopGroup: React.RefObject<SVGGElement>;
+
   constructor(props: IProps) {
     super(props);
     this.state = {
@@ -25,6 +28,7 @@ export default class ArchimateSvg extends React.PureComponent<IProps, IState> {
     }
     this.svgLoaded = this.svgLoaded.bind(this);
     this.svgResized = this.svgResized.bind(this);
+    this.svgTopGroup = React.createRef();
   }
 
   public render() {
@@ -207,11 +211,18 @@ export default class ArchimateSvg extends React.PureComponent<IProps, IState> {
             <polygon points="12.5,6.25 22.5,12.5 12.5,18.75 2.5,12.5" fill="white" stroke="black"/>
           </marker>
         </defs>
-        <g id="archimate-diagram">
+        <g ref={this.svgTopGroup}>
           { this.props.children }
         </g>
       </svg>
     );
+  }
+
+  public componentDidMount() {
+    const svgTopGroup = this.svgTopGroup.current;
+    if (svgTopGroup) {
+      createPanZoom(svgTopGroup, {});
+    }
   }
 
   public svgLoaded(evt: React.SyntheticEvent<SVGSVGElement>) {

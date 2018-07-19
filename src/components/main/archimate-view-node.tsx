@@ -1,4 +1,5 @@
 import * as React from "react";
+import { TextAlignProperty } from "../../../node_modules/csstype";
 import { Bounds, IEntity, Layer, Point, ViewNode, zeroBounds } from "../../archimate-model";
 import "./archimate-svg.css";
 import EntityLabel from "./entity-label";
@@ -15,7 +16,7 @@ interface IState {
   entity?: IEntity | undefined;
   entityLabelFunc?: () => string | undefined;
   entityShapeFunc?: () => React.ReactFragment;
-  textAlign?: string;
+  textAlign?: TextAlignProperty;
   textBounds?: Bounds;
   margin?: number;
 }
@@ -27,7 +28,7 @@ class MergedState implements IState {
   public entity?: IEntity | undefined;
   public entityLabelFunc?: () => string | undefined;
   public entityShapeFunc?: () => React.ReactFragment;
-  public textAlign?: string;
+  public textAlign?: TextAlignProperty;
   public textBounds?: Bounds;
   public margin?: number;
 
@@ -171,10 +172,13 @@ export default class ArchimateViewNode extends React.PureComponent<IProps, IStat
   public stateForViewNode(): IState {
     const defaultState = new MergedState({
       backgroundClass: this.defaultBackgroundClass(),
+      badge: undefined,
+      badgeBounds: undefined,
       entity: this.props.viewNode.elementInstance(),
       entityLabelFunc: this.label,
       entityShapeFunc: this.rectPath,
       margin: 8,
+      textAlign: "center",
       textBounds: this.defaultTextBounds(),
     });
 
@@ -307,7 +311,14 @@ export default class ArchimateViewNode extends React.PureComponent<IProps, IStat
           textBounds: this.dataTextBounds(),
         })
       case "Deliverable":
-        return defaultState.with({ entityShapeFunc: this.representationPath });
+        return defaultState.with({ entityShapeFunc: this.deliverablePath });
+      case "Gap":
+        return defaultState.with({ 
+          backgroundClass: "archimate-implementation2-background",
+          badge: "#archimate-gap-badge",
+          badgeBounds: this.rectBadgeBounds(),
+          entityShapeFunc: this.deliverablePath,
+         });
       case "Device":
         if (this.props.viewNode.childType === "1") {
           return badgedNode.with({ badge: "#archimate-device-badge" });
@@ -354,31 +365,28 @@ export default class ArchimateViewNode extends React.PureComponent<IProps, IStat
         return badgedRect.with({ badge: "#archimate-network-badge" });
       case "Node":
         if (this.props.viewNode.childType === "1") {
-          return badgedNode.with({ badge: "#archimate-node-badge" });
-        } else {
           return defaultState.with({ entityShapeFunc: this.devicePath });
+        } else {
+          return badgedRect.with({ badge: "#archimate-node-badge" });
         }
       case "DiagramObject":
       case "Note":
         return noteState;
+      case "Constraint":
+        return badgedMotivation.with({ badge: "#archimate-constraint-badge" });
+      case "Goal":
+        return badgedMotivation.with({ badge: "#archimate-goal-badge" });
       case "Outcome":
         return badgedMotivation.with({ badge: "#archimate-outcome-badge" });
       case "Path":
         return badgedRect.with({ badge: "#archimate-communication-path-badge" });
       case "Plateau":
-        if (this.props.viewNode.childType === "1") {
-          return badgedNode.with({
-            backgroundClass: "archimate-implementation2-background",
-            badge: "#archimate-plateau-badge",
-          });
-        } else {
-          return defaultState.with({
-            backgroundClass: "archimate-implementation2-background",
-            entityShapeFunc: this.devicePath,
-          });
-        }
-      case "Principal":
-        return badgedMotivation.with({ badge: "#archimate-principal-badge" });
+        return badgedNode.with({
+          backgroundClass: "archimate-implementation2-background",
+          badge: "#archimate-plateau-badge",
+        });
+      case "Principle":
+        return badgedMotivation.with({ badge: "#archimate-principle-badge" });
       case "Product":
         return defaultState.with({
           entityShapeFunc: this.productPath,
@@ -389,7 +397,7 @@ export default class ArchimateViewNode extends React.PureComponent<IProps, IStat
           entityShapeFunc: this.representationPath,
           textBounds: this.dataTextBounds(),
         });
-    case "Requirement":
+      case "Requirement":
         return badgedMotivation.with({ badge: "#archimate-requirement-badge" });
       case "Resource":
         return badgedRect.with({ badge: "#archimate-resource-badge" });
@@ -407,6 +415,10 @@ export default class ArchimateViewNode extends React.PureComponent<IProps, IStat
           entityShapeFunc: this.valuePath,
           textBounds: this.valueTextBounds(),
         });
+      case "WorkPackage":
+        return defaultState.with({
+          entityShapeFunc: this.roundedRectPath,
+        })
       default:
         return defaultState;
     }
@@ -761,6 +773,30 @@ export default class ArchimateViewNode extends React.PureComponent<IProps, IStat
     );
   }
 
+  private deliverablePath(): React.ReactFragment {
+    const bounds = this.props.viewNode.bounds;
+    return (
+      <React.Fragment>
+        <path
+            d={[
+                "M", bounds.left(), bounds.top(),
+                "v", bounds.height - 8,
+                "c", 0.167 * bounds.width, 0.133 * bounds.height,
+                0.336 * bounds.width, 0.133 * bounds.height,
+                bounds.width * 0.508, 0,
+                "c", 0.0161 * bounds.width, -0.0778 * bounds.height,
+                0.322 * bounds.width, -0.0778 * bounds.height,
+                bounds.width * 0.475, 0,
+                "v", -(bounds.height - 8),
+                "z"
+              ].join(" ")}
+            className={this.state.backgroundClass}
+            style={this.shapeStyle()}
+        />
+      </React.Fragment>
+    );
+  }
+
   private representationPath(): React.ReactFragment {
     const bounds = this.props.viewNode.bounds;
     return (
@@ -1019,7 +1055,7 @@ export default class ArchimateViewNode extends React.PureComponent<IProps, IStat
           style={this.shapeStyle()}
         />
         <path
-          d={["M", bounds.left, bounds.top() + groupHeaderHeight - 1,
+          d={["M", bounds.left(), bounds.top() + groupHeaderHeight - 1,
               "v", -(groupHeaderHeight - 1),
               "h", bounds.width / 2,
               "v", groupHeaderHeight - 1].join(" ")}

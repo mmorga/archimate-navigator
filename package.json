@@ -8,6 +8,7 @@
     "d3-force": "^1.1.0",
     "d3-request": "^1.0.6",
     "fuse.js": "^3.2.1",
+    "panzoom": "^5.0.0",
     "react": "^16.4.1",
     "react-bootstrap": "^0.32.1",
     "react-dom": "^16.4.1",

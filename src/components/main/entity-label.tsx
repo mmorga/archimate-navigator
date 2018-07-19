@@ -1,4 +1,5 @@
 import * as React from "react";
+import { TextAlignProperty } from "../../../node_modules/csstype";
 import { Bounds } from "../../archimate-model/archimate/bounds";
 import { ViewNode } from "../../archimate-model/archimate/view-node";
 
@@ -6,7 +7,7 @@ interface IProps {
   child: ViewNode;
   label: string;
   textBounds: Bounds;
-  textAlign?: string;
+  textAlign?: TextAlignProperty;
   badgeBounds: Bounds;
 }
 
@@ -172,6 +173,7 @@ export default class EntityLabel extends React.PureComponent<IProps, IState> {
     if (style.fontColor) { cssStyle.color = style.fontColor.toRGBA() }
     if (style.font && style.font.name) { cssStyle.fontFamily = style.font.name }
     if (style.font && style.font.size) { cssStyle.fontSize = style.font.size }
+    if (this.props.textAlign) { cssStyle.textAlign = this.props.textAlign } 
     if (style.textAlignment) { cssStyle.textAlign = style.textAlignment }
     return cssStyle;
   }

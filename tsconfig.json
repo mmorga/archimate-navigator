@@ -31,6 +31,8 @@
     "src/setupTests.ts"
   ],
   "files": [
+    "src/panzoom.d.ts",
+    "src/svg-text.d.ts",
     "src/archimate-model/archimate/access-type.ts",
     "src/archimate-model/archimate/diagram-type.ts",
     "src/archimate-model/archimate/element-type.ts",
@@ -102,7 +104,6 @@
     "src/components/main/archimate-diagram-view.tsx",
     "src/components/archimate-navigator.tsx",
     "src/registerServiceWorker.ts",
-    "src/svg-text.d.ts",
     "src/index.tsx"
   ]
 }

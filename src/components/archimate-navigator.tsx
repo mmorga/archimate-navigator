@@ -31,6 +31,7 @@ interface IProps {
 }
 
 interface IState {
+  diagramDivHeight: number;
   diagramSvg?: Svg;
   diagramZoom: number;
   error?: any;
@@ -80,6 +81,7 @@ export default class ArchimateNavigator extends React.Component<
   constructor(props: IProps) {
     super(props);
     this.state = {
+      diagramDivHeight: this.calcDiagramDivHeight(),
       diagramSvg: undefined,
       diagramZoom: 100,
       graphModelStore: new GraphModelStore(),
@@ -99,6 +101,7 @@ export default class ArchimateNavigator extends React.Component<
   }
 
   public componentDidMount() {
+    window.addEventListener("resize", this.onResize.bind(this));
     const parser = new DOMParser();
     fetch(this.props.modelUrl)
       .then((response: Response) => response.text())
@@ -125,6 +128,10 @@ export default class ArchimateNavigator extends React.Component<
           });
         }
       );
+  }
+
+  public componentWillUnmount() {
+    window.removeEventListener("resize", this.onResize.bind(this));
   }
 
   public render() {
@@ -191,7 +198,7 @@ export default class ArchimateNavigator extends React.Component<
               selectedSvg={this.selectedSvg()}
               diagramZoom={this.state.diagramZoom}
             />
-            <div className="archimate-svg-container" style={{height: window.innerHeight - 70}}>
+            <div className="archimate-svg-container" style={{height: this.state.diagramDivHeight}}>
               {this.mainView()}
             </div>
           </Col>
@@ -357,6 +364,16 @@ export default class ArchimateNavigator extends React.Component<
   };
 
   // private openInNewWindow = (): void => {};
+
+  private onResize() {
+    this.setState({
+      diagramDivHeight: this.calcDiagramDivHeight(),
+    });
+  }
+
+  private calcDiagramDivHeight(): number {
+    return window.innerHeight - 70;
+  }
 }
 
 // interface SvgRect {
