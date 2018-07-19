@@ -25,6 +25,7 @@ interface IProps {
   graphQuery?: string;
   modelUrl: string;
   selectedDiagram?: Diagram;
+  selectedDiagramId?: string;
   selectedEntity?: IEntity;
   selectedView?: ActiveView;
   sidebarTabKey?: SidebarTab;
@@ -45,6 +46,7 @@ interface IState {
   req?: XMLHttpRequest;
   sampleQueries: CypherQuery[];
   selectedDiagram?: Diagram;
+  selectedDiagramId?: string;
   selectedEntity?: IEntity;
   selectedView: ActiveView;
   sidebarTabKey: SidebarTab;
@@ -94,6 +96,7 @@ export default class ArchimateNavigator extends React.Component<
       req: undefined,
       sampleQueries: SAMPLE_QUERIES,
       selectedDiagram: props.selectedDiagram,
+      selectedDiagramId: props.selectedDiagramId || window.location.hash.replace(/^#/, ""),
       selectedEntity: props.selectedEntity,
       selectedView: props.selectedView || ActiveView.Diagram,
       sidebarTabKey: props.sidebarTabKey || SidebarTab.DiagramTreeTab
@@ -116,6 +119,7 @@ export default class ArchimateNavigator extends React.Component<
           this.setState({
             isLoaded: true,
             model: parsedModel || this.state.model,
+            selectedDiagram: parsedModel ? parsedModel.diagrams.find(d => d.id === this.state.selectedDiagramId) : undefined,
           });
         },
         // Note: it's important to handle errors here

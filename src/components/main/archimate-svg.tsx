@@ -20,6 +20,7 @@ interface IState {
 
 export default class ArchimateSvg extends React.PureComponent<IProps, IState> {
   private svgTopGroup: React.RefObject<SVGGElement>;
+  private panzoom: object | undefined = undefined;
 
   constructor(props: IProps) {
     super(props);
@@ -221,7 +222,15 @@ export default class ArchimateSvg extends React.PureComponent<IProps, IState> {
   public componentDidMount() {
     const svgTopGroup = this.svgTopGroup.current;
     if (svgTopGroup) {
+      // this.panzoom = 
       createPanZoom(svgTopGroup, {});
+    }
+  }
+
+  public componentWillUnmount() {
+    if (this.panzoom) {
+      // this.panzoom.dispose();
+      this.panzoom = undefined;
     }
   }
 

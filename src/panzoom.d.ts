@@ -16,7 +16,7 @@
 export = createPanZoom;
 
 /*~ This example shows how to have multiple overloads for your function */
-declare function createPanZoom(domElement: Element, options?: PanZoom.IOptions) : any; 
+declare function createPanZoom(domElement: Element, options?: PanZoom.IOptions) : PanZoom.IPanZoom; 
 
 /*~ If you want to expose types from your module as well, you can
  *~ place them in this block. Often you will want to describe the
@@ -39,15 +39,27 @@ declare namespace PanZoom {
       zoomSpeed?: number;
   }
 
-  // export interface IPanZoom {
-  //   dispose: any,
-  //   moveBy: internalMoveBy,
-  //   moveTo: moveTo,
-  //   centerOn: centerOn,
-  //   zoomTo: publicZoomTo,
-  //   zoomAbs: zoomAbs,
-  //   getTransform: getTransformModel,
-  //   showRectangle: showRectangle,
-  // }
+  export interface IPanZoom {
+    dispose: () => void,
+    moveBy: (dx: number, dy: number, smooth: boolean) => void,
+    moveTo: (x: number, y: number) => void,
+    centerOn: (ui: any) => void,
+    zoomTo: (clientX: number, clientY: number, scaleMultiplier: number) => void,
+    zoomAbs: (clientX: number, clientY: number, zoomLevel: number) => void,
+    getTransform: () => ITransform,
+    showRectangle: (rect: IRect) => void,
+  }
 
+  export interface IRect {
+    bottom: number;
+    top: number;
+    right: number;
+    left: number;
+  }
+
+  export interface ITransform {
+    x: number;
+    y: number;
+    scale: number;  
+  }
 }
