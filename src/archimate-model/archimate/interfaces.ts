@@ -1,5 +1,6 @@
 import { AccessType } from "./access-type";
 import { Bounds } from "./bounds";
+import { Style } from "./style";
 
 export interface IPoint {
   x: number;
@@ -77,7 +78,7 @@ export interface IViewNode extends IEntity {
   documentation?: string;
   // @note type here was used for the Element/Relationship/Diagram type
   type: string;
-  style?: string;
+  style?: Style;
 
   // @note viewRefs are pointers to 0-* Diagrams for diagram drill in defined in abstract View Concept
   viewRefs?: string;
@@ -95,7 +96,7 @@ export interface IViewNode extends IEntity {
   // ArchiMate Container Attributes
   // container doesn't distinguish between nodes and connections
 
-  nodes: IViewNode[]; // TODO: This is Archi format only - remove
+  nodes: IViewNode[];
   connections: object[];
 
   // Element

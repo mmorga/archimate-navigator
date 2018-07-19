@@ -7,6 +7,7 @@ import { ConnectionParser } from "./connection-parser";
 import { ContentParser } from "./content-parser";
 import { DocumentationParser } from "./documentation-parser";
 import { getNSStringAttribute, getStringAttribute } from "./dom-helpers";
+import { StyleParser } from "./style-parser";
 
 export class ViewNodeParser {
   public model: IModel;
@@ -16,6 +17,7 @@ export class ViewNodeParser {
   private documentationParser: DocumentationParser;
   private contentParser: ContentParser;
   private boundsParser: BoundsParser;
+  private styleParser: StyleParser;
 
   constructor(model: IModel, diagram: Diagram, offset: Bounds) {
     this.model = model;
@@ -25,6 +27,7 @@ export class ViewNodeParser {
     this.documentationParser = new DocumentationParser();
     this.contentParser = new ContentParser();
     this.boundsParser = new BoundsParser();
+    this.styleParser = new StyleParser();
   }
 
   public viewNodes(parent: Element): ViewNode[] {
@@ -50,14 +53,13 @@ export class ViewNodeParser {
       ) || ""
     ).replace("archimate:", "");
 
-    // viewNode.style = TODO: write style parser
+    viewNode.style = this.styleParser.style(child);
     viewNode.viewRefs = getStringAttribute(child, "model");
     viewNode.content = this.contentParser.content(child);
     if (child.parentElement!.nodeName === "child") {
       const parentEl = child.parentElement as Element;
       viewNode.parent = getStringAttribute(parentEl, "id");
     }
-    // TODO: normalize bounds with parent(s)
     viewNode.bounds = this.boundsParser.bounds(child)!.offset(this.offset);
     viewNode.element = getStringAttribute(child, "archimateElement");
     viewNode.childType = getStringAttribute(child, "type");

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Bounds, IEntity, Layer, ViewNode, zeroBounds } from "../../archimate-model";
+import { Bounds, IEntity, Layer, Point, ViewNode, zeroBounds } from "../../archimate-model";
 import "./archimate-svg.css";
 import EntityLabel from "./entity-label";
 
@@ -174,6 +174,7 @@ export default class ArchimateViewNode extends React.PureComponent<IProps, IStat
       entity: this.props.viewNode.elementInstance(),
       entityLabelFunc: this.label,
       entityShapeFunc: this.rectPath,
+      margin: 8,
       textBounds: this.defaultTextBounds(),
     });
 
@@ -206,12 +207,18 @@ export default class ArchimateViewNode extends React.PureComponent<IProps, IStat
       textBounds: this.props.viewNode.bounds.reducedBy(3),
     });
 
+    const junction = defaultState.with({
+      backgroundClass: "archimate-junction-background", 
+      entityLabelFunc: () => undefined,
+      entityShapeFunc: this.junctionPath,
+    });
+
     switch(this.elementType()) {
       case "AndJunction": 
-        return defaultState.with({
-          backgroundClass: "archimate-junction-background", 
-          entityLabelFunc: () => undefined,
-        });
+      case "Junction":
+        return junction.with({});
+      case "OrJunction":
+        return junction.with({ backgroundClass: "archimate-or-junction-background" });
       case "ApplicationCollaboration":
       case "TechnologyCollaboration":
         return badgedRect.with({ badge: "#archimate-collaboration-badge" });
@@ -228,12 +235,12 @@ export default class ArchimateViewNode extends React.PureComponent<IProps, IStat
       case "BusinessEvent":
       case "TechnologyEvent":
         if (this.props.viewNode.childType === "1") {
-          return badgedRoundedRect.with({ badge: "#archimate-event-badge" });
-        } else {
           return defaultState.with({
             entityShapeFunc: this.eventPath,
             textBounds: this.eventTextBounds(),
           });
+        } else {
+          return badgedRoundedRect.with({ badge: "#archimate-event-badge" });
         }
       case "ApplicationFunction":
       case "BusinessFunction":
@@ -291,6 +298,14 @@ export default class ArchimateViewNode extends React.PureComponent<IProps, IStat
           margin: 8,
           textBounds: this.dataTextBounds(),
         });
+      case "BusinessRole":
+        return badgedRect.with({ badge: "#archimate-role-badge" });
+      case "Contract":
+        return defaultState.with({
+          entityShapeFunc: this.contractPath,
+          margin: 8,
+          textBounds: this.dataTextBounds(),
+        })
       case "Deliverable":
         return defaultState.with({ entityShapeFunc: this.representationPath });
       case "Device":
@@ -312,19 +327,29 @@ export default class ArchimateViewNode extends React.PureComponent<IProps, IStat
       case "Driver":
         return badgedMotivation.with({ badge: "#archimate-driver-badge" });
       case "Group":
-      case "Grouping":
-        const bounds = this.props.viewNode.bounds;
         return defaultState.with({
           backgroundClass: "archimate-group-background",
+          entityShapeFunc: this.groupPath,
+          textAlign: "left",      
+          textBounds: this.groupTextBounds(),
+        });
+      case "Grouping":
+        return defaultState.with({
+          backgroundClass: "archimate-grouping-background",
           entityShapeFunc: this.groupingPath,
           textAlign: "left",      
-          textBounds: new Bounds(bounds.left() + 3, bounds.top(), (bounds.width / 2.0) - 6, this.groupHeaderHeight),
+          textBounds: this.groupTextBounds(),
         });
       case "Location":
         return badgedRect.with({ 
           backgroundClass: "archimate-location-background",
           badge: "#archimate-location-badge",
         });
+      case "Meaning":
+        return defaultState.with({
+          entityShapeFunc: this.meaningPath,
+        });
+      case "CommunicationNetwork":
       case "Network":
         return badgedRect.with({ badge: "#archimate-network-badge" });
       case "Node":
@@ -336,11 +361,6 @@ export default class ArchimateViewNode extends React.PureComponent<IProps, IStat
       case "DiagramObject":
       case "Note":
         return noteState;
-      case "OrJunction":
-        return defaultState.with({
-          backgroundClass: "archimate-or-junction-background",
-          entityLabelFunc: () => undefined,
-        });
       case "Outcome":
         return badgedMotivation.with({ badge: "#archimate-outcome-badge" });
       case "Path":
@@ -360,8 +380,16 @@ export default class ArchimateViewNode extends React.PureComponent<IProps, IStat
       case "Principal":
         return badgedMotivation.with({ badge: "#archimate-principal-badge" });
       case "Product":
-        return defaultState.with({ entityShapeFunc: this.productPath });
-      case "Requirement":
+        return defaultState.with({
+          entityShapeFunc: this.productPath,
+          textBounds: this.dataTextBounds(),
+         });
+      case "Representation":
+        return defaultState.with({
+          entityShapeFunc: this.representationPath,
+          textBounds: this.dataTextBounds(),
+        });
+    case "Requirement":
         return badgedMotivation.with({ badge: "#archimate-requirement-badge" });
       case "Resource":
         return badgedRect.with({ badge: "#archimate-resource-badge" });
@@ -428,9 +456,17 @@ export default class ArchimateViewNode extends React.PureComponent<IProps, IStat
     return this.state.backgroundClass || "archimate-none-background";
   }
 
-  public shapeStyle() {
-    return {};
-  }
+  public shapeStyle(): React.CSSProperties {
+    const style = this.props.viewNode.style;
+    if (style === undefined) {
+      return {};
+    }
+    const cssStyle: React.CSSProperties = {};
+    if (style.fillColor) { cssStyle.fill = style.fillColor.toRGBA() }
+    if (style.lineColor) { cssStyle.stroke = style.lineColor.toRGBA() }
+    if (style.lineWidth) { cssStyle.strokeWidth = style.lineWidth }
+    return cssStyle;
+}
 
   public entityBadge() {
     if (this.state.badge === undefined) {
@@ -556,7 +592,7 @@ export default class ArchimateViewNode extends React.PureComponent<IProps, IStat
     const eventWidth = bounds.width * 0.85;
     const rx = 17;
     const d = [
-        "M", bounds.left, bounds.top,
+        "M", bounds.left(), bounds.top(),
         "l", notchX, notchHeight,
         "l", -notchX, notchHeight,
         "h", eventWidth,
@@ -728,22 +764,25 @@ export default class ArchimateViewNode extends React.PureComponent<IProps, IStat
   private representationPath(): React.ReactFragment {
     const bounds = this.props.viewNode.bounds;
     return (
-      <path
-          d={[
-              "M", bounds.left(), bounds.top(),
-              "v", bounds.height - 8,
-              "c", 0.167 * bounds.width, 0.133 * bounds.height,
-              0.336 * bounds.width, 0.133 * bounds.height,
-              bounds.width * 0.508, 0,
-              "c", 0.0161 * bounds.width, -0.0778 * bounds.height,
-              0.322 * bounds.width, -0.0778 * bounds.height,
-              bounds.width * 0.475, 0,
-              "v", -(bounds.height - 8),
-              "z"
-            ].join(" ")}
-          className={this.state.backgroundClass}
-          style={this.shapeStyle()}
-      />
+      <React.Fragment>
+        <path
+            d={[
+                "M", bounds.left(), bounds.top(),
+                "v", bounds.height - 8,
+                "c", 0.167 * bounds.width, 0.133 * bounds.height,
+                0.336 * bounds.width, 0.133 * bounds.height,
+                bounds.width * 0.508, 0,
+                "c", 0.0161 * bounds.width, -0.0778 * bounds.height,
+                0.322 * bounds.width, -0.0778 * bounds.height,
+                bounds.width * 0.475, 0,
+                "v", -(bounds.height - 8),
+                "z"
+              ].join(" ")}
+            className={this.state.backgroundClass}
+            style={this.shapeStyle()}
+        />
+        <rect key="data-decoration" x={bounds.left()} y={bounds.top()} width={bounds.width} height={this.state.margin} className="archimate-decoration" />
+      </React.Fragment>
     );
   }
 
@@ -885,7 +924,7 @@ export default class ArchimateViewNode extends React.PureComponent<IProps, IStat
     );
   }
 
-  private groupingPath(): React.ReactFragment {
+  private groupPath(): React.ReactFragment {
     const bounds = this.props.viewNode.bounds;
     return (
       <React.Fragment>
@@ -914,5 +953,85 @@ export default class ArchimateViewNode extends React.PureComponent<IProps, IStat
         />)
       </React.Fragment>
     );
+  }
+
+  private contractPath(): React.ReactFragment {
+    const bounds = this.props.viewNode.bounds;
+    const margin = this.state.margin || 8;
+    return (
+      <g className={this.state.backgroundClass}>
+        <rect x={bounds.left()} y={bounds.top()} width={bounds.width} height={bounds.height} className={this.state.backgroundClass} style={this.shapeStyle()} />
+        <rect x={bounds.left()} y={bounds.top()} width={bounds.width} height={margin}  className="archimate-decoration" />
+        <rect x={bounds.left()} y={bounds.top() + bounds.height - margin} width={bounds.width} height={margin} className="archimate-decoration" />
+      </g>
+    );
+  }
+
+  private meaningPath(): React.ReactFragment {
+    const bounds = this.props.viewNode.bounds;
+    const pts = [
+      new Point(bounds.left() + bounds.width * 0.04, bounds.top() + bounds.height * 0.5),
+      new Point(bounds.left() + bounds.width * 0.5, bounds.top() + bounds.height * 0.12),
+      new Point(bounds.left() + bounds.width * 0.94, bounds.top() + bounds.height * 0.55),
+      new Point(bounds.left() + bounds.width * 0.53, bounds.top() + bounds.height * 0.87)
+    ];
+    return (
+      <path
+        d={[
+        "M", pts[0].x, pts[0].y,
+        "C", pts[0].x - bounds.width * 0.15, pts[0].y - bounds.height * 0.32,
+        pts[1].x - bounds.width * 0.3, pts[1].y - bounds.height * 0.15,
+        pts[1].x, pts[1].y,
+        "C", pts[1].x + bounds.width * 0.29, pts[1].y - bounds.height * 0.184,
+        pts[2].x + bounds.width * 0.204, pts[2].y - bounds.height * 0.304,
+        pts[2].x, pts[2].y,
+        "C", pts[2].x + bounds.width * 0.028, pts[2].y + bounds.height * 0.295,
+        pts[3].x + bounds.width * 0.156, pts[3].y + bounds.height * 0.088,
+        pts[3].x, pts[3].y,
+        "C", pts[3].x - bounds.width * 0.279, pts[3].y + bounds.height * 0.326,
+        pts[0].x - bounds.width * 0.164, pts[0].y + bounds.height * 0.314,
+        pts[0].x, pts[0].y
+      ].join(" ")}
+      className={this.state.backgroundClass} style={this.shapeStyle()} />
+    );
+  }
+
+  private junctionPath(): React.ReactFragment {
+    const bounds = this.props.viewNode.bounds;
+    const center = bounds.center();
+    const r = Math.min(bounds.width, bounds.height) / 2;
+    return (
+      <circle cx={center.x} cy={center.y} r={r} className={this.state.backgroundClass} style={this.shapeStyle()} />      
+    );
+  }
+
+  private groupingPath(): React.ReactFragment {
+    const bounds = this.props.viewNode.bounds;
+    const groupHeaderHeight = 21;
+    return (
+      <React.Fragment>
+        <rect
+          x={bounds.left()}
+          y={bounds.top() + groupHeaderHeight}
+          width={bounds.width}
+          height={bounds.height - groupHeaderHeight}
+          className={this.state.backgroundClass} 
+          style={this.shapeStyle()}
+        />
+        <path
+          d={["M", bounds.left, bounds.top() + groupHeaderHeight - 1,
+              "v", -(groupHeaderHeight - 1),
+              "h", bounds.width / 2,
+              "v", groupHeaderHeight - 1].join(" ")}
+          className={this.state.backgroundClass} 
+          style={this.shapeStyle()}
+        />
+      </React.Fragment>
+    );
+  }
+
+  private groupTextBounds(): Bounds {
+    const bounds = this.props.viewNode.bounds;
+    return new Bounds(bounds.left() + 3, bounds.top(), (bounds.width / 2.0) - 6, this.groupHeaderHeight);
   }
 }

@@ -318,13 +318,14 @@ export class ElementTagParser {
         this.parseArchimateElement(el, ElementType.WorkPackageElementType);
         break;
       case ElementType.AndJunctionElementType:
-        this.parseArchimateElement(el, ElementType.AndJunctionElementType);
-        break;
       case ElementType.JunctionElementType:
-        this.parseArchimateElement(el, ElementType.JunctionElementType);
-        break;
       case ElementType.OrJunctionElementType:
-        this.parseArchimateElement(el, ElementType.OrJunctionElementType);
+        const jTypeAttr = el.attributes.getNamedItem("type");
+        if (jTypeAttr && jTypeAttr.value === "or") {
+          this.parseArchimateElement(el, ElementType.OrJunctionElementType);
+        } else {
+          this.parseArchimateElement(el, ElementType.JunctionElementType);
+        }
         break;
       case ElementType.CapabilityElementType:
         this.parseArchimateElement(el, ElementType.CapabilityElementType);

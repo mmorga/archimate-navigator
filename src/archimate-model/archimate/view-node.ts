@@ -2,6 +2,7 @@ import { Bounds, zeroBounds } from "./bounds";
 import { Connection } from "./connection";
 import { Diagram } from "./diagram";
 import { IEntity, IModel, IProperty, IViewNode } from "./interfaces";
+import { Style } from "./style";
 
 // Graphical node type. It can contain child node types.
 // This can be specialized as Label and Container
@@ -31,7 +32,7 @@ export class ViewNode implements IViewNode {
   public documentation?: string;
   // @note type here was used for the Element/Relationship/Diagram type
   public type: string;
-  public style?: string;
+  public style?: Style;
 
   // @note viewRefs are pointers to 0-* Diagrams for diagram drill in defined in abstract View Concept
   public viewRefs?: string;

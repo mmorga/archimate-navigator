@@ -81,7 +81,7 @@ export default class EntityLabel extends React.PureComponent<IProps, IState> {
           <tbody>
             <tr style={{height:tb.height}}>
               <td className="entity-name">
-                <p className="entity-name">{this.props.label}</p>
+                <p className="entity-name" style={this.textStyle()}>{this.props.label}</p>
               </td>
             </tr>
           </tbody>
@@ -153,9 +153,6 @@ export default class EntityLabel extends React.PureComponent<IProps, IState> {
 
   // Splits the text of the entity by newlines and to fit space available
   // public textStyles() {
-  //   // const reducer = (accumulator: string[], currentValue: string) => {
-      
-  //   // };
   //   return this.textLines().reduce((lines, line) => {
   //     const text = new Text(line, this.props.child.style);
   //     return lines.concat(
@@ -165,16 +162,17 @@ export default class EntityLabel extends React.PureComponent<IProps, IState> {
   //   }, []);
   // }
 
-  // public textStyle() {
-  //   const style = this.props.child.style || new Style();
-  //   {
-  //     fill: style.font_color&.to_rgba,
-  //     "color": style.font_color&.to_rgba,
-  //     "font-family": style.font&.name,
-  //     "font-size": style.font&.size,
-  //     "text-align": style.text_align || @text_align
-  //   }.delete_if { |_key, value| value.nil? }
-  //     .map { |key, value| "#{key}:#{value};" }
-  //     .join("")
-  // }
+  public textStyle(): React.CSSProperties {
+    const style = this.props.child.style;
+    if (style === undefined) {
+      return {};
+    }
+    const cssStyle: React.CSSProperties = {};
+    if (style.fillColor) { cssStyle.fill = style.fillColor.toRGBA() }
+    if (style.fontColor) { cssStyle.color = style.fontColor.toRGBA() }
+    if (style.font && style.font.name) { cssStyle.fontFamily = style.font.name }
+    if (style.font && style.font.size) { cssStyle.fontSize = style.font.size }
+    if (style.textAlignment) { cssStyle.textAlign = style.textAlignment }
+    return cssStyle;
+  }
 }

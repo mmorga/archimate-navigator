@@ -2,6 +2,7 @@ import { Bounds } from "./bounds";
 import { IEntity, IModel, IProperty, LogicError } from "./interfaces";
 import { Path } from "./path";
 import { Point } from "./point";
+import { Style } from "./style";
 import { ViewNode } from "./view-node";
 
 // Graphical connection type.
@@ -26,7 +27,7 @@ export class Connection implements IEntity {
   public source: string;
   public target: string;
   public relationship?: string;
-  public style?: string; // Style
+  public style?: Style;
   public properties: IProperty[] = [];
 
   private model: IModel;
@@ -131,8 +132,8 @@ export class Connection implements IEntity {
     } else if (entity instanceof Connection) {
       srcOrTarget = entity as Connection;
     } else {
-      throw new LogicError("Lookup returned unexpected type")
-    }    
+      throw new LogicError("Lookup returned unexpected type");
+    }
     return srcOrTarget;
   }
 }

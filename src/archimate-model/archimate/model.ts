@@ -47,7 +47,6 @@ export class Model implements IModel {
 
   private indexHash: Map<string, IEntity>;
 
-  // Constructor TODO: parse opts
   constructor() {
     this.indexHash = emptyIndexHash();
     this.properties = [];

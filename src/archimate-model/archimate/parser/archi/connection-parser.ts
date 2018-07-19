@@ -5,6 +5,7 @@ import { IModel, ParserError } from "../../interfaces";
 import { BendpointParser } from "./bendpoint-parser";
 import { DocumentationParser } from "./documentation-parser";
 import { getNSStringAttribute, getStringAttribute } from "./dom-helpers";
+import { StyleParser } from "./style-parser";
 
 export class ConnectionParser {
   public model: IModel;
@@ -12,6 +13,7 @@ export class ConnectionParser {
   public offset: Bounds;
   private documentationParser: DocumentationParser;
   private bendpointParser: BendpointParser;
+  private styleParser: StyleParser;
 
   constructor(model: IModel, diagram: Diagram, offset: Bounds) {
     this.model = model;
@@ -20,6 +22,7 @@ export class ConnectionParser {
     this.createConnection = this.createConnection.bind(this);
     this.documentationParser = new DocumentationParser();
     this.bendpointParser = new BendpointParser();
+    this.styleParser = new StyleParser();
   }
 
   public connections(parent: Element): Connection[] {
@@ -48,7 +51,7 @@ export class ConnectionParser {
     connection.documentation = this.documentationParser.value(child);
     connection.bendpoints = this.bendpointParser.bendpoints(child);
     connection.relationship = getStringAttribute(child, "archimateRelationship");
-    // viewNode.style = TODO: write style parser
+    connection.style = this.styleParser.style(child);
     this.diagram.connections.push(connection);
     return connection;
   }

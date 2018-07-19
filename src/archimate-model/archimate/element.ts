@@ -50,7 +50,6 @@ export class Element implements IEntity, IHasRelationships {
   // }
 
   // Diagrams that this entity is referenced in.
-  // TODO: memoize the response
   public diagrams() {
     if (this.diagramCache) {
       return this.diagramCache;
