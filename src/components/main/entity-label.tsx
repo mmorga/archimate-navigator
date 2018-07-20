@@ -1,7 +1,6 @@
 import * as React from "react";
 import { TextAlignProperty } from "../../../node_modules/csstype";
-import { Bounds } from "../../archimate-model/archimate/bounds";
-import { ViewNode } from "../../archimate-model/archimate/view-node";
+import { Bounds, ViewNode } from "../../archimate-model";
 
 interface IProps {
   child: ViewNode;

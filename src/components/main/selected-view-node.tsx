@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Bounds } from "../../archimate-model/archimate/bounds";
+import { Bounds } from "../../archimate-model";
 
 interface IProps {
   bounds: Bounds;
