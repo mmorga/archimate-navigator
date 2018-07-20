@@ -5,7 +5,6 @@ import ArchimateSvg from "./archimate-svg";
 import ArchimateViewNode from "./archimate-view-node";
 
 interface IProps {
-  diagramZoom: number;
   selectedDiagram?: Diagram;
   selectedEntity?: IEntity;
   entityClicked: (entity: IEntity) => void;
