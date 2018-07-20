@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "bootstrap": "^3.3.7",
+    "csstype": "^2.5.5",
     "d3": "^5.5.0",
     "d3-force": "^1.1.0",
     "d3-request": "^1.0.6",

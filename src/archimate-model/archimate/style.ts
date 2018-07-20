@@ -1,4 +1,4 @@
-import { TextAlignProperty } from "../../../node_modules/csstype";
+import { TextAlignProperty } from "csstype";
 import { Color } from "./color";
 import { Font } from "./font";
 
