@@ -1,11 +1,12 @@
 import * as React from "react";
-import { IEntity, Organization } from "../../archimate-model";
+import { Organization } from "../../archimate-model";
+import { entityClickedFunc } from "../common";
 import EntityLink from "./entity-link";
 import FolderItem from "./folder-item";
 
 interface IProps {
   views: Organization;
-  entityClicked: (entity: IEntity) => void;
+  entityClicked: entityClickedFunc;
 }
 
 export default class ArchimateDiagramTree extends React.PureComponent<IProps> {

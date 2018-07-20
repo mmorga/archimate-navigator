@@ -1,9 +1,10 @@
 import * as React from "react";
 import { IEntity } from "../../archimate-model";
+import { entityClickedFunc } from "../common";
 
 interface IProps {
   entity: IEntity | undefined;
-  entityClicked: (entity: IEntity) => void;
+  entityClicked: entityClickedFunc;
   text?: string;
 }
 
@@ -16,7 +17,7 @@ export default class EntityLink extends React.PureComponent<IProps> {
     const text = this.props.text ? this.props.text : this.props.entity!.name;
     if (this.props.entity) {
       return (
-        <a href={this.props.entity!.href} onClick={this.entityClicked}>
+        <a href={this.props.entity!.href} onClick={this.props.entityClicked.bind(this, this.props.entity)}>
           {this.props.children}
           {text}
         </a>
@@ -25,11 +26,4 @@ export default class EntityLink extends React.PureComponent<IProps> {
       return undefined;
     }
   }
-
-  private entityClicked = (event: React.MouseEvent<HTMLAnchorElement>) => {
-    event.preventDefault();
-    if (this.props.entityClicked && this.props.entity) {
-      this.props.entityClicked(this.props.entity);
-    }
-  };
 }

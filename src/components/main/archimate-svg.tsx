@@ -3,19 +3,12 @@ import * as React from "react";
 import { Diagram } from "../../archimate-model";
 import "./archimate-svg.css";
 
-export interface IViewBox {
-  x: number, 
-  y: number, 
-  width: number, 
-  height: number,
-}
-
 interface IProps {
   diagram: Diagram;
 }
 
 interface IState {
-  viewBox?: IViewBox;
+  viewBox?: SVGRect;
 }
 
 export default class ArchimateSvg extends React.PureComponent<IProps, IState> {
@@ -44,11 +37,19 @@ export default class ArchimateSvg extends React.PureComponent<IProps, IState> {
         viewBox={`${vb.x} ${vb.y} ${vb.width} ${vb.height}`}
         onLoad={this.svgLoaded}
         zoomAndPan="magnify"
-        // onresize={this.svgResized}
         >
         <title>{ this.props.diagram.name }</title>
         <desc>{ this.props.diagram.documentation }</desc>
         <defs>
+          <linearGradient 
+              id="archimate-highlight-color"
+              gradientUnits="userSpaceOnUse"
+              spreadMethod="reflect"
+              x1="0" y1="0" x2="1" y2="1"
+          >
+            <stop offset="0%"  stop-color="black"/>
+            <stop offset="100%" stop-color="white"/>
+          </linearGradient>
           <symbol id="archimate-material-badge" className="archimate-badge" viewBox="0 0 20 20">
             <path style={{fill:"none",stroke:"inherit",strokeWidth:1,strokeLinejoin:"miter"}} d="M 15.443383,8.5890552 5.0182941,17.265414 -7.7081977,12.575201 -10.0096,-0.7913701 0.41548896,-9.4677289 13.141981,-4.7775163 Z" transform="matrix(0.59818877,-0.22354387,0.22387513,0.59808805,7.5647066,7.7263348)" />
             <path style={style2} d="M 4.5472185,10.333586 8.1220759,4.0990346"/>
@@ -222,6 +223,7 @@ export default class ArchimateSvg extends React.PureComponent<IProps, IState> {
   public componentDidMount() {
     const svgTopGroup = this.svgTopGroup.current;
     if (svgTopGroup) {
+      // TODO:
       // this.panzoom = 
       createPanZoom(svgTopGroup, {});
     }
@@ -229,6 +231,7 @@ export default class ArchimateSvg extends React.PureComponent<IProps, IState> {
 
   public componentWillUnmount() {
     if (this.panzoom) {
+      // TODO:
       // this.panzoom.dispose();
       this.panzoom = undefined;
     }

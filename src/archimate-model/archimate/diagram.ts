@@ -39,9 +39,8 @@ export class Diagram implements IDiagram {
       return this.relationshipsCache;
     }
     this.relationshipsCache = this.connections
-        .map(conn => conn.element())
+        .map(conn => conn.entityInstance())
         .filter(el => el !== undefined)
-        // .filter(el => el instanceof Relationship)
         .map(rel => rel as Relationship);
     return this.relationshipsCache;
   }
@@ -51,7 +50,7 @@ export class Diagram implements IDiagram {
       return this.elementsCache;
     }
     this.elementsCache = this.nodes
-        .map(viewNode => viewNode.elementInstance())
+        .map(viewNode => viewNode.entityInstance())
         .filter(entity => entity instanceof Element)
         .map(el => el as Element);
     return this.elementsCache;
@@ -62,34 +61,11 @@ export class Diagram implements IDiagram {
       return this.diagramsCache;
     }
     this.diagramsCache = this.nodes
-        .map(viewNode => viewNode.elementInstance())
+        .map(viewNode => viewNode.entityInstance())
         .filter(entity => entity instanceof Diagram)
         .map(el => el as Diagram);
     return this.diagramsCache;
   }
-
-  
-  // public allNodes(): ViewNode[] {
-  //   return this.nodes.concat(
-  //     this.nodes.flatMap((node) => node.allNodes(), this),
-  //   );
-  // }
-
-  // elements() {
-  //   @elements ||= all_nodes.map(&:element).compact
-  // }
-
-  // element_ids() {
-  //   @element_ids ||= elements.map(&:id)
-  // }
-
-  // relationships() {
-  //   @relationships ||= connections.map(&:relationship).compact
-  // }
-
-  // relationship_ids() {
-  //   @relationship_ids ||= relationships.map(&:id)
-  // }
 
   public toString() {
     return `Diagram<${this.id}>[${this.name}]`;
@@ -99,23 +75,19 @@ export class Diagram implements IDiagram {
     return this.viewpoint !== undefined;
   }
 
-  // viewpoint_description() {
-  //   switch(this.viewpoint) {
-  //   case Symbol:
-  //     viewpoint.to_s
-  //   case Viewpoint:
-  //     viewpoint.name.to_s
-  //   default:
-  //     switch(this.type) {
-  //     case "canvas:CanvasModel":
-  //       return "Canvas";
-  //     case "archimate:SketchModel":
-  //       return "Sketch";
-  //     default:
-  //       return "Total";
-  //     }
-  //   }
-  // }
+  public viewpointDescription(): string {
+    if (this.viewpoint === undefined) {
+      switch(this.type) {
+        case "canvas:CanvasModel":
+          return "Canvas";
+        case "archimate:SketchModel":
+          return "Sketch";
+        default:
+          return "Total";
+      }  
+    }
+    return this.viewpoint.toString();
+  }
 
   public calculateMaxExtents() {
     const nodeVals =

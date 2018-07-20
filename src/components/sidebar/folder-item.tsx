@@ -1,10 +1,11 @@
 import * as React from "react";
-import { IEntity, Organization } from "../../archimate-model";
+import { Organization } from "../../archimate-model";
+import { entityClickedFunc } from "../common";
 import EntityLink from "./entity-link";
 
 interface IProps {
   organization: Organization;
-  entityClicked: (entity: IEntity) => void;
+  entityClicked: entityClickedFunc;
 }
 
 interface IState {

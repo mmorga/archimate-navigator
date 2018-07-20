@@ -240,3 +240,11 @@ table.properties>caption {
   marker-end: url(#archimate-filled-arrow);
   stroke-dasharray: 3, 3;
 }
+
+.archimate-selected-element-highlight {
+  animation: archimate-dash 1s linear 0s infinite;
+  fill: none;
+  stroke: url(#archimate-highlight-color);
+  stroke-width: 2px;
+  stroke-dasharray: 10;
+}

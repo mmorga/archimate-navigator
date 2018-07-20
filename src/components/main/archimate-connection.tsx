@@ -1,9 +1,12 @@
 import * as React from "react";
 import { Connection, Path, ViewNode } from "../../archimate-model";
+import { entityClickedFunc } from "../common";
 import "./archimate-svg.css";
 
 interface IProps {
   connection: Connection;
+  onClicked?: entityClickedFunc;
+  selected: boolean;
 }
 
 interface IState {
@@ -36,17 +39,37 @@ export default class ArchimateConnection extends React.PureComponent<
       return null;
     }
     return (
-      <React.Fragment>
+      <g {...this.groupAttrs()}>
         <path {...this.pathAttrs()}>
           <title>{this.props.connection.documentation}</title>
         </path>
+        {this.selectedHighlight()}
         {this.lineText()}
-      </React.Fragment>
+      </g>
     );
   }
 
+  private selectedHighlight() {
+    if (!this.props.selected) {
+      return undefined;
+    }
+    const attrs = this.pathAttrs();
+    attrs.className = "archimate-selected-element-highlight";
+    return (
+      <path {...attrs} />
+    );
+  }
+
+  private groupAttrs(): React.SVGProps<SVGGElement> {
+    const attrs: React.SVGProps<SVGGElement> = { id: this.props.connection.id,  };
+    if (this.props.onClicked) {
+      attrs.onClick = this.props.onClicked.bind(this, this.props.connection.entityInstance());
+    }
+    return attrs;
+  }
+
   private lineText(): JSX.Element | undefined {
-    const relationship = this.props.connection.element();
+    const relationship = this.props.connection.entityInstance();
     const name = relationship ? relationship.name : undefined;
     if (name === undefined || name.length === 0) {
       return undefined;
@@ -130,7 +153,7 @@ export default class ArchimateConnection extends React.PureComponent<
   }
 
   private id(): string {
-    const rel = this.props.connection.element();
+    const rel = this.props.connection.entityInstance();
     if (rel) {
       return rel.id;
     }
@@ -139,7 +162,7 @@ export default class ArchimateConnection extends React.PureComponent<
 
   // Look at the type (if any of the path and set the class appropriately)
   private path_class(): string {
-    const rel = this.props.connection.element();
+    const rel = this.props.connection.entityInstance();
     const type = rel ? rel.type : "default";
     return (
       ["archimate", this.css_classify(type)].join("-") +

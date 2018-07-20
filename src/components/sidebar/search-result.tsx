@@ -1,10 +1,11 @@
 import * as React from "react";
 import { Diagram, Element, IEntity, Relationship } from "../../archimate-model";
+import { entityClickedFunc } from "../common";
 import EntityLink from "./entity-link";
 
 interface IProps {
   entity: IEntity;
-  resultClicked: (entity: IEntity) => void;
+  resultClicked: entityClickedFunc;
 }
 
 export default class SearchResult extends React.PureComponent<IProps> {

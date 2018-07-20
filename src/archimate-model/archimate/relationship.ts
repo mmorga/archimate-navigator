@@ -12,13 +12,14 @@ import { RelationshipType } from "./relationship-type";
 export class Relationship implements IRelationship {
   public id: string; //
   public type: RelationshipType;
-  public name?: string; // default: nil
-  public documentation?: string; // writable: true, default: nil
-  public properties: Property[]; // default: []
-  public source?: string; // comparison_attr: :id, writable: true, default: nil
-  public target?: string; // comparison_attr: :id, writable: true, default: nil
-  public accessType?: AccessType; // default: nil
+  public name?: string;
+  public documentation?: string;
+  public properties: Property[];
+  public source?: string;
+  public target?: string;
+  public accessType?: AccessType;
   public derived: boolean = false;
+  public strength?: string;
   public model: IModel;
 
   constructor(model: IModel, type: RelationshipType) {
@@ -35,11 +36,6 @@ export class Relationship implements IRelationship {
   public targetElement(): IEntity | undefined {
     return this.model.lookup(this.target) as IEntity;
   }
-  // replace(entity, with_entity) {
-  //   @source = with_entity.id if source == entity.id
-  //   @target = with_entity.id if target == entity.id
-  // }
-
   // weight() {
   //   self.class::WEIGHT
   // }
@@ -63,33 +59,10 @@ export class Relationship implements IRelationship {
   //   ].compact.join(" ")
   // }
 
-  // Copy any attributes/docs, etc. from each of the others into the original.
-  //     1. Child `label`s with different `xml:lang` attribute values
-  //     2. Child `documentation` (and different `xml:lang` attribute values)
-  //     3. Child `properties`
-  //     4. Any other elements
-  // source and target don't change on a merge
-  // merge(relationship) {
-  //   if !documentation
-  //     self.documentation = relationship.documentation
-  //   elsif documentation != relationship.documentation
-  //     documentation.merge(relationship.documentation)
-  //   end
-  //   relationship.properties.each do |property|
-  //     unless properties.find { |my_prop|
-  //         my_prop.property_definition.name == property.property_definition.name && my_prop.value == property.value
-  //     }
-  //       properties << property
-  //     end
-  //   end
-  //   @access_type ||= relationship.access_type
-  // }
-
   // Diagrams that this entity is referenced in.
   public diagrams() {
-    // references.select { |ref| ref.is_a?(Diagram) }
-    return this.model.diagrams;
-  }
+    return this.model.diagrams.filter(dia => dia.relationships().find(rel => rel.id === this.id));
+    }
 
   // replace_item_with(item, replacement) {
   //   super

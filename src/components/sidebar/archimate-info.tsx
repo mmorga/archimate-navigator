@@ -1,21 +1,23 @@
 import * as React from "react";
 import {
   Diagram,
+  Element,
   IEntity,
   IHasRelationships,
   IHasViews,
   Relationship
 } from "../../archimate-model";
-import DocumentationPanel from "./info/documentation-panel";
+import { entityClickedFunc } from "../common";
 import ElementsTable from "./info/elements-table";
 import EntityIdPanel from "./info/entity-id-panel";
 import PropertiesPanel from "./info/properties-panel";
 import RelationshipsTable from "./info/relationships-table";
 import ViewsTable from "./info/views-table";
+import Panel from "./panel";
 
 interface IProps {
   entity?: IEntity;
-  entityClicked: (entity: IEntity) => void;
+  entityClicked: entityClickedFunc;
 }
 
 export default class ArchimateInfo extends React.PureComponent<IProps> {
@@ -24,65 +26,86 @@ export default class ArchimateInfo extends React.PureComponent<IProps> {
   }
 
   public render() {
-    // let viewpoint = "";
-    let elements = null;
-    let relationships = null;
-    let views = null;
-    let documentation = null;
-    let properties = null;
+    return (
+      <React.Fragment>
+        <EntityIdPanel entity={this.props.entity} entityClicked={this.props.entityClicked} />
+        {this.documentation()}
+        {this.properties()}
+        {this.elements()}
+        {this.relationships()}
+        {this.views()}
+      </React.Fragment>
+    );
+  }
 
+  private elements(): JSX.Element | undefined {
     if (this.props.entity instanceof Diagram) {
       const diagram = this.props.entity as Diagram;
-      // viewpoint = diagram.viewpoint;
-      elements = (
+      return (
         <ElementsTable
           elements={diagram.elements()}
           elementClicked={this.props.entityClicked}
         />
       );
+    } else {
+      return undefined;
     }
+
+  }
+  private relationships(): JSX.Element | undefined {
     if (
       this.props.entity instanceof Diagram ||
       this.props.entity instanceof Element
     ) {
-      relationships = (
+      return (
         <RelationshipsTable
           relationships={(this.props
             .entity as IHasRelationships).relationships()}
           entityClicked={this.props.entityClicked}
         />
       );
+    } else {
+      return undefined;
     }
+  }
+
+  private views(): JSX.Element | undefined {
     if (
       this.props.entity instanceof Diagram ||
       this.props.entity instanceof Element ||
       this.props.entity instanceof Relationship
     ) {
       const viewsEntity = this.props.entity as IHasViews;
-      views = (
+      return (
         <ViewsTable
           views={viewsEntity.diagrams()}
           entityClicked={this.props.entityClicked}
         />
       );
+    } else {
+      return undefined;
     }
-    if (this.props.entity) {
-      documentation = (
-        <DocumentationPanel documentation={this.props.entity.documentation} />
-      );
-      properties = (
-        <PropertiesPanel properties={this.props.entity.properties || []} />
-      );
+  }
+  private properties(): JSX.Element | undefined {
+    if (this.props.entity === undefined) {
+      return undefined;
     }
     return (
-      <div>
-        <EntityIdPanel entity={this.props.entity} />
-        {documentation}
-        {properties}
-        {elements}
-        {relationships}
-        {views}
-      </div>
+      <PropertiesPanel properties={this.props.entity.properties || []} />
     );
+  }
+
+  private documentation(): JSX.Element | undefined {
+    if (this.props.entity === undefined) {
+      return undefined;
+    }   
+    const header = this.props.entity.documentation ? "Documentation" : (<React.Fragment>Documentation <span className="small">(none)</span></React.Fragment>);
+    return (
+      <Panel 
+          header={header}
+          initiallyCollapsed={!this.props.entity.documentation}>
+        { this.props.entity.documentation || "No Documentation" }
+      </Panel>
+    )
   }
 }

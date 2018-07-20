@@ -1,3 +1,4 @@
+import { AccessType } from "../../access-type";
 import { DiagramType } from "../../diagram-type";
 import { Element as ArchiElement } from "../../element";
 import { ElementType } from "../../element-type";
@@ -43,12 +44,37 @@ export class ElementTagParser {
   }
 
   private parseArchimateRelationship(el: Element, type: RelationshipType) {
-    const archiEl = new Relationship(this.model, type);
-    archiEl.id = getStringAttribute(el, "id") || "";
-    archiEl.name = getStringAttribute(el, "name") || "";
-    archiEl.documentation = this.documentationParser.value(el);
-    archiEl.properties = this.propertiesParser.properties(el);
-    this.model.relationships.push(archiEl);
+    const relationship = new Relationship(this.model, type);
+    relationship.id = getStringAttribute(el, "id") || "";
+    relationship.name = getStringAttribute(el, "name") || "";
+    relationship.documentation = this.documentationParser.value(el);
+    relationship.properties = this.propertiesParser.properties(el);
+    relationship.source = getStringAttribute(el, "source");
+    relationship.target = getStringAttribute(el, "target");
+    relationship.strength = getStringAttribute(el, "strength");
+    relationship.accessType = this.parseAccessType(el);
+    this.model.relationships.push(relationship);
+  }
+
+  private stringToAccessType(str: string): AccessType {
+    switch(str) {
+      case "1":
+        return AccessType.Read;
+      case "2":
+        return AccessType.Write;
+      case "3":
+        return AccessType.ReadWrite;
+      default:
+        return AccessType.Access;
+    }
+  }
+  private parseAccessType(el: Element): AccessType {
+    const accessTypeStr = getStringAttribute(el, "accessType");
+    if (accessTypeStr === undefined) {
+      return AccessType.Access;
+    }
+
+    return this.stringToAccessType(accessTypeStr);
   }
 
   private parseArchimateDiagram(el: Element, type: DiagramType) {

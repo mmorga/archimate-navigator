@@ -50,6 +50,10 @@ export interface IEntity extends IIdentifiable, IHasProperties {
   readonly type: string; // Model, Element, Relationship, or View
 }
 
+export interface IEntityRef {
+  entityInstance(): IEntity | undefined;
+}
+
 export interface IRelationship extends IEntity {
   source?: string; // comparison_attr: :id, writable: true, default: nil
   target?: string; // comparison_attr: :id, writable: true, default: nil

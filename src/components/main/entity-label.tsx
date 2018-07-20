@@ -16,11 +16,6 @@ interface IState {
   lineHeight: number;
 }
 
-// interface IGAttrs {
-//   id: string;
-//   className?: string;
-// }
-
 // **StereotypeLabel** < **Label**
 //
 // Split out any stereotype portion to render separately

@@ -1,11 +1,12 @@
 import * as React from "react";
 import { IEntity, IRelationship, Relationship } from "../../../archimate-model";
+import { entityClickedFunc } from "../../common";
 import EntityLink from "../entity-link";
 import Panel from "../panel";
 
 interface IProps {
   relationships: IRelationship[];
-  entityClicked: (entity: IEntity) => void;
+  entityClicked: entityClickedFunc;
 }
 
 export default class RelationshipsTable extends React.PureComponent<IProps> {
@@ -43,9 +44,16 @@ export default class RelationshipsTable extends React.PureComponent<IProps> {
         </tr>
       ));
     }
-
+    const empty = this.props.relationships.length === 0;
+    const header = !empty ? (
+      "Relationships"
+    ) : (
+      <React.Fragment>
+        Relationships <span className="small">(none)</span>
+      </React.Fragment>
+    );
     return (
-      <Panel header="Relationships">
+      <Panel header={header} initiallyCollapsed={empty}>
         <table className="table">
           <thead>
             <tr key="relationships-header">

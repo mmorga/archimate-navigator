@@ -1,11 +1,12 @@
 import * as React from "react";
-import { IDiagram, IEntity } from "../../../archimate-model";
+import { IDiagram } from "../../../archimate-model";
+import { entityClickedFunc } from "../../common";
 import EntityLink from "../entity-link";
 import Panel from "../panel";
 
 interface IProps {
   views: IDiagram[];
-  entityClicked: (entity: IEntity) => void;
+  entityClicked: entityClickedFunc;
 }
 
 export default class ViewsTable extends React.PureComponent<IProps> {
@@ -36,8 +37,16 @@ export default class ViewsTable extends React.PureComponent<IProps> {
       ));
     }
 
+    const empty = this.props.views.length === 0;
+    const header = !empty ? (
+      "Views"
+    ) : (
+      <React.Fragment>
+        Views <span className="small">(none)</span>
+      </React.Fragment>
+    );
     return (
-      <Panel header="Views">
+      <Panel header={header} initiallyCollapsed={empty}>
         <table className="table archimate-views-table">
           <thead>
             <tr key="views-table-header">

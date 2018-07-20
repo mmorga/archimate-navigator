@@ -1,6 +1,7 @@
 import Fuse from "fuse.js";
 import React from "react";
 import { IEntity } from "../../archimate-model";
+import { entityClickedFunc } from "../common";
 import SearchResult from "./search-result";
 
 // interface FuseResult {
@@ -11,7 +12,7 @@ import SearchResult from "./search-result";
 
 interface IProps {
   data: IEntity[];
-  resultClicked: (entity: IEntity) => void;
+  resultClicked: entityClickedFunc;
   searchText?: string;
 }
 

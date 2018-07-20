@@ -29,8 +29,10 @@ export default class PropertiesPanel extends React.PureComponent<IProps> {
       ));
     }
 
+    const propertiesEmpty = this.props.properties.length === 0;
+    const header = !propertiesEmpty ? "Properties" : (<React.Fragment>Properties <span className="small">(none)</span></React.Fragment>);
     return (
-      <Panel header="Properties">
+      <Panel header={header} initiallyCollapsed={propertiesEmpty}>
         <table className="table">
           <thead>
             <tr key="properties-header">

@@ -1,7 +1,8 @@
 import * as React from "react";
 
 interface IProps {
-  readonly header?: string;
+  header?: string | React.ReactFragment;
+  initiallyCollapsed?: boolean;
 }
 
 interface IState {
@@ -14,7 +15,7 @@ export default class Panel extends React.PureComponent<IProps, IState> {
   constructor(props: IProps) {
     super(props);
     this.state = {
-      collapse: false
+      collapse: this.props.initiallyCollapsed || false
     };
   }
 

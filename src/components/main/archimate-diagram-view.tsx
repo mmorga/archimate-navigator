@@ -1,5 +1,6 @@
 import * as React from "react";
-import { Diagram, IEntity } from "../../archimate-model";
+import { Diagram, IEntity, IEntityRef } from "../../archimate-model";
+import { entityClickedFunc } from "../common";
 import ArchimateConnection from "./archimate-connection";
 import ArchimateSvg from "./archimate-svg";
 import ArchimateViewNode from "./archimate-view-node";
@@ -7,8 +8,8 @@ import ArchimateViewNode from "./archimate-view-node";
 interface IProps {
   selectedDiagram?: Diagram;
   selectedEntity?: IEntity;
-  entityClicked: (entity: IEntity) => void;
-  diagramClicked: (event: React.MouseEvent<Element>) => void;
+  entityClicked: entityClickedFunc;
+  diagramClicked: entityClickedFunc;
 }
 
 interface IState {
@@ -44,10 +45,20 @@ export default class ArchimateDiagramView extends React.PureComponent<
           diagram={this.props.selectedDiagram}
         >
           {selectedDiagram.nodes.map(node => (
-            <ArchimateViewNode key={node.id} viewNode={node} />
+            <ArchimateViewNode
+              key={node.id} 
+              viewNode={node} 
+              onClicked={this.props.entityClicked} 
+              selected={this.nodeIsSelected(node)}
+            />
           ))}
           {selectedDiagram.connections.map(conn => (
-            <ArchimateConnection key={conn.id} connection={conn} />
+            <ArchimateConnection
+                key={conn.id}
+                connection={conn}
+                onClicked={this.props.entityClicked}
+                selected={this.nodeIsSelected(conn)}
+            />
           ))}
         </ArchimateSvg>
       );
@@ -58,5 +69,16 @@ export default class ArchimateDiagramView extends React.PureComponent<
         </div>
       );
     }
+  }
+
+  private nodeIsSelected(node: IEntityRef): boolean {
+    if (this.props.selectedEntity === undefined) {
+      return false;
+    }
+    const nodeElement = node.entityInstance();
+    if (nodeElement === undefined) {
+      return false;
+    }
+    return this.props.selectedEntity.id === nodeElement.id;
   }
 }

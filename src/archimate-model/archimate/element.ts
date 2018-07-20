@@ -23,6 +23,7 @@ export class Element implements IEntity, IHasRelationships {
   public href?: string;
   private model: IModel;
   private diagramCache?: IDiagram[];
+  private relationshipCache?: IRelationship[];
 
   constructor(model: IModel, type: ElementType, id?: string, name?: string) {
     this.model = model;
@@ -30,11 +31,6 @@ export class Element implements IEntity, IHasRelationships {
     this.id = id || model.makeUniqueId();
     this.name = name || "";
     this.properties = [];
-  }
-
-  // TODO: Implement me
-  public relationships(): IRelationship[] {
-    return [];
   }
 
   public toString() {
@@ -49,12 +45,20 @@ export class Element implements IEntity, IHasRelationships {
   //   this.class::LAYER
   // }
 
+  public relationships(): IRelationship[] {
+    if (this.relationshipCache) {
+      return this.relationshipCache;
+    }
+    this.relationshipCache = this.model.relationships.filter(rel => (rel.source === this.id) || (rel.target === this.id));
+    return this.relationshipCache;
+  }
+
   // Diagrams that this entity is referenced in.
   public diagrams() {
     if (this.diagramCache) {
       return this.diagramCache;
     }
-    this.diagramCache = this.model.diagrams.filter(dia => dia.elements().find(el => el === this));
+    this.diagramCache = this.model.diagrams.filter(dia => dia.elements().find(el => el.id === this.id));
     return this.diagramCache;
   }
 }

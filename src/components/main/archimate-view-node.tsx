@@ -1,18 +1,21 @@
 import * as React from "react";
 import { TextAlignProperty } from "../../../node_modules/csstype";
 import { Bounds, IEntity, Layer, Point, ViewNode, zeroBounds } from "../../archimate-model";
+import { entityClickedFunc } from "../common";
 import "./archimate-svg.css";
 import EntityLabel from "./entity-label";
+import SelectedViewNode from "./selected-view-node";
 
 interface IProps {
   viewNode: ViewNode;
+  onClicked?: entityClickedFunc;
+  selected: boolean;
 }
 
 interface IState {
   badge?: string;
   badgeBounds?: Bounds;
   backgroundClass?: string;
-
   entity?: IEntity | undefined;
   entityLabelFunc?: () => string | undefined;
   entityShapeFunc?: () => React.ReactFragment;
@@ -59,11 +62,6 @@ class MergedState implements IState {
   }
 }
 
-interface IGAttrs {
-  id: string;
-  className?: string;
-}
-
 // tslint:disable-next-line:max-classes-per-file
 export default class ArchimateViewNode extends React.PureComponent<IProps, IState> {
   private groupHeaderHeight = 21;
@@ -75,12 +73,13 @@ export default class ArchimateViewNode extends React.PureComponent<IProps, IStat
 
   public render() {
     return (
-      <g{...this.groupAttrs()}>
+      <g {...this.groupAttrs()}>
         {this.title()}
         {this.desc()}
         {this.entityShape()}
         {this.entityBadge()}
         {this.entityLabel()}
+        {this.selectedHighlight()}
       </g>
     );
   }
@@ -174,7 +173,7 @@ export default class ArchimateViewNode extends React.PureComponent<IProps, IStat
       backgroundClass: this.defaultBackgroundClass(),
       badge: undefined,
       badgeBounds: undefined,
-      entity: this.props.viewNode.elementInstance(),
+      entity: this.props.viewNode.entityInstance(),
       entityLabelFunc: this.label,
       entityShapeFunc: this.rectPath,
       margin: 8,
@@ -424,16 +423,19 @@ export default class ArchimateViewNode extends React.PureComponent<IProps, IStat
     }
   }
 
-  public groupAttrs(): IGAttrs {
-    const attrs: IGAttrs = { id: this.props.viewNode.id,  };
+  public groupAttrs(): React.SVGProps<SVGGElement> {
+    const attrs: React.SVGProps<SVGGElement> = { id: this.props.viewNode.id,  };
     if (this.props.viewNode.type && this.props.viewNode.type.length > 0) {
       attrs.className = `archimate-${this.elementType()}`;
+    }
+    if (this.props.onClicked) {
+      attrs.onClick = this.props.onClicked.bind(this, this.props.viewNode.entityInstance());
     }
     return attrs;
   }
 
   public elementType(): string {
-    const elInst = this.props.viewNode.elementInstance();
+    const elInst = this.props.viewNode.entityInstance();
     if (elInst) {
       return elInst.type;
     } else {
@@ -517,7 +519,7 @@ export default class ArchimateViewNode extends React.PureComponent<IProps, IStat
     if (this.props.viewNode.name && (this.props.viewNode.name.length > 0)) {
       return this.props.viewNode.name;
     }
-    const el = this.props.viewNode.elementInstance();
+    const el = this.props.viewNode.entityInstance();
     if (el === undefined) {
       return undefined;
     }
@@ -1069,5 +1071,13 @@ export default class ArchimateViewNode extends React.PureComponent<IProps, IStat
   private groupTextBounds(): Bounds {
     const bounds = this.props.viewNode.bounds;
     return new Bounds(bounds.left() + 3, bounds.top(), (bounds.width / 2.0) - 6, this.groupHeaderHeight);
+  }
+
+  private selectedHighlight(): React.ReactFragment | undefined {
+    if (this.props.selected) {
+      return <SelectedViewNode bounds={this.props.viewNode.bounds} />;
+    } else {
+      return undefined;
+    }
   }
 }
