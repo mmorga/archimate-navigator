@@ -55,7 +55,7 @@ export class Model implements IModel {
   }
 
   public lookup(id: string | undefined): IEntity | undefined {
-    if (id === undefined) {
+    if ((id === undefined) || (id === "")) {
       return undefined;
     }
     if (this.indexHash.get(id) === undefined) {
