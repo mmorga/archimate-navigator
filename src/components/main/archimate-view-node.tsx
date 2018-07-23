@@ -1,5 +1,5 @@
+import { TextAlignProperty } from "csstype";
 import * as React from "react";
-import { TextAlignProperty } from "../../../node_modules/csstype";
 import { Bounds, IEntity, Layer, Point, ViewNode, zeroBounds } from "../../archimate-model";
 import { entityClickedFunc } from "../common";
 import "./archimate-svg.css";
