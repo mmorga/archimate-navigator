@@ -7,10 +7,7 @@ export default class ProductViewNode extends DataObjectViewNode {
     super(props);
     this.state = {
       ...this.state,
-      backgroundClass: "archimate-note-background",
-      textAlign: "left",
-      textBounds: this.props.viewNode.bounds.reducedBy(3),
-      };
+    };
   }
 
   public entityShape(): JSX.Element {
