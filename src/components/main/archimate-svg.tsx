@@ -47,8 +47,8 @@ export default class ArchimateSvg extends React.PureComponent<IProps, IState> {
               spreadMethod="reflect"
               x1="0" y1="0" x2="1" y2="1"
           >
-            <stop offset="0%"  stop-color="black"/>
-            <stop offset="100%" stop-color="white"/>
+            <stop offset="0%"  stopColor="black"/>
+            <stop offset="100%" stopColor="white"/>
           </linearGradient>
           <symbol id="archimate-material-badge" className="archimate-badge" viewBox="0 0 20 20">
             <path style={{fill:"none",stroke:"inherit",strokeWidth:1,strokeLinejoin:"miter"}} d="M 15.443383,8.5890552 5.0182941,17.265414 -7.7081977,12.575201 -10.0096,-0.7913701 0.41548896,-9.4677289 13.141981,-4.7775163 Z" transform="matrix(0.59818877,-0.22354387,0.22387513,0.59808805,7.5647066,7.7263348)" />

@@ -66,7 +66,7 @@ export default class EntityLabel extends React.PureComponent<IProps, IState> {
         <clipPath id={clipPathId}>
           <path d={this.clipPathD()} />
         </clipPath>
-        <text clip-path={`url(#${clipPathId})`} x={this.lineX()} y={tb.y} style={this.textStyle()}>
+        <text clipPath={`url(#${clipPathId})`} x={this.lineX()} y={tb.y} style={this.textStyle()}>
           <TextFlow
               text={this.props.label} 
               bounds={this.props.textBounds}
