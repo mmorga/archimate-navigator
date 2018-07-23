@@ -1,10 +1,51 @@
-import { TextAlignProperty } from "csstype";
 import * as React from "react";
-import { Bounds, IEntity, Layer, Point, ViewNode, zeroBounds } from "../../archimate-model";
+import { LogicError, ViewNode } from "../../archimate-model";
 import { entityClickedFunc } from "../common";
 import "./archimate-svg.css";
-import EntityLabel from "./entity-label";
-import SelectedViewNode from "./selected-view-node";
+import ApplicationComponentViewNode from "./view-nodes/application-component-view-node";
+import ArtifactViewNode from "./view-nodes/artifact-view-node";
+import AssessmentViewNode from "./view-nodes/assessment-view-node";
+import BusinessActorViewNode from "./view-nodes/business-actor-view-node";
+import BusinessRoleViewNode from "./view-nodes/business-role-view-node";
+import CollaborationViewNode from "./view-nodes/collaboration-view-node";
+import ConstraintViewNode from "./view-nodes/constraint-view-node";
+import ContractViewNode from "./view-nodes/contract-view-node";
+import DataObjectViewNode from "./view-nodes/data-object-view-node";
+import DeliverableViewNode from "./view-nodes/deliverable-view-node";
+import DeviceViewNode from "./view-nodes/device-view-node";
+import DiagramRefViewNode from "./view-nodes/diagram-ref-view-node";
+import DistributionNetworkViewNode from "./view-nodes/distribution-network-view-node";
+import DriverViewNode from "./view-nodes/driver-view-node";
+import EventViewNode from "./view-nodes/event-view-node";
+import FunctionViewNode from "./view-nodes/function-view-node";
+import GapViewNode from "./view-nodes/gap-view-node";
+import GoalViewNode from "./view-nodes/goal-view-node";
+import GroupViewNode from "./view-nodes/group-view-node";
+import GroupingViewNode from "./view-nodes/grouping-view-node";
+import InteractionViewNode from "./view-nodes/interaction-view-node";
+import InterfaceViewNode from "./view-nodes/interface-view-node";
+import JunctionViewNode from "./view-nodes/junction";
+import LocationViewNode from "./view-nodes/location-view-node";
+import MeaningViewNode from "./view-nodes/meaning-view-node";
+import NetworkViewNode from "./view-nodes/network-view-node";
+import NodeViewNode from "./view-nodes/node-view-node";
+import NoteViewNode from "./view-nodes/note-view-node";
+import OrJunctionViewNode from "./view-nodes/or-junction";
+import OutcomeViewNode from "./view-nodes/outcome-view-node";
+import PathViewNode from "./view-nodes/path-view-node";
+import PlateauViewNode from "./view-nodes/plateau-view-node";
+import PrincipleViewNode from "./view-nodes/principle-view-node";
+import ProcessViewNode from "./view-nodes/process-view-node";
+import ProductViewNode from "./view-nodes/product-view-node";
+import RepresentationViewNode from "./view-nodes/representation-view-node";
+import RequirementViewNode from "./view-nodes/requirement-view-node";
+import ResourceViewNode from "./view-nodes/resource-view-node";
+import ServiceViewNode from "./view-nodes/service-view-node";
+import StakeholderViewNode from "./view-nodes/stakeholder-view-node";
+import StickyViewNode from "./view-nodes/sticky-view-node";
+import SystemSoftwareViewNode from "./view-nodes/system-software-view-node";
+import ValueViewNode from "./view-nodes/value-view-node";
+import WorkPackageViewNode from "./view-nodes/work-package-view-node";
 
 interface IProps {
   viewNode: ViewNode;
@@ -12,1072 +53,133 @@ interface IProps {
   selected: boolean;
 }
 
-interface IState {
-  badge?: string;
-  badgeBounds?: Bounds;
-  backgroundClass?: string;
-  entity?: IEntity | undefined;
-  entityLabelFunc?: () => string | undefined;
-  entityShapeFunc?: () => React.ReactFragment;
-  textAlign?: TextAlignProperty;
-  textBounds?: Bounds;
-  margin?: number;
-}
-
-class MergedState implements IState {
-  public badge?: string;
-  public badgeBounds?: Bounds;
-  public backgroundClass?: string;
-  public entity?: IEntity | undefined;
-  public entityLabelFunc?: () => string | undefined;
-  public entityShapeFunc?: () => React.ReactFragment;
-  public textAlign?: TextAlignProperty;
-  public textBounds?: Bounds;
-  public margin?: number;
-
-  constructor(s: IState) {
-    this.backgroundClass = s.backgroundClass;
-    this.badge = s.badge;
-    this.badgeBounds = s.badgeBounds;
-    this.entity = s.entity;
-    this.entityLabelFunc = s.entityLabelFunc;
-    this.entityShapeFunc = s.entityShapeFunc;
-    this.margin = s.margin;
-    this.textAlign = s.textAlign;
-    this.textBounds = s.textBounds;
-  }
-
-  public with(s: IState): MergedState {
-    return new MergedState({
-      backgroundClass: s.backgroundClass || this.backgroundClass,
-      badge: s.badge || this.badge,
-      badgeBounds: s.badgeBounds || this.badgeBounds,
-      entity: s.entity || this.entity,
-      entityLabelFunc: s.entityLabelFunc || this.entityLabelFunc,
-      entityShapeFunc: s.entityShapeFunc || this.entityShapeFunc,
-      margin: s.margin || this.margin,
-      textAlign: s.textAlign || this.textAlign,
-      textBounds: s.textBounds || this.textBounds,
-    });
-  }
-}
-
-// tslint:disable-next-line:max-classes-per-file
-export default class ArchimateViewNode extends React.PureComponent<IProps, IState> {
-  private groupHeaderHeight = 21;
-
+export default class ArchimateViewNode extends React.PureComponent<IProps> {
   constructor(props: IProps) {
     super(props);
-    this.state = this.stateForViewNode();
   }
 
   public render() {
-    return (
-      <g {...this.groupAttrs()}>
-        {this.title()}
-        {this.desc()}
-        {this.entityShape()}
-        {this.entityBadge()}
-        {this.entityLabel()}
-        {this.selectedHighlight()}
-      </g>
-    );
-  }
-
-  public defaultBackgroundClass(): string {
-    switch(this.elementType()) {
-    case "BusinessActor":
-    case "BusinessCollaboration":
-    case "BusinessEvent":
-    case "BusinessFunction":
-    case "BusinessInteraction":
-    case "BusinessInterface":
-    case "BusinessObject":
-    case "BusinessProcess":
-    case "BusinessRole":
-    case "BusinessService":
-    case "Contract":
-    case "Location":
-    case "Product":
-    case "Representation":
-      return Layer.Business;
-    case "ApplicationCollaboration":
-    case "ApplicationComponent":
-    case "ApplicationEvent":
-    case "ApplicationFunction":
-    case "ApplicationInteraction":
-    case "ApplicationInterface":
-    case "ApplicationProcess":
-    case "ApplicationService":
-    case "DataObject":
-      return Layer.Application;
-    case "Artifact":
-    case "CommunicationNetwork":
-    case "CommunicationPath":
-    case "Device":
-    case "InfrastructureFunction":
-    case "InfrastructureInterface":
-    case "InfrastructureService":
-    case "Network":
-    case "Node":
-    case "Path":
-    case "SystemSoftware":
-    case "TechnologyCollaboration":
-    case "TechnologyEvent":
-    case "TechnologyFunction":
-    case "TechnologyInteraction":
-    case "TechnologyInterface":
-    case "TechnologyObject":
-    case "TechnologyProcess":
-    case "TechnologyService":
-      return Layer.Technology;
-    case "DistributionNetwork":
-    case "Equipment":
-    case "Facility":
-    case "Material":
-      return Layer.Physical;
-    case "Assessment":
-    case "Constraint":
-    case "Driver":
-    case "Goal":
-    case "Meaning":
-    case "Outcome":
-    case "Principle":
-    case "Requirement":
-    case "Stakeholder":
-    case "Value":
-      return Layer.Motivation;
-    case "Deliverable":
-    case "Gap":
-    case "ImplementationEvent":
-    case "Plateau":
-    case "WorkPackage":
-      return Layer.ImplementationAndMigration;
-    case "AndJunction":
-    case "Junction":
-    case "OrJunction":
-      return Layer.Connectors;
-    case "Capability":
-    case "CourseOfAction":
-    case "Resource":
-      return Layer.Strategy;
-    case "Grouping":
-    case "Group":
-    default:
-      return Layer.Other;
-    }
-  }
-
-  public stateForViewNode(): IState {
-    const defaultState = new MergedState({
-      backgroundClass: this.defaultBackgroundClass(),
-      badge: undefined,
-      badgeBounds: undefined,
-      entity: this.props.viewNode.entityInstance(),
-      entityLabelFunc: this.label,
-      entityShapeFunc: this.rectPath,
-      margin: 8,
-      textAlign: "center",
-      textBounds: this.defaultTextBounds(),
-    });
-
-    const badgedRect = defaultState.with({
-      badgeBounds: this.rectBadgeBounds(),
-      entityShapeFunc: this.rectPath,
-    });
-
-    const badgedRoundedRect = defaultState.with({
-      badgeBounds: this.roundedRectBadgeBounds(),
-      entityShapeFunc: this.roundedRectPath,
-    });
-
-    const badgedMotivation = defaultState.with({
-      badgeBounds: this.motivationBadgeBounds(),
-      entityShapeFunc: this.motivationPath,
-    });
-
-    const badgedNode = defaultState.with({
-      badgeBounds: this.nodeBadgeBounds(),
-      entityShapeFunc: this.nodePath,
-      margin: 14,
-      textBounds: this.nodeTextBounds(),
-    });
-
-    const noteState = defaultState.with({
-      backgroundClass: "archimate-note-background",
-      entityShapeFunc: this.notePath,
-      textAlign: "left",
-      textBounds: this.props.viewNode.bounds.reducedBy(3),
-    });
-
-    const junction = defaultState.with({
-      backgroundClass: "archimate-junction-background", 
-      entityLabelFunc: () => undefined,
-      entityShapeFunc: this.junctionPath,
-    });
-
-    switch(this.elementType()) {
+    const elType = this.elementType();
+    switch(elType) {
       case "AndJunction": 
       case "Junction":
-        return junction.with({});
+        return <JunctionViewNode viewNode={this.props.viewNode} onClicked={this.props.onClicked} selected={this.props.selected} />
       case "OrJunction":
-        return junction.with({ backgroundClass: "archimate-or-junction-background" });
+        return <OrJunctionViewNode viewNode={this.props.viewNode} onClicked={this.props.onClicked} selected={this.props.selected} />
       case "ApplicationCollaboration":
+      case "BusinessCollaboration":
       case "TechnologyCollaboration":
-        return badgedRect.with({ badge: "#archimate-collaboration-badge" });
+        return <CollaborationViewNode viewNode={this.props.viewNode} onClicked={this.props.onClicked} selected={this.props.selected} />
       case "ApplicationComponent":
-        if (this.props.viewNode.childType === "1") {
-          return badgedRect.with({ badge: "#archimate-app-component-badge" });
-        } else {
-          return defaultState.with({
-            entityShapeFunc: this.componentPath,
-            textBounds: this.componentTextBounds(),
-          });
-        }
+        return <ApplicationComponentViewNode viewNode={this.props.viewNode} onClicked={this.props.onClicked} selected={this.props.selected} />
       case "ApplicationEvent":
       case "BusinessEvent":
       case "TechnologyEvent":
-        if (this.props.viewNode.childType === "1") {
-          return defaultState.with({
-            entityShapeFunc: this.eventPath,
-            textBounds: this.eventTextBounds(),
-          });
-        } else {
-          return badgedRoundedRect.with({ badge: "#archimate-event-badge" });
-        }
+        return <EventViewNode viewNode={this.props.viewNode} onClicked={this.props.onClicked} selected={this.props.selected} />
       case "ApplicationFunction":
       case "BusinessFunction":
       case "TechnologyFunction":
-        return badgedRoundedRect.with({ badge: "#archimate-function-badge" });
+        return <FunctionViewNode viewNode={this.props.viewNode} onClicked={this.props.onClicked} selected={this.props.selected} />
       case "ApplicationInteraction":
       case "BusinessInteraction":
       case "TechnologyInteraction":
-        return badgedRoundedRect.with({ badge: "#archimate-interaction-badge" });
+        return <InteractionViewNode viewNode={this.props.viewNode} onClicked={this.props.onClicked} selected={this.props.selected} />
       case "ApplicationInterface":
       case "BusinessInterface":
       case "TechnologyInterface":
-        if (this.props.viewNode.childType === "1") {
-          return defaultState.with({ entityShapeFunc: this.elipsePath });
-        } else {
-          return badgedRect.with({ badge: "#archimate-interface-badge" });
-        }
+       return <InterfaceViewNode viewNode={this.props.viewNode} onClicked={this.props.onClicked} selected={this.props.selected} />
       case "ApplicationProcess":
       case "BusinessProcess":
       case "TechnologyProcess":
-        if (this.props.viewNode.childType === "1") {
-          return defaultState.with({
-            entityShapeFunc: this.processPath,
-            textBounds: this.processTextBounds(),
-          });
-        } else {
-          return badgedRoundedRect.with({ badge: "#archimate-process-badge" });
-        }
+        return <ProcessViewNode viewNode={this.props.viewNode} onClicked={this.props.onClicked} selected={this.props.selected} />
       case "ApplicationService":
       case "BusinessService":
       case "TechnologyService":
-        if (this.props.viewNode.childType === "1") {
-          return defaultState.with({
-            entityShapeFunc: this.servicePath,
-            textBounds: this.serviceBounds(),
-          });
-        } else {
-          return badgedRoundedRect.with({ badge: "#archimate-service-badge" });
-        }
-      case "Artifact":
-        return defaultState.with({
-          badge: "archimate-artifact-badge",
-          entityShapeFunc: this.artifactPath,
-        });
-      case "Assessment":
-        return badgedMotivation.with({ badge: "#archimate-assessment-badge" });
+        return <ServiceViewNode viewNode={this.props.viewNode} onClicked={this.props.onClicked} selected={this.props.selected} />
       case "BusinessActor":
-        return badgedRect.with({ badge: "#archimate-actor-badge" });
-      case "BusinessCollaboration":
-        return badgedRect.with({ badge: "#archimate-collaboration-badge" });
+        return <BusinessActorViewNode viewNode={this.props.viewNode} onClicked={this.props.onClicked} selected={this.props.selected} />
+      case "Artifact":
+        return <ArtifactViewNode viewNode={this.props.viewNode} onClicked={this.props.onClicked} selected={this.props.selected} />
+      case "Assessment":
+        return <AssessmentViewNode viewNode={this.props.viewNode} onClicked={this.props.onClicked} selected={this.props.selected} />
+      case "Driver":
+        return <DriverViewNode viewNode={this.props.viewNode} onClicked={this.props.onClicked} selected={this.props.selected} />
+      case "Constraint":
+        return <ConstraintViewNode viewNode={this.props.viewNode} onClicked={this.props.onClicked} selected={this.props.selected} />
+      case "Goal":
+        return <GoalViewNode viewNode={this.props.viewNode} onClicked={this.props.onClicked} selected={this.props.selected} />
+      case "Outcome":
+        return <OutcomeViewNode viewNode={this.props.viewNode} onClicked={this.props.onClicked} selected={this.props.selected} />
+      case "Principle":
+        return <PrincipleViewNode viewNode={this.props.viewNode} onClicked={this.props.onClicked} selected={this.props.selected} />
+      case "Requirement":
+        return <RequirementViewNode viewNode={this.props.viewNode} onClicked={this.props.onClicked} selected={this.props.selected} />
+      case "Stakeholder":
+        return <StakeholderViewNode viewNode={this.props.viewNode} onClicked={this.props.onClicked} selected={this.props.selected} />
       case "BusinessObject":
       case "DataObject":
-        return defaultState.with({
-          entityShapeFunc: this.dataPath,
-          margin: 8,
-          textBounds: this.dataTextBounds(),
-        });
+        return <DataObjectViewNode viewNode={this.props.viewNode} onClicked={this.props.onClicked} selected={this.props.selected} />
       case "BusinessRole":
-        return badgedRect.with({ badge: "#archimate-role-badge" });
+        return <BusinessRoleViewNode viewNode={this.props.viewNode} onClicked={this.props.onClicked} selected={this.props.selected} />
       case "Contract":
-        return defaultState.with({
-          entityShapeFunc: this.contractPath,
-          margin: 8,
-          textBounds: this.dataTextBounds(),
-        })
+        return <ContractViewNode viewNode={this.props.viewNode} onClicked={this.props.onClicked} selected={this.props.selected} />
       case "Deliverable":
-        return defaultState.with({ entityShapeFunc: this.deliverablePath });
+        return <DeliverableViewNode viewNode={this.props.viewNode} onClicked={this.props.onClicked} selected={this.props.selected} />
       case "Gap":
-        return defaultState.with({ 
-          backgroundClass: "archimate-implementation2-background",
-          badge: "#archimate-gap-badge",
-          badgeBounds: this.rectBadgeBounds(),
-          entityShapeFunc: this.deliverablePath,
-         });
-      case "Device":
-        if (this.props.viewNode.childType === "1") {
-          return badgedNode.with({ badge: "#archimate-device-badge" });
-        } else {
-          return defaultState.with({ entityShapeFunc: this.devicePath });
-        }
+        return <GapViewNode viewNode={this.props.viewNode} onClicked={this.props.onClicked} selected={this.props.selected} />
       case "DiagramModelReference":
       case "ArchimateDiagramModel":
       case "DiagramModel":
-        return badgedRect.with({
-          backgroundClass: "archimate-diagram-model-reference-background",
-          badge: "#archimate-diagram-model-reference-badge",
-          // optionalLinkFunc: this.diagramOptionalLink,
-        });
+        return <DiagramRefViewNode viewNode={this.props.viewNode} onClicked={this.props.onClicked} selected={this.props.selected} />
+      case "Device":
+        return <DeviceViewNode viewNode={this.props.viewNode} onClicked={this.props.onClicked} selected={this.props.selected} />
+      case "Plateau":
+        return <PlateauViewNode viewNode={this.props.viewNode} onClicked={this.props.onClicked} selected={this.props.selected} />
+      case "Node":
+       return <NodeViewNode viewNode={this.props.viewNode} onClicked={this.props.onClicked} selected={this.props.selected} />
       case "DistributionNetwork":
-        return badgedRect.with({ badge: "#archimate-distribution-network-badge" });
-      case "Driver":
-        return badgedMotivation.with({ badge: "#archimate-driver-badge" });
+        return <DistributionNetworkViewNode viewNode={this.props.viewNode} onClicked={this.props.onClicked} selected={this.props.selected} />
       case "Group":
-        return defaultState.with({
-          backgroundClass: "archimate-group-background",
-          entityShapeFunc: this.groupPath,
-          textAlign: "left",      
-          textBounds: this.groupTextBounds(),
-        });
+        return <GroupViewNode viewNode={this.props.viewNode} onClicked={this.props.onClicked} selected={this.props.selected} />
       case "Grouping":
-        return defaultState.with({
-          backgroundClass: "archimate-grouping-background",
-          entityShapeFunc: this.groupingPath,
-          textAlign: "left",      
-          textBounds: this.groupTextBounds(),
-        });
+       return <GroupingViewNode viewNode={this.props.viewNode} onClicked={this.props.onClicked} selected={this.props.selected} />
       case "Location":
-        return badgedRect.with({ 
-          backgroundClass: "archimate-location-background",
-          badge: "#archimate-location-badge",
-        });
+        return <LocationViewNode viewNode={this.props.viewNode} onClicked={this.props.onClicked} selected={this.props.selected} />
       case "Meaning":
-        return defaultState.with({
-          entityShapeFunc: this.meaningPath,
-        });
+        return <MeaningViewNode viewNode={this.props.viewNode} onClicked={this.props.onClicked} selected={this.props.selected} />
       case "CommunicationNetwork":
       case "Network":
-        return badgedRect.with({ badge: "#archimate-network-badge" });
-      case "Node":
-        if (this.props.viewNode.childType === "1") {
-          return defaultState.with({ entityShapeFunc: this.devicePath });
-        } else {
-          return badgedRect.with({ badge: "#archimate-node-badge" });
-        }
+        return <NetworkViewNode viewNode={this.props.viewNode} onClicked={this.props.onClicked} selected={this.props.selected} />
+      case "Path":
+        return <PathViewNode viewNode={this.props.viewNode} onClicked={this.props.onClicked} selected={this.props.selected} />
+      case "Resource":
+        return <ResourceViewNode viewNode={this.props.viewNode} onClicked={this.props.onClicked} selected={this.props.selected} />
+      case "SystemSoftware":
+        return <SystemSoftwareViewNode viewNode={this.props.viewNode} onClicked={this.props.onClicked} selected={this.props.selected} />
       case "DiagramObject":
       case "Note":
-        return noteState;
-      case "Constraint":
-        return badgedMotivation.with({ badge: "#archimate-constraint-badge" });
-      case "Goal":
-        return badgedMotivation.with({ badge: "#archimate-goal-badge" });
-      case "Outcome":
-        return badgedMotivation.with({ badge: "#archimate-outcome-badge" });
-      case "Path":
-        return badgedRect.with({ badge: "#archimate-communication-path-badge" });
-      case "Plateau":
-        return badgedNode.with({
-          backgroundClass: "archimate-implementation2-background",
-          badge: "#archimate-plateau-badge",
-        });
-      case "Principle":
-        return badgedMotivation.with({ badge: "#archimate-principle-badge" });
+        return <NoteViewNode viewNode={this.props.viewNode} onClicked={this.props.onClicked} selected={this.props.selected} />
       case "Product":
-        return defaultState.with({
-          entityShapeFunc: this.productPath,
-          textBounds: this.dataTextBounds(),
-         });
+        return <ProductViewNode viewNode={this.props.viewNode} onClicked={this.props.onClicked} selected={this.props.selected} />
       case "Representation":
-        return defaultState.with({
-          entityShapeFunc: this.representationPath,
-          textBounds: this.dataTextBounds(),
-        });
-      case "Requirement":
-        return badgedMotivation.with({ badge: "#archimate-requirement-badge" });
-      case "Resource":
-        return badgedRect.with({ badge: "#archimate-resource-badge" });
+        return <RepresentationViewNode viewNode={this.props.viewNode} onClicked={this.props.onClicked} selected={this.props.selected} />
       case "SketchModelSticky":
-        return defaultState.with({
-          backgroundClass: "archimate-sticky-background",
-          entityShapeFunc: this.rectPath,
-        });
-      case "Stakeholder":
-        return badgedMotivation.with({ badge: "#archimate-role-badge" });
-      case "SystemSoftware":
-        return badgedRect.with({ badge: "#archimate-system-software-badge" });
+        return <StickyViewNode viewNode={this.props.viewNode} onClicked={this.props.onClicked} selected={this.props.selected} />
       case "Value":
-        return defaultState.with({
-          entityShapeFunc: this.valuePath,
-          textBounds: this.valueTextBounds(),
-        });
+        return <ValueViewNode viewNode={this.props.viewNode} onClicked={this.props.onClicked} selected={this.props.selected} />
       case "WorkPackage":
-        return defaultState.with({
-          entityShapeFunc: this.roundedRectPath,
-        })
+        return <WorkPackageViewNode viewNode={this.props.viewNode} onClicked={this.props.onClicked} selected={this.props.selected} />
       default:
-        return defaultState;
+        throw new LogicError(`Unexpected view node type ${elType}`);
     }
   }
 
-  public groupAttrs(): React.SVGProps<SVGGElement> {
-    const attrs: React.SVGProps<SVGGElement> = { id: this.props.viewNode.id,  };
-    if (this.props.viewNode.type && this.props.viewNode.type.length > 0) {
-      attrs.className = `archimate-${this.elementType()}`;
-    }
-    if (this.props.onClicked) {
-      attrs.onClick = this.props.onClicked.bind(this, this.props.viewNode.entityInstance());
-    }
-    return attrs;
-  }
-
-  public elementType(): string {
+  private elementType(): string {
     const elInst = this.props.viewNode.entityInstance();
     if (elInst) {
       return elInst.type;
     } else {
       return this.props.viewNode.type;
-    }
-  }
-
-  public title() {
-    if (this.props.viewNode.name && this.props.viewNode.name.length > 0) {
-      return (<title>{this.props.viewNode.name}</title>);
-    } else {
-      return undefined;
-    }
-  }
-
-  public desc() {
-    if (this.props.viewNode.documentation) {
-      return (<desc>{this.props.viewNode.documentation}</desc>);
-    } else {
-      return undefined;
-    }
-  }
-
-  public entityShape() {
-    if (this.state.entityShapeFunc) {
-      return this.state.entityShapeFunc.bind(this)();
-    }
-    return this.rectPath();
-  }
-
-  public backgroundClass() {
-    return this.state.backgroundClass || "archimate-none-background";
-  }
-
-  public shapeStyle(): React.CSSProperties {
-    const style = this.props.viewNode.style;
-    if (style === undefined) {
-      return {};
-    }
-    const cssStyle: React.CSSProperties = {};
-    if (style.fillColor) { cssStyle.fill = style.fillColor.toRGBA() }
-    if (style.lineColor) { cssStyle.stroke = style.lineColor.toRGBA() }
-    if (style.lineWidth) { cssStyle.strokeWidth = style.lineWidth }
-    return cssStyle;
-}
-
-  public entityBadge() {
-    if (this.state.badge === undefined) {
-      return undefined;
-    }
-    return (
-      <use 
-        href={this.state.badge}
-        {...this.state.badgeBounds}
-        />
-    );
-  }
-  
-  public entityLabel() {
-    const badgeBounds = zeroBounds(); // this.props.viewNode.badge ? DataModel::Bounds.new(x: 0, y: 0, width: 20, height: 20) : DataModel::Bounds.zero
-    const optLabel = this.label();
-    if (optLabel === undefined) {
-      return undefined;
-    }
-    const label = optLabel as string;
-    return (
-      <EntityLabel 
-          child={this.props.viewNode}
-          label={label}
-          textBounds={this.state.textBounds || (this.props.viewNode.bounds).reducedBy(2)}
-          textAlign={this.state.textAlign}
-          badgeBounds={badgeBounds}
-          />
-    );
-  }
-
-  public label() {
-    if (this.props.viewNode.content && (this.props.viewNode.content.length > 0)) {
-      return this.props.viewNode.content;
-    }
-    if (this.props.viewNode.name && (this.props.viewNode.name.length > 0)) {
-      return this.props.viewNode.name;
-    }
-    const el = this.props.viewNode.entityInstance();
-    if (el === undefined) {
-      return undefined;
-    }
-    return el.name;
-  }
-
-  private motivationBadgeBounds(): Bounds {
-    const bounds = this.props.viewNode.bounds;
-    return new Bounds(bounds.right() - 25, bounds.top() + 5, 20, 20);
-  }
-
-  private nodeBadgeBounds(): Bounds {
-    const bounds = this.props.viewNode.bounds;
-    const margin = 14;
-    return new Bounds(
-      bounds.right() - margin - 25,
-      bounds.top() + margin + 5,
-      20,
-      20
-    );
-  }
-
-  private rectBadgeBounds() {
-    const bounds = this.props.viewNode.bounds;
-    return new Bounds(bounds.right() - 25, bounds.top() + 5, 20, 20);
-  }
-
-  private roundedRectBadgeBounds() {
-    const bounds = this.props.viewNode.bounds;
-    return new Bounds(
-      bounds.right() - 25,
-      bounds.top() + 5,
-      20,
-      20
-    );
-  }
-
-  private rectPath(): React.ReactFragment {
-    const bounds = this.props.viewNode.bounds;
-    return (
-      <rect x={bounds.x} y={bounds.y} width={bounds.width} height={bounds.height} className={this.backgroundClass()} style={this.shapeStyle()}/>
-    );
-  }
-
-  private componentDecoration(left: number, top: number) {
-    return (
-      <React.Fragment>
-        <rect x={left} y={top} width="21" height="13" className={this.state.backgroundClass} style={this.shapeStyle()} />
-        <rect x={left} y={top} width="21" height="13" className="archimate-decoration" />
-      </React.Fragment>
-    );
-  }
-
-  private componentTextBounds(): Bounds {
-    const bounds = this.props.viewNode.bounds;
-    const mainBoxX = bounds.left() + 21.0 / 2;
-    return new Bounds(mainBoxX + 21 / 2, bounds.top() + 1, bounds.width - 22, bounds.height - 2);
-  }
-
-  private componentPath(): React.ReactFragment {
-    const bounds = this.props.viewNode.bounds;
-    const mainBoxX = bounds.left() + 21.0 / 2;
-    const mainBoxWidth = bounds.width - 21 / 2;
-    // this.setState({textBounds: new Bounds(mainBoxX + 21 / 2, bounds.top() + 1, bounds.width - 22, bounds.height - 2)});
-    return (
-      <React.Fragment>
-        <rect x={mainBoxX} y={bounds.top()} width={mainBoxWidth} height={bounds.height} className={this.state.backgroundClass} style={this.shapeStyle()} />
-        {this.componentDecoration(bounds.left(), bounds.top() + 10)}
-        {this.componentDecoration(bounds.left(), bounds.top() + 30)}
-      </React.Fragment>
-    );
-  }
-
-  private eventTextBounds(): Bounds {
-    const textBounds = this.defaultTextBounds();
-    const notchX = 18;
-    return new Bounds(textBounds.left() + notchX * 0.8, textBounds.top(), textBounds.width - notchX, textBounds.height);
-  }
-
-  private eventPath(): React.ReactFragment {
-    const bounds = this.props.viewNode.bounds;
-    const notchX = 18;
-    const notchHeight = bounds.height / 2.0;
-    const eventWidth = bounds.width * 0.85;
-    const rx = 17;
-    const d = [
-        "M", bounds.left(), bounds.top(),
-        "l", notchX, notchHeight,
-        "l", -notchX, notchHeight,
-        "h", eventWidth,
-        "a", rx, notchHeight, 0, 0, 0, 0, -bounds.height,
-        "z"
-      ].join(" ");
-    return (
-      <path d={ d } className={this.state.backgroundClass} style={this.shapeStyle()} />
-    );
-  }
-
-  private defaultTextBounds() {
-    return this.props.viewNode.bounds.reducedBy(2);
-  }
-
-  private roundedRectPath(): React.ReactFragment {
-    const bounds = this.props.viewNode.bounds;
-    return (
-      <rect x={bounds.left()} y={bounds.top()} width={bounds.width} height={bounds.height} rx={"5"} ry={"5"} className={this.state.backgroundClass} />
-    );
-  }
-
-  private elipsePath(): React.ReactFragment {
-    const bounds = this.props.viewNode.bounds;
-    return (
-      <ellipse
-        cx={bounds.left() + bounds.width / 2.0}
-        cy={bounds.top() + bounds.height / 2.0}
-        rx={bounds.width / 2.0}
-        ry={bounds.height / 2.0}
-        className={this.state.backgroundClass}
-        style={this.shapeStyle()}
-      />
-    );
-  }
-
-  private processTextBounds(): Bounds {
-    const bounds = this.props.viewNode.bounds;
-    const shaftTop = bounds.top() + bounds.height * 0.15;
-    const shaftBottom = bounds.bottom() - bounds.height * 0.15;
-    const left = bounds.left();
-    const textBounds = new Bounds(left, shaftTop, bounds.width - bounds.height * 0.25, shaftBottom - shaftTop);
-    return textBounds.reducedBy(2);
-  }
-
-  private processPath(): React.ReactFragment {
-    const bounds = this.props.viewNode.bounds;
-    const top = bounds.top();
-    const shaftTop = bounds.top() + bounds.height * 0.15;
-    const middle = bounds.top() + bounds.height * 0.5;
-    const shaftBottom = bounds.bottom() - bounds.height * 0.15;
-    const bottom = bounds.bottom();
-
-    const left = bounds.left();
-    const arrowBack = bounds.right() - bounds.height * 0.5;
-    const right = bounds.right();
-    return (
-      <path
-        d={[
-          "M", left, shaftTop,
-          "L", arrowBack, shaftTop,
-          "L", arrowBack, top,
-          "L", right, middle,
-          "L", arrowBack, bottom,
-          "L", arrowBack, shaftBottom,
-          "L", left, shaftBottom,
-          "z"
-        ].join(" ")}
-        className={this.state.backgroundClass}
-        style={this.shapeStyle()}
-        />
-    );
-  }
-
-  private serviceBounds(): Bounds {
-    const bounds = this.props.viewNode.bounds;
-    return new Bounds(
-      bounds.left() + 7,
-      bounds.top() + 5,
-      bounds.width - 14,
-      bounds.height - 10
-    );
-  }
-
-  private servicePath(): React.ReactFragment {
-    const bounds = this.props.viewNode.bounds;
-    return (
-      <rect
-        x={bounds.left()}
-        y={bounds.top()}
-        width={bounds.width}
-        height={bounds.height}
-        rx={bounds.height / 2.0}
-        ry={bounds.height / 2.0}
-        className={this.state.backgroundClass}
-        style={this.shapeStyle()}
-      />
-    );
-  }
-
-  private artifactPath(): React.ReactFragment {
-    const bounds = this.props.viewNode.bounds;
-    const margin = 18;
-    return (
-      <g className={this.state.backgroundClass} style={this.shapeStyle()}>
-        <path 
-          d={[
-              "M", bounds.left(), bounds.top(),
-              "h", bounds.width - margin,
-              "l", margin, margin,
-              "v", bounds.height - margin,
-              "h", -bounds.width,
-              "z"
-            ].join(" ")}
-        />
-        <path 
-          d={[
-              "M", bounds.right() - margin, bounds.top(),
-              "v", margin,
-              "h", margin,
-              "z"
-            ].join(" ")}
-          className="archimate-decoration"
-        />
-      </g>
-    );
-  }
-
-  private motivationPath(): React.ReactFragment {
-    const bounds = this.props.viewNode.bounds;
-    const margin = 10;
-    const width = bounds.width - margin * 2;
-    const height = bounds.height - margin * 2;
-    return (
-      <path
-        d={[
-            "M", bounds.left() + margin, bounds.top(),
-            "h", width,
-            "l", margin, margin,
-            "v", height,
-            "l", -margin, margin,
-            "h", -width,
-            "l", -margin, -margin,
-            "v", -height,
-            "z"
-          ].join(" ")}
-        className={this.state.backgroundClass}
-        style={this.shapeStyle()}
-      />
-    );
-  }
-
-  private dataTextBounds() {
-    const textBounds = this.defaultTextBounds();
-    const margin: number = 8;
-    return new Bounds(textBounds.left(), textBounds.top() + margin, textBounds.width, textBounds.height - margin);
-  }
-
-  private dataPath(): React.ReactFragment {
-    const bounds = this.props.viewNode.bounds;
-    return (
-      <g className={this.state.backgroundClass}>
-        <rect key="data-background" x={bounds.left()} y={bounds.top()} width={bounds.width} height={bounds.height} className={this.state.backgroundClass} style={this.shapeStyle()} />
-        <rect key="data-decoration" x={bounds.left()} y={bounds.top()} width={bounds.width} height={this.state.margin} className="archimate-decoration" />
-      </g>
-    );
-  }
-
-  private deliverablePath(): React.ReactFragment {
-    const bounds = this.props.viewNode.bounds;
-    return (
-      <React.Fragment>
-        <path
-            d={[
-                "M", bounds.left(), bounds.top(),
-                "v", bounds.height - 8,
-                "c", 0.167 * bounds.width, 0.133 * bounds.height,
-                0.336 * bounds.width, 0.133 * bounds.height,
-                bounds.width * 0.508, 0,
-                "c", 0.0161 * bounds.width, -0.0778 * bounds.height,
-                0.322 * bounds.width, -0.0778 * bounds.height,
-                bounds.width * 0.475, 0,
-                "v", -(bounds.height - 8),
-                "z"
-              ].join(" ")}
-            className={this.state.backgroundClass}
-            style={this.shapeStyle()}
-        />
-      </React.Fragment>
-    );
-  }
-
-  private representationPath(): React.ReactFragment {
-    const bounds = this.props.viewNode.bounds;
-    return (
-      <React.Fragment>
-        <path
-            d={[
-                "M", bounds.left(), bounds.top(),
-                "v", bounds.height - 8,
-                "c", 0.167 * bounds.width, 0.133 * bounds.height,
-                0.336 * bounds.width, 0.133 * bounds.height,
-                bounds.width * 0.508, 0,
-                "c", 0.0161 * bounds.width, -0.0778 * bounds.height,
-                0.322 * bounds.width, -0.0778 * bounds.height,
-                bounds.width * 0.475, 0,
-                "v", -(bounds.height - 8),
-                "z"
-              ].join(" ")}
-            className={this.state.backgroundClass}
-            style={this.shapeStyle()}
-        />
-        <rect key="data-decoration" x={bounds.left()} y={bounds.top()} width={bounds.width} height={this.state.margin} className="archimate-decoration" />
-      </React.Fragment>
-    );
-  }
-
-  private devicePath(): React.ReactFragment {
-    const bounds = this.props.viewNode.bounds;
-    const margin = 10;
-    const decorationPath = [
-      "M", bounds.left() + margin, bounds.bottom() - margin,
-      "l", -margin, margin,
-      "h", bounds.width,
-      "l", -margin, -margin,
-      "z"
-    ].join(" ");
-  
-    return (
-      <React.Fragment>
-        <rect
-          x={bounds.left()}
-          y={bounds.top()}
-          width={bounds.width}
-          height={bounds.height - margin}
-          rx={"6"}
-          ry={"6"}
-          className={this.state.backgroundClass}
-          style={this.shapeStyle()}
-        />
-        <path d={decorationPath} className={this.state.backgroundClass} style={this.shapeStyle()} />
-        <path d={decorationPath} className="archimate-decoration" style={this.shapeStyle()} />
-      </React.Fragment> 
-    );
-  }
-
-  private nodeTextBounds(): Bounds {
-    const bounds = this.props.viewNode.bounds;
-    const margin = 14;
-    const nodeBoxHeight = bounds.height - margin;
-    const nodeBoxWidth = bounds.width - margin;
-    return new Bounds(bounds.left() + 1, bounds.top() + margin + 1, nodeBoxWidth - 2, nodeBoxHeight - 2);
-  }
-
-  private nodePath(): React.ReactFragment {
-    const bounds = this.props.viewNode.bounds;
-    const margin = this.state.margin || 14;
-    const nodeBoxHeight = bounds.height - margin;
-    const nodeBoxWidth = bounds.width - margin;
-    return (
-      <g className={this.state.backgroundClass} style={this.shapeStyle()}>
-        <path 
-          d={[
-              "M", bounds.left(), bounds.bottom(),
-              "v", -nodeBoxHeight,
-              "l", margin, -margin,
-              "h", nodeBoxWidth,
-              "v", nodeBoxHeight,
-              "l", -margin, margin,
-              "z"
-            ].join(" ")}
-        />
-        <path 
-          d={[
-              "M", bounds.left(), bounds.top() + margin,
-              "l", margin, -margin,
-              "h", nodeBoxWidth,
-              "v", nodeBoxHeight,
-              "l", -margin, margin,
-              "v", -nodeBoxHeight,
-              "z",
-              "M", bounds.right(), bounds.top(),
-              "l", -margin, margin
-            ].join(" ")}
-          className="archimate-decoration"
-        />
-        <path 
-          d={[
-              "M", bounds.left, bounds.top() + margin,
-              "h", nodeBoxWidth,
-              "l", margin, -margin,
-              "M", bounds.left() + nodeBoxWidth, bounds.bottom(),
-              "v", -nodeBoxHeight
-            ].join(" ")}
-          style={{fill:"none",stroke:"inherit"}}
-        />
-      </g>
-    );
-  }
-
-  // private diagramOptionalLink(): 
-  //   xml.a(href: "#{@entity.id}.svg") do
-  //     block.call
-  //   end
-  // }
-
-  private notePath(): React.ReactFragment {
-    const bounds = this.props.viewNode.bounds;
-    return (
-      <path
-        d={[
-            "m", bounds.left(), bounds.top(),
-            "h", bounds.width,
-            "v", bounds.height - 8,
-            "l", -8, 8,
-            "h", -(bounds.width - 8),
-            "z"
-          ].join(" ")}
-        className={this.state.backgroundClass} 
-        style={this.shapeStyle()}
-      />
-    );
-  }
-
-  private productPath(): React.ReactFragment {
-    const bounds = this.props.viewNode.bounds;
-    return (
-      <g className={this.state.backgroundClass}>
-        <rect x={bounds.left()} y={bounds.top()} width={bounds.width} height={bounds.height} className={this.state.backgroundClass} style={this.shapeStyle()} />
-        <rect x={bounds.left()} y={bounds.top()} width={bounds.width / 2.0} height="8" className="archimate-decoration" />
-      </g>
-    );
-  }
-
-  private valueTextBounds(): Bounds {
-    const textBounds = this.defaultTextBounds();
-    return new Bounds(
-      textBounds.left() + 10,
-      textBounds.top() + 10,
-      textBounds.width - 20,
-      textBounds.height - 20
-    );
-  }
-
-  private valuePath(): React.ReactFragment {
-    const bounds = this.props.viewNode.bounds;
-    const cx = bounds.left() + bounds.width / 2.0;
-    const rx = bounds.width / 2.0 - 1;
-    const cy = bounds.top() + bounds.height / 2.0;
-    const ry = bounds.height / 2.0 - 1;
-    return (
-      <ellipse cx={cx} cy={cy} rx={rx} ry={ry} className={this.state.backgroundClass} style={this.shapeStyle()} />
-    );
-  }
-
-  private groupPath(): React.ReactFragment {
-    const bounds = this.props.viewNode.bounds;
-    return (
-      <React.Fragment>
-        <rect
-            x={bounds.left()}
-            y={bounds.top() + this.groupHeaderHeight}
-            width={bounds.width}
-            height={bounds.height - this.groupHeaderHeight}
-            className={this.state.backgroundClass}
-            style={this.shapeStyle()}
-        />
-        <rect 
-            x={bounds.left()}
-            y={bounds.top()}
-            width={bounds.width / 2.0}
-            height={this.groupHeaderHeight}
-            className={this.state.backgroundClass}
-            style={this.shapeStyle()}
-        />
-        <rect 
-            x={bounds.left()}
-            y={bounds.top()}
-            width={bounds.width / 2.0}
-            height={this.groupHeaderHeight}
-            className={"archimate-decoration"}
-        />)
-      </React.Fragment>
-    );
-  }
-
-  private contractPath(): React.ReactFragment {
-    const bounds = this.props.viewNode.bounds;
-    const margin = this.state.margin || 8;
-    return (
-      <g className={this.state.backgroundClass}>
-        <rect x={bounds.left()} y={bounds.top()} width={bounds.width} height={bounds.height} className={this.state.backgroundClass} style={this.shapeStyle()} />
-        <rect x={bounds.left()} y={bounds.top()} width={bounds.width} height={margin}  className="archimate-decoration" />
-        <rect x={bounds.left()} y={bounds.top() + bounds.height - margin} width={bounds.width} height={margin} className="archimate-decoration" />
-      </g>
-    );
-  }
-
-  private meaningPath(): React.ReactFragment {
-    const bounds = this.props.viewNode.bounds;
-    const pts = [
-      new Point(bounds.left() + bounds.width * 0.04, bounds.top() + bounds.height * 0.5),
-      new Point(bounds.left() + bounds.width * 0.5, bounds.top() + bounds.height * 0.12),
-      new Point(bounds.left() + bounds.width * 0.94, bounds.top() + bounds.height * 0.55),
-      new Point(bounds.left() + bounds.width * 0.53, bounds.top() + bounds.height * 0.87)
-    ];
-    return (
-      <path
-        d={[
-        "M", pts[0].x, pts[0].y,
-        "C", pts[0].x - bounds.width * 0.15, pts[0].y - bounds.height * 0.32,
-        pts[1].x - bounds.width * 0.3, pts[1].y - bounds.height * 0.15,
-        pts[1].x, pts[1].y,
-        "C", pts[1].x + bounds.width * 0.29, pts[1].y - bounds.height * 0.184,
-        pts[2].x + bounds.width * 0.204, pts[2].y - bounds.height * 0.304,
-        pts[2].x, pts[2].y,
-        "C", pts[2].x + bounds.width * 0.028, pts[2].y + bounds.height * 0.295,
-        pts[3].x + bounds.width * 0.156, pts[3].y + bounds.height * 0.088,
-        pts[3].x, pts[3].y,
-        "C", pts[3].x - bounds.width * 0.279, pts[3].y + bounds.height * 0.326,
-        pts[0].x - bounds.width * 0.164, pts[0].y + bounds.height * 0.314,
-        pts[0].x, pts[0].y
-      ].join(" ")}
-      className={this.state.backgroundClass} style={this.shapeStyle()} />
-    );
-  }
-
-  private junctionPath(): React.ReactFragment {
-    const bounds = this.props.viewNode.bounds;
-    const center = bounds.center();
-    const r = Math.min(bounds.width, bounds.height) / 2;
-    return (
-      <circle cx={center.x} cy={center.y} r={r} className={this.state.backgroundClass} style={this.shapeStyle()} />      
-    );
-  }
-
-  private groupingPath(): React.ReactFragment {
-    const bounds = this.props.viewNode.bounds;
-    const groupHeaderHeight = 21;
-    return (
-      <React.Fragment>
-        <rect
-          x={bounds.left()}
-          y={bounds.top() + groupHeaderHeight}
-          width={bounds.width}
-          height={bounds.height - groupHeaderHeight}
-          className={this.state.backgroundClass} 
-          style={this.shapeStyle()}
-        />
-        <path
-          d={["M", bounds.left(), bounds.top() + groupHeaderHeight - 1,
-              "v", -(groupHeaderHeight - 1),
-              "h", bounds.width / 2,
-              "v", groupHeaderHeight - 1].join(" ")}
-          className={this.state.backgroundClass} 
-          style={this.shapeStyle()}
-        />
-      </React.Fragment>
-    );
-  }
-
-  private groupTextBounds(): Bounds {
-    const bounds = this.props.viewNode.bounds;
-    return new Bounds(bounds.left() + 3, bounds.top(), (bounds.width / 2.0) - 6, this.groupHeaderHeight);
-  }
-
-  private selectedHighlight(): React.ReactFragment | undefined {
-    if (this.props.selected) {
-      return <SelectedViewNode bounds={this.props.viewNode.bounds} />;
-    } else {
-      return undefined;
     }
   }
 }
