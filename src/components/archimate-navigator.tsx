@@ -91,7 +91,7 @@ export default class ArchimateNavigator extends React.Component<
               </Tab>
               <Tab eventKey={SidebarTab.SearchTab} title="Search">
                 <ArchimateSearch
-                  data={this.state.model.entities()}
+                  model={this.state.model}
                   resultClicked={this.entityClicked}
                 />
               </Tab>

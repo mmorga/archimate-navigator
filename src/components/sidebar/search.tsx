@@ -1,23 +1,17 @@
 import Fuse from "fuse.js";
 import React from "react";
-import { IEntity } from "../../archimate-model";
+import { Model } from "../../archimate-model";
 import { entityClickedFunc } from "../common";
 import SearchResult from "./search-result";
 
-// interface FuseResult {
-//     id: string;
-//     name: string;
-//     type: string;
-// }
-
 interface IProps {
-  data: IEntity[];
+  model: Model;
   resultClicked: entityClickedFunc;
   searchText?: string;
 }
 
 interface IState {
-  fuse?: Fuse;
+  fuse: Fuse;
   results: any[];
   search: string;
 }
@@ -39,21 +33,19 @@ export default class ArchimateSearch extends React.PureComponent<
 
   constructor(props: IProps) {
     super(props);
-    let fuse;
-    if (props.data) {
-      fuse = new Fuse(this.props.data, this.fuseOptions);
-    }
 
     this.state = {
-      fuse,
+      fuse: new Fuse(this.props.model.entities(), this.fuseOptions),
       results: [],
-      search: ""
+      search: this.props.searchText || ""
     };
   }
 
   public componentWillReceiveProps(nextProps: IProps) {
-    if (this.props.data !== nextProps.data) {
-      this.setState({ fuse: new Fuse(nextProps.data, this.fuseOptions) });
+    if (this.props.model !== nextProps.model) {
+      this.setState({
+        fuse: new Fuse(nextProps.model.entities(), this.fuseOptions)
+      });
     }
   }
 
@@ -86,8 +78,9 @@ export default class ArchimateSearch extends React.PureComponent<
             <form className="form-inline">
               <input
                 type="text"
+                value={this.state.search}
                 className="form-control"
-                style={{ width: "80%" }}
+                style={{ width: "75%" }}
                 id="archimate-search-text"
                 placeholder="search"
                 onChange={this.handleChange}
@@ -116,19 +109,21 @@ export default class ArchimateSearch extends React.PureComponent<
     );
   }
 
-  private handleClick = (event: React.MouseEvent<Element>) => {
+  private handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    if (this.props.searchText) {
-      const results = this.state.fuse!.search(this.props.searchText as string);
-      this.setState({ results });
+    if (this.state.search.length > 0) {
+      this.setState({
+        results: this.state.fuse.search(this.state.search)
+      });
     }
   };
 
-  private handleChange = (event: React.ChangeEvent<Element>) => {
-    event.preventDefault();
-    if (this.props.searchText) {
-      const results = this.state.fuse!.search(this.props.searchText as string);
-      this.setState({ results });
+  private handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    this.setState({ search: event.target.value });
+    if (this.state.search.length > 0) {
+      this.setState({
+        results: this.state.fuse.search(this.state.search)
+      });
     }
   };
 }
