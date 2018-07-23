@@ -17,7 +17,7 @@ export default class NoteViewNode extends DefaultViewNode {
     return (
       <path
         d={[
-            "m", bounds.left(), bounds.top(),
+            "m", bounds.left, bounds.top,
             "h", bounds.width,
             "v", bounds.height - 8,
             "l", -8, 8,

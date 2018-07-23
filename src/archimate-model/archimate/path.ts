@@ -93,11 +93,11 @@ export class Path {
     if (overlapXCenter) {
       ax = bx = overlapXCenter;
     } else if (b.rightOf(a)) {
-      ax = a.right();
-      bx = b.left();
+      ax = a.right;
+      bx = b.left;
     } else {
-      ax = a.left();
-      bx = b.right();
+      ax = a.left;
+      bx = b.right;
     }
 
     const ayRange = a.yRange();
@@ -110,11 +110,11 @@ export class Path {
     if (overlapYCenter) {
       ay = by = overlapYCenter;
     } else if (b.above(a)) {
-      ay = a.top();
-      by = b.bottom();
+      ay = a.top;
+      by = b.bottom;
     } else {
-      ay = a.bottom();
-      by = b.top();
+      ay = a.bottom;
+      by = b.top;
     }
 
     return [new Point(ax, ay), new Point(bx, by)];

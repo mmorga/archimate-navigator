@@ -20,24 +20,24 @@ export default class GroupViewNode extends DefaultViewNode {
     return (
       <React.Fragment>
         <rect
-            x={bounds.left()}
-            y={bounds.top() + this.groupHeaderHeight}
+            x={bounds.left}
+            y={bounds.top + this.groupHeaderHeight}
             width={bounds.width}
             height={bounds.height - this.groupHeaderHeight}
             className={this.state.backgroundClass}
             style={this.shapeStyle()}
         />
         <rect 
-            x={bounds.left()}
-            y={bounds.top()}
+            x={bounds.left}
+            y={bounds.top}
             width={bounds.width / 2.0}
             height={this.groupHeaderHeight}
             className={this.state.backgroundClass}
             style={this.shapeStyle()}
         />
         <rect 
-            x={bounds.left()}
-            y={bounds.top()}
+            x={bounds.left}
+            y={bounds.top}
             width={bounds.width / 2.0}
             height={this.groupHeaderHeight}
             className={"archimate-decoration"}
@@ -48,6 +48,6 @@ export default class GroupViewNode extends DefaultViewNode {
 
   private groupTextBounds(): Bounds {
     const bounds = this.props.viewNode.bounds;
-    return new Bounds(bounds.left() + 3, bounds.top(), (bounds.width / 2.0) - 6, this.groupHeaderHeight);
+    return new Bounds(bounds.left + 3, bounds.top, (bounds.width / 2.0) - 6, this.groupHeaderHeight);
   }
 }

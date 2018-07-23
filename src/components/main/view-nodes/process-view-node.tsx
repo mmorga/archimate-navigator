@@ -30,24 +30,24 @@ export default class ProcessViewNode extends BadgedRoundedRectViewNode {
 
   private processTextBounds(): Bounds {
     const bounds = this.props.viewNode.bounds;
-    const shaftTop = bounds.top() + bounds.height * 0.15;
-    const shaftBottom = bounds.bottom() - bounds.height * 0.15;
-    const left = bounds.left();
+    const shaftTop = bounds.top + bounds.height * 0.15;
+    const shaftBottom = bounds.bottom - bounds.height * 0.15;
+    const left = bounds.left;
     const textBounds = new Bounds(left, shaftTop, bounds.width - bounds.height * 0.25, shaftBottom - shaftTop);
     return textBounds.reducedBy(2);
   }
 
   private processPath(): JSX.Element {
     const bounds = this.props.viewNode.bounds;
-    const top = bounds.top();
-    const shaftTop = bounds.top() + bounds.height * 0.15;
-    const middle = bounds.top() + bounds.height * 0.5;
-    const shaftBottom = bounds.bottom() - bounds.height * 0.15;
-    const bottom = bounds.bottom();
+    const top = bounds.top;
+    const shaftTop = bounds.top + bounds.height * 0.15;
+    const middle = bounds.top + bounds.height * 0.5;
+    const shaftBottom = bounds.bottom - bounds.height * 0.15;
+    const bottom = bounds.bottom;
 
-    const left = bounds.left();
-    const arrowBack = bounds.right() - bounds.height * 0.5;
-    const right = bounds.right();
+    const left = bounds.left;
+    const arrowBack = bounds.right - bounds.height * 0.5;
+    const right = bounds.right;
     return (
       <path
         d={[

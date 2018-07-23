@@ -16,7 +16,7 @@ export default class RepresentationViewNode extends DataObjectViewNode {
       <React.Fragment>
         <path
             d={[
-                "M", bounds.left(), bounds.top(),
+                "M", bounds.left, bounds.top,
                 "v", bounds.height - 8,
                 "c", 0.167 * bounds.width, 0.133 * bounds.height,
                 0.336 * bounds.width, 0.133 * bounds.height,
@@ -30,7 +30,7 @@ export default class RepresentationViewNode extends DataObjectViewNode {
             className={this.state.backgroundClass}
             style={this.shapeStyle()}
         />
-        <rect key="data-decoration" x={bounds.left()} y={bounds.top()} width={bounds.width} height={this.state.margin} className="archimate-decoration" />
+        <rect key="data-decoration" x={bounds.left} y={bounds.top} width={bounds.width} height={this.state.margin} className="archimate-decoration" />
       </React.Fragment>
     );
   }

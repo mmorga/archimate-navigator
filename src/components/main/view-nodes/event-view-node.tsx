@@ -31,7 +31,7 @@ export default class EventViewNode extends BadgedRoundedRectViewNode {
   private eventTextBounds(): Bounds {
     const textBounds = this.state.textBounds;
     const notchX = 18;
-    return new Bounds(textBounds.left() + notchX * 0.8, textBounds.top(), textBounds.width - notchX, textBounds.height);
+    return new Bounds(textBounds.left + notchX * 0.8, textBounds.top, textBounds.width - notchX, textBounds.height);
   }
 
   private eventPath(): JSX.Element {
@@ -41,7 +41,7 @@ export default class EventViewNode extends BadgedRoundedRectViewNode {
     const eventWidth = bounds.width * 0.85;
     const rx = 17;
     const d = [
-        "M", bounds.left(), bounds.top(),
+        "M", bounds.left, bounds.top,
         "l", notchX, notchHeight,
         "l", -notchX, notchHeight,
         "h", eventWidth,

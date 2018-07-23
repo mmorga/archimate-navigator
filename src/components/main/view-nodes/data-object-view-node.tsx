@@ -16,8 +16,8 @@ export default class DataObjectViewNode extends DefaultViewNode {
     const bounds = this.props.viewNode.bounds;
     return (
       <g className={this.state.backgroundClass}>
-        <rect key="data-background" x={bounds.left()} y={bounds.top()} width={bounds.width} height={bounds.height} className={this.state.backgroundClass} style={this.shapeStyle()} />
-        <rect key="data-decoration" x={bounds.left()} y={bounds.top()} width={bounds.width} height={this.state.margin} className="archimate-decoration" />
+        <rect key="data-background" x={bounds.left} y={bounds.top} width={bounds.width} height={bounds.height} className={this.state.backgroundClass} style={this.shapeStyle()} />
+        <rect key="data-decoration" x={bounds.left} y={bounds.top} width={bounds.width} height={this.state.margin} className="archimate-decoration" />
       </g>
     );
   }
@@ -25,6 +25,6 @@ export default class DataObjectViewNode extends DefaultViewNode {
   private dataTextBounds() {
     const textBounds = this.state.textBounds;
     const margin: number = 8;
-    return new Bounds(textBounds.left(), textBounds.top() + margin, textBounds.width, textBounds.height - margin);
+    return new Bounds(textBounds.left, textBounds.top + margin, textBounds.width, textBounds.height - margin);
   }
 }

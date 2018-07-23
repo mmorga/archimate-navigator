@@ -16,7 +16,7 @@ export default class DeliverableViewNode extends DefaultViewNode {
       <React.Fragment>
         <path
             d={[
-                "M", bounds.left(), bounds.top(),
+                "M", bounds.left, bounds.top,
                 "v", bounds.height - 8,
                 "c", 0.167 * bounds.width, 0.133 * bounds.height,
                 0.336 * bounds.width, 0.133 * bounds.height,

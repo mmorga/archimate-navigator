@@ -31,8 +31,8 @@ export default class InterfaceViewNode extends BadgedRectViewNode {
     const bounds = this.props.viewNode.bounds;
     return (
       <ellipse
-        cx={bounds.left() + bounds.width / 2.0}
-        cy={bounds.top() + bounds.height / 2.0}
+        cx={bounds.left + bounds.width / 2.0}
+        cy={bounds.top + bounds.height / 2.0}
         rx={bounds.width / 2.0}
         ry={bounds.height / 2.0}
         className={this.state.backgroundClass}

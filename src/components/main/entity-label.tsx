@@ -84,7 +84,7 @@ export default class EntityLabel extends React.PureComponent<IProps, IState> {
       const bb = this.props.badgeBounds;
       const badgeNotchHeight = bb.height + 2;
       return [
-        "M", tb.left(), tb.top(),
+        "M", tb.left, tb.top,
         "h", tb.width - bb.width - 2,
         "v", badgeNotchHeight,
         "h", bb.width + 2,
@@ -94,7 +94,7 @@ export default class EntityLabel extends React.PureComponent<IProps, IState> {
       ].map(i => i.toString()).join(" ");
     } else {
       return [
-        "M", tb.left(), tb.top(),
+        "M", tb.left, tb.top,
         "h", tb.width,
         "v", tb.height,
         "h", - tb.width,
@@ -109,12 +109,12 @@ export default class EntityLabel extends React.PureComponent<IProps, IState> {
     const textBounds = this.props.textBounds as Bounds;
     switch(this.state.textAnchor) {
     case "start":
-      return textBounds.left();
+      return textBounds.left;
     case "end":
       if (idx > 0) {
-        return textBounds.right();
+        return textBounds.right;
       } else {
-        return textBounds.right() - this.props.badgeBounds.width;
+        return textBounds.right - this.props.badgeBounds.width;
       }
     default:
       if (idx > 0) {

@@ -17,7 +17,7 @@ export default class ArtifactViewNode extends DefaultViewNode {
       <g className={this.state.backgroundClass} style={this.shapeStyle()}>
         <path 
           d={[
-              "M", bounds.left(), bounds.top(),
+              "M", bounds.left, bounds.top,
               "h", bounds.width - margin,
               "l", margin, margin,
               "v", bounds.height - margin,
@@ -27,7 +27,7 @@ export default class ArtifactViewNode extends DefaultViewNode {
         />
         <path 
           d={[
-              "M", bounds.right() - margin, bounds.top(),
+              "M", bounds.right - margin, bounds.top,
               "v", margin,
               "h", margin,
               "z"

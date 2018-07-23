@@ -95,12 +95,12 @@ export default class TextFlow extends React.PureComponent<IProps, IState> {
     const textBounds = this.props.bounds as Bounds;
     switch(this.props.style.textAnchor) {
     case "start":
-      return textBounds.left();
+      return textBounds.left;
     case "end":
       if (idx > 0) {
-        return textBounds.right();
+        return textBounds.right;
       } else {
-        return textBounds.right() - this.props.badgeBounds.width;
+        return textBounds.right - this.props.badgeBounds.width;
       }
     default:
       if (idx > 0) {

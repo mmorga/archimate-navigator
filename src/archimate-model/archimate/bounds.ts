@@ -11,20 +11,29 @@ export class Bounds implements IBounds {
     return new Bounds(0, 0, 0, 0);
   }
 
-  public x?: number;
-  public y?: number;
-  public width: number;
-  public height: number;
+  public readonly x?: number;
+  public readonly y?: number;
+  public readonly width: number;
+  public readonly height: number;
+  public readonly top: number;
+  public readonly left: number;
+  public readonly right: number;
+  public readonly bottom: number;
+
 
   constructor(x: number | undefined, y: number | undefined, width: number, height: number) {
     this.x = x;
     this.y = y;
     this.width = width;
     this.height = height;
+    this.top = this.y || 0;
+    this.left = this.x || 0;
+    this.right = this.left + this.width;
+    this.bottom = this.top + this.height;
   }
 
   public offset(os: Bounds): Bounds {
-    return new Bounds(this.left() + os.left(), this.top() + os.top(), this.width, this.height);
+    return new Bounds(this.left + os.left, this.top + os.top, this.width, this.height);
   }
 
   public toString() {
@@ -32,60 +41,60 @@ export class Bounds implements IBounds {
   }
 
   public xRange() {
-    return new Range(this.left(), this.right());
+    return new Range(this.left, this.right);
   }
 
   public yRange() {
-    return new Range(this.top(), this.bottom())
+    return new Range(this.top, this.bottom)
   }
 
-  public top() {
-    return this.y || 0;
-  }
+  // public top {
+  //   return this.y || 0;
+  // }
 
-  public bottom() {
-    return this.top() + this.height;
-  }
+  // public bottom {
+  //   return this.top + this.height;
+  // }
 
-  public right() {
-    return this.left() + this.width;
-  }
+  // public right {
+  //   return this.left + this.width;
+  // }
 
-  public left() {
-    return this.x || 0;
-  }
+  // public left {
+  //   return this.x || 0;
+  // }
 
   public center(): Point {
-    // return new Bounds(this.left() + this.width / 2.0, this.top() + this.height / 2.0, 0, 0);
-    return new Point(this.left() + this.width / 2.0, this.top() + this.height / 2.0);
+    // return new Bounds(this.left + this.width / 2.0, this.top + this.height / 2.0, 0, 0);
+    return new Point(this.left + this.width / 2.0, this.top + this.height / 2.0);
   }
 
   public above(other: Bounds) {
-    return this.bottom() < other.top();
+    return this.bottom < other.top;
   }
 
   public below(other: Bounds) {
-    return this.top() > other.bottom();
+    return this.top > other.bottom;
   }
 
   public rightOf(other: Bounds) {
-    return this.left() > other.right();
+    return this.left > other.right;
   }
 
   public leftOf(other: Bounds) {
-    return this.right() < other.left();
+    return this.right < other.left;
   }
 
   public reducedBy(val: number) {
-    return new Bounds(this.left() + val, this.top() + val, this.width - val * 2, this.height - val * 2);
+    return new Bounds(this.left + val, this.top + val, this.width - val * 2, this.height - val * 2);
   }
 
   // Tests if this bounds is inside the argument Bounds
   public inside(other: Bounds) {
-    return this.left() > other.left() &&
-      this.right() < other.right() &&
-      this.top() > other.top() &&
-      this.bottom() < other.bottom();
+    return this.left > other.left &&
+      this.right < other.right &&
+      this.top > other.top &&
+      this.bottom < other.bottom;
   }
 
   public empty() {

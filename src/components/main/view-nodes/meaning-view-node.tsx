@@ -13,10 +13,10 @@ export default class MeaningViewNode extends DefaultViewNode {
   public entityShape(): JSX.Element {
     const bounds = this.props.viewNode.bounds;
     const pts = [
-      new Point(bounds.left() + bounds.width * 0.04, bounds.top() + bounds.height * 0.5),
-      new Point(bounds.left() + bounds.width * 0.5, bounds.top() + bounds.height * 0.12),
-      new Point(bounds.left() + bounds.width * 0.94, bounds.top() + bounds.height * 0.55),
-      new Point(bounds.left() + bounds.width * 0.53, bounds.top() + bounds.height * 0.87)
+      new Point(bounds.left + bounds.width * 0.04, bounds.top + bounds.height * 0.5),
+      new Point(bounds.left + bounds.width * 0.5, bounds.top + bounds.height * 0.12),
+      new Point(bounds.left + bounds.width * 0.94, bounds.top + bounds.height * 0.55),
+      new Point(bounds.left + bounds.width * 0.53, bounds.top + bounds.height * 0.87)
     ];
     return (
       <path

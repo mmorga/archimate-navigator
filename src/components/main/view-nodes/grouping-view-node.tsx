@@ -18,15 +18,15 @@ export default class GroupingViewNode extends GroupViewNode {
     return (
       <React.Fragment>
         <rect
-          x={bounds.left()}
-          y={bounds.top() + groupHeaderHeight}
+          x={bounds.left}
+          y={bounds.top + groupHeaderHeight}
           width={bounds.width}
           height={bounds.height - groupHeaderHeight}
           className={this.state.backgroundClass} 
           style={this.shapeStyle()}
         />
         <path
-          d={["M", bounds.left(), bounds.top() + groupHeaderHeight - 1,
+          d={["M", bounds.left, bounds.top + groupHeaderHeight - 1,
               "v", -(groupHeaderHeight - 1),
               "h", bounds.width / 2,
               "v", groupHeaderHeight - 1].join(" ")}

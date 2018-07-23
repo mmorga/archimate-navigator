@@ -8,7 +8,7 @@ export default class DeviceViewNode extends BadgedNodeViewNode {
     const bounds = viewNodeBounds;
     const margin = 10;
     const decorationPath = [
-      "M", bounds.left() + margin, bounds.bottom() - margin,
+      "M", bounds.left + margin, bounds.bottom - margin,
       "l", -margin, margin,
       "h", bounds.width,
       "l", -margin, -margin,
@@ -18,8 +18,8 @@ export default class DeviceViewNode extends BadgedNodeViewNode {
     return (
       <React.Fragment>
         <rect
-          x={bounds.left()}
-          y={bounds.top()}
+          x={bounds.left}
+          y={bounds.top}
           width={bounds.width}
           height={bounds.height - margin}
           rx={"6"}

@@ -19,7 +19,7 @@ export default class MotivationViewNode extends DefaultViewNode {
     return (
       <path
         d={[
-            "M", bounds.left() + margin, bounds.top(),
+            "M", bounds.left + margin, bounds.top,
             "h", width,
             "l", margin, margin,
             "v", height,
@@ -38,6 +38,6 @@ export default class MotivationViewNode extends DefaultViewNode {
 
   private motivationBadgeBounds(): Bounds {
     const bounds = this.props.viewNode.bounds;
-    return new Bounds(bounds.right() - 25, bounds.top() + 5, 20, 20);
+    return new Bounds(bounds.right - 25, bounds.top + 5, 20, 20);
   }
 }

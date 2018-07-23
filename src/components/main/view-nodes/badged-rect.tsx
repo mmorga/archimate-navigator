@@ -13,7 +13,7 @@ export default class BadgedRectViewNode extends DefaultViewNode {
     super(props);
     this.state = {
       ...this.state,
-      badgeBounds: new Bounds(this.props.viewNode.bounds.right() - 25, this.props.viewNode.bounds.top() + 5, 20, 20),
+      badgeBounds: new Bounds(this.props.viewNode.bounds.right - 25, this.props.viewNode.bounds.top + 5, 20, 20),
     };
   }
 

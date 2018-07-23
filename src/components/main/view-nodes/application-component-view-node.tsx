@@ -26,13 +26,13 @@ export default class ApplicationComponentViewNode extends BadgedRectViewNode {
       return super.entityShape();
     } else {
       const bounds = this.props.viewNode.bounds;
-      const mainBoxX = bounds.left() + 21.0 / 2;
+      const mainBoxX = bounds.left + 21.0 / 2;
       const mainBoxWidth = bounds.width - 21 / 2;
       return (
         <React.Fragment>
-          <rect x={mainBoxX} y={bounds.top()} width={mainBoxWidth} height={bounds.height} className={this.state.backgroundClass} style={this.shapeStyle()} />
-          {this.componentDecoration(bounds.left(), bounds.top() + 10)}
-          {this.componentDecoration(bounds.left(), bounds.top() + 30)}
+          <rect x={mainBoxX} y={bounds.top} width={mainBoxWidth} height={bounds.height} className={this.state.backgroundClass} style={this.shapeStyle()} />
+          {this.componentDecoration(bounds.left, bounds.top + 10)}
+          {this.componentDecoration(bounds.left, bounds.top + 30)}
         </React.Fragment>
       );
     }
@@ -49,8 +49,8 @@ export default class ApplicationComponentViewNode extends BadgedRectViewNode {
 }
 
 function componentTextBounds(bounds: Bounds): Bounds {
-  const mainBoxX = bounds.left() + 21.0 / 2;
-  return new Bounds(mainBoxX + 21 / 2, bounds.top() + 1, bounds.width - 22, bounds.height - 2);
+  const mainBoxX = bounds.left + 21.0 / 2;
+  return new Bounds(mainBoxX + 21 / 2, bounds.top + 1, bounds.width - 22, bounds.height - 2);
 }
 
 
