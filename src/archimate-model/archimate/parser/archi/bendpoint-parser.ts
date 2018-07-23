@@ -23,7 +23,7 @@ export class BendpointParser {
 
   private parseAttrInt(child: Element, attrName: string): number {
     const str = getStringAttribute(child, attrName) || "0";
-    const i = Number.parseInt(str);
+    const i = Number.parseInt(str, 10);
     if (Number.isNaN(i)) {
       return 0;
     }

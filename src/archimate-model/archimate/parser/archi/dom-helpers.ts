@@ -20,5 +20,5 @@ export function getIntAttribute(node: Element, name: string): number | undefined
     return undefined;
   }
 
-  return Number.parseInt(strVal as string);
+  return Number.parseInt(strVal as string, 10);
 }

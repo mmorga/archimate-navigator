@@ -13,7 +13,7 @@ export class Font {
     return new Font(
       fontParts[1],
       Number.parseFloat(fontParts[2]),
-      Number.parseInt(fontParts[3]),
+      Number.parseInt(fontParts[3], 10),
       str
     );
   }
