@@ -8,12 +8,12 @@ export default class NoteViewNode extends DefaultViewNode {
       ...this.state,
       backgroundClass: "archimate-note-background",
       textAlign: "left",
-      textBounds: this.props.viewNode.bounds.reducedBy(3),
+      textBounds: this.props.viewNode.curBounds().reducedBy(3),
       };
   }
 
   public entityShape(): JSX.Element {
-    const bounds = this.props.viewNode.bounds;
+    const bounds = this.props.viewNode.curBounds();
     return (
       <path
         d={[

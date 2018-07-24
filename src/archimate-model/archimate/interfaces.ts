@@ -1,3 +1,4 @@
+import * as d3force from "d3-force";
 import { AccessType } from "./access-type";
 import { Bounds } from "./bounds";
 import { Style } from "./style";
@@ -182,4 +183,35 @@ export interface IModel extends IEntity, IHasOrganizations {
   lookup(id: string | undefined): IEntity | undefined;
   makeUniqueId(): string;
   register(entity: IEntity): void;
+}
+
+/**
+ * INode data type for ArchiMate elements
+ */
+export interface INode extends d3force.SimulationNodeDatum {
+  id: string;
+  name?: string;
+  // layer: string;  // TODO: add layer
+  // nodeType: string;
+  // labels: string[];
+  // nodeId: string;
+}
+
+export function inodeKeyFunc(
+  this: SVGGElement,
+  datum: INode,
+  index: number,
+  groups: SVGGElement[]
+) {
+  return datum.id;
+}
+
+/**
+ * Data type for ArchiMate relationships
+ */
+export interface ILink extends d3force.SimulationLinkDatum<INode> {
+  id: string;
+  // linkType: string;
+  relationship?: string;
+  // weight: number;
 }

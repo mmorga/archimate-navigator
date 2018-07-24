@@ -29,7 +29,7 @@ export default class ServiceViewNode extends BadgedRoundedRectViewNode {
   }
 
   private serviceTextBounds(): Bounds {
-    const bounds = this.props.viewNode.bounds;
+    const bounds = this.props.viewNode.curBounds();
     return new Bounds(
       bounds.left + 7,
       bounds.top + 5,
@@ -39,7 +39,7 @@ export default class ServiceViewNode extends BadgedRoundedRectViewNode {
   }
 
   private servicePath(): JSX.Element {
-    const bounds = this.props.viewNode.bounds;
+    const bounds = this.props.viewNode.curBounds();
     return (
       <rect
         x={bounds.left}

@@ -13,7 +13,7 @@ export default class DataObjectViewNode extends DefaultViewNode {
   }
 
   public entityShape(): JSX.Element {
-    const bounds = this.props.viewNode.bounds;
+    const bounds = this.props.viewNode.curBounds();
     const style = this.shapeStyle();
     const decorStyle: React.CSSProperties = {
       stroke: style.stroke,

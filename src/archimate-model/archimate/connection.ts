@@ -1,5 +1,5 @@
 import { Bounds } from "./bounds";
-import { IEntity, IEntityRef, IModel, IProperty, LogicError } from "./interfaces";
+import { IEntity, IEntityRef, ILink, IModel, IProperty, LogicError } from "./interfaces";
 import { Path } from "./path";
 import { Point } from "./point";
 import { Style } from "./style";
@@ -16,7 +16,7 @@ import { ViewNode } from "./view-node";
 // connection's label, documentation and properties can be provided and will
 // be additional to (or over-ride) those contained in the referenced
 // ArchiMate relationship.
-export class Connection implements IEntity, IEntityRef {
+export class Connection implements IEntity, IEntityRef, ILink {
   public id: string;
   public name?: string;
   public documentation?: string;

@@ -16,7 +16,7 @@ export default class GroupViewNode extends DefaultViewNode {
   }
 
   public entityShape(): JSX.Element {
-    const bounds = this.props.viewNode.bounds;
+    const bounds = this.props.viewNode.curBounds();
     return (
       <React.Fragment>
         <rect
@@ -47,7 +47,7 @@ export default class GroupViewNode extends DefaultViewNode {
   }
 
   private groupTextBounds(): Bounds {
-    const bounds = this.props.viewNode.bounds;
+    const bounds = this.props.viewNode.curBounds();
     return new Bounds(bounds.left + 3, bounds.top, (bounds.width / 2.0) - 6, this.groupHeaderHeight);
   }
 }

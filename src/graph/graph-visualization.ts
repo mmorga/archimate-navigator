@@ -1,7 +1,5 @@
 import * as d3force from "d3-force";
 import * as d3selection from "d3-selection";
-// import * as d3zoom from "d3-zoom";
-// import SvgText from "svg-text";
 import GraphLinks from "./graph-links";
 import GraphNodes from "./graph-nodes";
 

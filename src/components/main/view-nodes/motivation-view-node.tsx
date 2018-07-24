@@ -12,7 +12,7 @@ export default class MotivationViewNode extends DefaultViewNode {
   }
 
   protected entityShape() {
-    const bounds = this.props.viewNode.bounds;
+    const bounds = this.props.viewNode.curBounds();
     const margin = 10;
     const width = bounds.width - margin * 2;
     const height = bounds.height - margin * 2;
@@ -37,7 +37,7 @@ export default class MotivationViewNode extends DefaultViewNode {
 
 
   private motivationBadgeBounds(): Bounds {
-    const bounds = this.props.viewNode.bounds;
+    const bounds = this.props.viewNode.curBounds();
     return new Bounds(bounds.right - 25, bounds.top + 5, 20, 20);
   }
 }

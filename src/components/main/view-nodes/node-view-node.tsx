@@ -21,7 +21,7 @@ export default class NodeViewNode extends BadgedNodeViewNode {
 
   public entityShape(): JSX.Element {
     if (this.props.viewNode.childType === "1") {
-      return BadgedRectViewNode.path(this.props.viewNode.bounds, this.state.backgroundClass, this.shapeStyle());
+      return BadgedRectViewNode.path(this.props.viewNode.curBounds(), this.state.backgroundClass, this.shapeStyle());
     } else {
       return super.entityShape();
     }

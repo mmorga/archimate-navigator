@@ -1,23 +1,6 @@
 import * as d3request from "d3-request";
 import * as GV from "./graph-visualization";
 
-// const appsThatUseCore =
-// MATCH p = (a:ApplicationComponent) <-[r*1..5]- (core:ApplicationComponent {name: "Core"})
-// WHERE all(x IN rels(p) WHERE x.weight >= 6)
-// AND size(filter(n in nodes(p) where n:ApplicationComponent)) < 3
-// return a, r, core
-// const usesCoreOrCoreInterface =
-// MATCH (core:ApplicationComponent {name: "Core"})
-// MATCH (core)-[r:CompositionRelationship]->(interface:ApplicationInterface)
-// MATCH p=(interface)-[r2:UsedByRelationship]->()
-// return core, r, p;
-// const usesCoreOrCoreInterfaces2 =
-// MATCH p = (core:ApplicationComponent {name: "Core"})-[r:CompositionRelationship]->
-// (interface:ApplicationInterface)-[r2:UsedByRelationship]->()
-// RETURN p
-// UNION MATCH p=(core:ApplicationComponent {name: "Core"})-[r2:UsedByRelationship]->()
-// return p;
-
 interface INeoNode {
   id: string;
   labels: string[];

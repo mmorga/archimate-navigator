@@ -66,6 +66,9 @@ export default class ArchimateNavigator extends React.Component<
         {this.exceptionView()}
         <Row className="show-grid">
           <Col xs={12} md={3} className="archimate-view-nav">
+          <h3>{this.state.model.name}</h3>
+          <p>{this.state.model.documentation}</p>
+          <h4>{this.state.selectedDiagram ? this.state.selectedDiagram.name : ""}</h4>
             <Tabs
               animation={false}
               defaultActiveKey={SidebarTab.DiagramTreeTab}
@@ -107,6 +110,7 @@ export default class ArchimateNavigator extends React.Component<
           <Col xs={12} md={9} className="archimate-diagram-view">
             <div className="archimate-svg-container">
               <ArchimateDiagramView
+                autoLayout={true}
                 key={this.state.selectedDiagram ? this.state.selectedDiagram.id : "archimate-no-diagram"}
                 selectedEntity={this.state.selectedEntity}
                 selectedDiagram={this.state.selectedDiagram}

@@ -29,7 +29,7 @@ export default class ProcessViewNode extends BadgedRoundedRectViewNode {
   }
 
   private processTextBounds(): Bounds {
-    const bounds = this.props.viewNode.bounds;
+    const bounds = this.props.viewNode.curBounds();
     const shaftTop = bounds.top + bounds.height * 0.15;
     const shaftBottom = bounds.bottom - bounds.height * 0.15;
     const left = bounds.left;
@@ -38,7 +38,7 @@ export default class ProcessViewNode extends BadgedRoundedRectViewNode {
   }
 
   private processPath(): JSX.Element {
-    const bounds = this.props.viewNode.bounds;
+    const bounds = this.props.viewNode.curBounds();
     const top = bounds.top;
     const shaftTop = bounds.top + bounds.height * 0.15;
     const middle = bounds.top + bounds.height * 0.5;

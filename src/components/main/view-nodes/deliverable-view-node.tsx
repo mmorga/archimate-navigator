@@ -11,7 +11,7 @@ export default class DeliverableViewNode extends DefaultViewNode {
   }
 
   public entityShape(): JSX.Element {
-    const bounds = this.props.viewNode.bounds;
+    const bounds = this.props.viewNode.curBounds();
     return (
       <React.Fragment>
         <path

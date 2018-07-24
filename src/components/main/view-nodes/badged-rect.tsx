@@ -13,12 +13,12 @@ export default class BadgedRectViewNode extends DefaultViewNode {
     super(props);
     this.state = {
       ...this.state,
-      badgeBounds: new Bounds(this.props.viewNode.bounds.right - 25, this.props.viewNode.bounds.top + 5, 20, 20),
+      badgeBounds: new Bounds(this.props.viewNode.curBounds().right - 25, this.props.viewNode.curBounds().top + 5, 20, 20),
     };
   }
 
   protected entityShape() {
-    const bounds = this.props.viewNode.bounds;
+    const bounds = this.props.viewNode.curBounds();
     return (
       <rect x={bounds.x} y={bounds.y} width={bounds.width} height={bounds.height} className={this.state.backgroundClass} style={this.shapeStyle()}/>
     );

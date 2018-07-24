@@ -16,7 +16,7 @@ export default class ApplicationComponentViewNode extends BadgedRectViewNode {
       this.state = {
         ...this.state,
         badgeBounds: zeroBounds(),
-        textBounds: componentTextBounds(this.props.viewNode.bounds),
+        textBounds: componentTextBounds(this.props.viewNode.curBounds()),
       };
     }
   }
@@ -25,7 +25,7 @@ export default class ApplicationComponentViewNode extends BadgedRectViewNode {
     if (this.props.viewNode.childType === "1") {
       return super.entityShape();
     } else {
-      const bounds = this.props.viewNode.bounds;
+      const bounds = this.props.viewNode.curBounds();
       const mainBoxX = bounds.left + 21.0 / 2;
       const mainBoxWidth = bounds.width - 21 / 2;
       return (

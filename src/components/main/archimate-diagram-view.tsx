@@ -1,5 +1,6 @@
+import * as d3force from "d3-force";
 import * as React from "react";
-import { Diagram, IEntity, IEntityRef } from "../../archimate-model";
+import { Connection, Diagram, IEntity, IEntityRef, ILink, INode, ViewNode } from "../../archimate-model";
 import { entityClickedFunc } from "../common";
 import ArchimateConnection from "./archimate-connection";
 import ArchimateSvg from "./archimate-svg";
@@ -7,9 +8,12 @@ import ArchimateViewNode from "./archimate-view-node";
 
 interface IProps {
   selectedDiagram?: Diagram;
+  nodes?: ViewNode[];
+  connections?: Connection[];
   selectedEntity?: IEntity;
   entityClicked: entityClickedFunc;
   diagramClicked: entityClickedFunc;
+  autoLayout?: boolean;
 }
 
 interface IState {
@@ -19,32 +23,38 @@ interface IState {
   error?: any;
   loadedSrc?: string;
   isCached?: boolean;
+  simulation?: d3force.Simulation<ViewNode, Connection> | undefined;
+  tickCount: number;
+  nodes: ViewNode[];
+  connections: Connection[];
 }
 
 export default class ArchimateDiagramView extends React.PureComponent<
   IProps,
   IState
 > {
-  public state: IState;
+  private nodeWidth = 120;
 
   constructor(props: IProps) {
     super(props);
     this.state = {
+      connections: this.props.selectedDiagram ? this.props.selectedDiagram.connections : [],
       isCached: false,
+      nodes: this.props.selectedDiagram ? this.props.selectedDiagram.nodes : [],
       selectedEntity: this.props.selectedEntity,
-      svg: undefined
+      svg: undefined,
+      tickCount: 0,
     };
   }
 
   public render() {
     if (this.props.selectedDiagram) {
-      const selectedDiagram = this.props.selectedDiagram as Diagram;
       return (
         <ArchimateSvg
           key={this.props.selectedDiagram.id}
           diagram={this.props.selectedDiagram}
         >
-          {selectedDiagram.nodes.map(node => (
+          {this.state.nodes.map(node => (
             <ArchimateViewNode
               key={node.id} 
               viewNode={node} 
@@ -52,7 +62,7 @@ export default class ArchimateDiagramView extends React.PureComponent<
               selected={this.nodeIsSelected(node)}
             />
           ))}
-          {selectedDiagram.connections.map(conn => (
+          {this.state.connections.map(conn => (
             <ArchimateConnection
                 key={conn.id}
                 connection={conn}
@@ -70,6 +80,91 @@ export default class ArchimateDiagramView extends React.PureComponent<
       );
     }
   }
+
+  public componentDidMount() {
+    if (this.props.autoLayout && (this.state.simulation === undefined)) {
+      this.setState({simulation: this.autoLayout()});
+    }
+  }
+
+  public componentWillUnmount() {
+    if (this.state.simulation) {
+      this.state.simulation.stop();
+    }
+  }
+
+  private autoLayout(): d3force.Simulation<ViewNode, Connection> | undefined {
+    if (this.props.selectedDiagram === undefined) {
+      return undefined;
+    }
+    // TODO: Make this better
+    // const svgEl = document.querySelector("svg");
+    // if (svgEl === null) {
+    //   return false;
+    // }
+    // const clientRect = svgEl.getClientRects()[0];
+    return (
+      d3force
+        .forceSimulation(this.props.selectedDiagram.nodes)
+        // .force(
+        //   "center",
+        //   d3force.forceCenter(clientRect.width / 2, clientRect.height / 2)
+        // )
+        .force("collide", d3force.forceCollide(this.nodeWidth))
+        .force(
+          "link",
+          d3force
+            .forceLink<ViewNode, Connection>(this.props.selectedDiagram.connections)
+            .id((node: INode, i: number, nodesData: INode[]) => node.id)
+            // TODO: experiment with this
+            .distance(this.adjustLinkDistance)
+        )
+        .force("charge", d3force.forceManyBody())
+        .on("tick", this.ticked)
+    );
+
+    // this.graphNodes.updateNodes(graph.nodes);
+    // this.graphLinks.updateLinks(graph.links);
+
+    // TODO: on resize, the center point of the simulation force need to be set.
+    // initResizeHandler(() => {
+    //     const resizeClientRect = curDiagramParent.getClientRects()[0];
+    //     simulation.force("center", d3force.forceCenter(resizeClientRect.width / 2, resizeClientRect.height / 2));
+    // });
+
+    // TODO: while the simulation is running, periodically reset the view box if
+    //       the user hasn't already started to zoom in.
+    // function resetViewBoxUnlessZoomed() {
+    //     if (graphG.attr("transform") === "translate(0,0)") {
+    //         resetViewBox(svgEl);
+    //     }
+    // }
+  }
+
+  private adjustLinkDistance = (d: ILink): number => {
+    // switch (d.linkType) {
+    //   case "CompositionRelationship":
+    //   case "AssignmentRelationship":
+    //     return 15;
+    //   default:
+        return 60;
+    // }
+  };
+
+  /**
+   * Called on each "tick" of the D3 Force simulation
+   * Not to be called directly
+   */
+  private ticked = () => {
+    // Update…
+    this.setState({
+      connections: (this.props.selectedDiagram as Diagram).connections,
+      nodes: (this.props.selectedDiagram as Diagram).nodes,
+      tickCount: this.state.tickCount + 1,
+    })
+    this.forceUpdate();
+    // resetViewBoxUnlessZoomed();  // TODO: hook this up with Svg class instance
+  };
 
   private nodeIsSelected(node: IEntityRef): boolean {
     if (this.props.selectedEntity === undefined) {

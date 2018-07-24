@@ -15,6 +15,7 @@ export interface IViewNodeState {
   badge?: string;
   badgeBounds?: Bounds;
   backgroundClass?: string;
+  bounds: Bounds,
   entity?: IEntity | undefined;
   textAlign?: TextAlignProperty;
   textBounds: Bounds;
@@ -29,10 +30,11 @@ export default class DefaultViewNode extends React.PureComponent<IViewNodeProps,
       backgroundClass: this.defaultBackgroundClass(),
       badge: undefined,
       badgeBounds: undefined,
+      bounds: this.props.viewNode.curBounds(),
       entity: this.props.viewNode.entityInstance(),
       margin: 8,
       textAlign: "center",
-      textBounds: this.props.viewNode.bounds.reducedBy(2),
+      textBounds: this.props.viewNode.curBounds().reducedBy(2),
     }
   }
 
@@ -77,7 +79,7 @@ export default class DefaultViewNode extends React.PureComponent<IViewNodeProps,
   }
 
   protected entityShape() {
-    const bounds = this.props.viewNode.bounds;
+    const bounds = this.props.viewNode.curBounds();
     return (
       <rect x={bounds.x} y={bounds.y} width={bounds.width} height={bounds.height} className={this.state.backgroundClass} style={this.shapeStyle()}/>
     );
@@ -117,7 +119,7 @@ export default class DefaultViewNode extends React.PureComponent<IViewNodeProps,
       <EntityLabel 
           child={this.props.viewNode}
           label={label}
-          textBounds={this.state.textBounds || (this.props.viewNode.bounds).reducedBy(2)}
+          textBounds={this.state.textBounds || (this.props.viewNode.curBounds()).reducedBy(2)}
           textAlign={this.state.textAlign}
           badgeBounds={this.state.badgeBounds || zeroBounds()}
           />
@@ -126,7 +128,7 @@ export default class DefaultViewNode extends React.PureComponent<IViewNodeProps,
 
   protected selectedHighlight(): React.ReactFragment | undefined {
     if (this.props.selected) {
-      return <SelectedViewNode bounds={this.props.viewNode.bounds} />;
+      return <SelectedViewNode bounds={this.props.viewNode.curBounds()} />;
     } else {
       return undefined;
     }

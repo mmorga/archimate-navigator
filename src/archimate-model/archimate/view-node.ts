@@ -1,7 +1,7 @@
 import { Bounds, zeroBounds } from "./bounds";
 import { Connection } from "./connection";
 import { Diagram } from "./diagram";
-import { IEntity, IEntityRef, IModel, IProperty, IViewNode } from "./interfaces";
+import { IEntity, IEntityRef, IModel, INode, IProperty, IViewNode } from "./interfaces";
 import { Style } from "./style";
 
 // Graphical node type. It can contain child node types.
@@ -25,7 +25,7 @@ import { Style } from "./style";
 //         nodes (ViewNodeType)
 //     - Element(
 //           elementRef)
-export class ViewNode implements IViewNode, IEntityRef {
+export class ViewNode implements IViewNode, IEntityRef, INode {
   // ArchiMate ViewConceptType Attributes
   public id: string;
   public name?: string;
@@ -77,6 +77,36 @@ export class ViewNode implements IViewNode, IEntityRef {
   // @return [String, NilClass]
   public xpathPath?: string;
 
+  // D3.SimulationNodeDatum
+  /**
+   * Node’s zero-based index into nodes array. This property is set during the initialization process of a simulation.
+   */
+  public index?: number;
+  /**
+   * Node’s current x-position
+   */
+  public x?: number;
+  /**
+   * Node’s current y-position
+   */
+  public y?: number;
+  /**
+   * Node’s current x-velocity
+   */
+  public vx?: number;
+  /**
+   * Node’s current y-velocity
+   */
+  public vy?: number;
+  /**
+   * Node’s fixed x-position (if position was fixed)
+   */
+  public fx?: number | null;
+  /**
+   * Node’s fixed y-position (if position was fixed)
+   */
+  public fy?: number | null;
+
   private model: IModel;
   private entity?: IEntity;
 
@@ -104,6 +134,14 @@ export class ViewNode implements IViewNode, IEntityRef {
     return this.entity;
   }
 
+  public curBounds(): Bounds {
+    return new Bounds(
+      this.x || this.bounds.left,
+      this.y || this.bounds.top,
+      this.bounds.width,
+      this.bounds.height,
+    );
+  }
   // description() {
   //   [
   //     name&.to_s,

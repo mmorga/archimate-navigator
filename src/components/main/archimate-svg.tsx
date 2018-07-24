@@ -9,6 +9,9 @@ interface IProps {
 
 interface IState {
   viewBox?: SVGRect;
+  panzoom?: PanZoom.IPanZoom;
+  x: number;
+  y: number;
 }
 
 export default class ArchimateSvg extends React.PureComponent<IProps, IState> {
@@ -19,6 +22,8 @@ export default class ArchimateSvg extends React.PureComponent<IProps, IState> {
     super(props);
     this.state = {
       viewBox: this.props.diagram.calculateMaxExtents(),
+      x: 0,
+      y: 0,
     }
     this.svgLoaded = this.svgLoaded.bind(this);
     this.svgResized = this.svgResized.bind(this);
@@ -223,17 +228,22 @@ export default class ArchimateSvg extends React.PureComponent<IProps, IState> {
   public componentDidMount() {
     const svgTopGroup = this.svgTopGroup.current;
     if (svgTopGroup && (this.props.diagram.nodes.length > 0)) {
-      // TODO:
-      // this.panzoom = 
-      createPanZoom(svgTopGroup, {});
+      // TODO: Send the typescript type as a patch
+      if (this.state.panzoom === undefined) {
+        const panzoom = createPanZoom(svgTopGroup, {});
+        panzoom.moveTo(this.state.x, this.state.y);
+        this.setState({panzoom});
+      }
     }
   }
 
   public componentWillUnmount() {
     if (this.panzoom) {
-      // TODO:
-      // this.panzoom.dispose();
-      this.panzoom = undefined;
+      if (this.state.panzoom) {
+        // TODO:
+        this.state.panzoom.dispose();
+        this.setState({panzoom: undefined});
+      }
     }
   }
 

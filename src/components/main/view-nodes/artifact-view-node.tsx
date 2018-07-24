@@ -11,7 +11,7 @@ export default class ArtifactViewNode extends DefaultViewNode {
   }
 
   public entityShape(): JSX.Element {
-    const bounds = this.props.viewNode.bounds;
+    const bounds = this.props.viewNode.curBounds();
     const margin = 18;
     return (
       <g className={this.state.backgroundClass} style={this.shapeStyle()}>

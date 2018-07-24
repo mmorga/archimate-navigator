@@ -13,7 +13,7 @@ export default class GroupingViewNode extends GroupViewNode {
   }
 
   public entityShape(): JSX.Element {
-    const bounds = this.props.viewNode.bounds;
+    const bounds = this.props.viewNode.curBounds();
     const groupHeaderHeight = 21;
     return (
       <React.Fragment>
