@@ -12,7 +12,7 @@ export default class ValueViewNode extends DefaultViewNode {
   }
 
   public entityShape(): JSX.Element {
-    const bounds = this.props.viewNode.curBounds();
+    const bounds = this.props.viewNode.absolutePosition();
     const cx = bounds.left + bounds.width / 2.0;
     const rx = bounds.width / 2.0 - 1;
     const cy = bounds.top + bounds.height / 2.0;

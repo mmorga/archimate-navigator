@@ -9,7 +9,7 @@ interface IProps {
 
 interface IState {
   viewBox?: SVGRect;
-  panzoom?: PanZoom.IPanZoom;
+  panzoom?: any; // PanZoom.IPanZoom;
   x: number;
   y: number;
 }

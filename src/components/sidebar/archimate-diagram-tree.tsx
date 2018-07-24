@@ -65,7 +65,7 @@ export default class ArchimateDiagramTree extends React.PureComponent<IProps> {
           id="archimate-view-index"
           className="panel-body archimate-view-index"
         >
-          <ul>
+          <ul className="archimate-organization-list">
             {folderChildren}
             {itemChildren}
           </ul>

@@ -55,15 +55,6 @@ export class Connection implements IConnection, IEntityRef {
       "nothing"}`;
   }
 
-  // public description() {
-  //   [
-  //     name.nil? ? nil : "#{name}: ",
-  //     source&.description,
-  //     relationship&.description,
-  //     target&.description
-  //   ].compact.join(" ")
-  // }
-
   public startLocation(): Point {
     return this.sourceAttachment || this.sourceBounds().center();
   }
@@ -109,17 +100,6 @@ export class Connection implements IConnection, IEntityRef {
     const pt = new Path(this).midpoint();
     return new Bounds(pt.x, pt.y, 0, 0);
   }
-
-  // public replace_item_with(item, replacement) {
-  //   super
-  //   item.remove_reference(self)
-  //   case item
-  //   when relationship
-  //     @relationship = replacement
-  //   else
-  //     raise "Trying to replace #{item} that I don't reference"
-  //   }
-  // }
 
   private srcTargetLookup(id: string): ViewNode | Connection {
     const entity = this.model.lookup(id);

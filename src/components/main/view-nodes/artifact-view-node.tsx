@@ -12,7 +12,7 @@ export default class ArtifactViewNode extends BadgedRectViewNode {
   }
 
   public entityShape(): JSX.Element {
-    const bounds = this.props.viewNode.curBounds();
+    const bounds = this.props.viewNode.absolutePosition();
     const margin = 18;
     return (
       <g className={this.state.backgroundClass} style={this.shapeStyle()}>

@@ -7,6 +7,11 @@ interface IProps {
   connection: Connection;
   onClicked?: entityClickedFunc;
   selected: boolean;
+  autoLayout?: boolean;
+  fromX: number;
+  fromY: number;
+  toX: number;
+  toY: number;
 }
 
 interface IState {
@@ -22,9 +27,9 @@ export default class ArchimateConnection extends React.PureComponent<
   constructor(props: IProps) {
     super(props);
     this.state = {
-      path: new Path(this.props.connection),
+      path: new Path(this.props.connection, this.props.autoLayout),
       sourceEntity: this.props.connection.sourceViewNode(),
-      targetEntity: this.props.connection.targetViewNode()
+      targetEntity: this.props.connection.targetViewNode(),
     };
   }
 
@@ -47,6 +52,18 @@ export default class ArchimateConnection extends React.PureComponent<
         {this.lineText()}
       </g>
     );
+  }
+
+  public componentDidUpdate(prevProps: IProps) {
+    if ((this.props.fromX !== prevProps.fromX) || 
+        (this.props.fromY !== prevProps.fromY) || 
+        (this.props.toX !== prevProps.toX) || 
+        (this.props.toY !== prevProps.toY) ||
+        (this.props.autoLayout !== prevProps.autoLayout)) {
+      this.setState({
+        path: new Path(this.props.connection, this.props.autoLayout),
+      });
+    }
   }
 
   private selectedHighlight() {
@@ -145,7 +162,7 @@ export default class ArchimateConnection extends React.PureComponent<
 
   private pathAttrs(): React.SVGProps<SVGPathElement> {
     return {
-      className: this.path_class(),
+      className: this.pathClass(),
       d: this.state.path.d(),
       id: this.id(),
       style: this.lineStyle()
@@ -161,16 +178,16 @@ export default class ArchimateConnection extends React.PureComponent<
   }
 
   // Look at the type (if any of the path and set the class appropriately)
-  private path_class(): string {
+  private pathClass(): string {
     const rel = this.props.connection.entityInstance();
     const type = rel ? rel.type : "default";
     return (
-      ["archimate", this.css_classify(type)].join("-") +
+      ["archimate", this.cssClassify(type)].join("-") +
       " archimate-relationship"
     );
   }
 
-  private css_classify(str: string): string {
+  private cssClassify(str: string): string {
     return str
       .replace(/::/, "/")
       .replace("Relationship", "")

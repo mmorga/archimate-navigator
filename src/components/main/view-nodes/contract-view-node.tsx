@@ -12,7 +12,7 @@ export default class ContractViewNode extends DataObjectViewNode {
   }
 
   public entityShape(): JSX.Element {
-    const bounds = this.props.viewNode.curBounds();
+    const bounds = this.props.viewNode.absolutePosition();
     const margin = this.state.margin || 8;
     return (
       <g className={this.state.backgroundClass}>

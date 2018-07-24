@@ -28,7 +28,7 @@ export default class ApplicationComponentViewNode extends BadgedRectViewNode {
     if (this.props.viewNode.childType === "1") {
       return super.textBounds();
     } else {
-      const bounds = this.props.viewNode.curBounds();
+      const bounds = this.props.viewNode.absolutePosition();
       const mainBoxX = bounds.left + 21.0 / 2;
       return new Bounds(mainBoxX + 21 / 2, bounds.top + 1, bounds.width - 22, bounds.height - 2);
     }
@@ -39,7 +39,7 @@ export default class ApplicationComponentViewNode extends BadgedRectViewNode {
     if (this.props.viewNode.childType === "1") {
       return super.entityShape();
     } else {
-      const bounds = this.props.viewNode.curBounds();
+      const bounds = this.props.viewNode.absolutePosition();
       const mainBoxX = bounds.left + 21.0 / 2;
       const mainBoxWidth = bounds.width - 21 / 2;
       return (

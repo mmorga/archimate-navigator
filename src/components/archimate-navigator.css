@@ -6,12 +6,12 @@
   height: 98vh;
 }
 
-.archimate-view-nav ul {
+.archimate-organization-list {
   list-style-type: none;
   padding-left: 0.5em;
 }
 
-.archimate-view-nav ul ul {
+ul.archimate-organization-list ul.archimate-organization-list {
   padding-left: 1.5em;
 }
 
@@ -23,6 +23,10 @@
   margin: -7px -7px 0 -7px;
 }
 
+.archimate-documentation-well {
+  margin: 0 0.5em 1.5em 0.5em;
+  padding: 0.5em 1em;
+}
 .archimate-svg-container {
   background: white;
   height: 100%;

@@ -18,11 +18,11 @@ export default class BadgedRectViewNode extends DefaultViewNode {
   }
 
   protected badgeBounds(): Bounds | undefined {
-    return new Bounds(this.props.viewNode.curBounds().right - 25, this.props.viewNode.curBounds().top + 5, 20, 20);
+    return new Bounds(this.props.viewNode.absolutePosition().right - 25, this.props.viewNode.absolutePosition().top + 5, 20, 20);
   }
 
   protected entityShape() {
-    const bounds = this.props.viewNode.curBounds();
+    const bounds = this.props.viewNode.absolutePosition();
     return (
       <rect x={bounds.x} y={bounds.y} width={bounds.width} height={bounds.height} className={this.state.backgroundClass} style={this.shapeStyle()}/>
     );

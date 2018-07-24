@@ -346,4 +346,19 @@
       </child>
     </element>
   </folder>
+  <purpose>
+# Purpose
+
+This **ArchiMate** Model is here to illustrate the abilty to use [Markdown](https://daringfireball.net/projects/markdown/)
+for markup in *Documentation* tags.
+
+* lists
+* lists
+* lists
+
+    // Code examples
+    while (true) {
+      this.burnCpu();
+    }
+  </purpose>
 </archimate:model>

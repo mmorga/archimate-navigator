@@ -11,11 +11,13 @@ export class Path {
   public segments: Segment[];
   public sourceBounds: Bounds;
   public targetBounds: Bounds;
+  public autoLayout: boolean;
   private dCmds?: any[];
   private pathLength?: number;
 
-  constructor(connection: Connection) {
+  constructor(connection: Connection, autoLayout?: boolean) {
     this.connection = connection;
+    this.autoLayout = autoLayout || false;
     this.sourceBounds = this.connection.sourceBounds() || zeroBounds();
     this.targetBounds = this.connection.targetBounds() || zeroBounds();
     this.points = this.calcPoints();
@@ -48,9 +50,13 @@ export class Path {
     if (this.dCmds) {
       return this.dCmds.join(" ");
     }
+    let bendpoints: string[][] = [];
+    if (!this.autoLayout) {
+      bendpoints = this.eachCons(this.points, 3).map(pts => this.curve_segment(pts[0], pts[1], pts[2]));
+    }
     const dCmds: string[] = ([] as string[]).concat(      
       this.move_to(this.points[0]), // Starting point (Source)
-      ...this.eachCons(this.points, 3).map(pts => this.curve_segment(pts[0], pts[1], pts[2])),
+      ...bendpoints,
       this.line_to(this.points[this.points.length - 1]) // Ending point (Target)
     );
     this.dCmds = dCmds;

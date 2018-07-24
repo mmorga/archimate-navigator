@@ -45,7 +45,7 @@ export default class DeviceViewNode extends BadgedNodeViewNode {
         ...this.state,
         badge: undefined,
         badgeBounds: undefined,
-        textBounds: this.props.viewNode.curBounds().reducedBy(2),
+        textBounds: this.props.viewNode.absolutePosition().reducedBy(2),
        };
     }
   }
@@ -54,7 +54,7 @@ export default class DeviceViewNode extends BadgedNodeViewNode {
     if (this.props.viewNode.childType === "1") {
       return super.entityShape();
     } else {
-      return DeviceViewNode.path(this.props.viewNode.curBounds(), this.state.backgroundClass, this.shapeStyle());
+      return DeviceViewNode.path(this.props.viewNode.absolutePosition(), this.state.backgroundClass, this.shapeStyle());
     }
   }
 }

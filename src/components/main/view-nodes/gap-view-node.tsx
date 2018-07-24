@@ -14,6 +14,6 @@ export default class GapViewNode extends DeliverableViewNode {
   }
 
   protected badgeBounds(): Bounds | undefined {
-    return new Bounds(this.props.viewNode.curBounds().right - 25, this.props.viewNode.curBounds().top + 5, 20, 20);
+    return new Bounds(this.props.viewNode.absolutePosition().right - 25, this.props.viewNode.absolutePosition().top + 5, 20, 20);
   }
 }

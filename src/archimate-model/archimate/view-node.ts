@@ -134,35 +134,14 @@ export class ViewNode implements IViewNode, IEntityRef {
     return this.entity;
   }
 
-  public curBounds(): Bounds {
+  // @todo Is this true for all or only Archi models?
+  public absolutePosition(): Bounds {
     return new Bounds(
       this.x || this.bounds.left,
       this.y || this.bounds.top,
       this.bounds.width,
       this.bounds.height,
     );
-  }
-  // description() {
-  //   [
-  //     name&.to_s,
-  //     element&.name,
-  //     element ? "(#{element.type})" : nil
-  //   ].compact.join(" ")
-  // }
-
-  // public allNodes(): ViewNode[] {
-  //   return this.nodes.concat(
-  //     this.nodes.flatMap((node) => node.allNodes(), this),
-  //   );
-  // }
-
-  // child_id_hash() {
-  //   nodes.each_with_object(id => self) { |i, a| a.merge!(i.child_id_hash) }
-  // }
-
-  // @todo Is this true for all or only Archi models?
-  public absolutePosition(): Bounds {
-    return this.bounds;
   }
 
   public inside(other: ViewNode | Connection): boolean {

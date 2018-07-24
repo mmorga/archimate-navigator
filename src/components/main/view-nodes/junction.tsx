@@ -12,7 +12,7 @@ export default class JunctionViewNode extends DefaultViewNode {
   }
 
   protected entityShape() {
-    const bounds = this.props.viewNode.curBounds();
+    const bounds = this.props.viewNode.absolutePosition();
     const center = bounds.center();
     const r = Math.min(bounds.width, bounds.height) / 2;
     return (

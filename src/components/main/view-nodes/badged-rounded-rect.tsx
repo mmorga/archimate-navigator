@@ -12,14 +12,14 @@ export default class BadgedRoundedRectViewNode extends DefaultViewNode {
   }
 
   protected entityShape() {
-    const bounds = this.props.viewNode.curBounds();
+    const bounds = this.props.viewNode.absolutePosition();
     return (
       <rect x={bounds.left} y={bounds.top} width={bounds.width} height={bounds.height} rx={"5"} ry={"5"} className={this.state.backgroundClass} style={this.shapeStyle()} />
     );
   }
 
   protected badgeBounds() : Bounds | undefined {
-    const bounds = this.props.viewNode.curBounds();
+    const bounds = this.props.viewNode.absolutePosition();
     return new Bounds(
       bounds.right - 25,
       bounds.top + 5,

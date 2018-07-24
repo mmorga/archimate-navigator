@@ -28,7 +28,7 @@ export default class InterfaceViewNode extends BadgedRectViewNode {
   }
 
   private elipsePath(): JSX.Element {
-    const bounds = this.props.viewNode.curBounds();
+    const bounds = this.props.viewNode.absolutePosition();
     return (
       <ellipse
         cx={bounds.left + bounds.width / 2.0}

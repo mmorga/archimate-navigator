@@ -69,10 +69,15 @@ export default class ArchimateDiagramView extends React.PureComponent<
           ))}
           {this.state.connections.map(conn => (
             <ArchimateConnection
+                autoLayout={this.props.autoLayout}
                 key={conn.id}
                 connection={conn}
                 onClicked={this.props.entityClicked}
                 selected={this.nodeIsSelected(conn)}
+                fromX={conn.sourceBounds().left}
+                fromY={conn.sourceBounds().top}
+                toX={conn.targetBounds().left}
+                toY={conn.targetBounds().top}
             />
           ))}
         </ArchimateSvg>

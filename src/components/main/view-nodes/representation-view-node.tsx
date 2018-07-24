@@ -11,7 +11,7 @@ export default class RepresentationViewNode extends DataObjectViewNode {
   }
 
   public entityShape(): JSX.Element {
-    const bounds = this.props.viewNode.curBounds();
+    const bounds = this.props.viewNode.absolutePosition();
     return (
       <React.Fragment>
         <path

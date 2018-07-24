@@ -7,6 +7,7 @@ import ArchimateDiagramView from "./main/archimate-diagram-view";
 import ArchimateDiagramTree from "./sidebar/archimate-diagram-tree";
 import ArchimateGraphTab from "./sidebar/archimate-graph-tab";
 import ArchimateInfo from "./sidebar/archimate-info";
+import ModelInfo from "./sidebar/model-info";
 import ArchimateSearch from "./sidebar/search";
 
 enum SidebarTab {
@@ -23,6 +24,7 @@ interface IProps {
 }
 
 interface IState {
+  autolayout: boolean;
   error?: any;
   graphQuery?: string;
   graphQueryResults: any[];
@@ -36,13 +38,12 @@ export default class ArchimateNavigator extends React.Component<
   IProps,
   IState
 > {
-  public state: IState;
-
   constructor(props: IProps) {
     super(props);
     const model = new Model();
     const selectedDiagramId = props.selectedDiagramId || window.location.hash.replace(/^#/, "");
     this.state = {
+      autolayout: false,
       graphQueryResults: [],
       model,
       selectedDiagram: model.lookupDiagram(selectedDiagramId),
@@ -57,9 +58,7 @@ export default class ArchimateNavigator extends React.Component<
         {this.exceptionView()}
         <Row className="show-grid">
           <Col xs={12} md={3} className="archimate-view-nav">
-          <h3>{this.state.model.name}</h3>
-          <p>{this.state.model.documentation}</p>
-          <h4>{this.state.selectedDiagram ? this.state.selectedDiagram.name : ""}</h4>
+            <ModelInfo model={this.state.model} selectedDiagram={this.state.selectedDiagram} />
             <Tabs
               animation={false}
               defaultActiveKey={SidebarTab.DiagramTreeTab}
@@ -101,7 +100,7 @@ export default class ArchimateNavigator extends React.Component<
           <Col xs={12} md={9} className="archimate-diagram-view">
             <div className="archimate-svg-container">
               <ArchimateDiagramView
-                autoLayout={true}
+                autoLayout={this.state.autolayout}
                 key={this.state.selectedDiagram ? this.state.selectedDiagram.id : "archimate-no-diagram"}
                 selectedEntity={this.state.selectedEntity}
                 selectedDiagram={this.state.selectedDiagram}

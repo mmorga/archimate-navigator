@@ -14,7 +14,7 @@ export default class BadgedNodeViewNode extends DefaultViewNode {
   }
 
   protected entityShape(): JSX.Element {
-    const bounds = this.props.viewNode.curBounds();
+    const bounds = this.props.viewNode.absolutePosition();
     const margin = this.state.margin || 14;
     const nodeBoxHeight = bounds.height - margin;
     const nodeBoxWidth = bounds.width - margin;
@@ -60,7 +60,7 @@ export default class BadgedNodeViewNode extends DefaultViewNode {
   }
 
   protected badgeBounds(): Bounds {
-    const bounds = this.props.viewNode.curBounds();
+    const bounds = this.props.viewNode.absolutePosition();
     const margin = 14;
     return new Bounds(
       bounds.right - margin - 25,
@@ -71,7 +71,7 @@ export default class BadgedNodeViewNode extends DefaultViewNode {
   }
 
   protected textBounds(): Bounds {
-    const bounds = this.props.viewNode.curBounds();
+    const bounds = this.props.viewNode.absolutePosition();
     const margin = 14;
     const nodeBoxHeight = bounds.height - margin;
     const nodeBoxWidth = bounds.width - margin;

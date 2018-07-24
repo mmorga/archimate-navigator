@@ -1,5 +1,5 @@
 // Type definitions for panzoom 
-// Project: https://github.com/dowjones/svg-text
+// Project: https://github.com/anvaka/panzoom
 // Definitions by: Mark Morga markmorga.com
 
 /*~ Note that ES6 modules cannot directly export callable functions.

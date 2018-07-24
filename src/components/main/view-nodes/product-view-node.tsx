@@ -11,7 +11,7 @@ export default class ProductViewNode extends DataObjectViewNode {
   }
 
   public entityShape(): JSX.Element {
-    const bounds = this.props.viewNode.curBounds();
+    const bounds = this.props.viewNode.absolutePosition();
     return (
       <g className={this.state.backgroundClass}>
         <rect x={bounds.left} y={bounds.top} width={bounds.width} height={bounds.height} className={this.state.backgroundClass} style={this.shapeStyle()} />

@@ -42,7 +42,7 @@ export default class EventViewNode extends BadgedRoundedRectViewNode {
   }
 
   private eventPath(): JSX.Element {
-    const bounds = this.props.viewNode.curBounds();
+    const bounds = this.props.viewNode.absolutePosition();
     const notchX = 18;
     const notchHeight = bounds.height / 2.0;
     const eventWidth = bounds.width * 0.85;
