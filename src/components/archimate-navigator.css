@@ -8,11 +8,15 @@
 
 .archimate-organization-list {
   list-style-type: none;
-  padding-left: 0.5em;
+  padding-left: 0;
 }
 
 ul.archimate-organization-list ul.archimate-organization-list {
-  padding-left: 1.5em;
+  padding-left: 1em;
+}
+
+.archimate-organization-list li {
+  padding-left: 0.5em;
 }
 
 .archimate-view-nav .panel {

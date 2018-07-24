@@ -42,12 +42,14 @@ export default class ArchimateNavigator extends React.Component<
     super(props);
     const model = new Model();
     const selectedDiagramId = props.selectedDiagramId || window.location.hash.replace(/^#/, "");
+    const selectedDiagram = model.lookupDiagram(selectedDiagramId);
+    const selectedEntity = model.lookup(props.selectedEntityId) || selectedDiagram;
     this.state = {
       autolayout: false,
       graphQueryResults: [],
       model,
-      selectedDiagram: model.lookupDiagram(selectedDiagramId),
-      selectedEntity: model.lookup(props.selectedEntityId),
+      selectedDiagram,
+      selectedEntity,
       sidebarTabKey: SidebarTab.DiagramTreeTab,
     };
   }
@@ -68,11 +70,8 @@ export default class ArchimateNavigator extends React.Component<
             >
               <Tab eventKey={SidebarTab.DiagramTreeTab} title="Views">
                 <ArchimateDiagramTree
-                  views={
-                    this.state.model.organizations[
-                      this.state.model.organizations.length - 1
-                    ]
-                  }
+                  views={ this.state.model.organizations[this.state.model.organizations.length - 1] }
+                  selectedDiagram={this.state.selectedDiagram}
                   entityClicked={this.diagramLinkClicked}
                 />
               </Tab>
@@ -90,9 +89,8 @@ export default class ArchimateNavigator extends React.Component<
               </Tab>
               <Tab eventKey={SidebarTab.GraphTab} title="Graph">
                 <ArchimateGraphTab
-                  query={this.state.graphQuery}
-                  results={this.state.graphQueryResults}
-                  runQuery={this.runQuery}
+                  model={this.state.model}
+                  selectedDiagram={this.state.selectedDiagram}
                 />
               </Tab>
             </Tabs>
@@ -127,10 +125,12 @@ export default class ArchimateNavigator extends React.Component<
             this.setState({error: err});
           }
           const curModel: Model = parsedModel || this.state.model;
+          const selectedDiagram = curModel.lookupDiagram(this.props.selectedDiagramId || window.location.hash.replace(/^#/, ""));
+          const selectedEntity = curModel.lookup(this.props.selectedEntityId) || selectedDiagram || curModel;
           this.setState({
             model: parsedModel || this.state.model,
-            selectedDiagram: curModel.lookupDiagram(this.props.selectedDiagramId || window.location.hash.replace(/^#/, "")),
-            selectedEntity: curModel.lookup(this.props.selectedEntityId),
+            selectedDiagram,
+            selectedEntity,
           });
         },
         // Note: it's important to handle errors here
@@ -162,11 +162,6 @@ export default class ArchimateNavigator extends React.Component<
     </Row>
     );
   }
-
-  private runQuery = (query: string) => {
-    this.setState({ graphQuery: query });
-    // this.state.graphModelStore!.runQuery(query, this.graphDataCallback);
-  };
 
   // Called when a sidebar tab is clicked.
   private handleSelectSidebarTab = (eventKey: any) => {

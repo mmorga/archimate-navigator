@@ -8,12 +8,12 @@ import {
   Relationship
 } from "../../archimate-model";
 import { entityClickedFunc } from "../common";
+import DocumentationPanel from "../documentation-panel";
 import ElementsTable from "./info/elements-table";
 import EntityIdPanel from "./info/entity-id-panel";
 import PropertiesPanel from "./info/properties-panel";
 import RelationshipsTable from "./info/relationships-table";
 import ViewsTable from "./info/views-table";
-import Panel from "./panel";
 
 interface IProps {
   entity?: IEntity;
@@ -29,7 +29,7 @@ export default class ArchimateInfo extends React.PureComponent<IProps> {
     return (
       <React.Fragment>
         <EntityIdPanel entity={this.props.entity} entityClicked={this.props.entityClicked} />
-        {this.documentation()}
+        <DocumentationPanel str={this.props.entity ? this.props.entity.documentation : undefined} />
         {this.properties()}
         {this.elements()}
         {this.relationships()}
@@ -95,17 +95,17 @@ export default class ArchimateInfo extends React.PureComponent<IProps> {
     );
   }
 
-  private documentation(): JSX.Element | undefined {
-    if (this.props.entity === undefined) {
-      return undefined;
-    }   
-    const header = this.props.entity.documentation ? "Documentation" : (<React.Fragment>Documentation <span className="small">(none)</span></React.Fragment>);
-    return (
-      <Panel 
-          header={header}
-          initiallyCollapsed={!this.props.entity.documentation}>
-        { this.props.entity.documentation || "No Documentation" }
-      </Panel>
-    )
-  }
+  // private documentation(): JSX.Element | undefined {
+  //   if (this.props.entity === undefined) {
+  //     return undefined;
+  //   }   
+  //   const header = this.props.entity.documentation ? "Documentation" : (<React.Fragment>Documentation <span className="small">(none)</span></React.Fragment>);
+  //   return (
+  //     <Panel 
+  //         header={header}
+  //         initiallyCollapsed={!this.props.entity.documentation}>
+  //       { this.props.entity.documentation || "No Documentation" }
+  //     </Panel>
+  //   )
+  // }
 }

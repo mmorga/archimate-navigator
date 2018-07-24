@@ -356,9 +356,12 @@ for markup in *Documentation* tags.
 * lists
 * lists
 
+You also include code examples:
+
     // Code examples
     while (true) {
       this.burnCpu();
     }
+
   </purpose>
 </archimate:model>

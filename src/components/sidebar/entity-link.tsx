@@ -6,6 +6,7 @@ interface IProps {
   entity: IEntity | undefined;
   entityClicked: entityClickedFunc;
   text?: string;
+  textClass?: string;
 }
 
 export default class EntityLink extends React.PureComponent<IProps> {
@@ -19,7 +20,7 @@ export default class EntityLink extends React.PureComponent<IProps> {
       return (
         <a href={this.props.entity!.href} onClick={this.props.entityClicked.bind(this, this.props.entity)}>
           {this.props.children}
-          {text}
+          <span className={this.props.textClass}>{text}</span>
         </a>
       );
     } else {

@@ -1,4 +1,6 @@
+import "github-markdown-css/github-markdown.css";
 import * as React from "react";
+import ReactMarkdown from "react-markdown";
 import { Property } from "../../../archimate-model";
 import Panel from "../panel";
 
@@ -48,7 +50,7 @@ export default class PropertiesPanel extends React.PureComponent<IProps> {
 
   private value(v: string | undefined) {
     if (v) {
-      return v;
+      return <ReactMarkdown className="markdown-body" source={v} />;
     }
 
     return <i>undefined</i>;

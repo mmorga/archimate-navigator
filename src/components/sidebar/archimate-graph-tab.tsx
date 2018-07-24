@@ -1,14 +1,10 @@
 import * as React from "react";
-import CypherQuery from "../../graph/cypher-query";
+import { Diagram, Model } from "../../archimate-model";
 import Panel from "./panel";
-import QueryItem from "./query-item";
-
-const SAMPLE_QUERIES: CypherQuery[] = [];
 
 interface IProps {
-  query?: string;
-  results: any[];
-  runQuery: (query: string) => void;
+  model: Model;
+  selectedDiagram: Diagram | undefined;
 }
 
 interface IState {
@@ -24,16 +20,11 @@ export default class ArchimateGraph extends React.PureComponent<
   constructor(props: IProps) {
     super(props);
     this.state = {
-      query: this.props.query || ""
+      query: "",
     };
   }
 
   public render() {
-    const samples = !SAMPLE_QUERIES
-      ? null
-      : SAMPLE_QUERIES.map(q => (
-          <QueryItem key={q.name} query={q} queryClicked={this.loadSample} />
-        ));
     return (
       <div>
         <Panel>
@@ -43,7 +34,7 @@ export default class ArchimateGraph extends React.PureComponent<
               rows={5}
               value={this.state.query || ""}
               onChange={this.handleChange}
-              placeholder="Cypher query"
+              placeholder="Query"
               style={{ width: "100%" }}
             />
             <button
@@ -55,22 +46,12 @@ export default class ArchimateGraph extends React.PureComponent<
             </button>
           </form>
         </Panel>
-        <Panel header="Sample Queries">
-          <ul>{samples}</ul>
-        </Panel>
       </div>
     );
   }
 
-  private loadSample = (query: CypherQuery) => {
-    this.setState({ query: query.query });
-  };
-
   private runQuery = (event: React.MouseEvent<Element>) => {
     event.preventDefault();
-    if (this.props.runQuery) {
-      this.props.runQuery(this.state.query);
-    }
   };
 
   private handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {

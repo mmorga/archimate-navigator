@@ -15,7 +15,7 @@ export default class Panel extends React.PureComponent<IProps, IState> {
   constructor(props: IProps) {
     super(props);
     this.state = {
-      collapse: this.props.initiallyCollapsed || false
+      collapse: (this.props.initiallyCollapsed === undefined) ? false : this.props.initiallyCollapsed,
     };
   }
 
@@ -31,6 +31,14 @@ export default class Panel extends React.PureComponent<IProps, IState> {
         </div>
       </div>
     );
+  }
+
+  public componentDidUpdate(prevProps: IProps) {
+    if (this.props.initiallyCollapsed !== prevProps.initiallyCollapsed) {
+      this.setState({
+        collapse: this.props.initiallyCollapsed ? true : false,
+      });
+    }
   }
 
   private handleCollapseExpand = () => {
