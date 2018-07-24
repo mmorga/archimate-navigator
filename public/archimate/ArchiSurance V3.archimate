@@ -1,0 +1,1312 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<archimate:model xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:archimate="http://www.archimatetool.com/archimate" name="ArchiSurance V3" id="id-LK_OS_TEMPLATE_SYSARCH_Testing_ArchiMate_3.0_Configuration" version="4.0.0">
+  <folder name="Strategy" id="bc3c2349-09fb-4f3f-a816-2c055ef4f4e9" type="strategy"/>
+  <folder name="Business" id="492ce17b-417a-4d94-bf41-1cfeaa4ad68c" type="business">
+    <element xsi:type="archimate:BusinessActor" name="Client" id="id-4927"/>
+    <element xsi:type="archimate:BusinessRole" name="Insurant" id="id-4911"/>
+    <element xsi:type="archimate:BusinessActor" name="Archisurance" id="id-4926"/>
+    <element xsi:type="archimate:BusinessProcess" name="Accept" id="id-4957"/>
+    <element xsi:type="archimate:BusinessProcess" name="Register" id="id-4960"/>
+    <element xsi:type="archimate:BusinessProcess" name="Pay" id="id-4959"/>
+    <element xsi:type="archimate:BusinessProcess" name="Valuate" id="id-4958"/>
+    <element xsi:type="archimate:BusinessProcess" name="Handle Claim" id="id-4956"/>
+    <element xsi:type="archimate:BusinessRole" name="Insurer" id="id-4910"/>
+    <element xsi:type="archimate:BusinessService" name="Customer Information Service" id="id-4965"/>
+    <element xsi:type="archimate:BusinessService" name="Claim Registration Service" id="id-4964"/>
+    <element xsi:type="archimate:BusinessService" name="Claims Payment Service" id="id-4967"/>
+    <element xsi:type="archimate:BusinessProcess" name="Close Contract" id="id-4961"/>
+    <element xsi:type="archimate:BusinessRole" name="Customer" id="id-4908"/>
+    <element xsi:type="archimate:BusinessProcess" name="Collect Premium" id="id-4954"/>
+    <element xsi:type="archimate:BusinessProcess" name="Inform Customer" id="id-4953"/>
+    <element xsi:type="archimate:BusinessService" name="Insurance Application Service" id="id-4966"/>
+    <element xsi:type="archimate:BusinessService" name="Premium Payment Service" id="id-4963"/>
+    <element xsi:type="archimate:BusinessObject" name="Customer File" id="id-4943"/>
+    <element xsi:type="archimate:BusinessCollaboration" name="Negotiation" id="id-4912"/>
+    <element xsi:type="archimate:BusinessObject" name="Insurance Policy" id="id-4942"/>
+    <element xsi:type="archimate:BusinessInteraction" name="Formalise Request" id="id-4950"/>
+    <element xsi:type="archimate:BusinessInteraction" name="Check and Sign Contract" id="id-4949"/>
+    <element xsi:type="archimate:BusinessProcess" name="Create Contract" id="id-4955"/>
+    <element xsi:type="archimate:Representation" name="Claim Form" id="id-4938"/>
+    <element xsi:type="archimate:BusinessEvent" name="Request for Insurance" id="id-4952"/>
+    <element xsi:type="archimate:BusinessRole" name="Intermediary" id="id-4909"/>
+    <element xsi:type="archimate:BusinessCollaboration" name="Contracting" id="id-4913"/>
+    <element xsi:type="archimate:BusinessObject" name="Damage Claim" id="id-4944"/>
+    <element xsi:type="archimate:BusinessEvent" name="Damage Occured" id="id-4951"/>
+    <element xsi:type="archimate:BusinessActor" name="Legal Aid" id="id-4925"/>
+    <element xsi:type="archimate:BusinessActor" name="Car" id="id-4924"/>
+    <element xsi:type="archimate:BusinessActor" name="Home &amp; Away" id="id-4923"/>
+    <element xsi:type="archimate:BusinessActor" name="Back Office" id="id-4922"/>
+    <element xsi:type="archimate:BusinessActor" name="Document Processing SSC" id="id-4921"/>
+    <element xsi:type="archimate:BusinessActor" name="Finance" id="id-4920"/>
+    <element xsi:type="archimate:BusinessActor" name="Customer Relations" id="id-4919"/>
+    <element xsi:type="archimate:BusinessActor" name="Intermediary Relations" id="id-4918"/>
+    <element xsi:type="archimate:BusinessActor" name="Front Office" id="id-4917"/>
+    <element xsi:type="archimate:BusinessActor" name="Product Development" id="id-4916"/>
+    <element xsi:type="archimate:BusinessActor" name="HRM" id="id-4915"/>
+    <element xsi:type="archimate:BusinessFunction" name="Financial Handling" id="id-4937"/>
+    <element xsi:type="archimate:BusinessFunction" name="Claims Handling" id="id-4936"/>
+    <element xsi:type="archimate:BusinessFunction" name="Maintaining Customer Relations" id="id-4935"/>
+    <element xsi:type="archimate:BusinessFunction" name="Maintaining Intermediary Relations" id="id-4934"/>
+    <element xsi:type="archimate:BusinessFunction" name="Contracting" id="id-4933"/>
+    <element xsi:type="archimate:BusinessFunction" name="Asset Management" id="id-4932"/>
+    <element xsi:type="archimate:BusinessRole" name="Customer's Bank" id="id-4907"/>
+    <element xsi:type="archimate:BusinessObject" name="Home Insurance Policy" id="id-4948"/>
+    <element xsi:type="archimate:BusinessObject" name="Car Insurance Policy" id="id-4947"/>
+    <element xsi:type="archimate:BusinessObject" name="Travel Insurance Policy" id="id-4946"/>
+    <element xsi:type="archimate:BusinessObject" name="Customer" id="id-4945"/>
+    <element xsi:type="archimate:BusinessObject" name="Liability Insurance Policy" id="id-4941"/>
+    <element xsi:type="archimate:BusinessObject" name="Insurance Request" id="id-4940"/>
+    <element xsi:type="archimate:BusinessObject" name="Legal aid Insurance Policy" id="id-4939"/>
+    <element xsi:type="archimate:BusinessActor" name="Director of Operations" id="id-4931"/>
+    <element xsi:type="archimate:BusinessActor" name="Director of Finance" id="id-4930"/>
+    <element xsi:type="archimate:BusinessActor" name="Director of Sales" id="id-4929"/>
+    <element xsi:type="archimate:BusinessActor" name="Board" id="id-4928"/>
+    <element xsi:type="archimate:BusinessService" name="Customer data mutation Service" id="id-4968"/>
+    <element xsi:type="archimate:Contract" name="Travel Insurance Policy" id="id-4962"/>
+    <element xsi:type="archimate:BusinessInterface" name="phone" id="id-4904"/>
+    <element xsi:type="archimate:BusinessInterface" name="e-mail" id="id-4906"/>
+    <element xsi:type="archimate:BusinessInterface" name="GIM" id="id-4905"/>
+    <element xsi:type="archimate:BusinessInterface" name="mail" id="id-4903"/>
+    <element xsi:type="archimate:BusinessCollaboration" name="collaboration" id="id-4914"/>
+  </folder>
+  <folder name="Application" id="e45b2ea6-2bf8-45e3-8e73-b0cfe4bf541f" type="application">
+    <element xsi:type="archimate:ApplicationService" name="CIS" id="id-4985">
+      <documentation>Customer Information Service</documentation>
+    </element>
+    <element xsi:type="archimate:ApplicationComponent" name="Policy Data Management" id="id-4976"/>
+    <element xsi:type="archimate:ApplicationComponent" name="CRM System" id="id-4975"/>
+    <element xsi:type="archimate:ApplicationComponent" name="Financial Application" id="id-4974"/>
+    <element xsi:type="archimate:ApplicationService" name="Claim InfoServ" id="id-4984"/>
+    <element xsi:type="archimate:ApplicationService" name="Customer data mutation Service" id="id-5692"/>
+    <element xsi:type="archimate:ApplicationService" name="Insurance Application Service" id="id-5693"/>
+    <element xsi:type="archimate:ApplicationService" name="Premium Payment Service" id="id-5691"/>
+    <element xsi:type="archimate:ApplicationComponent" name="Claim Data Management" id="id-4980"/>
+    <element xsi:type="archimate:ApplicationComponent" name="Risk Assessment" id="id-4979"/>
+    <element xsi:type="archimate:ApplicationComponent" name="Customer Data Access" id="id-4978"/>
+    <element xsi:type="archimate:ApplicationComponent" name="Home &amp; Away Policy Administration" id="id-4977"/>
+    <element xsi:type="archimate:DataObject" name="Damage Claim Data" id="id-4991"/>
+    <element xsi:type="archimate:DataObject" name="Customer File Data" id="id-4990"/>
+    <element xsi:type="archimate:DataObject" name="Insurance Policy Data" id="id-4989"/>
+    <element xsi:type="archimate:DataObject" name="Insurance Request Data" id="id-4988"/>
+    <element xsi:type="archimate:ApplicationService" name="Policy Creation Service" id="id-4987"/>
+    <element xsi:type="archimate:ApplicationFunction" name="Create Policy" id="id-4973"/>
+    <element xsi:type="archimate:ApplicationFunction" name="Calculate Premium" id="id-4972"/>
+    <element xsi:type="archimate:ApplicationFunction" name="Calculate Risk" id="id-4971"/>
+    <element xsi:type="archimate:ApplicationFunction" name="Store Policy" id="id-4970"/>
+    <element xsi:type="archimate:ApplicationFunction" name="Policy Creation" id="id-4969"/>
+    <element xsi:type="archimate:ApplicationComponent" name="Web portal" id="id-4982"/>
+    <element xsi:type="archimate:ApplicationComponent" name="Call center application" id="id-4981"/>
+    <element xsi:type="archimate:ApplicationComponent" name="Bank System" id="id-4983"/>
+  </folder>
+  <folder name="Technology &amp; Physical" id="617f1f60-46d6-4f29-bb6b-e79be9c71d3f" type="technology">
+    <element xsi:type="archimate:Device" name="Unix Server" id="id-4996"/>
+    <element xsi:type="archimate:Node" name="Unix Server Farm" id="id-5004"/>
+    <element xsi:type="archimate:Device" name="NAS File Server" id="id-4995"/>
+    <element xsi:type="archimate:SystemSoftware" name="Message Queueing" id="id-5000"/>
+    <element xsi:type="archimate:SystemSoftware" name="DBMS" id="id-4999"/>
+    <element xsi:type="archimate:SystemSoftware" name="CICS" id="id-4998"/>
+    <element xsi:type="archimate:Node" name="Mainframe" id="id-5003"/>
+    <element xsi:type="archimate:TechnologyService" name="Customer File Service" id="id-5009"/>
+    <element xsi:type="archimate:TechnologyService" name="Claim Files Service" id="id-5008"/>
+    <element xsi:type="archimate:Node" name="Firewall" id="id-5002"/>
+    <element xsi:type="archimate:CommunicationNetwork" name="LAN" id="id-4992"/>
+    <element xsi:type="archimate:Device" name="Admin Server" id="id-4994"/>
+    <element xsi:type="archimate:CommunicationNetwork" name="BIBIT" id="id-4993"/>
+    <element xsi:type="archimate:TechnologyService" name="Database Service" id="id-5007"/>
+    <element xsi:type="archimate:TechnologyService" name="Network Service" id="id-5006"/>
+    <element xsi:type="archimate:TechnologyService" name="File Service" id="id-5005"/>
+    <element xsi:type="archimate:Device" name="BIBIT Server" id="id-4997"/>
+    <element xsi:type="archimate:SystemSoftware" name="Financial Software" id="id-5001"/>
+  </folder>
+  <folder name="Motivation" id="70fa2482-18c1-4bab-a53d-ed3922454d16" type="motivation">
+    <element xsi:type="archimate:Value" name="Be Insured" id="id-5019"/>
+    <element xsi:type="archimate:Principle" name="Infrastructure Principle" id="id-5018"/>
+    <element xsi:type="archimate:Principle" name="Component Principle" id="id-5017"/>
+    <element xsi:type="archimate:Principle" name="TCO Goal" id="id-5016"/>
+    <element xsi:type="archimate:Principle" name="Licence Principle" id="id-5015"/>
+    <element xsi:type="archimate:Principle" name="Occupancy Principle" id="id-5014"/>
+    <element xsi:type="archimate:Principle" name="Costs Goal" id="id-5013"/>
+    <element xsi:type="archimate:Principle" name="Treatment Time Principle" id="id-5012"/>
+    <element xsi:type="archimate:Principle" name="One Stop Principle" id="id-5011"/>
+    <element xsi:type="archimate:Principle" name="Client Satisfaction Goal" id="id-5010"/>
+  </folder>
+  <folder name="Implementation &amp; Migration" id="b462d6e0-299d-4186-80cf-8ec51a15f883" type="implementation_migration"/>
+  <folder name="Other" id="603369b5-1b03-4b6d-8b3b-0ab3e3d4b801" type="other"/>
+  <folder name="Relations" id="ba32b95d-bf70-4339-a8b3-5bf22099e652" type="relations">
+    <element xsi:type="archimate:SpecializationRelationship" id="id-4948-110-4942" source="id-4948" target="id-4942"/>
+    <element xsi:type="archimate:SpecializationRelationship" id="id-4947-110-4942" source="id-4947" target="id-4942"/>
+    <element xsi:type="archimate:SpecializationRelationship" id="id-4946-110-4942" source="id-4946" target="id-4942"/>
+    <element xsi:type="archimate:SpecializationRelationship" id="id-4941-110-4942" source="id-4941" target="id-4942"/>
+    <element xsi:type="archimate:SpecializationRelationship" id="id-4939-110-4942" source="id-4939" target="id-4942"/>
+    <element xsi:type="archimate:CompositionRelationship" id="id-4977-34-4976" source="id-4977" target="id-4976"/>
+    <element xsi:type="archimate:CompositionRelationship" id="id-4977-34-4978" source="id-4977" target="id-4978"/>
+    <element xsi:type="archimate:CompositionRelationship" id="id-4943-34-4940" source="id-4943" target="id-4940"/>
+    <element xsi:type="archimate:CompositionRelationship" id="id-4943-34-4942" source="id-4943" target="id-4942"/>
+    <element xsi:type="archimate:CompositionRelationship" id="id-4943-34-4944" source="id-4943" target="id-4944"/>
+    <element xsi:type="archimate:AggregationRelationship" id="id-4912-114-4908" source="id-4912" target="id-4908"/>
+    <element xsi:type="archimate:AggregationRelationship" id="id-4912-114-4909" source="id-4912" target="id-4909"/>
+    <element xsi:type="archimate:AggregationRelationship" id="id-4912-114-4910" source="id-4912" target="id-4910"/>
+    <element xsi:type="archimate:AggregationRelationship" id="id-4942-114-4940" source="id-4942" target="id-4940"/>
+    <element xsi:type="archimate:AggregationRelationship" id="id-4942-114-4944" source="id-4942" target="id-4944"/>
+    <element xsi:type="archimate:AggregationRelationship" id="id-4913-114-4908" source="id-4913" target="id-4908"/>
+    <element xsi:type="archimate:AggregationRelationship" id="id-4913-114-4909" source="id-4913" target="id-4909"/>
+    <element xsi:type="archimate:AggregationRelationship" id="id-4913-114-4910" source="id-4913" target="id-4910"/>
+    <element xsi:type="archimate:AggregationRelationship" id="id-4945-114-4943" source="id-4945" target="id-4943"/>
+    <element xsi:type="archimate:AggregationRelationship" id="id-4914-114-4907" source="id-4914" target="id-4907"/>
+    <element xsi:type="archimate:AggregationRelationship" id="id-4914-114-4921" source="id-4914" target="id-4921"/>
+    <element xsi:type="archimate:AssignmentRelationship" id="id-4927-116-4911" source="id-4927" target="id-4911"/>
+    <element xsi:type="archimate:AssignmentRelationship" id="id-4926-116-4910" source="id-4926" target="id-4910"/>
+    <element xsi:type="archimate:AssignmentRelationship" id="id-4910-116-4955" source="id-4910" target="id-4955"/>
+    <element xsi:type="archimate:AssignmentRelationship" id="id-4910-116-4956" source="id-4910" target="id-4956"/>
+    <element xsi:type="archimate:AssignmentRelationship" id="id-4912-116-4950" source="id-4912" target="id-4950"/>
+    <element xsi:type="archimate:AssignmentRelationship" id="id-4913-116-4949" source="id-4913" target="id-4949"/>
+    <element xsi:type="archimate:RealizationRelationship" id="id-4957-108-4965" source="id-4957" target="id-4965"/>
+    <element xsi:type="archimate:RealizationRelationship" id="id-4960-108-4964" source="id-4960" target="id-4964"/>
+    <element xsi:type="archimate:RealizationRelationship" id="id-4959-108-4967" source="id-4959" target="id-4967"/>
+    <element xsi:type="archimate:RealizationRelationship" id="id-4956-108-4964" source="id-4956" target="id-4964"/>
+    <element xsi:type="archimate:RealizationRelationship" id="id-4956-108-4967" source="id-4956" target="id-4967"/>
+    <element xsi:type="archimate:RealizationRelationship" id="id-4991-108-4944" source="id-4991" target="id-4944"/>
+    <element xsi:type="archimate:RealizationRelationship" id="id-4990-108-4943" source="id-4990" target="id-4943"/>
+    <element xsi:type="archimate:RealizationRelationship" id="id-4989-108-4939" source="id-4989" target="id-4939"/>
+    <element xsi:type="archimate:RealizationRelationship" id="id-4989-108-4941" source="id-4989" target="id-4941"/>
+    <element xsi:type="archimate:RealizationRelationship" id="id-4989-108-4946" source="id-4989" target="id-4946"/>
+    <element xsi:type="archimate:RealizationRelationship" id="id-4989-108-4947" source="id-4989" target="id-4947"/>
+    <element xsi:type="archimate:RealizationRelationship" id="id-4989-108-4948" source="id-4989" target="id-4948"/>
+    <element xsi:type="archimate:RealizationRelationship" id="id-4961-108-4966" source="id-4961" target="id-4966"/>
+    <element xsi:type="archimate:RealizationRelationship" id="id-4954-108-4963" source="id-4954" target="id-4963"/>
+    <element xsi:type="archimate:RealizationRelationship" id="id-4953-108-4965" source="id-4953" target="id-4965"/>
+    <element xsi:type="archimate:RealizationRelationship" id="id-4938-108-4944" source="id-4938" target="id-4944"/>
+    <element xsi:type="archimate:RealizationRelationship" id="id-4988-108-4940" source="id-4988" target="id-4940"/>
+    <element xsi:type="archimate:RealizationRelationship" id="id-4976-146-4984" source="id-4976" target="id-4984"/>
+    <element xsi:type="archimate:RealizationRelationship" id="id-4976-146-5692" source="id-4976" target="id-5692"/>
+    <element xsi:type="archimate:RealizationRelationship" id="id-4975-146-4985" source="id-4975" target="id-4985"/>
+    <element xsi:type="archimate:RealizationRelationship" id="id-4975-146-5693" source="id-4975" target="id-5693"/>
+    <element xsi:type="archimate:RealizationRelationship" id="id-4974-146-5691" source="id-4974" target="id-5691"/>
+    <element xsi:type="archimate:RealizationRelationship" id="id-4995-146-5005" source="id-4995" target="id-5005"/>
+    <element xsi:type="archimate:RealizationRelationship" id="id-4995-146-5009" source="id-4995" target="id-5009"/>
+    <element xsi:type="archimate:RealizationRelationship" id="id-5003-146-5007" source="id-5003" target="id-5007"/>
+    <element xsi:type="archimate:RealizationRelationship" id="id-5003-146-5008" source="id-5003" target="id-5008"/>
+    <element xsi:type="archimate:RealizationRelationship" id="id-4977-146-4987" source="id-4977" target="id-4987"/>
+    <element xsi:type="archimate:RealizationRelationship" id="id-5002-146-5006" source="id-5002" target="id-5006"/>
+    <element xsi:type="archimate:RealizationRelationship" id="id-4997-146-4983" source="id-4997" target="id-4983"/>
+    <element xsi:type="archimate:RealizationRelationship" id="id-5001-146-4974" source="id-5001" target="id-4974"/>
+    <element xsi:type="archimate:TriggeringRelationship" id="id-4957-118-4958" source="id-4957" target="id-4958"/>
+    <element xsi:type="archimate:TriggeringRelationship" id="id-4960-118-4957" source="id-4960" target="id-4957"/>
+    <element xsi:type="archimate:TriggeringRelationship" id="id-4958-118-4959" source="id-4958" target="id-4959"/>
+    <element xsi:type="archimate:TriggeringRelationship" id="id-4956-118-4953" source="id-4956" target="id-4953"/>
+    <element xsi:type="archimate:TriggeringRelationship" id="id-4953-118-4954" source="id-4953" target="id-4954"/>
+    <element xsi:type="archimate:TriggeringRelationship" id="id-4950-118-4955" source="id-4950" target="id-4955"/>
+    <element xsi:type="archimate:TriggeringRelationship" id="id-4955-118-4949" source="id-4955" target="id-4949"/>
+    <element xsi:type="archimate:TriggeringRelationship" id="id-4952-118-4950" source="id-4952" target="id-4950"/>
+    <element xsi:type="archimate:TriggeringRelationship" id="id-4951-118-4960" source="id-4951" target="id-4960"/>
+    <element xsi:type="archimate:TriggeringRelationship" id="id-4973-118-4970" source="id-4973" target="id-4970"/>
+    <element xsi:type="archimate:TriggeringRelationship" id="id-4972-118-4973" source="id-4972" target="id-4973"/>
+    <element xsi:type="archimate:TriggeringRelationship" id="id-4971-118-4972" source="id-4971" target="id-4972"/>
+    <element xsi:type="archimate:TriggeringRelationship" id="id-4908-154-4952" source="id-4908" target="id-4952"/>
+    <element xsi:type="archimate:FlowRelationship" id="id-4937-124-4932" source="id-4937" target="id-4932"/>
+    <element xsi:type="archimate:FlowRelationship" id="id-4937-124-4936" source="id-4937" target="id-4936"/>
+    <element xsi:type="archimate:FlowRelationship" id="id-4936-124-4935" source="id-4936" target="id-4935"/>
+    <element xsi:type="archimate:FlowRelationship" id="id-4936-124-4937" source="id-4936" target="id-4937"/>
+    <element xsi:type="archimate:FlowRelationship" id="id-4935-124-4936" source="id-4935" target="id-4936"/>
+    <element xsi:type="archimate:FlowRelationship" id="id-4934-124-4933" source="id-4934" target="id-4933"/>
+    <element xsi:type="archimate:FlowRelationship" id="id-4933-124-4932" source="id-4933" target="id-4932"/>
+    <element xsi:type="archimate:FlowRelationship" id="id-4933-124-4934" source="id-4933" target="id-4934"/>
+    <element xsi:type="archimate:FlowRelationship" id="id-4932-124-4933" source="id-4932" target="id-4933"/>
+    <element xsi:type="archimate:FlowRelationship" id="id-4932-124-4937" source="id-4932" target="id-4937"/>
+    <element xsi:type="archimate:FlowRelationship" id="id-4908-160-4909" source="id-4908" target="id-4909"/>
+    <element xsi:type="archimate:FlowRelationship" id="id-4908-160-4935" source="id-4908" target="id-4935"/>
+    <element xsi:type="archimate:FlowRelationship" id="id-4909-160-4908" source="id-4909" target="id-4908"/>
+    <element xsi:type="archimate:FlowRelationship" id="id-4909-160-4934" source="id-4909" target="id-4934"/>
+    <element xsi:type="archimate:FlowRelationship" id="id-4922-160-4915" source="id-4922" target="id-4915"/>
+    <element xsi:type="archimate:FlowRelationship" id="id-4922-160-4916" source="id-4922" target="id-4916"/>
+    <element xsi:type="archimate:FlowRelationship" id="id-4922-160-4920" source="id-4922" target="id-4920"/>
+    <element xsi:type="archimate:FlowRelationship" id="id-4922-160-4921" source="id-4922" target="id-4921"/>
+    <element xsi:type="archimate:FlowRelationship" id="id-4921-160-4918" source="id-4921" target="id-4918"/>
+    <element xsi:type="archimate:FlowRelationship" id="id-4921-160-4919" source="id-4921" target="id-4919"/>
+    <element xsi:type="archimate:FlowRelationship" id="id-4921-160-4922" source="id-4921" target="id-4922"/>
+    <element xsi:type="archimate:FlowRelationship" id="id-4920-160-4907" source="id-4920" target="id-4907"/>
+    <element xsi:type="archimate:FlowRelationship" id="id-4920-160-4922" source="id-4920" target="id-4922"/>
+    <element xsi:type="archimate:FlowRelationship" id="id-4919-160-4921" source="id-4919" target="id-4921"/>
+    <element xsi:type="archimate:FlowRelationship" id="id-4918-160-4921" source="id-4918" target="id-4921"/>
+    <element xsi:type="archimate:FlowRelationship" id="id-4916-160-4922" source="id-4916" target="id-4922"/>
+    <element xsi:type="archimate:FlowRelationship" id="id-4915-160-4922" source="id-4915" target="id-4922"/>
+    <element xsi:type="archimate:FlowRelationship" id="id-4937-160-4907" source="id-4937" target="id-4907"/>
+    <element xsi:type="archimate:FlowRelationship" id="id-4936-160-4908" source="id-4936" target="id-4908"/>
+    <element xsi:type="archimate:FlowRelationship" id="id-4935-160-4908" source="id-4935" target="id-4908"/>
+    <element xsi:type="archimate:FlowRelationship" id="id-4934-160-4909" source="id-4934" target="id-4909"/>
+    <element xsi:type="archimate:FlowRelationship" id="id-4907-160-4920" source="id-4907" target="id-4920"/>
+    <element xsi:type="archimate:FlowRelationship" id="id-4907-160-4937" source="id-4907" target="id-4937"/>
+    <element xsi:type="archimate:ServingRelationship" id="id-4985-144-4955" source="id-4985" target="id-4955"/>
+    <element xsi:type="archimate:ServingRelationship" id="id-4985-144-4976" source="id-4985" target="id-4976"/>
+    <element xsi:type="archimate:ServingRelationship" id="id-4984-144-4950" source="id-4984" target="id-4950"/>
+    <element xsi:type="archimate:ServingRelationship" id="id-4984-144-4974" source="id-4984" target="id-4974"/>
+    <element xsi:type="archimate:ServingRelationship" id="id-4965-144-4908" source="id-4965" target="id-4908"/>
+    <element xsi:type="archimate:ServingRelationship" id="id-4965-144-4911" source="id-4965" target="id-4911"/>
+    <element xsi:type="archimate:ServingRelationship" id="id-4964-144-4908" source="id-4964" target="id-4908"/>
+    <element xsi:type="archimate:ServingRelationship" id="id-4964-144-4911" source="id-4964" target="id-4911"/>
+    <element xsi:type="archimate:ServingRelationship" id="id-4967-144-4908" source="id-4967" target="id-4908"/>
+    <element xsi:type="archimate:ServingRelationship" id="id-4967-144-4911" source="id-4967" target="id-4911"/>
+    <element xsi:type="archimate:ServingRelationship" id="id-5009-144-4974" source="id-5009" target="id-4974"/>
+    <element xsi:type="archimate:ServingRelationship" id="id-5009-144-4976" source="id-5009" target="id-4976"/>
+    <element xsi:type="archimate:ServingRelationship" id="id-5008-144-4975" source="id-5008" target="id-4975"/>
+    <element xsi:type="archimate:ServingRelationship" id="id-5008-144-4976" source="id-5008" target="id-4976"/>
+    <element xsi:type="archimate:ServingRelationship" id="id-5692-144-4960" source="id-5692" target="id-4960"/>
+    <element xsi:type="archimate:ServingRelationship" id="id-5693-144-4960" source="id-5693" target="id-4960"/>
+    <element xsi:type="archimate:ServingRelationship" id="id-5691-144-4959" source="id-5691" target="id-4959"/>
+    <element xsi:type="archimate:ServingRelationship" id="id-4966-144-4908" source="id-4966" target="id-4908"/>
+    <element xsi:type="archimate:ServingRelationship" id="id-4966-144-4960" source="id-4966" target="id-4960"/>
+    <element xsi:type="archimate:ServingRelationship" id="id-4963-144-4908" source="id-4963" target="id-4908"/>
+    <element xsi:type="archimate:ServingRelationship" id="id-4963-144-4959" source="id-4963" target="id-4959"/>
+    <element xsi:type="archimate:ServingRelationship" id="id-4987-144-4949" source="id-4987" target="id-4949"/>
+    <element xsi:type="archimate:ServingRelationship" id="id-4968-144-4960" source="id-4968" target="id-4960"/>
+    <element xsi:type="archimate:ServingRelationship" id="id-4904-144-4908" source="id-4904" target="id-4908"/>
+    <element xsi:type="archimate:ServingRelationship" id="id-4904-144-4909" source="id-4904" target="id-4909"/>
+    <element xsi:type="archimate:ServingRelationship" id="id-4906-144-4908" source="id-4906" target="id-4908"/>
+    <element xsi:type="archimate:ServingRelationship" id="id-4905-144-4909" source="id-4905" target="id-4909"/>
+    <element xsi:type="archimate:ServingRelationship" id="id-4903-144-4908" source="id-4903" target="id-4908"/>
+    <element xsi:type="archimate:ServingRelationship" id="id-4975-170-4982" source="id-4975" target="id-4982"/>
+    <element xsi:type="archimate:ServingRelationship" id="id-4974-170-4977" source="id-4974" target="id-4977"/>
+    <element xsi:type="archimate:ServingRelationship" id="id-4979-170-4982" source="id-4979" target="id-4982"/>
+    <element xsi:type="archimate:ServingRelationship" id="id-4978-170-4979" source="id-4978" target="id-4979"/>
+    <element xsi:type="archimate:ServingRelationship" id="id-4978-170-4981" source="id-4978" target="id-4981"/>
+    <element xsi:type="archimate:ServingRelationship" id="id-4981-170-4982" source="id-4981" target="id-4982"/>
+    <element xsi:type="archimate:ServingRelationship" id="id-4983-170-4974" source="id-4983" target="id-4974"/>
+    <element xsi:type="archimate:AccessRelationship" id="id-4957-120-4942" source="id-4957" target="id-4942"/>
+    <element xsi:type="archimate:AccessRelationship" id="id-4957-120-4943" source="id-4957" target="id-4943" accessType="1"/>
+    <element xsi:type="archimate:AccessRelationship" id="id-4957-120-4944" source="id-4957" target="id-4944" accessType="1"/>
+    <element xsi:type="archimate:AccessRelationship" id="id-4960-120-4943" source="id-4960" target="id-4943"/>
+    <element xsi:type="archimate:AccessRelationship" id="id-4960-120-4944" source="id-4960" target="id-4944"/>
+    <element xsi:type="archimate:AccessRelationship" id="id-4959-120-4943" source="id-4959" target="id-4943"/>
+    <element xsi:type="archimate:AccessRelationship" id="id-4958-120-4944" source="id-4958" target="id-4944"/>
+    <element xsi:type="archimate:AccessRelationship" id="id-4973-120-4989" source="id-4973" target="id-4989"/>
+    <element xsi:type="archimate:AccessRelationship" id="id-4971-120-4988" source="id-4971" target="id-4988" accessType="1"/>
+    <element xsi:type="archimate:AccessRelationship" id="id-4970-120-4990" source="id-4970" target="id-4990"/>
+    <element xsi:type="archimate:AccessRelationship" id="id-4976-156-4989" source="id-4976" target="id-4989"/>
+    <element xsi:type="archimate:AccessRelationship" id="id-4980-156-4991" source="id-4980" target="id-4991"/>
+    <element xsi:type="archimate:AccessRelationship" id="id-4978-156-4990" source="id-4978" target="id-4990"/>
+    <element xsi:type="archimate:AssociationRelationship" id="id-4992-122-4994" source="id-4992" target="id-4994"/>
+    <element xsi:type="archimate:AssociationRelationship" id="id-4992-122-4995" source="id-4992" target="id-4995"/>
+    <element xsi:type="archimate:AssociationRelationship" id="id-4992-122-4997" source="id-4992" target="id-4997"/>
+    <element xsi:type="archimate:AssociationRelationship" id="id-4908-122-5019" source="id-4908" target="id-5019"/>
+    <element xsi:type="archimate:AssociationRelationship" id="id-5019-122-4963" source="id-5019" target="id-4963"/>
+    <element xsi:type="archimate:AssociationRelationship" id="id-5004-158-4992" source="id-5004" target="id-4992"/>
+    <element xsi:type="archimate:AssociationRelationship" id="id-5003-158-4992" source="id-5003" target="id-4992"/>
+    <element xsi:type="archimate:AssociationRelationship" id="id-5002-158-4992" source="id-5002" target="id-4992"/>
+    <element xsi:type="archimate:AssociationRelationship" id="id-5002-158-4993" source="id-5002" target="id-4993"/>
+    <element xsi:type="archimate:AssociationRelationship" id="id-4992-158-5002" source="id-4992" target="id-5002"/>
+    <element xsi:type="archimate:AssociationRelationship" id="id-4993-158-5002" source="id-4993" target="id-5002"/>
+    <element xsi:type="archimate:AssociationRelationship" id="id-4919-158-4904" source="id-4919" target="id-4904"/>
+    <element xsi:type="archimate:AssociationRelationship" id="id-4931-158-4921" source="id-4931" target="id-4921"/>
+    <element xsi:type="archimate:AssociationRelationship" id="id-4931-158-4923" source="id-4931" target="id-4923"/>
+    <element xsi:type="archimate:AssociationRelationship" id="id-4931-158-4924" source="id-4931" target="id-4924"/>
+    <element xsi:type="archimate:AssociationRelationship" id="id-4931-158-4925" source="id-4931" target="id-4925"/>
+    <element xsi:type="archimate:AssociationRelationship" id="id-4930-158-4920" source="id-4930" target="id-4920"/>
+    <element xsi:type="archimate:AssociationRelationship" id="id-4929-158-4918" source="id-4929" target="id-4918"/>
+    <element xsi:type="archimate:AssociationRelationship" id="id-4929-158-4919" source="id-4929" target="id-4919"/>
+    <element xsi:type="archimate:AssociationRelationship" id="id-4928-158-4915" source="id-4928" target="id-4915"/>
+    <element xsi:type="archimate:AssociationRelationship" id="id-4928-158-4916" source="id-4928" target="id-4916"/>
+    <element xsi:type="archimate:AssociationRelationship" id="id-4928-158-4929" source="id-4928" target="id-4929"/>
+    <element xsi:type="archimate:AssociationRelationship" id="id-4928-158-4930" source="id-4928" target="id-4930"/>
+    <element xsi:type="archimate:AssociationRelationship" id="id-4928-158-4931" source="id-4928" target="id-4931"/>
+    <element xsi:type="archimate:AssociationRelationship" id="id-4904-158-4918" source="id-4904" target="id-4918"/>
+    <element xsi:type="archimate:AssociationRelationship" id="id-4906-158-4919" source="id-4906" target="id-4919"/>
+    <element xsi:type="archimate:AssociationRelationship" id="id-4905-158-4918" source="id-4905" target="id-4918"/>
+    <element xsi:type="archimate:AssociationRelationship" id="id-4903-158-4921" source="id-4903" target="id-4921"/>
+  </folder>
+  <folder name="Views" id="37f94eff-8ddc-44ac-ad22-be763d5a9cdf" type="diagrams">
+    <element xsi:type="archimate:ArchimateDiagramModel" name="Archimate View" id="id-5661" viewpoint="layered"/>
+    <element xsi:type="archimate:ArchimateDiagramModel" name="Layered View" id="id-5584" viewpoint="layered">
+      <child xsi:type="archimate:Group" id="id-5649" name="Infrastructure" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#c3c3c3">
+        <bounds x="20" y="970" width="710" height="270"/>
+        <child xsi:type="archimate:DiagramObject" id="id-5648" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#008040" archimateElement="id-5003">
+          <bounds x="30" y="43" width="120" height="190"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5595" lineColor="#000000" source="id-5648" target="id-5655" archimateRelationship="id-5003-146-5008"/>
+          <child xsi:type="archimate:DiagramObject" id="id-5646" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#c9e7b7" archimateElement="id-4999">
+            <bounds x="10" y="90" width="90" height="40"/>
+          </child>
+          <child xsi:type="archimate:DiagramObject" id="id-5647" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#c9e7b7" archimateElement="id-4998">
+            <bounds x="10" y="40" width="90" height="40"/>
+          </child>
+          <child xsi:type="archimate:DiagramObject" id="id-5645" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#c9e7b7" archimateElement="id-5000">
+            <bounds x="8" y="140" width="93" height="38"/>
+          </child>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-5643" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#008040" archimateElement="id-5004">
+          <bounds x="190" y="93" width="220" height="90"/>
+          <child xsi:type="archimate:DiagramObject" id="id-5641" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#c9e7b7" archimateElement="id-4996">
+            <bounds x="110" y="30" width="80" height="50"/>
+          </child>
+          <child xsi:type="archimate:DiagramObject" id="id-5642" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#c9e7b7" archimateElement="id-4996">
+            <bounds x="10" y="30" width="80" height="50"/>
+          </child>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-5644" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#c9e7b7" archimateElement="id-4995">
+          <bounds x="440" y="113" width="90" height="50"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5594" lineColor="#000000" source="id-5644" target="id-5654" archimateRelationship="id-4995-146-5009"/>
+        </child>
+      </child>
+      <child xsi:type="archimate:Group" id="id-5634" name="Business processes and internal actors / roles" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ebebeb">
+        <bounds x="20" y="330" width="710" height="150"/>
+        <child xsi:type="archimate:DiagramObject" id="id-5632" targetConnections="id-5623" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#80ff80" archimateElement="id-4956">
+          <bounds x="11" y="43" width="450" height="80"/>
+          <child xsi:type="archimate:DiagramObject" id="id-5629" targetConnections="id-5610 id-5608" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffffb5" archimateElement="id-4960">
+            <bounds x="10" y="30" width="100" height="40"/>
+            <sourceConnection xsi:type="archimate:Connection" id="id-5614" lineColor="#000000" source="id-5629" target="id-5628" archimateRelationship="id-4960-118-4957"/>
+            <sourceConnection xsi:type="archimate:Connection" id="id-5616" lineColor="#000000" source="id-5629" target="id-5651" archimateRelationship="id-4960-108-4964"/>
+          </child>
+          <child xsi:type="archimate:DiagramObject" id="id-5630" targetConnections="id-5613 id-5607" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffffb5" archimateElement="id-4959">
+            <bounds x="340" y="30" width="100" height="40"/>
+            <sourceConnection xsi:type="archimate:Connection" id="id-5617" lineColor="#000000" source="id-5630" target="id-5652" archimateRelationship="id-4959-108-4967"/>
+          </child>
+          <child xsi:type="archimate:DiagramObject" id="id-5628" targetConnections="id-5614" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffffb5" archimateElement="id-4957">
+            <bounds x="130" y="30" width="90" height="40"/>
+            <sourceConnection xsi:type="archimate:Connection" id="id-5615" lineColor="#000000" source="id-5628" target="id-5631" archimateRelationship="id-4957-118-4958"/>
+            <sourceConnection xsi:type="archimate:Connection" id="id-5620" lineColor="#000000" source="id-5628" target="id-5650" archimateRelationship="id-4957-108-4965"/>
+          </child>
+          <child xsi:type="archimate:DiagramObject" id="id-5631" targetConnections="id-5615" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffffb5" archimateElement="id-4958">
+            <bounds x="238" y="30" width="82" height="40"/>
+            <sourceConnection xsi:type="archimate:Connection" id="id-5613" lineColor="#000000" source="id-5631" target="id-5630" archimateRelationship="id-4958-118-4959"/>
+          </child>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-5627" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ff8080" archimateElement="id-4926">
+          <bounds x="582" y="63" width="115" height="40"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5622" lineColor="#000000" source="id-5627" target="id-5633" archimateRelationship="id-4926-116-4910"/>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-5633" targetConnections="id-5622" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ff8080" archimateElement="id-4910">
+          <bounds x="489" y="63" width="80" height="40"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5623" lineColor="#000000" source="id-5633" target="id-5632" archimateRelationship="id-4910-116-4956"/>
+        </child>
+      </child>
+      <child xsi:type="archimate:Group" id="id-5640" name="Application Components and Services" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#d7d7d7">
+        <bounds x="20" y="660" width="710" height="130"/>
+        <child xsi:type="archimate:DiagramObject" id="id-5636" targetConnections="id-5606 id-5602 id-5603" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#b5ffff" archimateElement="id-4976">
+          <bounds x="270" y="43" width="120" height="60"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5698" lineColor="#000000" source="id-5636" target="id-5695" archimateRelationship="id-4976-146-5692"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5596" lineColor="#000000" source="id-5636" target="id-5639" archimateRelationship="id-4976-146-4984"/>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-5637" targetConnections="id-5604" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#b5ffff" archimateElement="id-4975">
+          <bounds x="10" y="43" width="120" height="60"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5702" lineColor="#000000" source="id-5637" target="id-5696" archimateRelationship="id-4975-146-5693"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5599" lineColor="#000000" source="id-5637" target="id-5635" archimateRelationship="id-4975-146-4985"/>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-5638" targetConnections="id-5605 id-5601" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#b5ffff" archimateElement="id-4974">
+          <bounds x="530" y="43" width="110" height="60"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5700" lineColor="#000000" source="id-5638" target="id-5697" archimateRelationship="id-4974-146-5691"/>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-5639" targetConnections="id-5596" font="1|Arial|8.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#0080c0" archimateElement="id-4984">
+          <bounds x="420" y="53" width="87" height="40"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5605" lineColor="#000000" source="id-5639" target="id-5638" archimateRelationship="id-4984-144-4974"/>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-5635" targetConnections="id-5599" font="1|Arial|8.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#0080c0" archimateElement="id-4985">
+          <bounds x="160" y="53" width="80" height="40"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5606" lineColor="#000000" source="id-5635" target="id-5636" archimateRelationship="id-4985-144-4976"/>
+        </child>
+      </child>
+      <child xsi:type="archimate:Group" id="id-5653" name="External Business Services" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#f5f5f5">
+        <bounds x="20" y="170" width="710" height="130"/>
+        <child xsi:type="archimate:DiagramObject" id="id-5650" targetConnections="id-5620" font="1|Arial|8.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffff80" archimateElement="id-4965">
+          <bounds x="132" y="43" width="110" height="60"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5609" lineColor="#000000" source="id-5650" target="id-5625" archimateRelationship="id-4965-144-4911"/>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-5651" targetConnections="id-5616" font="1|Arial|8.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffff80" archimateElement="id-4964">
+          <bounds x="20" y="43" width="103" height="60"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5612" lineColor="#000000" source="id-5651" target="id-5625" archimateRelationship="id-4964-144-4911"/>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-5652" targetConnections="id-5617" font="1|Arial|8.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffff80" archimateElement="id-4967">
+          <bounds x="352" y="43" width="100" height="60"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5611" lineColor="#000000" source="id-5652" target="id-5625" archimateRelationship="id-4967-144-4911"/>
+        </child>
+      </child>
+      <child xsi:type="archimate:Group" id="id-5626" name="External Roles and Actors" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#d2d7d7">
+        <bounds x="20" y="20" width="710" height="120"/>
+        <child xsi:type="archimate:DiagramObject" id="id-5624" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ff8080" archimateElement="id-4927">
+          <bounds x="370" y="43" width="90" height="40"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5621" lineColor="#000000" source="id-5624" target="id-5625" archimateRelationship="id-4927-116-4911"/>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-5625" targetConnections="id-5609 id-5612 id-5611 id-5621" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ff8080" archimateElement="id-4911">
+          <bounds x="220" y="43" width="90" height="40"/>
+        </child>
+      </child>
+      <child xsi:type="archimate:Group" id="id-5656" name="External infrastructure services" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#cdcdcd">
+        <bounds x="20" y="820" width="710" height="120"/>
+        <child xsi:type="archimate:DiagramObject" id="id-5654" targetConnections="id-5594" font="1|Arial|8.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#c9e7b7" archimateElement="id-5009">
+          <bounds x="431" y="43" width="109" height="40"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5601" lineColor="#000000" source="id-5654" target="id-5638" archimateRelationship="id-5009-144-4974"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5602" lineColor="#000000" source="id-5654" target="id-5636" archimateRelationship="id-5009-144-4976"/>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-5655" targetConnections="id-5595" font="1|Arial|8.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#c9e7b7" archimateElement="id-5008">
+          <bounds x="40" y="43" width="100" height="40"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5603" lineColor="#000000" source="id-5655" target="id-5636" archimateRelationship="id-5008-144-4976"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5604" lineColor="#000000" source="id-5655" target="id-5637" archimateRelationship="id-5008-144-4975"/>
+        </child>
+      </child>
+      <child xsi:type="archimate:Group" id="id-5660" name="External Application Services" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#e1e1e1">
+        <bounds x="20" y="510" width="710" height="120"/>
+        <child xsi:type="archimate:DiagramObject" id="id-5695" targetConnections="id-5698" font="1|Arial|8.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#0080c0" archimateElement="id-5692">
+          <bounds x="264" y="43" width="133" height="60"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5610" lineColor="#000000" source="id-5695" target="id-5629" archimateRelationship="id-5692-144-4960">
+            <bendpoint startY="-85" endX="259" endY="75"/>
+            <bendpoint startX="-230" startY="-85" endX="29" endY="75"/>
+          </sourceConnection>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-5696" targetConnections="id-5702" font="1|Arial|8.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#0080c0" archimateElement="id-5693">
+          <bounds x="20" y="43" width="101" height="60"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5608" lineColor="#000000" source="id-5696" target="id-5629" archimateRelationship="id-5693-144-4960"/>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-5697" targetConnections="id-5700" font="1|Arial|8.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#0080c0" archimateElement="id-5691">
+          <bounds x="540" y="43" width="90" height="60"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5607" lineColor="#000000" source="id-5697" target="id-5630" archimateRelationship="id-5691-144-4959">
+            <bendpoint startY="-85" endX="184" endY="75"/>
+            <bendpoint startX="-184" startY="-85" endY="75"/>
+          </sourceConnection>
+        </child>
+      </child>
+    </element>
+    <element xsi:type="archimate:ArchimateDiagramModel" name="Application Structure View" id="id-5560" viewpoint="layered">
+      <child xsi:type="archimate:DiagramObject" id="id-5580" font="1|Arial|12.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#0db0ff" archimateElement="id-4977">
+        <bounds x="30" y="40" width="340" height="290"/>
+        <child xsi:type="archimate:DiagramObject" id="id-5576" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#8080ff" archimateElement="id-4980">
+          <bounds x="190" y="130" width="140" height="60"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5572" lineColor="#000000" source="id-5576" target="id-5581" archimateRelationship="id-4980-156-4991"/>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-5577" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#8080ff" archimateElement="id-4979">
+          <bounds x="20" y="130" width="140" height="60"/>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-5578" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#8080ff" archimateElement="id-4976">
+          <bounds x="190" y="200" width="140" height="60"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5570" lineColor="#000000" source="id-5578" target="id-5583" archimateRelationship="id-4976-156-4989"/>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-5579" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#8080ff" archimateElement="id-4978">
+          <bounds x="190" y="60" width="140" height="60"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5571" lineColor="#000000" source="id-5579" target="id-5582" archimateRelationship="id-4978-156-4990"/>
+        </child>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5581" targetConnections="id-5572" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#80ffff" archimateElement="id-4991">
+        <bounds x="430" y="170" width="120" height="60"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5582" targetConnections="id-5571" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#80ffff" archimateElement="id-4990">
+        <bounds x="430" y="100" width="120" height="60"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5583" targetConnections="id-5570" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#80ffff" archimateElement="id-4989">
+        <bounds x="430" y="240" width="120" height="60"/>
+      </child>
+    </element>
+    <element xsi:type="archimate:ArchimateDiagramModel" name="Technical Infrastructure View" id="id-5513" viewpoint="layered">
+      <child xsi:type="archimate:Group" id="id-5551" name="Archisurance" lineColor="#5c5c5c" fillColor="#dafecb">
+        <bounds x="10" y="90" width="450" height="420"/>
+        <child xsi:type="archimate:DiagramObject" id="id-5549" font="1|Arial|12.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#008040" archimateElement="id-5003">
+          <bounds x="20" y="93" width="120" height="200"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5526" lineColor="#000000" source="id-5549" target="id-5550" archimateRelationship="id-5003-158-4992"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5534" lineColor="#000000" source="id-5549" target="id-5557" archimateRelationship="id-5003-146-5007"/>
+          <child xsi:type="archimate:DiagramObject" id="id-5546" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#c9e7b7" archimateElement="id-4999">
+            <bounds x="10" y="90" width="90" height="40"/>
+          </child>
+          <child xsi:type="archimate:DiagramObject" id="id-5547" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#c9e7b7" archimateElement="id-4998">
+            <bounds x="10" y="40" width="90" height="40"/>
+          </child>
+          <child xsi:type="archimate:DiagramObject" id="id-5548" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#c9e7b7" archimateElement="id-5000">
+            <bounds x="8" y="140" width="93" height="38"/>
+          </child>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-5544" font="1|Arial|12.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#008040" archimateElement="id-5004">
+          <bounds x="120" y="303" width="220" height="90"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5524" lineColor="#000000" source="id-5544" target="id-5550" archimateRelationship="id-5004-158-4992"/>
+          <child xsi:type="archimate:DiagramObject" id="id-5542" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#c9e7b7" archimateElement="id-4996">
+            <bounds x="10" y="30" width="80" height="50"/>
+          </child>
+          <child xsi:type="archimate:DiagramObject" id="id-5543" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#c9e7b7" archimateElement="id-4996">
+            <bounds x="110" y="30" width="80" height="50"/>
+          </child>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-5541" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ff8080" archimateElement="id-5002">
+          <bounds x="330" y="163" width="100" height="60"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5530" lineColor="#000000" source="id-5541" target="id-5550" archimateRelationship="id-5002-158-4992"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5532" lineColor="#000000" source="id-5541" target="id-5556" archimateRelationship="id-5002-158-4993"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5536" lineColor="#000000" source="id-5541" target="id-5558" archimateRelationship="id-5002-146-5006"/>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-5545" targetConnections="id-5538" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#c9e7b7" archimateElement="id-4995">
+          <bounds x="180" y="43" width="100" height="60"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5533" lineColor="#000000" source="id-5545" target="id-5559" archimateRelationship="id-4995-146-5005"/>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-5550" targetConnections="id-5526 id-5524 id-5530" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#c9e7b7" archimateElement="id-4992">
+          <bounds x="190" y="173" width="80" height="40"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5538" lineColor="#000000" source="id-5550" target="id-5545" archimateRelationship="id-4992-122-4995"/>
+        </child>
+      </child>
+      <child xsi:type="archimate:Group" id="id-5555" name="Intermediary" lineColor="#5c5c5c" fillColor="#dafecb">
+        <bounds x="570" y="210" width="370" height="130"/>
+        <child xsi:type="archimate:DiagramObject" id="id-5553" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ff8080" archimateElement="id-5002">
+          <bounds x="20" y="43" width="90" height="60"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5527" lineColor="#000000" source="id-5553" target="id-5552" archimateRelationship="id-5002-158-4992"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5531" lineColor="#000000" source="id-5553" target="id-5556" archimateRelationship="id-5002-158-4993"/>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-5554" targetConnections="id-5539" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#c9e7b7" archimateElement="id-4994">
+          <bounds x="276" y="48" width="80" height="50"/>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-5552" targetConnections="id-5527" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#c9e7b7" archimateElement="id-4992">
+          <bounds x="140" y="53" width="80" height="40"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5539" lineColor="#000000" source="id-5552" target="id-5554" archimateRelationship="id-4992-122-4994"/>
+        </child>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5557" targetConnections="id-5534" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#008040" archimateElement="id-5007">
+        <bounds x="30" y="20" width="120" height="40"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5558" targetConnections="id-5536" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#008040" archimateElement="id-5006">
+        <bounds x="330" y="20" width="120" height="40"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5559" targetConnections="id-5533" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#008040" archimateElement="id-5005">
+        <bounds x="180" y="20" width="120" height="40"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5556" targetConnections="id-5532 id-5531" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#c9e7b7" archimateElement="id-4993">
+        <bounds x="468" y="264" width="80" height="40"/>
+      </child>
+    </element>
+    <element xsi:type="archimate:ArchimateDiagramModel" name="Service Realisation View" id="id-5481" viewpoint="layered">
+      <child xsi:type="archimate:DiagramObject" id="id-5505" targetConnections="id-5495 id-5492 id-5493 id-5494 id-5491" font="1|Arial|14.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffffb5" archimateElement="id-4908">
+        <bounds x="30" y="20" width="610" height="60"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5510" font="1|Arial|12.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffffb5" archimateElement="id-4956">
+        <bounds x="160" y="230" width="190" height="60"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5497" lineColor="#000000" source="id-5510" target="id-5507" archimateRelationship="id-4956-118-4953"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5499" lineColor="#000000" source="id-5510" target="id-5509" archimateRelationship="id-4956-108-4967"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5500" lineColor="#000000" source="id-5510" target="id-5503" archimateRelationship="id-4956-108-4964"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5507" targetConnections="id-5497" font="1|Arial|12.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffffb5" archimateElement="id-4953">
+        <bounds x="371" y="230" width="137" height="60"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5496" lineColor="#000000" source="id-5507" target="id-5506" archimateRelationship="id-4953-118-4954"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5498" lineColor="#000000" source="id-5507" target="id-5512" archimateRelationship="id-4953-108-4965"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5504" font="1|Arial|12.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffffb5" archimateElement="id-4961">
+        <bounds x="17" y="230" width="125" height="60"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5502" lineColor="#000000" source="id-5504" target="id-5508" archimateRelationship="id-4961-108-4966"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5506" targetConnections="id-5496" font="1|Arial|12.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffffb5" archimateElement="id-4954">
+        <bounds x="530" y="230" width="120" height="60"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5501" lineColor="#000000" source="id-5506" target="id-5511" archimateRelationship="id-4954-108-4963"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5503" targetConnections="id-5500" font="1|Arial|8.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#0080c0" archimateElement="id-4964">
+        <bounds x="141" y="130" width="109" height="60"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5495" lineColor="#000000" source="id-5503" target="id-5505" archimateRelationship="id-4964-144-4908"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5508" targetConnections="id-5502" font="1|Arial|8.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#0080c0" archimateElement="id-4966">
+        <bounds x="28" y="130" width="103" height="60"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5492" lineColor="#000000" source="id-5508" target="id-5505" archimateRelationship="id-4966-144-4908"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5512" targetConnections="id-5498" font="1|Arial|8.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#0080c0" archimateElement="id-4965">
+        <bounds x="388" y="130" width="103" height="60"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5493" lineColor="#000000" source="id-5512" target="id-5505" archimateRelationship="id-4965-144-4908"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5509" targetConnections="id-5499" font="1|Arial|8.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#0080c0" archimateElement="id-4967">
+        <bounds x="270" y="130" width="100" height="60"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5494" lineColor="#000000" source="id-5509" target="id-5505" archimateRelationship="id-4967-144-4908"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5511" targetConnections="id-5501" font="1|Arial|8.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#0080c0" archimateElement="id-4963">
+        <bounds x="540" y="130" width="100" height="60"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5491" lineColor="#000000" source="id-5511" target="id-5505" archimateRelationship="id-4963-144-4908"/>
+      </child>
+    </element>
+    <element xsi:type="archimate:ArchimateDiagramModel" name="Business Process View" id="id-5415" viewpoint="layered">
+      <child xsi:type="archimate:DiagramObject" id="id-5475" font="1|Arial|12.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffff80" archimateElement="id-4956">
+        <bounds x="170" y="154" width="660" height="90"/>
+        <child xsi:type="archimate:DiagramObject" id="id-5471" targetConnections="id-5438" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffffb5" archimateElement="id-4959">
+          <bounds x="510" y="20" width="120" height="60"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5431" lineColor="#000000" source="id-5471" target="id-5478" archimateRelationship="id-4959-120-4943"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5432" lineColor="#000000" source="id-5471" target="id-5460" archimateRelationship="id-4959-120-4943"/>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-5472" targetConnections="id-5441" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffffb5" archimateElement="id-4958">
+          <bounds x="350" y="20" width="120" height="60"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5427" lineColor="#000000" source="id-5472" target="id-5477" archimateRelationship="id-4958-120-4944"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5438" lineColor="#000000" source="id-5472" target="id-5471" archimateRelationship="id-4958-118-4959"/>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-5473" targetConnections="id-5443" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffffb5" archimateElement="id-4960">
+          <bounds x="20" y="20" width="120" height="60"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5428" lineColor="#000000" source="id-5473" target="id-5477" archimateRelationship="id-4960-120-4944"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5429" lineColor="#000000" source="id-5473" target="id-5478" archimateRelationship="id-4960-120-4943"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5439" lineColor="#000000" source="id-5473" target="id-5474" archimateRelationship="id-4960-118-4957"/>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-5474" targetConnections="id-5439" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffffb5" archimateElement="id-4957">
+          <bounds x="180" y="20" width="120" height="60"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5433" lineColor="#000000" source="id-5474" target="id-5478" archimateRelationship="id-4957-120-4943"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5435" lineColor="#000000" source="id-5474" target="id-5477" archimateRelationship="id-4957-120-4944"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5436" lineColor="#000000" source="id-5474" target="id-5462" archimateRelationship="id-4957-120-4942"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5441" lineColor="#000000" source="id-5474" target="id-5472" archimateRelationship="id-4957-118-4958"/>
+        </child>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5466" font="1|Arial|12.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffff80" archimateElement="id-4961">
+        <bounds x="170" y="394" width="587" height="100"/>
+        <child xsi:type="archimate:DiagramObject" id="id-5463" targetConnections="id-5445 id-5442" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffffb5" archimateElement="id-4950">
+          <bounds x="15" y="30" width="150" height="60"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5437" lineColor="#000000" source="id-5463" target="id-5465" archimateRelationship="id-4950-118-4955"/>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-5465" targetConnections="id-5437 id-5448" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffffb5" archimateElement="id-4955">
+          <bounds x="240" y="30" width="129" height="60"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5440" lineColor="#000000" source="id-5465" target="id-5464" archimateRelationship="id-4955-118-4949"/>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-5464" targetConnections="id-5440 id-5446" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffffb5" archimateElement="id-4949">
+          <bounds x="432" y="30" width="120" height="60"/>
+        </child>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5461" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffffb5" archimateElement="id-4912">
+        <bounds x="190" y="514" width="140" height="60"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5445" lineColor="#000000" source="id-5461" target="id-5463" archimateRelationship="id-4912-116-4950"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5449" lineColor="#000000" source="id-5461" target="id-5470" archimateRelationship="id-4912-114-4910"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5450" lineColor="#000000" source="id-5461" target="id-5469" archimateRelationship="id-4912-114-4909">
+          <bendpoint startX="131" startY="26" endX="-19" endY="-64"/>
+        </sourceConnection>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5451" lineColor="#000000" source="id-5461" target="id-5480" archimateRelationship="id-4912-114-4908"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5468" targetConnections="id-5426" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffff80" archimateElement="id-4952">
+        <bounds x="20" y="424" width="120" height="60"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5442" lineColor="#000000" source="id-5468" target="id-5463" archimateRelationship="id-4952-118-4950"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5469" targetConnections="id-5450 id-5454" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffffb5" archimateElement="id-4909">
+        <bounds x="350" y="604" width="120" height="60"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5470" targetConnections="id-5449 id-5453" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffffb5" archimateElement="id-4910">
+        <bounds x="414" y="514" width="120" height="60"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5448" lineColor="#000000" source="id-5470" target="id-5465" archimateRelationship="id-4910-116-4955"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5476" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffffb5" archimateElement="id-4913">
+        <bounds x="603" y="663" width="120" height="60"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5446" lineColor="#000000" source="id-5476" target="id-5464" archimateRelationship="id-4913-116-4949"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5452" lineColor="#000000" source="id-5476" target="id-5480" archimateRelationship="id-4913-114-4908"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5453" lineColor="#000000" source="id-5476" target="id-5470" archimateRelationship="id-4913-114-4910">
+          <bendpoint startX="-56" startY="-150" endX="133" endY="-1"/>
+        </sourceConnection>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5454" lineColor="#000000" source="id-5476" target="id-5469" archimateRelationship="id-4913-114-4909">
+          <bendpoint startX="-106" startY="-59" endX="147"/>
+        </sourceConnection>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5480" targetConnections="id-5451 id-5452" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffffb5" archimateElement="id-4908">
+        <bounds x="200" y="663" width="120" height="60"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5426" lineColor="#000000" source="id-5480" target="id-5468" archimateRelationship="id-4908-154-4952">
+          <bendpoint startX="-180" endY="239"/>
+        </sourceConnection>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5460" targetConnections="id-5432" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffffb5" archimateElement="id-4943">
+        <bounds x="680" y="302" width="120" height="55"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5462" targetConnections="id-5436" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#0080ff" archimateElement="id-4942">
+        <bounds x="408" y="310" width="120" height="55"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5478" targetConnections="id-5431 id-5429 id-5433" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#0080ff" archimateElement="id-4943">
+        <bounds x="190" y="310" width="120" height="55"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5477" targetConnections="id-5427 id-5428 id-5435 id-5444" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#0080ff" archimateElement="id-4944">
+        <bounds x="360" y="24" width="100" height="50"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5479" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffff80" archimateElement="id-4951">
+        <bounds x="20" y="184" width="120" height="40"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5443" lineColor="#000000" source="id-5479" target="id-5473" archimateRelationship="id-4951-118-4960"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5467" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffff80" archimateElement="id-4938">
+        <bounds x="180" y="24" width="80" height="50"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5444" lineColor="#000000" source="id-5467" target="id-5477" archimateRelationship="id-4938-108-4944"/>
+      </child>
+    </element>
+    <element xsi:type="archimate:ArchimateDiagramModel" name="Organisation Structure View" id="id-5387" viewpoint="layered">
+      <child xsi:type="archimate:DiagramObject" id="id-5414" font="1|Arial|12.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffff80" archimateElement="id-4926">
+        <bounds x="20" y="20" width="440" height="500"/>
+        <child xsi:type="archimate:DiagramObject" id="id-5406" font="1|Arial|12.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#0080c0" archimateElement="id-4922">
+          <bounds x="20" y="170" width="400" height="100"/>
+          <child xsi:type="archimate:DiagramObject" id="id-5403" font="1|Arial|12.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#8080c0" archimateElement="id-4925">
+            <bounds x="270" y="30" width="120" height="60"/>
+          </child>
+          <child xsi:type="archimate:DiagramObject" id="id-5404" font="1|Arial|12.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#8080c0" archimateElement="id-4924">
+            <bounds x="140" y="30" width="120" height="60"/>
+          </child>
+          <child xsi:type="archimate:DiagramObject" id="id-5405" font="1|Arial|12.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#8080c0" archimateElement="id-4923">
+            <bounds x="10" y="30" width="120" height="60"/>
+          </child>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-5411" font="1|Arial|12.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffffb5" archimateElement="id-4917">
+          <bounds x="20" y="50" width="400" height="100"/>
+          <child xsi:type="archimate:DiagramObject" id="id-5410" font="1|Arial|12.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffffb5" archimateElement="id-4918">
+            <bounds x="215" y="20" width="169" height="60"/>
+          </child>
+          <child xsi:type="archimate:DiagramObject" id="id-5409" font="1|Arial|12.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffffb5" archimateElement="id-4919">
+            <bounds x="12" y="20" width="155" height="60"/>
+          </child>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-5407" font="1|Arial|12.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#808040" archimateElement="id-4921">
+          <bounds x="20" y="410" width="400" height="60"/>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-5412" font="1|Arial|12.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ff8040" archimateElement="id-4916">
+          <bounds x="150" y="310" width="140" height="60"/>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-5408" font="1|Arial|12.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ff8040" archimateElement="id-4920">
+          <bounds x="20" y="310" width="120" height="60"/>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-5413" font="1|Arial|12.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ff8040" archimateElement="id-4915">
+          <bounds x="300" y="310" width="120" height="60"/>
+        </child>
+      </child>
+    </element>
+    <element xsi:type="archimate:ArchimateDiagramModel" name="Business Function View" id="id-5357" viewpoint="layered">
+      <child xsi:type="archimate:DiagramObject" id="id-5385" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffff80" archimateElement="id-4910">
+        <bounds x="200" y="120" width="360" height="360"/>
+        <child xsi:type="archimate:DiagramObject" id="id-5384" font="1|Arial|12.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffffb5" archimateElement="id-4932">
+          <bounds x="15" y="260" width="150" height="60"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5375" lineColor="#000000" source="id-5384" target="id-5379" archimateRelationship="id-4932-124-4937"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5376" font="1|Arial|8.0|0|COCOA|1|" fontColor="#000000" lineColor="#000000" source="id-5384" target="id-5383" archimateRelationship="id-4932-124-4933"/>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-5379" targetConnections="id-5375 id-5374 id-5369" font="1|Arial|12.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffffb5" archimateElement="id-4937">
+          <bounds x="196" y="260" width="147" height="60"/>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-5380" font="1|Arial|12.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffffb5" archimateElement="id-4936">
+          <bounds x="200" y="140" width="140" height="60"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5367" font="1|Arial|8.0|0|COCOA|1|" fontColor="#000000" lineColor="#000000" source="id-5380" target="id-5377" archimateRelationship="id-4936-160-4908"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5373" lineColor="#000000" source="id-5380" target="id-5381" archimateRelationship="id-4936-124-4935">
+            <bendpoint startX="24" startY="-59" endX="24" endY="61"/>
+          </sourceConnection>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5374" lineColor="#000000" source="id-5380" target="id-5379" archimateRelationship="id-4936-124-4937">
+            <bendpoint startX="-25" startY="58" endX="-24" endY="-62"/>
+          </sourceConnection>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-5381" targetConnections="id-5373 id-5371" font="1|Arial|12.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffffb5" archimateElement="id-4935">
+          <bounds x="200" y="20" width="140" height="60"/>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-5382" targetConnections="id-5372 id-5368" font="1|Arial|12.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffffb5" archimateElement="id-4934">
+          <bounds x="20" y="20" width="140" height="60"/>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-5383" targetConnections="id-5376" font="1|Arial|12.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffffb5" archimateElement="id-4933">
+          <bounds x="20" y="140" width="140" height="60"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5372" font="1|Arial|8.0|0|COCOA|1|" fontColor="#000000" lineColor="#000000" source="id-5383" target="id-5382" archimateRelationship="id-4933-124-4934"/>
+        </child>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5378" targetConnections="id-5370" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffffb5" archimateElement="id-4909">
+        <bounds x="20" y="30" width="120" height="450"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5368" font="1|Arial|8.0|0|COCOA|1|" fontColor="#000000" lineColor="#000000" source="id-5378" target="id-5382" archimateRelationship="id-4909-160-4934">
+          <bendpoint startX="87" startY="-85" endX="-123"/>
+        </sourceConnection>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5377" targetConnections="id-5367" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffffb5" archimateElement="id-4908">
+        <bounds x="610" y="30" width="150" height="300"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5370" font="1|Arial|8.0|0|COCOA|1|" fontColor="#000000" lineColor="#000000" source="id-5377" target="id-5378" archimateRelationship="id-4908-160-4909">
+          <bendpoint startX="-136" startY="-92" endX="469" endY="-167"/>
+          <bendpoint startX="-335" startY="-92" endX="270" endY="-167"/>
+          <bendpoint startX="-502" startY="-95" endX="103" endY="-170"/>
+        </sourceConnection>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5371" font="1|Arial|8.0|0|COCOA|1|" fontColor="#000000" lineColor="#000000" source="id-5377" target="id-5381" archimateRelationship="id-4908-160-4935">
+          <bendpoint startX="-100" startY="-45" endX="115" endY="-35"/>
+        </sourceConnection>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5386" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffffb5" archimateElement="id-4907">
+        <bounds x="610" y="360" width="150" height="120"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5369" lineColor="#000000" source="id-5386" target="id-5379" archimateRelationship="id-4907-160-4937">
+          <bendpoint startX="-107" startY="13" endX="109" endY="23"/>
+        </sourceConnection>
+      </child>
+    </element>
+    <element xsi:type="archimate:ArchimateDiagramModel" name="Information Structure View" id="id-5312" viewpoint="layered">
+      <child xsi:type="archimate:DiagramObject" id="id-5352" targetConnections="id-5326" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffff80" archimateElement="id-4941">
+        <bounds x="480" y="330" width="133" height="55"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5338" lineColor="#000000" source="id-5352" target="id-5351" archimateRelationship="id-4941-110-4942">
+          <bendpoint startX="1" startY="-49" endX="157" endY="51"/>
+          <bendpoint startX="-160" startY="-49" endX="-4" endY="51"/>
+        </sourceConnection>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5354" targetConnections="id-5325" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffff80" archimateElement="id-4939">
+        <bounds x="640" y="330" width="130" height="55"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5339" lineColor="#000000" source="id-5354" target="id-5351" archimateRelationship="id-4939-110-4942">
+          <bendpoint startX="1" startY="-49" endX="316" endY="51"/>
+          <bendpoint startX="-319" startY="-49" endX="-4" endY="51"/>
+        </sourceConnection>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5348" targetConnections="id-5327" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffff80" archimateElement="id-4946">
+        <bounds x="12" y="330" width="128" height="55"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5337" lineColor="#000000" source="id-5348" target="id-5351" archimateRelationship="id-4946-110-4942">
+          <bendpoint startX="1" startY="-49" endX="-313" endY="51"/>
+          <bendpoint startX="310" startY="-49" endX="-4" endY="51"/>
+        </sourceConnection>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5343" targetConnections="id-5324" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffff80" archimateElement="id-4948">
+        <bounds x="327" y="330" width="126" height="55"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5340" lineColor="#000000" source="id-5343" target="id-5351" archimateRelationship="id-4948-110-4942"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5342" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#80ffff" archimateElement="id-4991">
+        <bounds x="490" y="130" width="120" height="55"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5329" lineColor="#000000" source="id-5342" target="id-5345" archimateRelationship="id-4991-108-4944"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5344" targetConnections="id-5328" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffff80" archimateElement="id-4947">
+        <bounds x="160" y="330" width="120" height="55"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5341" lineColor="#000000" source="id-5344" target="id-5351" archimateRelationship="id-4947-110-4942">
+          <bendpoint startX="1" startY="-49" endX="-169" endY="51"/>
+          <bendpoint startX="166" startY="-49" endX="-4" endY="51"/>
+        </sourceConnection>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5345" targetConnections="id-5329 id-5336 id-5322 id-5331" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffff80" archimateElement="id-4944">
+        <bounds x="490" y="230" width="120" height="55"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5346" targetConnections="id-5330 id-5333" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffff80" archimateElement="id-4943">
+        <bounds x="330" y="130" width="120" height="55"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5334" lineColor="#000000" source="id-5346" target="id-5353" archimateRelationship="id-4943-34-4940"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5335" lineColor="#000000" source="id-5346" target="id-5351" archimateRelationship="id-4943-34-4942"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5336" lineColor="#000000" source="id-5346" target="id-5345" archimateRelationship="id-4943-34-4944"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5347" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#80ffff" archimateElement="id-4990">
+        <bounds x="20" y="130" width="120" height="55"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5330" lineColor="#000000" source="id-5347" target="id-5346" archimateRelationship="id-4990-108-4943"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5349" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffff80" archimateElement="id-4945">
+        <bounds x="330" y="30" width="120" height="55"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5333" lineColor="#000000" source="id-5349" target="id-5346" archimateRelationship="id-4945-114-4943"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5350" font="1|Arial|14.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffff80" archimateElement="id-4938">
+        <bounds x="650" y="230" width="120" height="55"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5322" lineColor="#000000" source="id-5350" target="id-5345" archimateRelationship="id-4938-108-4944"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5351" targetConnections="id-5338 id-5339 id-5337 id-5340 id-5341 id-5335" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffff80" archimateElement="id-4942">
+        <bounds x="330" y="230" width="120" height="55"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5331" lineColor="#000000" source="id-5351" target="id-5345" archimateRelationship="id-4942-114-4944"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5332" lineColor="#000000" source="id-5351" target="id-5353" archimateRelationship="id-4942-114-4940"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5353" targetConnections="id-5334 id-5332 id-5323" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffff80" archimateElement="id-4940">
+        <bounds x="170" y="230" width="120" height="55"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5355" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#80ffff" archimateElement="id-4988">
+        <bounds x="20" y="230" width="120" height="55"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5323" lineColor="#000000" source="id-5355" target="id-5353" archimateRelationship="id-4988-108-4940"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5356" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#80ffff" archimateElement="id-4989">
+        <bounds x="330" y="460" width="120" height="55"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5324" lineColor="#000000" source="id-5356" target="id-5343" archimateRelationship="id-4989-108-4948"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5325" lineColor="#000000" source="id-5356" target="id-5354" archimateRelationship="id-4989-108-4939">
+          <bendpoint startX="315" endY="130"/>
+        </sourceConnection>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5326" lineColor="#000000" source="id-5356" target="id-5352" archimateRelationship="id-4989-108-4941"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5327" lineColor="#000000" source="id-5356" target="id-5348" archimateRelationship="id-4989-108-4946">
+          <bendpoint startX="-314" endY="130"/>
+        </sourceConnection>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5328" lineColor="#000000" source="id-5356" target="id-5344" archimateRelationship="id-4989-108-4947"/>
+      </child>
+    </element>
+    <element xsi:type="archimate:ArchimateDiagramModel" name="Application Behaviour View" id="id-5285" viewpoint="layered">
+      <child xsi:type="archimate:DiagramObject" id="id-5309" font="1|Arial|14.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#0080c0" archimateElement="id-4977">
+        <bounds x="10" y="130" width="700" height="160"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5295" lineColor="#000000" source="id-5309" target="id-5302" archimateRelationship="id-4977-146-4987"/>
+        <child xsi:type="archimate:DiagramObject" id="id-5308" font="1|Arial|12.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#8080ff" archimateElement="id-4969">
+          <bounds x="50" y="60" width="620" height="80"/>
+          <child xsi:type="archimate:DiagramObject" id="id-5306" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#b5ffff" archimateElement="id-4971">
+            <bounds x="18" y="20" width="123" height="50"/>
+            <sourceConnection xsi:type="archimate:Connection" id="id-5298" lineColor="#000000" source="id-5306" target="id-5311" archimateRelationship="id-4971-120-4988"/>
+            <sourceConnection xsi:type="archimate:Connection" id="id-5300" lineColor="#000000" source="id-5306" target="id-5305" archimateRelationship="id-4971-118-4972"/>
+          </child>
+          <child xsi:type="archimate:DiagramObject" id="id-5304" targetConnections="id-5301" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#b5ffff" archimateElement="id-4973">
+            <bounds x="320" y="20" width="120" height="50"/>
+            <sourceConnection xsi:type="archimate:Connection" id="id-5297" lineColor="#000000" source="id-5304" target="id-5310" archimateRelationship="id-4973-120-4989"/>
+            <sourceConnection xsi:type="archimate:Connection" id="id-5299" lineColor="#000000" source="id-5304" target="id-5307" archimateRelationship="id-4973-118-4970"/>
+          </child>
+          <child xsi:type="archimate:DiagramObject" id="id-5305" targetConnections="id-5300" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#b5ffff" archimateElement="id-4972">
+            <bounds x="170" y="20" width="120" height="50"/>
+            <sourceConnection xsi:type="archimate:Connection" id="id-5301" lineColor="#000000" source="id-5305" target="id-5304" archimateRelationship="id-4972-118-4973"/>
+          </child>
+          <child xsi:type="archimate:DiagramObject" id="id-5307" targetConnections="id-5299" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#b5ffff" archimateElement="id-4970">
+            <bounds x="470" y="20" width="120" height="50"/>
+            <sourceConnection xsi:type="archimate:Connection" id="id-5296" lineColor="#000000" source="id-5307" target="id-5303" archimateRelationship="id-4970-120-4990"/>
+          </child>
+        </child>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5302" targetConnections="id-5295" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#b5ffff" archimateElement="id-4987">
+        <bounds x="300" y="30" width="120" height="60"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5303" targetConnections="id-5296" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#00ffff" archimateElement="id-4990">
+        <bounds x="530" y="360" width="120" height="60"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5311" targetConnections="id-5298" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#00ffff" archimateElement="id-4988">
+        <bounds x="80" y="360" width="120" height="60"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5310" targetConnections="id-5297" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#00ffff" archimateElement="id-4989">
+        <bounds x="390" y="360" width="100" height="60"/>
+      </child>
+    </element>
+    <element xsi:type="archimate:ArchimateDiagramModel" name="Organisation Tree View" id="id-5248" viewpoint="layered">
+      <child xsi:type="archimate:DiagramObject" id="id-5272" targetConnections="id-5265" font="1|Arial|8.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#0080c0" archimateElement="id-4931">
+        <bounds x="461" y="160" width="137" height="50"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5260" lineColor="#000000" source="id-5272" target="id-5276" archimateRelationship="id-4931-158-4923"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5261" lineColor="#000000" source="id-5272" target="id-5282" archimateRelationship="id-4931-158-4921"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5262" lineColor="#000000" source="id-5272" target="id-5283" archimateRelationship="id-4931-158-4925"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5263" lineColor="#000000" source="id-5272" target="id-5275" archimateRelationship="id-4931-158-4924"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5273" targetConnections="id-5258" font="1|Arial|8.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffff80" archimateElement="id-4918">
+        <bounds x="150" y="250" width="139" height="40"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5278" targetConnections="id-5266" font="1|Arial|8.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ff8040" archimateElement="id-4916">
+        <bounds x="204" y="47" width="116" height="44"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5274" targetConnections="id-5259" font="1|Arial|8.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffff80" archimateElement="id-4919">
+        <bounds x="10" y="250" width="126" height="40"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5277" targetConnections="id-5267" font="1|Arial|8.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#804040" archimateElement="id-4930">
+        <bounds x="768" y="170" width="124" height="40"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5264" lineColor="#000000" source="id-5277" target="id-5281" archimateRelationship="id-4930-158-4920"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5275" targetConnections="id-5263" font="1|Arial|8.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#0080c0" archimateElement="id-4924">
+        <bounds x="430" y="250" width="100" height="40"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5276" targetConnections="id-5260" font="1|Arial|8.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#0080c0" archimateElement="id-4923">
+        <bounds x="320" y="250" width="100" height="40"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5279" targetConnections="id-5268" font="1|Arial|8.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffff80" archimateElement="id-4929">
+        <bounds x="120" y="170" width="100" height="40"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5258" lineColor="#000000" source="id-5279" target="id-5273" archimateRelationship="id-4929-158-4918"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5259" lineColor="#000000" source="id-5279" target="id-5274" archimateRelationship="id-4929-158-4919"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5280" targetConnections="id-5269" font="1|Arial|8.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ff8040" archimateElement="id-4915">
+        <bounds x="730" y="50" width="100" height="40"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5281" targetConnections="id-5264" font="1|Arial|8.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#804040" archimateElement="id-4920">
+        <bounds x="780" y="250" width="100" height="40"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5282" targetConnections="id-5261" font="1|Arial|8.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#0080c0" archimateElement="id-4921">
+        <bounds x="650" y="250" width="100" height="40"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5283" targetConnections="id-5262" font="1|Arial|8.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#0080c0" archimateElement="id-4925">
+        <bounds x="540" y="250" width="100" height="40"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5284" font="1|Arial|8.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#8080ff" archimateElement="id-4928">
+        <bounds x="480" y="20" width="100" height="40"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5265" lineColor="#000000" source="id-5284" target="id-5272" archimateRelationship="id-4928-158-4931"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5266" lineColor="#000000" source="id-5284" target="id-5278" archimateRelationship="id-4928-158-4916"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5267" lineColor="#000000" source="id-5284" target="id-5277" archimateRelationship="id-4928-158-4930"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5268" lineColor="#000000" source="id-5284" target="id-5279" archimateRelationship="id-4928-158-4929"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5269" lineColor="#000000" source="id-5284" target="id-5280" archimateRelationship="id-4928-158-4915"/>
+      </child>
+    </element>
+    <element xsi:type="archimate:ArchimateDiagramModel" name="Business Product View" id="id-5221" viewpoint="layered">
+      <child xsi:type="archimate:Group" id="id-5245" name="Travel Insurance" lineColor="#5c5c5c" fillColor="#d2d7d7">
+        <bounds x="40" y="200" width="670" height="210"/>
+        <child xsi:type="archimate:DiagramObject" id="id-5243" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#0080c0" archimateElement="id-4962">
+          <bounds x="480" y="83" width="150" height="80"/>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-5238" font="1|Arial|8.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#008080" archimateElement="id-4964">
+          <bounds x="20" y="131" width="113" height="53"/>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-5240" font="1|Arial|8.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#008080" archimateElement="id-4966">
+          <bounds x="20" y="51" width="113" height="53"/>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-5242" font="1|Arial|8.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#008080" archimateElement="id-4967">
+          <bounds x="336" y="131" width="104" height="53"/>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-5244" font="1|Arial|8.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#008080" archimateElement="id-4965">
+          <bounds x="336" y="51" width="104" height="53"/>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-5239" targetConnections="id-5231" font="1|Arial|8.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#008080" archimateElement="id-4963">
+          <bounds x="170" y="51" width="100" height="53"/>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-5241" font="1|Arial|8.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#008080" archimateElement="id-4968">
+          <bounds x="170" y="131" width="100" height="53"/>
+        </child>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5247" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffffb5" archimateElement="id-4908">
+        <bounds x="200" y="30" width="120" height="50"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5232" lineColor="#000000" source="id-5247" target="id-5246" archimateRelationship="id-4908-122-5019"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5246" targetConnections="id-5232" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ccccff" archimateElement="id-5019">
+        <bounds x="211" y="120" width="97" height="49"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5231" lineColor="#000000" source="id-5246" target="id-5239" archimateRelationship="id-5019-122-4963"/>
+      </child>
+    </element>
+    <element xsi:type="archimate:ArchimateDiagramModel" name="Actor Cooperation view" id="id-5166" viewpoint="layered">
+      <child xsi:type="archimate:DiagramObject" id="id-5213" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffff80" archimateElement="id-4926">
+        <bounds x="240" y="24" width="440" height="490"/>
+        <child xsi:type="archimate:DiagramObject" id="id-5205" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffff00" archimateElement="id-4922">
+          <bounds x="20" y="280" width="400" height="100"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5185" lineColor="#000000" source="id-5205" target="id-5210" archimateRelationship="id-4922-160-4920">
+            <bendpoint startX="156" startY="71" endX="3" endY="-44"/>
+          </sourceConnection>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5186" lineColor="#000000" source="id-5205" target="id-5209" archimateRelationship="id-4922-160-4921">
+            <bendpoint startX="135" startY="-73" endX="135" endY="47"/>
+          </sourceConnection>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5187" lineColor="#000000" source="id-5205" target="id-5211" archimateRelationship="id-4922-160-4916">
+            <bendpoint startX="9" startY="70" endX="14" endY="-46"/>
+          </sourceConnection>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5188" lineColor="#000000" source="id-5205" target="id-5212" archimateRelationship="id-4922-160-4915">
+            <bendpoint startX="-105" startY="64" endX="55" endY="-51"/>
+          </sourceConnection>
+          <child xsi:type="archimate:DiagramObject" id="id-5204" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffff80" archimateElement="id-4925">
+            <bounds x="290" y="30" width="93" height="50"/>
+          </child>
+          <child xsi:type="archimate:DiagramObject" id="id-5202" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffff80" archimateElement="id-4923">
+            <bounds x="10" y="30" width="78" height="53"/>
+          </child>
+          <child xsi:type="archimate:DiagramObject" id="id-5203" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffff80" archimateElement="id-4924">
+            <bounds x="160" y="30" width="80" height="50"/>
+          </child>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-5208" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffff00" archimateElement="id-4917">
+          <bounds x="20" y="30" width="400" height="100"/>
+          <child xsi:type="archimate:DiagramObject" id="id-5206" targetConnections="id-5183 id-5176 id-5179" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffffb5" archimateElement="id-4918">
+            <bounds x="220" y="20" width="169" height="60"/>
+          </child>
+          <child xsi:type="archimate:DiagramObject" id="id-5207" targetConnections="id-5180" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffffb5" archimateElement="id-4919">
+            <bounds x="10" y="20" width="155" height="60"/>
+            <sourceConnection xsi:type="archimate:Connection" id="id-5182" lineColor="#000000" source="id-5207" target="id-5200" archimateRelationship="id-4919-158-4904"/>
+            <sourceConnection xsi:type="archimate:Connection" id="id-5184" lineColor="#000000" source="id-5207" target="id-5209" archimateRelationship="id-4919-160-4921"/>
+          </child>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-5209" targetConnections="id-5186 id-5184 id-5199 id-5178" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffff00" archimateElement="id-4921">
+          <bounds x="20" y="180" width="400" height="60"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5183" lineColor="#000000" source="id-5209" target="id-5206" archimateRelationship="id-4921-160-4918">
+            <bendpoint startX="57" startY="-68" endX="-47" endY="62"/>
+          </sourceConnection>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-5211" targetConnections="id-5187" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffff00" archimateElement="id-4916">
+          <bounds x="170" y="420" width="91" height="53"/>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-5210" targetConnections="id-5185 id-5189" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffff00" archimateElement="id-4920">
+          <bounds x="330" y="420" width="86" height="50"/>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-5212" targetConnections="id-5188" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffff00" archimateElement="id-4915">
+          <bounds x="20" y="420" width="80" height="50"/>
+        </child>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5218" targetConnections="id-5198" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffffb5" archimateElement="id-4907">
+        <bounds x="850" y="204" width="139" height="60"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5189" lineColor="#000000" source="id-5218" target="id-5210" archimateRelationship="id-4907-160-4920">
+          <bendpoint startX="-79" startY="178" endX="227" endY="-57"/>
+        </sourceConnection>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5216" targetConnections="id-5194 id-5197 id-5195" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffffb5" archimateElement="id-4908">
+        <bounds x="8" y="74" width="120" height="60"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5219" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffffb5" archimateElement="id-4914">
+        <bounds x="700" y="204" width="120" height="60"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5198" lineColor="#000000" source="id-5219" target="id-5218" archimateRelationship="id-4914-114-4907"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5199" lineColor="#000000" source="id-5219" target="id-5209" archimateRelationship="id-4914-114-4921"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5220" targetConnections="id-5191 id-5196" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffffb5" archimateElement="id-4909">
+        <bounds x="850" y="74" width="120" height="60"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5200" targetConnections="id-5182" font="1|Arial|8.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffffb5" archimateElement="id-4904">
+        <bounds x="205" y="74" width="25" height="27"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5194" lineColor="#000000" source="id-5200" target="id-5216" archimateRelationship="id-4904-144-4908"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5215" font="1|Arial|8.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffffb5" archimateElement="id-4904">
+        <bounds x="705" y="74" width="25" height="27"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5176" lineColor="#000000" source="id-5215" target="id-5206" archimateRelationship="id-4904-158-4918"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5191" lineColor="#000000" source="id-5215" target="id-5220" archimateRelationship="id-4904-144-4909"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5201" font="1|Arial|8.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffffb5" archimateElement="id-4906">
+        <bounds x="205" y="112" width="25" height="25"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5180" lineColor="#000000" source="id-5201" target="id-5207" archimateRelationship="id-4906-158-4919"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5197" lineColor="#000000" source="id-5201" target="id-5216" archimateRelationship="id-4906-144-4908"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5214" font="1|Arial|8.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffffb5" archimateElement="id-4905">
+        <bounds x="705" y="112" width="25" height="25"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5179" lineColor="#000000" source="id-5214" target="id-5206" archimateRelationship="id-4905-158-4918"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5196" lineColor="#000000" source="id-5214" target="id-5220" archimateRelationship="id-4905-144-4909"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5217" font="1|Arial|8.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffffb5" archimateElement="id-4903">
+        <bounds x="195" y="220" width="25" height="25"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5178" lineColor="#000000" source="id-5217" target="id-5209" archimateRelationship="id-4903-158-4921"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5195" lineColor="#000000" source="id-5217" target="id-5216" archimateRelationship="id-4903-144-4908"/>
+      </child>
+    </element>
+    <element xsi:type="archimate:ArchimateDiagramModel" name="Business Cooperation View" id="id-5120" viewpoint="layered">
+      <child xsi:type="archimate:DiagramObject" id="id-5152" font="1|Arial|12.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffff80" archimateElement="id-4961">
+        <bounds x="154" y="394" width="680" height="110"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5143" lineColor="#000000" source="id-5152" target="id-5164" archimateRelationship="id-4961-108-4966">
+          <bendpoint startX="-420" startY="1" endY="147"/>
+        </sourceConnection>
+        <child xsi:type="archimate:DiagramObject" id="id-5151" targetConnections="id-5132" font="1|Arial|12.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffffb5" archimateElement="id-4950">
+          <bounds x="20" y="30" width="160" height="60"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5142" lineColor="#000000" source="id-5151" target="id-5150" archimateRelationship="id-4950-118-4955"/>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-5150" targetConnections="id-5142 id-5131" font="1|Arial|12.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffffb5" archimateElement="id-4955">
+          <bounds x="292" y="30" width="129" height="60"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5141" lineColor="#000000" source="id-5150" target="id-5149" archimateRelationship="id-4955-118-4949"/>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-5149" targetConnections="id-5141 id-5130" font="1|Arial|12.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffffb5" archimateElement="id-4949">
+          <bounds x="540" y="30" width="120" height="60"/>
+        </child>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5161" font="1|Arial|12.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffff80" archimateElement="id-4956">
+        <bounds x="154" y="254" width="680" height="100"/>
+        <child xsi:type="archimate:DiagramObject" id="id-5157" targetConnections="id-5140" font="1|Arial|12.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffffb5" archimateElement="id-4958">
+          <bounds x="370" y="20" width="120" height="60"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5139" lineColor="#000000" source="id-5157" target="id-5159" archimateRelationship="id-4958-118-4959"/>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-5158" targetConnections="id-5138" font="1|Arial|12.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffffb5" archimateElement="id-4957">
+          <bounds x="190" y="20" width="120" height="60"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5140" lineColor="#000000" source="id-5158" target="id-5157" archimateRelationship="id-4957-118-4958"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5146" lineColor="#000000" source="id-5158" target="id-5154" archimateRelationship="id-4957-108-4965"/>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-5159" targetConnections="id-5139" font="1|Arial|12.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffffb5" archimateElement="id-4959">
+          <bounds x="540" y="20" width="120" height="60"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5145" lineColor="#000000" source="id-5159" target="id-5163" archimateRelationship="id-4959-108-4967"/>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-5160" targetConnections="id-5134" font="1|Arial|12.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffffb5" archimateElement="id-4960">
+          <bounds x="20" y="20" width="120" height="60"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5138" lineColor="#000000" source="id-5160" target="id-5158" archimateRelationship="id-4960-118-4957"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5144" lineColor="#000000" source="id-5160" target="id-5156" archimateRelationship="id-4960-108-4964"/>
+        </child>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5165" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#b5ffff" archimateElement="id-4985">
+        <bounds x="446" y="554" width="130" height="60"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5131" lineColor="#000000" source="id-5165" target="id-5150" archimateRelationship="id-4985-144-4955"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5153" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#b5ffff" archimateElement="id-4987">
+        <bounds x="694" y="554" width="120" height="60"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5130" lineColor="#000000" source="id-5153" target="id-5149" archimateRelationship="id-4987-144-4949"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5155" targetConnections="id-5137 id-5136 id-5135 id-5133" font="1|Arial|12.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffffb5" archimateElement="id-4908">
+        <bounds x="345" y="24" width="120" height="60"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5162" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#b5ffff" archimateElement="id-4984">
+        <bounds x="194" y="554" width="120" height="60"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5132" lineColor="#000000" source="id-5162" target="id-5151" archimateRelationship="id-4984-144-4950"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5156" targetConnections="id-5144" font="1|Arial|8.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffffb5" archimateElement="id-4964">
+        <bounds x="180" y="132" width="111" height="53"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5137" lineColor="#000000" source="id-5156" target="id-5155" archimateRelationship="id-4964-144-4908"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5154" targetConnections="id-5146" font="1|Arial|8.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffffb5" archimateElement="id-4965">
+        <bounds x="351" y="131" width="107" height="53"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5136" lineColor="#000000" source="id-5154" target="id-5155" archimateRelationship="id-4965-144-4908"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5164" targetConnections="id-5143" font="1|Arial|8.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffffb5" archimateElement="id-4966">
+        <bounds x="24" y="277" width="101" height="53"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5134" lineColor="#000000" source="id-5164" target="id-5160" archimateRelationship="id-4966-144-4960"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5135" lineColor="#000000" source="id-5164" target="id-5155" archimateRelationship="id-4966-144-4908">
+          <bendpoint startY="-249" endX="-331"/>
+        </sourceConnection>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5163" targetConnections="id-5145" font="1|Arial|8.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ffffb5" archimateElement="id-4967">
+        <bounds x="709" y="132" width="90" height="53"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5133" lineColor="#000000" source="id-5163" target="id-5155" archimateRelationship="id-4967-144-4908">
+          <bendpoint startX="-1" startY="-104" endX="348"/>
+        </sourceConnection>
+      </child>
+    </element>
+    <element xsi:type="archimate:ArchimateDiagramModel" name="Application Cooperation View" id="id-5080" viewpoint="layered">
+      <child xsi:type="archimate:Group" id="id-5690" lineColor="#5c5c5c" fillColor="#d2d7d7">
+        <bounds x="80" y="300" width="520" height="230"/>
+        <child xsi:type="archimate:DiagramObject" id="id-5104" targetConnections="id-5097" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#b5ffff" archimateElement="id-4978">
+          <bounds x="380" y="53" width="120" height="60"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5093" lineColor="#000000" source="id-5104" target="id-5102" archimateRelationship="id-4978-170-4981"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5094" lineColor="#000000" source="id-5104" target="id-5099" archimateRelationship="id-4978-170-4979">
+            <bendpoint startY="-280" endX="160"/>
+          </sourceConnection>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-5105" targetConnections="id-5096" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#b5ffff" archimateElement="id-4974">
+          <bounds x="20" y="93" width="120" height="60"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5095" lineColor="#000000" source="id-5105" target="id-5107" archimateRelationship="id-4974-170-4977"/>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-5106" targetConnections="id-5098" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#b5ffff" archimateElement="id-4976">
+          <bounds x="380" y="133" width="120" height="60"/>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-5107" targetConnections="id-5095" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#b5ffff" archimateElement="id-4977">
+          <bounds x="200" y="93" width="120" height="60"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5097" lineColor="#000000" source="id-5107" target="id-5104" archimateRelationship="id-4977-34-4978"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5098" lineColor="#000000" source="id-5107" target="id-5106" archimateRelationship="id-4977-34-4976"/>
+        </child>
+      </child>
+      <child xsi:type="archimate:Group" id="id-5103" name="Front office Applications" lineColor="#5c5c5c" fillColor="#d2d7d7">
+        <bounds x="80" y="40" width="520" height="220"/>
+        <child xsi:type="archimate:DiagramObject" id="id-5099" targetConnections="id-5094" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#b5ffff" archimateElement="id-4979">
+          <bounds x="220" y="33" width="120" height="60"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5090" lineColor="#000000" source="id-5099" target="id-5101" archimateRelationship="id-4979-170-4982"/>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-5100" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#b5ffff" archimateElement="id-4975">
+          <bounds x="220" y="133" width="120" height="60"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5091" lineColor="#000000" source="id-5100" target="id-5101" archimateRelationship="id-4975-170-4982"/>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-5101" targetConnections="id-5090 id-5091 id-5092" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#b5ffff" archimateElement="id-4982">
+          <bounds x="30" y="33" width="120" height="60"/>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-5102" targetConnections="id-5093" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#b5ffff" archimateElement="id-4981">
+          <bounds x="30" y="133" width="120" height="60"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5092" lineColor="#000000" source="id-5102" target="id-5101" archimateRelationship="id-4981-170-4982"/>
+        </child>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5109" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ff8080" archimateElement="id-4983">
+        <bounds x="100" y="570" width="120" height="60"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5096" lineColor="#000000" source="id-5109" target="id-5105" archimateRelationship="id-4983-170-4974"/>
+      </child>
+    </element>
+    <element xsi:type="archimate:ArchimateDiagramModel" name="Implementation and Installation View" id="id-5044" viewpoint="layered">
+      <child xsi:type="archimate:DiagramObject" id="id-5078" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#c9e7b7" archimateElement="id-5004">
+        <bounds x="30" y="150" width="160" height="90"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5057" lineColor="#000000" source="id-5078" target="id-5072" archimateRelationship="id-5004-158-4992"/>
+        <child xsi:type="archimate:DiagramObject" id="id-5077" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#c9e7b7" archimateElement="id-5001">
+          <bounds x="30" y="35" width="100" height="43"/>
+          <sourceConnection xsi:type="archimate:Connection" id="id-5064" lineColor="#000000" source="id-5077" target="id-5074" archimateRelationship="id-5001-146-4974"/>
+        </child>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5070" targetConnections="id-5063" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#b5ffff" archimateElement="id-4983">
+        <bounds x="480" y="30" width="120" height="60"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5074" targetConnections="id-5064" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#b5ffff" archimateElement="id-4974">
+        <bounds x="50" y="30" width="120" height="60"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5073" targetConnections="id-5068" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#c9e7b7" archimateElement="id-4995">
+        <bounds x="60" y="370" width="100" height="60"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5075" targetConnections="id-5065" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#c9e7b7" archimateElement="id-4997">
+        <bounds x="486" y="185" width="108" height="55"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5063" lineColor="#000000" source="id-5075" target="id-5070" archimateRelationship="id-4997-146-4983"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5069" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ff8080" archimateElement="id-5002">
+        <bounds x="170" y="270" width="80" height="60"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5055" lineColor="#000000" source="id-5069" target="id-5071" archimateRelationship="id-5002-158-4993"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5061" lineColor="#000000" source="id-5069" target="id-5072" archimateRelationship="id-5002-158-4992"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5079" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ff8080" archimateElement="id-5002">
+        <bounds x="390" y="270" width="80" height="60"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5054" lineColor="#000000" source="id-5079" target="id-5071" archimateRelationship="id-5002-158-4993"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5058" lineColor="#000000" source="id-5079" target="id-5076" archimateRelationship="id-5002-158-4992"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5071" targetConnections="id-5055 id-5054" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#c9e7b7" archimateElement="id-4993">
+        <bounds x="280" y="280" width="80" height="40"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5072" targetConnections="id-5057 id-5061" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#c9e7b7" archimateElement="id-4992">
+        <bounds x="70" y="280" width="80" height="40"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5068" lineColor="#000000" source="id-5072" target="id-5073" archimateRelationship="id-4992-122-4995"/>
+      </child>
+      <child xsi:type="archimate:DiagramObject" id="id-5076" targetConnections="id-5058" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#c9e7b7" archimateElement="id-4992">
+        <bounds x="500" y="280" width="80" height="40"/>
+        <sourceConnection xsi:type="archimate:Connection" id="id-5065" lineColor="#000000" source="id-5076" target="id-5075" archimateRelationship="id-4992-122-4997"/>
+      </child>
+    </element>
+    <element xsi:type="archimate:ArchimateDiagramModel" name="Goal and Principle View" id="id-5020" viewpoint="layered">
+      <child xsi:type="archimate:Group" id="id-5035" name="ICT-Goals" lineColor="#5c5c5c" fillColor="#d2d7d7">
+        <bounds x="36" y="468" width="400" height="196"/>
+        <child xsi:type="archimate:DiagramObject" id="id-5032" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ccccff" archimateElement="id-5018">
+          <bounds x="204" y="108" width="140" height="55"/>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-5033" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ccccff" archimateElement="id-5017">
+          <bounds x="204" y="36" width="140" height="55"/>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-5034" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ccccff" archimateElement="id-5016">
+          <bounds x="24" y="72" width="140" height="55"/>
+        </child>
+      </child>
+      <child xsi:type="archimate:Group" id="id-5039" name="Financial Goals" lineColor="#5c5c5c" fillColor="#d2d7d7">
+        <bounds x="36" y="228" width="400" height="196"/>
+        <child xsi:type="archimate:DiagramObject" id="id-5036" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ccccff" archimateElement="id-5015">
+          <bounds x="204" y="108" width="140" height="55"/>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-5037" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ccccff" archimateElement="id-5014">
+          <bounds x="204" y="36" width="140" height="55"/>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-5038" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ccccff" archimateElement="id-5013">
+          <bounds x="24" y="72" width="140" height="55"/>
+        </child>
+      </child>
+      <child xsi:type="archimate:Group" id="id-5043" name="Products &amp; Services Goals" lineColor="#5c5c5c" fillColor="#d2d7d7">
+        <bounds x="36" y="12" width="400" height="196"/>
+        <child xsi:type="archimate:DiagramObject" id="id-5040" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ccccff" archimateElement="id-5012">
+          <bounds x="204" y="108" width="140" height="55"/>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-5041" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ccccff" archimateElement="id-5011">
+          <bounds x="204" y="36" width="140" height="55"/>
+        </child>
+        <child xsi:type="archimate:DiagramObject" id="id-5042" font="1|Arial|10.0|0|COCOA|1|" fontColor="#000000" lineColor="#5c5c5c" fillColor="#ccccff" archimateElement="id-5010">
+          <bounds x="24" y="72" width="140" height="55"/>
+        </child>
+      </child>
+    </element>
+  </folder>
+  <purpose>An example of a fictional Insurance company.</purpose>
+</archimate:model>

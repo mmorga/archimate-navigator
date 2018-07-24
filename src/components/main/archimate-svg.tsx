@@ -222,7 +222,7 @@ export default class ArchimateSvg extends React.PureComponent<IProps, IState> {
 
   public componentDidMount() {
     const svgTopGroup = this.svgTopGroup.current;
-    if (svgTopGroup) {
+    if (svgTopGroup && (this.props.diagram.nodes.length > 0)) {
       // TODO:
       // this.panzoom = 
       createPanZoom(svgTopGroup, {});

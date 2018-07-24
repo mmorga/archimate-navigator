@@ -94,13 +94,23 @@ export class Diagram implements IDiagram {
       this.nodes
           .map(node => node.bounds as Bounds)
           .map(bounds => [bounds.x || 0, bounds.y || 0, bounds.width, bounds.height]);
-    // TODO: Add connection calculation
+          // TODO: Add connection calculation
     // doc.css(".archimate-relationship")
     //   .each { |path|
     //     path.attr("d").split(" ").each_slice(3) do |point|
     //       nodeVals << [point[1].to_i, point[2].to_i, 0, 0]
     //     end
     //   }
+
+    if (nodeVals.length < 1) {
+      return {
+        height: 0,
+        width: 0,
+        x: 0,
+        y: 0,
+      };
+    }
+
     const minFunc = (prev: undefined | number, cur: number) => {
       let p = prev || Number.MAX_SAFE_INTEGER;
       if (cur < p) {

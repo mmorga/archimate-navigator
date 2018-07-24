@@ -14,10 +14,29 @@ export default class DataObjectViewNode extends DefaultViewNode {
 
   public entityShape(): JSX.Element {
     const bounds = this.props.viewNode.bounds;
+    const style = this.shapeStyle();
+    const decorStyle: React.CSSProperties = {
+      stroke: style.stroke,
+      strokeWidth: style.strokeWidth,
+    };
     return (
       <g className={this.state.backgroundClass}>
-        <rect key="data-background" x={bounds.left} y={bounds.top} width={bounds.width} height={bounds.height} className={this.state.backgroundClass} style={this.shapeStyle()} />
-        <rect key="data-decoration" x={bounds.left} y={bounds.top} width={bounds.width} height={this.state.margin} className="archimate-decoration" />
+        <rect 
+          key="data-background" 
+          x={bounds.left} 
+          y={bounds.top} 
+          width={bounds.width} 
+          height={bounds.height} 
+          className={this.state.backgroundClass} 
+          style={style} />
+        <rect 
+          key="data-decoration" 
+          x={bounds.left} 
+          y={bounds.top} 
+          width={bounds.width} 
+          height={this.state.margin} 
+          className="archimate-decoration" 
+          style={decorStyle} />
       </g>
     );
   }

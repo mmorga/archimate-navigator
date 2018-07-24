@@ -44,6 +44,8 @@ export default class DeviceViewNode extends BadgedNodeViewNode {
       this.state = {
         ...this.state,
         badge: undefined,
+        badgeBounds: undefined,
+        textBounds: this.props.viewNode.bounds.reducedBy(2),
        };
     }
   }
