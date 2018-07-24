@@ -11,7 +11,7 @@ export default class GroupViewNode extends DefaultViewNode {
       ...this.state,
       backgroundClass: "archimate-group-background",
       textAlign: "left",      
-      textBounds: this.groupTextBounds(),
+      textBounds: this.textBounds(),
     };
   }
 
@@ -46,7 +46,7 @@ export default class GroupViewNode extends DefaultViewNode {
     );
   }
 
-  private groupTextBounds(): Bounds {
+  protected textBounds(): Bounds {
     const bounds = this.props.viewNode.curBounds();
     return new Bounds(bounds.left + 3, bounds.top, (bounds.width / 2.0) - 6, this.groupHeaderHeight);
   }

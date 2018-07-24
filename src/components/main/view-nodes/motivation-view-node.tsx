@@ -7,7 +7,7 @@ export default class MotivationViewNode extends DefaultViewNode {
     super(props);
     this.state = {
       ...this.state,
-      badgeBounds: this.motivationBadgeBounds(),
+      badgeBounds: this.badgeBounds(),
     };
   }
 
@@ -35,8 +35,7 @@ export default class MotivationViewNode extends DefaultViewNode {
     );
   }
 
-
-  private motivationBadgeBounds(): Bounds {
+  protected badgeBounds(): Bounds {
     const bounds = this.props.viewNode.curBounds();
     return new Bounds(bounds.right - 25, bounds.top + 5, 20, 20);
   }

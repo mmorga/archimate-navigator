@@ -7,9 +7,9 @@ export default class BadgedNodeViewNode extends DefaultViewNode {
     super(props);
     this.state = {
       ...this.state,
-      badgeBounds: this.nodeBadgeBounds(),
+      badgeBounds: this.badgeBounds(),
       margin: 14,
-      textBounds: this.nodeTextBounds(),
+      textBounds: this.textBounds(),
     };
   }
 
@@ -59,7 +59,7 @@ export default class BadgedNodeViewNode extends DefaultViewNode {
     );
   }
 
-  private nodeBadgeBounds(): Bounds {
+  protected badgeBounds(): Bounds {
     const bounds = this.props.viewNode.curBounds();
     const margin = 14;
     return new Bounds(
@@ -70,7 +70,7 @@ export default class BadgedNodeViewNode extends DefaultViewNode {
     );
   }
 
-  private nodeTextBounds(): Bounds {
+  protected textBounds(): Bounds {
     const bounds = this.props.viewNode.curBounds();
     const margin = 14;
     const nodeBoxHeight = bounds.height - margin;

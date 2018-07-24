@@ -7,7 +7,7 @@ export default class ValueViewNode extends DefaultViewNode {
     super(props);
     this.state = {
       ...this.state,
-      textBounds: this.valueTextBounds(),
+      textBounds: this.textBounds(),
     };
   }
 
@@ -22,8 +22,8 @@ export default class ValueViewNode extends DefaultViewNode {
     );
   }
   
-  private valueTextBounds(): Bounds {
-    const textBounds = this.state.textBounds;
+  protected textBounds(): Bounds {
+    const textBounds = super.textBounds();
     return new Bounds(
       textBounds.left + 10,
       textBounds.top + 10,

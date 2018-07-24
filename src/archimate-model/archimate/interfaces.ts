@@ -1,6 +1,7 @@
 import * as d3force from "d3-force";
 import { AccessType } from "./access-type";
 import { Bounds } from "./bounds";
+import { Point } from "./point";
 import { Style } from "./style";
 
 export interface IPoint {
@@ -76,7 +77,7 @@ export interface IHasViews {
   diagrams(): IDiagram[];
 }
 
-export interface IViewNode extends IEntity {
+export interface IViewNode extends IEntity, d3force.SimulationNodeDatum {
   // ArchiMate ViewConceptType Attributes
   id: string;
   name?: string;
@@ -109,6 +110,26 @@ export interface IViewNode extends IEntity {
   // Archi format, selects the shape of element (for elements that can have two or more shapes)
   // A nil value indicates the standard representation, a value of "1" indicates the alternate
   childType?: string;
+}
+
+/**
+ * Data type for ArchiMate relationships
+ */
+export interface IConnection extends IEntity, d3force.SimulationLinkDatum<IViewNode> {
+  id: string;
+  name?: string;
+  documentation?: string;
+  type: string;
+  sourceAttachment?: Point;
+  bendpoints: Point[];
+  targetAttachment?: Point;
+  source: string;
+  target: string;
+  relationship?: string;
+  style?: Style;
+  properties: IProperty[];
+  // linkType: string;
+  // weight: number;
 }
 
 export interface IDiagram extends IEntity, IHasRelationships, IHasViews {
@@ -185,33 +206,11 @@ export interface IModel extends IEntity, IHasOrganizations {
   register(entity: IEntity): void;
 }
 
-/**
- * INode data type for ArchiMate elements
- */
-export interface INode extends d3force.SimulationNodeDatum {
-  id: string;
-  name?: string;
-  // layer: string;  // TODO: add layer
-  // nodeType: string;
-  // labels: string[];
-  // nodeId: string;
-}
-
 export function inodeKeyFunc(
   this: SVGGElement,
-  datum: INode,
+  datum: IViewNode,
   index: number,
   groups: SVGGElement[]
 ) {
   return datum.id;
-}
-
-/**
- * Data type for ArchiMate relationships
- */
-export interface ILink extends d3force.SimulationLinkDatum<INode> {
-  id: string;
-  // linkType: string;
-  relationship?: string;
-  // weight: number;
 }

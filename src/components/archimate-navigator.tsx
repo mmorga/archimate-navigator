@@ -1,8 +1,6 @@
 import * as React from "react";
 import { Col, Grid, Row, Tab, Tabs } from "react-bootstrap";
 import { Diagram, IEntity, Model, parse } from "../archimate-model";
-// import GraphModelStore from "../graph/graph-model-store";
-// import GraphVisualization, { ID3Graph } from "../graph/graph-visualization";
 import "./archimate-navigator.css";
 import { entityClickedFunc } from "./common";
 import ArchimateDiagramView from "./main/archimate-diagram-view";
@@ -26,11 +24,8 @@ interface IProps {
 
 interface IState {
   error?: any;
-  // graphModelStore?: GraphModelStore;
   graphQuery?: string;
   graphQueryResults: any[];
-  // graphSvg?: Svg;
-  // graphViz?: GraphVisualization;
   model: Model;
   selectedDiagram?: Diagram;
   selectedEntity?: IEntity;
@@ -48,11 +43,7 @@ export default class ArchimateNavigator extends React.Component<
     const model = new Model();
     const selectedDiagramId = props.selectedDiagramId || window.location.hash.replace(/^#/, "");
     this.state = {
-      // graphModelStore: new GraphModelStore(),
-      // graphQuery: props.graphQuery,
       graphQueryResults: [],
-      // graphSvg: undefined,
-      // graphViz: undefined,
       model,
       selectedDiagram: model.lookupDiagram(selectedDiagramId),
       selectedEntity: model.lookup(props.selectedEntityId),
@@ -173,26 +164,10 @@ export default class ArchimateNavigator extends React.Component<
     );
   }
 
-  // TODO: tell the graph viz to stop and shutdown (if it exists) prior to creating a new one.
-  // private svgRefCallback = (svg: SVGSVGElement | undefined): void => {
-  //   this.setState({
-  //     graphSvg: svg ? new Svg(svg, "#main-graph-group") : undefined
-  //   });
-  //   if (svg) {
-  //     this.state.graphViz = new GraphVisualization(svg);
-  //   }
-  // };
-
   private runQuery = (query: string) => {
     this.setState({ graphQuery: query });
     // this.state.graphModelStore!.runQuery(query, this.graphDataCallback);
   };
-
-  // private graphDataCallback = (graph: ID3Graph) => {
-  //   if (this.state.graphViz) {
-  //     this.state.graphViz.showGraph(graph);
-  //   }
-  // };
 
   // Called when a sidebar tab is clicked.
   private handleSelectSidebarTab = (eventKey: any) => {

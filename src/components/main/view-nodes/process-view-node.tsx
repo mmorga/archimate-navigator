@@ -10,7 +10,7 @@ export default class ProcessViewNode extends BadgedRoundedRectViewNode {
       this.state = {
         ...this.state,
         badgeBounds: zeroBounds(),
-        textBounds: this.processTextBounds(),
+        textBounds: this.textBounds(),
       };
     } else {
       this.state = {
@@ -28,7 +28,7 @@ export default class ProcessViewNode extends BadgedRoundedRectViewNode {
     }
   }
 
-  private processTextBounds(): Bounds {
+  protected textBounds(): Bounds {
     const bounds = this.props.viewNode.curBounds();
     const shaftTop = bounds.top + bounds.height * 0.15;
     const shaftBottom = bounds.bottom - bounds.height * 0.15;

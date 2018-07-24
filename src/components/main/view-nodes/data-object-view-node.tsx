@@ -8,7 +8,7 @@ export default class DataObjectViewNode extends DefaultViewNode {
     this.state = {
       ...this.state,
       margin: 8,
-      textBounds: this.dataTextBounds(),
+      textBounds: this.textBounds(),
     };
   }
 
@@ -41,8 +41,8 @@ export default class DataObjectViewNode extends DefaultViewNode {
     );
   }
 
-  private dataTextBounds() {
-    const textBounds = this.state.textBounds;
+  protected textBounds() {
+    const textBounds = super.textBounds();
     const margin: number = 8;
     return new Bounds(textBounds.left, textBounds.top + margin, textBounds.width, textBounds.height - margin);
   }

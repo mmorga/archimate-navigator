@@ -1,23 +1,18 @@
 import * as React from "react";
-import { Bounds, zeroBounds } from "../../../archimate-model";
+import { Bounds } from "../../../archimate-model";
 import BadgedRoundedRectViewNode from "./badged-rounded-rect";
 import { IViewNodeProps } from "./default-element";
 
 export default class EventViewNode extends BadgedRoundedRectViewNode {
   constructor(props: IViewNodeProps) {
     super(props);
-    if (this.props.viewNode.childType === "1") {
-      this.state = {
-        ...this.state,
-        badgeBounds: zeroBounds(),
-        textBounds: this.eventTextBounds(),
-      };
-    } else {
-      this.state = {
-        ...this.state,
-        badge: "#archimate-event-badge",
-      };
-    }
+    const badge = (this.props.viewNode.childType === "1") ? undefined : "#archimate-event-badge";
+    this.state = {
+      ...this.state,
+      badge,
+      badgeBounds: this.badgeBounds(),
+      textBounds: this.textBounds(),
+    };
   }
 
   protected entityShape() {
@@ -28,10 +23,22 @@ export default class EventViewNode extends BadgedRoundedRectViewNode {
     }
   }
 
-  private eventTextBounds(): Bounds {
-    const textBounds = this.state.textBounds;
-    const notchX = 18;
-    return new Bounds(textBounds.left + notchX * 0.8, textBounds.top, textBounds.width - notchX, textBounds.height);
+  protected badgeBounds(): Bounds | undefined {
+    if (this.props.viewNode.childType === "1") {
+      return undefined;
+    } else {
+      return super.badgeBounds();
+    }
+  }
+
+  protected textBounds(): Bounds {
+    if (this.props.viewNode.childType === "1") {
+      const textBounds = super.textBounds();
+      const notchX = 18;
+      return new Bounds(textBounds.left + notchX * 0.8, textBounds.top, textBounds.width - notchX, textBounds.height);
+    } else {
+      return super.textBounds();
+    }
   }
 
   private eventPath(): JSX.Element {

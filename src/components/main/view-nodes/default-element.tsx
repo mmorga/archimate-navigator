@@ -9,6 +9,8 @@ export interface IViewNodeProps {
   viewNode: ViewNode;
   onClicked?: entityClickedFunc;
   selected: boolean;
+  x: number;
+  y: number;
 }
 
 export interface IViewNodeState {
@@ -23,18 +25,32 @@ export interface IViewNodeState {
 }
 
 export default class DefaultViewNode extends React.PureComponent<IViewNodeProps, IViewNodeState> {
-
   constructor(props: IViewNodeProps) {
     super(props);
+    const bounds = new Bounds(
+      this.props.x || this.props.viewNode.bounds.left,
+      this.props.y || this.props.viewNode.bounds.top,
+      this.props.viewNode.bounds.width,
+      this.props.viewNode.bounds.height,
+    );
     this.state = {
       backgroundClass: this.defaultBackgroundClass(),
       badge: undefined,
       badgeBounds: undefined,
-      bounds: this.props.viewNode.curBounds(),
+      bounds,
       entity: this.props.viewNode.entityInstance(),
       margin: 8,
       textAlign: "center",
-      textBounds: this.props.viewNode.curBounds().reducedBy(2),
+      textBounds: bounds.reducedBy(2),
+    }
+  }
+
+  public componentDidUpdate(prevProps: IViewNodeProps) {
+    if ((this.props.x !== prevProps.x) || (this.props.y !== prevProps.y)) {
+      this.setState({
+        badgeBounds: this.badgeBounds(),
+        textBounds: this.textBounds(),
+      });
     }
   }
 
@@ -51,6 +67,19 @@ export default class DefaultViewNode extends React.PureComponent<IViewNodeProps,
     );
   }
 
+  protected textBounds(): Bounds {
+    return (
+      new Bounds(
+        this.props.x, 
+        this.props.y, 
+        this.props.viewNode.bounds.width,
+        this.props.viewNode.bounds.height,
+      )).reducedBy(2);
+  }
+  
+  protected badgeBounds(): Bounds | undefined {
+    return undefined;
+  }
   protected groupAttrs(): React.SVGProps<SVGGElement> {
     const attrs: React.SVGProps<SVGGElement> = { id: this.props.viewNode.id,  };
     if (this.props.viewNode.type && this.props.viewNode.type.length > 0) {
@@ -104,7 +133,7 @@ export default class DefaultViewNode extends React.PureComponent<IViewNodeProps,
     return (
       <use 
         href={this.state.badge}
-        {...this.state.badgeBounds}
+        {...this.badgeBounds()}
         />
     );
   }

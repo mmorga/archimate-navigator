@@ -1,7 +1,7 @@
 import { Bounds, zeroBounds } from "./bounds";
 import { Connection } from "./connection";
 import { Diagram } from "./diagram";
-import { IEntity, IEntityRef, IModel, INode, IProperty, IViewNode } from "./interfaces";
+import { IEntity, IEntityRef, IModel, IProperty, IViewNode } from "./interfaces";
 import { Style } from "./style";
 
 // Graphical node type. It can contain child node types.
@@ -25,7 +25,7 @@ import { Style } from "./style";
 //         nodes (ViewNodeType)
 //     - Element(
 //           elementRef)
-export class ViewNode implements IViewNode, IEntityRef, INode {
+export class ViewNode implements IViewNode, IEntityRef {
   // ArchiMate ViewConceptType Attributes
   public id: string;
   public name?: string;

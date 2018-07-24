@@ -10,7 +10,7 @@ export default class ServiceViewNode extends BadgedRoundedRectViewNode {
       this.state = {
         ...this.state,
         badgeBounds: zeroBounds(),
-        textBounds: this.serviceTextBounds(),
+        textBounds: this.textBounds(),
       };
     } else {
       this.state = {
@@ -28,7 +28,7 @@ export default class ServiceViewNode extends BadgedRoundedRectViewNode {
     }
   }
 
-  private serviceTextBounds(): Bounds {
+  protected textBounds(): Bounds {
     const bounds = this.props.viewNode.curBounds();
     return new Bounds(
       bounds.left + 7,

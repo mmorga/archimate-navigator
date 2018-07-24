@@ -9,7 +9,11 @@ export default class GapViewNode extends DeliverableViewNode {
       ...this.state,
       backgroundClass: "archimate-implementation2-background",
       badge: "#archimate-gap-badge",
-      badgeBounds: new Bounds(this.props.viewNode.curBounds().right - 25, this.props.viewNode.curBounds().top + 5, 20, 20),
+      badgeBounds: this.badgeBounds(),
     };
+  }
+
+  protected badgeBounds(): Bounds | undefined {
+    return new Bounds(this.props.viewNode.curBounds().right - 25, this.props.viewNode.curBounds().top + 5, 20, 20);
   }
 }

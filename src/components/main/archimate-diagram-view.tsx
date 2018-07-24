@@ -1,10 +1,10 @@
 import * as d3force from "d3-force";
 import * as React from "react";
-import { Connection, Diagram, IEntity, IEntityRef, ILink, INode, ViewNode } from "../../archimate-model";
+import { Connection, Diagram, IConnection, IEntity, IEntityRef, IViewNode, ViewNode } from "../../archimate-model";
 import { entityClickedFunc } from "../common";
 import ArchimateConnection from "./archimate-connection";
 import ArchimateSvg from "./archimate-svg";
-import ArchimateViewNode from "./archimate-view-node";
+import archimateViewNode from "./archimate-view-node";
 
 interface IProps {
   selectedDiagram?: Diagram;
@@ -55,12 +55,17 @@ export default class ArchimateDiagramView extends React.PureComponent<
           diagram={this.props.selectedDiagram}
         >
           {this.state.nodes.map(node => (
-            <ArchimateViewNode
-              key={node.id} 
-              viewNode={node} 
-              onClicked={this.props.entityClicked} 
-              selected={this.nodeIsSelected(node)}
-            />
+            React.createElement(
+              archimateViewNode(node),
+              {
+                key: node.id,
+                onClicked: this.props.entityClicked,
+                selected: this.nodeIsSelected(node),
+                viewNode: node,
+                x: node.x || node.bounds.left,
+                y: node.y || node.bounds.top,
+              }
+            )
           ))}
           {this.state.connections.map(conn => (
             <ArchimateConnection
@@ -93,6 +98,7 @@ export default class ArchimateDiagramView extends React.PureComponent<
     }
   }
 
+  // TODO: We have a problem with edges that target an edge.
   private autoLayout(): d3force.Simulation<ViewNode, Connection> | undefined {
     if (this.props.selectedDiagram === undefined) {
       return undefined;
@@ -103,6 +109,15 @@ export default class ArchimateDiagramView extends React.PureComponent<
     //   return false;
     // }
     // const clientRect = svgEl.getClientRects()[0];
+
+    // TODO: Needs to be a way to handle edges that connect to other edges
+    //       current solution is to remove the edge from the selected set.
+    const connections = this.props.selectedDiagram.connections.filter(c => c.targetViewNode() instanceof ViewNode);
+    const forceLink = d3force
+        .forceLink<ViewNode, Connection>(connections)
+        .id((node: IViewNode, i: number, nodesData: IViewNode[]) => node.id)
+        // TODO: experiment with this
+        .distance(this.adjustLinkDistance);
     return (
       d3force
         .forceSimulation(this.props.selectedDiagram.nodes)
@@ -113,11 +128,7 @@ export default class ArchimateDiagramView extends React.PureComponent<
         .force("collide", d3force.forceCollide(this.nodeWidth))
         .force(
           "link",
-          d3force
-            .forceLink<ViewNode, Connection>(this.props.selectedDiagram.connections)
-            .id((node: INode, i: number, nodesData: INode[]) => node.id)
-            // TODO: experiment with this
-            .distance(this.adjustLinkDistance)
+          forceLink
         )
         .force("charge", d3force.forceManyBody())
         .on("tick", this.ticked)
@@ -141,7 +152,7 @@ export default class ArchimateDiagramView extends React.PureComponent<
     // }
   }
 
-  private adjustLinkDistance = (d: ILink): number => {
+  private adjustLinkDistance = (d: IConnection): number => {
     // switch (d.linkType) {
     //   case "CompositionRelationship":
     //   case "AssignmentRelationship":

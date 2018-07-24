@@ -1,7 +1,8 @@
 import * as React from "react";
-import DefaultViewNode, { IViewNodeProps } from "./default-element";
+import BadgedRectViewNode from "./badged-rect";
+import { IViewNodeProps } from "./default-element";
 
-export default class ArtifactViewNode extends DefaultViewNode {
+export default class ArtifactViewNode extends BadgedRectViewNode {
   constructor(props: IViewNodeProps) {
     super(props);
     this.state = {

@@ -7,7 +7,7 @@ export default class BadgedRoundedRectViewNode extends DefaultViewNode {
     super(props);
     this.state = {
       ...this.state,
-      badgeBounds: this.roundedRectBadgeBounds(),
+      badgeBounds: this.badgeBounds(),
     };
   }
 
@@ -18,7 +18,7 @@ export default class BadgedRoundedRectViewNode extends DefaultViewNode {
     );
   }
 
-  private roundedRectBadgeBounds() {
+  protected badgeBounds() : Bounds | undefined {
     const bounds = this.props.viewNode.curBounds();
     return new Bounds(
       bounds.right - 25,
