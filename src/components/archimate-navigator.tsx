@@ -4,10 +4,10 @@ import { Diagram, IEntity, Model, parse } from "../archimate-model";
 import "./archimate-navigator.css";
 import { entityClickedFunc } from "./common";
 import ArchimateDiagramView from "./main/archimate-diagram-view";
-import ArchimateDiagramTree from "./sidebar/archimate-diagram-tree";
 import ArchimateGraphTab from "./sidebar/archimate-graph-tab";
 import ArchimateInfo from "./sidebar/archimate-info";
 import ModelInfo from "./sidebar/model-info";
+import OrganizationPanel from "./sidebar/organization-panel";
 import ArchimateSearch from "./sidebar/search";
 
 enum SidebarTab {
@@ -71,12 +71,11 @@ export default class ArchimateNavigator extends React.Component<
               defaultActiveKey={SidebarTab.DiagramTreeTab}
               activeKey={this.state.sidebarTabKey}
               onSelect={this.handleSelectSidebarTab}
-              id="archimate-sidebar-tabs"
             >
               <Tab eventKey={SidebarTab.DiagramTreeTab} title="Views">
-                <ArchimateDiagramTree
-                  views={ this.state.model.organizations[this.state.model.organizations.length - 1] }
-                  selectedDiagram={this.state.selectedDiagram}
+                <OrganizationPanel
+                  organization={ this.state.model.organizations[this.state.model.organizations.length - 1] }
+                  selectedEntity={this.state.selectedDiagram}
                   entityClicked={this.diagramLinkClicked}
                 />
               </Tab>
