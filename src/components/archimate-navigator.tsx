@@ -32,6 +32,10 @@ interface IState {
   selectedDiagram?: Diagram;
   selectedEntity?: IEntity;
   sidebarTabKey: SidebarTab;
+  working?: string;
+  loadStart?: Date | undefined;
+  parseStart?: Date | undefined;
+  parseDone?: Date | undefined;
 }
 
 export default class ArchimateNavigator extends React.Component<
@@ -58,6 +62,7 @@ export default class ArchimateNavigator extends React.Component<
     return (
       <Grid bsClass="container-fluid">
         {this.exceptionView()}
+        {this.workingView()}
         <Row className="show-grid">
           <Col xs={12} md={3} className="archimate-view-nav">
             <ModelInfo model={this.state.model} selectedDiagram={this.state.selectedDiagram} />
@@ -114,16 +119,32 @@ export default class ArchimateNavigator extends React.Component<
 
   public componentDidMount() {
     const parser = new DOMParser();
+    this.setState({
+      loadStart: new Date(),
+      parseDone: undefined,
+      parseStart: undefined,
+      working: "Loading ArchiMate Model"
+    });
     fetch(this.props.modelUrl)
       .then((response: Response) => response.text())
       .then((str: string) => {
-          const xmlDocument = parser.parseFromString(str, "application/xml");
+        this.setState({
+          parseStart: new Date(),
+          working: "Parsing ArchiMate Model",
+        });
+        const xmlDocument = parser.parseFromString(str, "application/xml");
           let parsedModel;
           try {
             parsedModel = parse(xmlDocument.children[0].ownerDocument);
           } catch (err) {
-            this.setState({error: err});
+            this.setState({
+              error: err,
+            });
           }
+          this.setState({
+            parseDone: new Date(),
+            working: undefined,
+          });
           const curModel: Model = parsedModel || this.state.model;
           const selectedDiagram = curModel.lookupDiagram(this.props.selectedDiagramId || window.location.hash.replace(/^#/, ""));
           const selectedEntity = curModel.lookup(this.props.selectedEntityId) || selectedDiagram || curModel;
@@ -139,6 +160,7 @@ export default class ArchimateNavigator extends React.Component<
         error => {
           this.setState({
             error,
+            working: undefined,
           });
         }
       );
@@ -163,6 +185,24 @@ export default class ArchimateNavigator extends React.Component<
     );
   }
 
+  private workingView() {
+    if (this.state.working) {
+      return(
+        <Row>
+          <Col xs={12} md={12}>
+            <div className="progress">
+              <div className="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow={100} aria-valuemin={0} aria-valuemax={100} style={{width: "100%"}}>
+                {this.state.working}
+              </div>
+            </div>
+            <p>{this.state.working}</p>
+          </Col>
+        </Row>
+        );
+    } else {
+      return undefined;
+    }
+  }
   // Called when a sidebar tab is clicked.
   private handleSelectSidebarTab = (eventKey: any) => {
     this.setState({ sidebarTabKey: eventKey });

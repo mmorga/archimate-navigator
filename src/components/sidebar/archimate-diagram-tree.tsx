@@ -1,5 +1,6 @@
 import * as React from "react";
 import { Diagram, IEntity, Organization } from "../../archimate-model";
+import "../archimate-navigator.css";
 import { entityClickedFunc } from "../common";
 import EntityLink from "./entity-link";
 import FolderItem from "./folder-item";

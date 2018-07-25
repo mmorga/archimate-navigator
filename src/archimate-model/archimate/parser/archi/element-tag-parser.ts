@@ -375,9 +375,11 @@ export class ElementTagParser {
         this.parseArchimateRelationship(el, RelationshipType.Assignment);
         break;
       case RelationshipType.Realization:
+      case RelationshipType.Realisation:
         this.parseArchimateRelationship(el, RelationshipType.Realization);
         break;
       case RelationshipType.Serving:
+      case RelationshipType.UsedBy:
         this.parseArchimateRelationship(el, RelationshipType.Serving);
         break;
       case RelationshipType.Access:
@@ -392,7 +394,8 @@ export class ElementTagParser {
       case RelationshipType.Flow:
         this.parseArchimateRelationship(el, RelationshipType.Flow);
         break;
-      case RelationshipType.Specialization:
+        case RelationshipType.Specialization:
+        case RelationshipType.Specialisation:
         this.parseArchimateRelationship(el, RelationshipType.Specialization);
         break;
       case RelationshipType.Association:

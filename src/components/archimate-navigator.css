@@ -11,9 +11,9 @@
   padding-left: 0;
 }
 
-ul.archimate-organization-list ul.archimate-organization-list {
+/* ul.archimate-organization-list ul.archimate-organization-list {
   padding-left: 1em;
-}
+} */
 
 .archimate-organization-list li {
   padding-left: 0.5em;

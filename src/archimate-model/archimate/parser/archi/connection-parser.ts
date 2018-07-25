@@ -38,11 +38,12 @@ export class ConnectionParser {
       child,
       "type",
       "http://www.w3.org/2001/XMLSchema-instance"
-    );
+    ) || "Connection";
     const source = getStringAttribute(child, "source");
     const target = getStringAttribute(child, "target");
-    if ([type, source, target].some(s => s === undefined)) {
-      throw new ParserError("Type, Source, or Target missing from Connection");
+    const id = getStringAttribute(child, "id");
+    if ([source, target].some(s => s === undefined)) {
+      throw new ParserError(`Element id=${id} Type=${type}, Source=${source} or Target=${target} missing from Connection`);
     }
     const connection = new Connection(this.model, type as string, source as string, target as string);
     connection.id =

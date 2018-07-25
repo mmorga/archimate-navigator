@@ -1,5 +1,6 @@
 import * as React from "react";
 import { Organization } from "../../archimate-model";
+import "../archimate-navigator.css";
 import { entityClickedFunc } from "../common";
 import EntityLink from "./entity-link";
 
@@ -25,10 +26,10 @@ export default class FolderItem extends React.PureComponent<IProps, IState> {
   }
 
   public render() {
-    const collapsed: any = { className: null };
+    const collapsed: any = { className: "archimate-organization-list" };
     let icon = "glyphicon glyphicon-folder-close";
     if (this.state.collapse) {
-      collapsed.className = "collapse";
+      collapsed.className = "archimate-organization-list collapse";
       icon = "glyphicon glyphicon-folder-open";
     }
     const folderChildren: any = this.props.organization.organizations.map(
@@ -58,7 +59,7 @@ export default class FolderItem extends React.PureComponent<IProps, IState> {
         >
           <span className={icon} /> {this.props.organization.name}
         </a>
-        <ul id={ulId} {...collapsed}>
+        <ul id={ulId} className="archimate-organization-list" {...collapsed}>
           {folderChildren}
           {diagramChildren}
         </ul>
