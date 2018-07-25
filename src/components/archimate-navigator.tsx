@@ -95,6 +95,8 @@ export default class ArchimateNavigator extends React.Component<
                 <ArchimateGraphTab
                   model={this.state.model}
                   selectedDiagram={this.state.selectedDiagram}
+                  autoLayout={this.state.autolayout}
+                  autoLayoutToggled={this.autoLayoutToggled}
                 />
               </Tab>
             </Tabs>
@@ -235,4 +237,6 @@ export default class ArchimateNavigator extends React.Component<
       this.diagramLinkClicked(entity as Diagram);
     }
   };
+
+  private autoLayoutToggled = (autolayout: boolean) => { this.setState({autolayout}); }
 }

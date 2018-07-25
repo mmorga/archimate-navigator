@@ -1,10 +1,14 @@
 import * as React from "react";
+import { Checkbox, Panel } from 'react-bootstrap';
 import { Diagram, Model } from "../../archimate-model";
-import Panel from "./panel";
+
+export type autoLayoutToggledFunc = (autoLayout: boolean, event?: React.FormEvent<Checkbox>) => void;
 
 interface IProps {
   model: Model;
   selectedDiagram: Diagram | undefined;
+  autoLayout: boolean;
+  autoLayoutToggled?: autoLayoutToggledFunc;
 }
 
 interface IState {
@@ -26,9 +30,10 @@ export default class ArchimateGraph extends React.PureComponent<
 
   public render() {
     return (
-      <div>
-        <Panel>
-          <form className="form">
+      <Panel>
+        <Panel.Body>
+          <form>
+            <Checkbox defaultChecked={this.props.autoLayout} onChange={this.autoLayoutToggled}> Auto Layout </Checkbox>
             <textarea
               className="form-control"
               rows={5}
@@ -45,9 +50,15 @@ export default class ArchimateGraph extends React.PureComponent<
               Query
             </button>
           </form>
-        </Panel>
-      </div>
+        </Panel.Body>
+      </Panel>
     );
+  }
+
+  private autoLayoutToggled = (event: React.FormEvent<Checkbox>) => {
+    if (this.props.autoLayoutToggled) {
+      this.props.autoLayoutToggled(!this.props.autoLayout, event);
+    }
   }
 
   private runQuery = (event: React.MouseEvent<Element>) => {
