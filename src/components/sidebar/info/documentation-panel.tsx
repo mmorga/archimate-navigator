@@ -1,7 +1,7 @@
 import "github-markdown-css/github-markdown.css";
 import * as React from "react";
 import ReactMarkdown from "react-markdown";
-import Panel from "./sidebar/panel";
+import Panel from "../panel";
 
 interface IProps {
   str: string | undefined;

@@ -18,8 +18,8 @@ import {
   LogicError,
   Model,
   Query
-} from "../../archimate-model";
-import QueryWizard from "./query/query-wizard";
+} from "../../../archimate-model";
+import QueryWizard from "./query-wizard";
 
 export type autoLayoutToggledFunc = (
   autoLayout: boolean,
@@ -28,8 +28,8 @@ export type autoLayoutToggledFunc = (
 
 interface IProps {
   autoLayout: boolean;
-  autoLayoutToggled?: autoLayoutToggledFunc;
   model: Model;
+  onAutoLayoutToggled: (autoLayout: boolean) => void,
   selectedDiagram: Diagram | undefined;
 }
 
@@ -38,7 +38,7 @@ interface IState extends IQuery {
   selectedQuery: IQuery;
 }
 
-export default class ArchimateQueryPanel extends React.PureComponent<
+export default class QueryTab extends React.PureComponent<
   IProps,
   IState
 > {
@@ -128,7 +128,7 @@ export default class ArchimateQueryPanel extends React.PureComponent<
           onRemoveElement={this.onQueryRemoveElement}
         />
         <Panel>
-          <Panel.Heading>Query Extras</Panel.Heading>
+          <Panel.Heading>Query Settings</Panel.Heading>
           <Panel.Body>
             <Form>
               <Checkbox
@@ -145,9 +145,7 @@ export default class ArchimateQueryPanel extends React.PureComponent<
   }
 
   private autoLayoutToggled = (event: React.FormEvent<Checkbox>) => {
-    if (this.props.autoLayoutToggled) {
-      this.props.autoLayoutToggled(!this.props.autoLayout, event);
-    }
+    this.props.onAutoLayoutToggled(!this.props.autoLayout);
   };
 
   private onQuerySelected = (event: any /*: React.FormEvent<FormControl>*/) => {

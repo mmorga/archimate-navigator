@@ -1,8 +1,8 @@
 import * as React from "react";
 import { Panel } from 'react-bootstrap';
-import { IEntity, Organization } from "../../archimate-model";
-import "../archimate-navigator.css";
-import { entityClickedFunc } from "../common";
+import { IEntity, Organization } from "../../../archimate-model";
+import "../../archimate-navigator.css";
+import { entityClickedFunc } from "../../common";
 import OrganizationContent from "./organization-content";
 
 interface IProps {
@@ -11,7 +11,7 @@ interface IProps {
   selectedEntity: IEntity | undefined;
 }
 
-export default class OrganizationPanel extends React.PureComponent<IProps> {
+export default class ViewsTab extends React.PureComponent<IProps> {
   constructor(props: IProps) {
     super(props);
   }

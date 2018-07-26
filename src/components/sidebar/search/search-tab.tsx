@@ -1,7 +1,7 @@
 import Fuse from "fuse.js";
 import React from "react";
-import { Model } from "../../archimate-model";
-import { entityClickedFunc } from "../common";
+import { Model } from "../../../archimate-model";
+import { entityClickedFunc } from "../../common";
 import SearchResult from "./search-result";
 
 interface IProps {
@@ -16,7 +16,7 @@ interface IState {
   search: string;
 }
 
-export default class ArchimateSearch extends React.PureComponent<
+export default class SearchTab extends React.PureComponent<
   IProps,
   IState
 > {

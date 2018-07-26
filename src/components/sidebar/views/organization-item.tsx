@@ -1,8 +1,8 @@
 import * as React from "react";
-import { IEntity } from "../../archimate-model";
-import "../archimate-navigator.css";
-import { entityClickedFunc } from "../common";
-import EntityLink from "./entity-link";
+import { IEntity } from "../../../archimate-model";
+import "../../archimate-navigator.css";
+import { entityClickedFunc } from "../../common";
+import EntityLink from "../entity-link";
 
 interface IProps {
   entity: IEntity;

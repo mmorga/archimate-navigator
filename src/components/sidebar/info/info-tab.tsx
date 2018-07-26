@@ -6,21 +6,21 @@ import {
   IHasRelationships,
   IHasViews,
   Relationship
-} from "../../archimate-model";
-import { entityClickedFunc } from "../common";
-import DocumentationPanel from "../documentation-panel";
-import ElementsTable from "./info/elements-table";
-import EntityIdPanel from "./info/entity-id-panel";
-import PropertiesPanel from "./info/properties-panel";
-import RelationshipsTable from "./info/relationships-table";
-import ViewsTable from "./info/views-table";
+} from "../../../archimate-model";
+import { entityClickedFunc } from "../../common";
+import DocumentationPanel from "./documentation-panel";
+import ElementsTable from "./elements-table";
+import EntityIdPanel from "./entity-id-panel";
+import PropertiesPanel from "./properties-panel";
+import RelationshipsTable from "./relationships-table";
+import ViewsTable from "./views-table";
 
 interface IProps {
   entity?: IEntity;
   entityClicked: entityClickedFunc;
 }
 
-export default class ArchimateInfo extends React.PureComponent<IProps> {
+export default class InfoTab extends React.PureComponent<IProps> {
   constructor(props: IProps) {
     super(props);
   }
