@@ -8,6 +8,7 @@ import {
   FormControl,
   FormGroup,
   Glyphicon,
+  HelpBlock,
   ListGroup,
   ListGroupItem,
   Panel
@@ -39,24 +40,13 @@ export default class QueryWizard extends React.PureComponent<
         <Panel.Body>
           <Form>
             <FormGroup controlId="queryName">
-              <ControlLabel>Query Name</ControlLabel>
+              <ControlLabel>Name</ControlLabel>
               <FormControl
                 componentClass="text"
                 placeholder="Query Name"
                 onChange={this.onQueryNameChanged}
               >
                 {this.props.query.name}
-              </FormControl>
-              <FormControl.Feedback />
-            </FormGroup>
-            <FormGroup controlId="viewpoint">
-              <ControlLabel>Viewpoint</ControlLabel>
-              <FormControl
-                componentClass="select"
-                defaultValue={this.props.query.viewpoint}
-                onChange={this.onViewpointChanged}
-              >
-                {Viewpoints.map(v => <option key={v} value={v}>{v}</option>)}
               </FormControl>
               <FormControl.Feedback />
             </FormGroup>
@@ -67,6 +57,18 @@ export default class QueryWizard extends React.PureComponent<
               onRemoveElement={this.props.onRemoveElement}
               onQueryChanged={this.onQueryChanged}
             />
+            <FormGroup controlId="viewpoint">
+              <ControlLabel>Viewpoint</ControlLabel>
+              <FormControl
+                componentClass="select"
+                defaultValue={this.props.query.viewpoint}
+                onChange={this.onViewpointChanged}
+              >
+                {Viewpoints.map(v => <option key={v} value={v}>{v}</option>)}
+              </FormControl>
+              <FormControl.Feedback />
+              <HelpBlock>Filters the valid elements and relationships for the query results</HelpBlock>
+            </FormGroup>
             <FormGroup controlId="relationships">
               <ControlLabel>Relationships</ControlLabel>
               <ListGroup>

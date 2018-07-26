@@ -1,15 +1,7 @@
 import { List } from "immutable";
 import * as React from "react";
 import {
-  Button,
   Checkbox,
-  ControlLabel,
-  Form,
-  FormControl,
-  FormGroup,
-  HelpBlock,
-  InputGroup,
-  Panel
 } from "react-bootstrap";
 import {
   Diagram,
@@ -92,42 +84,6 @@ export default class QueryTab extends React.PureComponent<
           queries={this.state.queries}
           selectedQuery={this.state.selectedQuery}        
         />
-        <Panel>
-          <Panel.Heading>
-            Queries
-          </Panel.Heading>
-          <Panel.Body>
-            <Form>
-              <FormGroup controlId="queryDiagramSelector">
-                <ControlLabel>Queries</ControlLabel>
-                <InputGroup>
-                  <FormControl
-                    componentClass="select"
-                    placeholder="Select Query"
-                    defaultValue={this.state.name}
-                    onChange={this.onQuerySelected}
-                  >
-                    {this.state.queries.map(q => (q ?
-                      <option
-                        key={q.id}
-                        value={q.id}
-                      >
-                        {q.name}
-                      </option> : undefined
-                    ))}
-                  </FormControl>
-                  <FormControl.Feedback />
-                  <InputGroup.Button>
-                    <Button>New</Button>
-                  </InputGroup.Button>
-                </InputGroup>
-                <HelpBlock>
-                  Select an existing query, or create a new one.
-                </HelpBlock>
-              </FormGroup>
-            </Form>
-          </Panel.Body>
-        </Panel>
         <QueryWizard
           model={this.props.model}
           selectedDiagram={this.props.selectedDiagram}

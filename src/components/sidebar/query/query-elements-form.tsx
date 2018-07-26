@@ -5,6 +5,7 @@ import {
   ControlLabel,
   FormGroup,
   Glyphicon,
+  HelpBlock,
   ListGroup,
   ListGroupItem,
 } from "react-bootstrap";
@@ -55,6 +56,7 @@ export default class QueryElementsForm extends React.PureComponent<
           <Button bsSize="xsmall" onClick={this.onShowElementPicker}>
             <Glyphicon glyph="add" /> Add...
           </Button>
+          <HelpBlock>Select Elements to begin query with</HelpBlock>
         </FormGroup>
         <ElementPicker 
           allElements={this.props.allElements}

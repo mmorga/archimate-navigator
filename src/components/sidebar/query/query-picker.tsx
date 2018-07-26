@@ -56,7 +56,7 @@ export default class QueryTab extends React.PureComponent<
                 </FormControl>
                 <FormControl.Feedback />
                 <InputGroup.Button onClick={this.props.onNewQuery}>
-                  <Button>New</Button>
+                  <Button bsStyle="primary">New</Button>
                 </InputGroup.Button>
               </InputGroup>
               <HelpBlock>
