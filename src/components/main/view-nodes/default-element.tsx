@@ -1,6 +1,6 @@
 import { TextAlignProperty } from "csstype";
 import * as React from "react";
-import { Bounds, IEntity, Layer, ViewNode, zeroBounds } from "../../../archimate-model";
+import { Bounds, IEntity, Layer, layerClassName, ViewNode, zeroBounds } from "../../../archimate-model";
 import { entityClickedFunc } from "../../common";
 import EntityLabel from "../entity-label";
 import SelectedViewNode from "../selected-view-node";
@@ -193,7 +193,7 @@ export default class DefaultViewNode extends React.PureComponent<IViewNodeProps,
     case "Location":
     case "Product":
     case "Representation":
-      return Layer.Business;
+      return layerClassName(Layer.Business);
     case "ApplicationCollaboration":
     case "ApplicationComponent":
     case "ApplicationEvent":
@@ -203,7 +203,7 @@ export default class DefaultViewNode extends React.PureComponent<IViewNodeProps,
     case "ApplicationProcess":
     case "ApplicationService":
     case "DataObject":
-      return Layer.Application;
+      return layerClassName(Layer.Application);
     case "Artifact":
     case "CommunicationNetwork":
     case "CommunicationPath":
@@ -223,12 +223,12 @@ export default class DefaultViewNode extends React.PureComponent<IViewNodeProps,
     case "TechnologyObject":
     case "TechnologyProcess":
     case "TechnologyService":
-      return Layer.Technology;
+      return layerClassName(Layer.Technology);
     case "DistributionNetwork":
     case "Equipment":
     case "Facility":
     case "Material":
-      return Layer.Physical;
+      return layerClassName(Layer.Physical);
     case "Assessment":
     case "Constraint":
     case "Driver":
@@ -239,25 +239,25 @@ export default class DefaultViewNode extends React.PureComponent<IViewNodeProps,
     case "Requirement":
     case "Stakeholder":
     case "Value":
-      return Layer.Motivation;
+      return layerClassName(Layer.Motivation);
     case "Deliverable":
     case "Gap":
     case "ImplementationEvent":
     case "Plateau":
     case "WorkPackage":
-      return Layer.ImplementationAndMigration;
+      return layerClassName(Layer.ImplementationAndMigration);
     case "AndJunction":
     case "Junction":
     case "OrJunction":
-      return Layer.Connectors;
+      return layerClassName(Layer.Connectors);
     case "Capability":
     case "CourseOfAction":
     case "Resource":
-      return Layer.Strategy;
+      return layerClassName(Layer.Strategy);
     case "Grouping":
     case "Group":
     default:
-      return Layer.Other;
+      return layerClassName(Layer.Other);
     }
   }  
 

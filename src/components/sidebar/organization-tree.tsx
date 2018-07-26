@@ -17,8 +17,6 @@ interface IState {
 // TODO: save the open closed state to localStorage
 // (https://developer.mozilla.org/en-US/docs/Web/API/Web_Storage_API/Using_the_Web_Storage_API)
 export default class OrganizationTree extends React.PureComponent<IProps, IState> {
-  public state: IState;
-
   constructor(props: IProps) {
     super(props);
     this.state = {

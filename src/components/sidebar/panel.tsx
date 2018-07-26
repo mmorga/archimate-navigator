@@ -10,8 +10,6 @@ interface IState {
 }
 
 export default class Panel extends React.PureComponent<IProps, IState> {
-  public state: IState;
-
   constructor(props: IProps) {
     super(props);
     this.state = {

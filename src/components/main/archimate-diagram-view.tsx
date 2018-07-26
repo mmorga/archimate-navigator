@@ -97,6 +97,12 @@ export default class ArchimateDiagramView extends React.PureComponent<
     }
   }
 
+  public componentDidUpdate(prevProps: IProps) {
+    if ((prevProps.autoLayout !== this.props.autoLayout) && (this.state.simulation === undefined)) {
+      this.setState({simulation: this.autoLayout()});
+    }
+  }
+
   public componentWillUnmount() {
     if (this.state.simulation) {
       this.state.simulation.stop();

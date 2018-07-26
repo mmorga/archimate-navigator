@@ -21,6 +21,7 @@ export * from "./archimate/organization";
 export * from "./archimate/relationship";
 export * from "./archimate/diagram";
 export * from "./archimate/model";
+export * from "./archimate/query";
 export * from "./archimate/parser/archi/dom-helpers";
 export * from "./archimate/parser/archi/bendpoint-parser";
 export * from "./archimate/parser/archi/documentation-parser";

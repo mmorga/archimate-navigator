@@ -8,6 +8,7 @@
     "d3-force": "^1.1.0",
     "fuse.js": "^3.2.1",
     "github-markdown-css": "^2.10.0",
+    "immutable": "^3.8.2",
     "panzoom": "^5.1.0",
     "react": "^16.4.1",
     "react-bootstrap": "^0.32.1",

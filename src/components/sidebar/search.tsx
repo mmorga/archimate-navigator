@@ -20,8 +20,6 @@ export default class ArchimateSearch extends React.PureComponent<
   IProps,
   IState
 > {
-  public state: IState;
-
   private fuseOptions = {
     distance: 100,
     keys: ["name", "type", "documentation", "properties"],

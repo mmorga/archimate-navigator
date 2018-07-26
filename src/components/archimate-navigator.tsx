@@ -3,9 +3,10 @@ import { Col, Grid, Row, Tab, Tabs } from "react-bootstrap";
 import { Diagram, IEntity, Model, parse } from "../archimate-model";
 import "./archimate-navigator.css";
 import { entityClickedFunc } from "./common";
+// import DragSizer from "./drag-sizer";
 import ArchimateDiagramView from "./main/archimate-diagram-view";
-import ArchimateGraphTab from "./sidebar/archimate-graph-tab";
 import ArchimateInfo from "./sidebar/archimate-info";
+import ArchimateQueryPanel from "./sidebar/archimate-query-panel";
 import ModelInfo from "./sidebar/model-info";
 import OrganizationPanel from "./sidebar/organization-panel";
 import ArchimateSearch from "./sidebar/search";
@@ -28,14 +29,18 @@ interface IState {
   error?: any;
   graphQuery?: string;
   graphQueryResults: any[];
+  loadStart?: number;
+  loadTime?: number;
   model: Model;
+  parseDone?: number;
+  parseTime?: number;
+  parseStart?: number;
   selectedDiagram?: Diagram;
   selectedEntity?: IEntity;
+  sidebarCollapsed: boolean;
   sidebarTabKey: SidebarTab;
+  sidebarWidth: number,
   working?: string;
-  loadStart?: Date | undefined;
-  parseStart?: Date | undefined;
-  parseDone?: Date | undefined;
 }
 
 export default class ArchimateNavigator extends React.Component<
@@ -54,7 +59,9 @@ export default class ArchimateNavigator extends React.Component<
       model,
       selectedDiagram,
       selectedEntity,
+      sidebarCollapsed: false,
       sidebarTabKey: SidebarTab.DiagramTreeTab,
+      sidebarWidth: 385,
     };
   }
 
@@ -64,55 +71,58 @@ export default class ArchimateNavigator extends React.Component<
         {this.exceptionView()}
         {this.workingView()}
         <Row className="show-grid">
-          <Col xs={12} md={3} className="archimate-view-nav">
-            <ModelInfo model={this.state.model} selectedDiagram={this.state.selectedDiagram} />
-            <Tabs
-              animation={false}
-              defaultActiveKey={SidebarTab.DiagramTreeTab}
-              activeKey={this.state.sidebarTabKey}
-              onSelect={this.handleSelectSidebarTab}
-            >
-              <Tab eventKey={SidebarTab.DiagramTreeTab} title="Views">
-                <OrganizationPanel
-                  organization={ this.state.model.organizations[this.state.model.organizations.length - 1] }
-                  selectedEntity={this.state.selectedDiagram}
-                  entityClicked={this.diagramLinkClicked}
-                />
-              </Tab>
-              <Tab eventKey={SidebarTab.InfoTab} title="Info">
-                <ArchimateInfo
-                  entity={this.state.selectedEntity}
-                  entityClicked={this.entityClicked}
-                />
-              </Tab>
-              <Tab eventKey={SidebarTab.SearchTab} title="Search">
-                <ArchimateSearch
-                  model={this.state.model}
-                  resultClicked={this.entityClicked}
-                />
-              </Tab>
-              <Tab eventKey={SidebarTab.GraphTab} title="Graph">
-                <ArchimateGraphTab
-                  model={this.state.model}
-                  selectedDiagram={this.state.selectedDiagram}
-                  autoLayout={this.state.autolayout}
-                  autoLayoutToggled={this.autoLayoutToggled}
-                />
-              </Tab>
-            </Tabs>
-          </Col>
-          <Col xs={12} md={9} className="archimate-diagram-view">
-            <div className="archimate-svg-container">
-              <ArchimateDiagramView
-                autoLayout={this.state.autolayout}
-                key={this.state.selectedDiagram ? this.state.selectedDiagram.id : "archimate-no-diagram"}
-                selectedEntity={this.state.selectedEntity}
-                selectedDiagram={this.state.selectedDiagram}
-                entityClicked={this.entityClicked}
-                diagramClicked={this.diagramLinkClicked}
-              />
+          <div style={{display: "flex"}}>
+            <div className="archimate-view-nav" style={{flex: `0 0 ${this.state.sidebarWidth}px`, padding: "9px 15px"}}>
+              <ModelInfo model={this.state.model} selectedDiagram={this.state.selectedDiagram} />
+              <Tabs
+                animation={false}
+                defaultActiveKey={SidebarTab.DiagramTreeTab}
+                activeKey={this.state.sidebarTabKey}
+                onSelect={this.handleSelectSidebarTab}
+              >
+                <Tab eventKey={SidebarTab.DiagramTreeTab} title="Views">
+                  <OrganizationPanel
+                    organization={ this.state.model.organizations[this.state.model.organizations.length - 1] }
+                    selectedEntity={this.state.selectedDiagram}
+                    entityClicked={this.diagramLinkClicked}
+                  />
+                </Tab>
+                <Tab eventKey={SidebarTab.InfoTab} title="Info">
+                  <ArchimateInfo
+                    entity={this.state.selectedEntity}
+                    entityClicked={this.entityClicked}
+                  />
+                </Tab>
+                <Tab eventKey={SidebarTab.SearchTab} title="Search">
+                  <ArchimateSearch
+                    model={this.state.model}
+                    resultClicked={this.entityClicked}
+                  />
+                </Tab>
+                <Tab eventKey={SidebarTab.GraphTab} title="Query">
+                  <ArchimateQueryPanel
+                    model={this.state.model}
+                    selectedDiagram={this.state.selectedDiagram}
+                    autoLayout={this.state.autolayout}
+                    autoLayoutToggled={this.autoLayoutToggled}
+                  />
+                </Tab>
+              </Tabs>
             </div>
-          </Col>
+            {/* <DragSizer id="dragula" initialX={this.state.sidebarWidth} onChange={this.onSidebarSizeChanged} /> */}
+            <div className="archimate-diagram-view" style={{flex: "1 1 auto"}}>
+              <div className="archimate-svg-container">
+                <ArchimateDiagramView
+                  autoLayout={this.state.autolayout}
+                  key={this.state.selectedDiagram ? this.state.selectedDiagram.id : "archimate-no-diagram"}
+                  selectedEntity={this.state.selectedEntity}
+                  selectedDiagram={this.state.selectedDiagram}
+                  entityClicked={this.entityClicked}
+                  diagramClicked={this.diagramLinkClicked}
+                />
+              </div>
+            </div>
+          </div>
         </Row>
       </Grid>
     );
@@ -121,16 +131,19 @@ export default class ArchimateNavigator extends React.Component<
   public componentDidMount() {
     const parser = new DOMParser();
     this.setState({
-      loadStart: new Date(),
+      loadStart: Date.now(),
+      loadTime: undefined,
       parseDone: undefined,
       parseStart: undefined,
+      parseTime: undefined,
       working: "Loading ArchiMate Model"
     });
     fetch(this.props.modelUrl)
       .then((response: Response) => response.text())
       .then((str: string) => {
         this.setState({
-          parseStart: new Date(),
+          loadTime: (Date.now() - (this.state.loadStart as number)) / 1000.0,
+          parseStart: Date.now(),
           working: "Parsing ArchiMate Model",
         });
         const xmlDocument = parser.parseFromString(str, "application/xml");
@@ -143,7 +156,8 @@ export default class ArchimateNavigator extends React.Component<
             });
           }
           this.setState({
-            parseDone: new Date(),
+            parseDone: Date.now(),
+            parseTime: (Date.now() - (this.state.parseStart as number)) / 1000.0,
             working: undefined,
           });
           const curModel: Model = parsedModel || this.state.model;
@@ -239,4 +253,6 @@ export default class ArchimateNavigator extends React.Component<
   };
 
   private autoLayoutToggled = (autolayout: boolean) => { this.setState({autolayout}); }
+
+  // private onSidebarSizeChanged = (position: number) => { this.setState({sidebarWidth: position}); }
 }
