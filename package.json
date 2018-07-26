@@ -14,8 +14,7 @@
     "react-bootstrap": "^0.32.1",
     "react-dom": "^16.4.1",
     "react-markdown": "^3.3.4",
-    "react-scripts-ts": "2.16.0",
-    "svg-text": "^0.5.1"
+    "react-scripts-ts": "2.16.0"
   },
   "scripts": {
     "start": "react-scripts-ts start",
