@@ -44,11 +44,9 @@ export default class Sidebar extends React.Component<IProps, IState> {
 
   public render() {
     return (
-      <div
-        className="archimate-view-nav"
+      <div className="archimate-view-nav"
         style={{
-          flex: `0 0 ${this.state.sidebarWidth}px`,
-          padding: "9px 15px"
+          flexBasis: `${this.state.sidebarWidth}px`,
         }}
       >
         <ModelInfo
@@ -56,6 +54,7 @@ export default class Sidebar extends React.Component<IProps, IState> {
           selectedDiagram={this.props.selectedDiagram}
         />
         <Tabs
+          id="archimate-sidebar-tabs"
           animation={false}
           defaultActiveKey={SidebarTab.DiagramTreeTab}
           activeKey={this.props.sidebarTabKey}

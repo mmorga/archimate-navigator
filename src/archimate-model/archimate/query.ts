@@ -31,11 +31,6 @@ export class Query implements IQuery {
     this.elements = List<Element>();
     this.relationships = List<Relationship>();
     this.pathDepth = 3;
-
-    // TODO: This is for dev purposes. Del me.
-    if (this.model.elements.length > 3) {
-      this.elements = List(this.model.elements.slice(0, 3));
-    }
   }
 
   // Add this once Immutable v4 is released

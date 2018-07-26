@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Col, Grid, Row } from "react-bootstrap";
+import { Alert, Button, Modal } from "react-bootstrap";
 import { Diagram, IEntity, Model, parse } from "../archimate-model";
 import "./archimate-navigator.css";
 import ArchimateDiagramView from "./main/archimate-diagram-view";
@@ -51,44 +51,39 @@ export default class ArchimateNavigator extends React.Component<
 
   public render() {
     return (
-      <Grid bsClass="container-fluid">
+      <React.Fragment>
         {this.exceptionView()}
         {this.workingView()}
-        <Row className="show-grid">
-          <div style={{ display: "flex" }}>
-            <Sidebar
-              autoLayout={this.state.autolayout}
-              diagramLinkClicked={this.onDiagramLinkClick}
-              entityClicked={this.onEntityClick}
-              model={this.state.model}
-              onAutoLayoutToggled={this.onAutoLayoutToggled}
-              onTabSelected={this.onSidebarTabSelected}
-              selectedDiagram={this.state.selectedDiagram}
-              selectedEntity={this.state.selectedEntity}
-              sidebarTabKey={this.state.sidebarTabKey}
-            />
-            <div
-              className="archimate-diagram-view"
-              style={{ flex: "1 1 auto" }}
-            >
-              <div className="archimate-svg-container">
-                <ArchimateDiagramView
-                  autoLayout={this.state.autolayout}
-                  key={
-                    this.state.selectedDiagram
-                      ? this.state.selectedDiagram.id
-                      : "archimate-no-diagram"
-                  }
-                  selectedEntity={this.state.selectedEntity}
-                  selectedDiagram={this.state.selectedDiagram}
-                  entityClicked={this.onEntityClick}
-                  diagramClicked={this.onDiagramLinkClick}
-                />
-              </div>
+        <div className="archimate-row">
+          <Sidebar
+            autoLayout={this.state.autolayout}
+            diagramLinkClicked={this.onDiagramLinkClick}
+            entityClicked={this.onEntityClick}
+            model={this.state.model}
+            onAutoLayoutToggled={this.onAutoLayoutToggled}
+            onTabSelected={this.onSidebarTabSelected}
+            selectedDiagram={this.state.selectedDiagram}
+            selectedEntity={this.state.selectedEntity}
+            sidebarTabKey={this.state.sidebarTabKey}
+          />
+          <div className="archimate-diagram-view">
+            <div className="archimate-svg-container">
+              <ArchimateDiagramView
+                autoLayout={this.state.autolayout}
+                key={
+                  this.state.selectedDiagram
+                    ? this.state.selectedDiagram.id
+                    : "archimate-no-diagram"
+                }
+                selectedEntity={this.state.selectedEntity}
+                selectedDiagram={this.state.selectedDiagram}
+                entityClicked={this.onEntityClick}
+                diagramClicked={this.onDiagramLinkClick}
+              />
             </div>
           </div>
-        </Row>
-      </Grid>
+        </div>
+      </React.Fragment>
     );
   }
 
@@ -164,38 +159,46 @@ export default class ArchimateNavigator extends React.Component<
     const errorMessage = `${err.name}: ${err.message}`;
 
     return (
-      <Row>
-        <Col xs={12} md={12}>
-          <p>{errorMessage}</p>
-        </Col>
-      </Row>
+      <Alert bsStyle="danger" onDismiss={this.onCloseException}>
+        <h4>An Exception Occurred</h4>
+        <p> {errorMessage} </p>
+        <p>
+          <Button onClick={this.onCloseException}>Close</Button>
+        </p>
+      </Alert> 
     );
   }
 
+  private onCloseException = () => {
+    this.setState({error: undefined});
+  }
+
   private workingView() {
-    if (this.state.working) {
-      return (
-        <Row>
-          <Col xs={12} md={12}>
-            <div className="progress">
-              <div
-                className="progress-bar progress-bar-striped active"
-                role="progressbar"
-                aria-valuenow={100}
-                aria-valuemin={0}
-                aria-valuemax={100}
-                style={{ width: "100%" }}
-              >
-                {this.state.working}
-              </div>
+    return (
+      <Modal show={this.state.working ? true : false} onHide={this.onWorkingViewHide}>
+        <Modal.Header>
+          <Modal.Title>Loading...</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="progress">
+            <div
+              className="progress-bar progress-bar-striped active"
+              role="progressbar"
+              aria-valuenow={100}
+              aria-valuemin={0}
+              aria-valuemax={100}
+            >
+              {this.state.working}
             </div>
-            <p>{this.state.working}</p>
-          </Col>
-        </Row>
-      );
-    } else {
-      return undefined;
-    }
+          </div>
+          <p>{this.state.working}</p>
+        </Modal.Body>
+      </Modal>
+    );
+  }
+
+  private onWorkingViewHide = () => {
+    this.setState({working: undefined});
   }
 
   private onDiagramLinkClick = (

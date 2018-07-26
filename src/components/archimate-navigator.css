@@ -1,9 +1,15 @@
+.archimate-row {
+  display: flex;
+}
+
 .archimate-view-nav {
   background: #f5f5f5;
-  margin-top: 0;
-  padding-top: 9px;
-  overflow: scroll;
+  flex: 0 0 385px;
   height: 98vh;
+  margin-top: 0;
+  overflow: scroll;
+  padding-top: 9px;
+  padding: 9px 15px;
 }
 
 .archimate-organization-list {
@@ -13,14 +19,6 @@
 
 .archimate-organization-list li {
   padding-left: 0.5em;
-}
-
-.archimate-view-nav .panel {
-  margin-bottom: 0;
-}
-
-.archimate-diagram-navbar {
-  margin: -7px -7px 0 -7px;
 }
 
 .archimate-documentation-well {
@@ -41,6 +39,7 @@
   background: white;
   height: 98vh;
   padding: 0;
+  flex: 1 1 auto;
 }
 
 .archimate-diagram-float {
@@ -75,7 +74,7 @@
 
 @keyframes archimate-dash {
   from {
-    strok-dashoffset: 0;
+    stroke-dashoffset: 0;
   }
   to {
     stroke-dashoffset: 19;

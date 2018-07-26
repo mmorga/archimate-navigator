@@ -81,13 +81,12 @@ export default class ElementPicker extends React.PureComponent<IProps, IState> {
               <ControlLabel>Layer Filter</ControlLabel>
               <FormControl
                 componentClass="select"
-                value={this.state.layerFilter}
+                defaultValue={this.state.layerFilter}
                 onChange={this.onLayerFilterChanged}
               >
                 {this.allLayers.map(v => (
                   <option
                     key={v}
-                    selected={v === this.state.layerFilter}
                     value={v}
                   >
                     {v}
@@ -100,13 +99,12 @@ export default class ElementPicker extends React.PureComponent<IProps, IState> {
               <ControlLabel>Element Type Filter</ControlLabel>
               <FormControl
                 componentClass="select"
-                value={this.state.elementTypeFilter}
+                defaultValue={this.state.elementTypeFilter}
                 onChange={this.onElementTypeFilterChanged}
               >
                 {this.state.elementTypesFilterElements.map(v => (
                   <option
                     key={v}
-                    selected={v === this.state.elementTypeFilter}
                     value={v}
                   >
                     {v}

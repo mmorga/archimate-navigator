@@ -1,5 +1,13 @@
 import Fuse from "fuse.js";
 import React from "react";
+import {
+  Button,
+  Form,
+  FormControl,
+  FormGroup,
+  InputGroup,
+  Panel
+} from "react-bootstrap";
 import { Model } from "../../../archimate-model";
 import { entityClickedFunc } from "../../common";
 import SearchResult from "./search-result";
@@ -16,10 +24,7 @@ interface IState {
   search: string;
 }
 
-export default class SearchTab extends React.PureComponent<
-  IProps,
-  IState
-> {
+export default class SearchTab extends React.PureComponent<IProps, IState> {
   private fuseOptions = {
     distance: 100,
     keys: ["name", "type", "documentation", "properties"],
@@ -66,44 +71,28 @@ export default class SearchTab extends React.PureComponent<
         />
       ));
     return (
-      <div
-        role="tabpanel"
-        className="tab-pane"
-        id="archimate-search-tab-content"
-      >
-        <div className="panel panel-default">
-          <div className="el-body">
-            <form className="form-inline">
-              <input
-                type="text"
-                value={this.state.search}
-                className="form-control"
-                style={{ width: "75%" }}
-                id="archimate-search-text"
-                placeholder="search"
-                onChange={this.handleChange}
-              />
-              <button
-                type="submit"
-                className="btn btn-default pull-right"
-                id="search"
-                onClick={this.handleClick}
-                {...opts}
-              >
-                {searchTitle}
-              </button>
-            </form>
-          </div>
-        </div>
-        <div className="panel panel-default">
-          <div
-            id="archimate-search-results"
-            className="panel-body archimate-search-results"
-          >
+      <Panel>
+        <Panel.Body>
+          <Form>
+            <FormGroup>
+              <InputGroup>
+                <FormControl
+                  type="text"
+                  placeholder="Search"
+                  defaultValue={this.state.search}
+                  onChange={this.handleChange}
+                />
+                <InputGroup.Button>
+                  <Button onClick={this.handleClick} {...opts}>
+                    {searchTitle}
+                  </Button>
+                </InputGroup.Button>
+              </InputGroup>
+            </FormGroup>
             <ol>{resultItems}</ol>
-          </div>
-        </div>
-      </div>
+          </Form>
+        </Panel.Body>
+      </Panel>
     );
   }
 
@@ -116,8 +105,8 @@ export default class SearchTab extends React.PureComponent<
     }
   };
 
-  private handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({ search: event.target.value });
+  private handleChange = (event: any) => {
+    this.setState({ search: event.currentTarget.value });
     if (this.state.search.length > 0) {
       this.setState({
         results: this.state.fuse.search(this.state.search)

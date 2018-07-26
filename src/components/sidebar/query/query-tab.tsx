@@ -19,6 +19,8 @@ import {
   Model,
   Query
 } from "../../../archimate-model";
+import QueryPicker from "./query-picker";
+import QuerySettings from "./query-settings";
 import QueryWizard from "./query-wizard";
 
 export type autoLayoutToggledFunc = (
@@ -84,7 +86,16 @@ export default class QueryTab extends React.PureComponent<
   public render() {
     return (
       <React.Fragment>
+        <QueryPicker
+          onNewQuery={this.onNewQuery}
+          onQuerySelected={this.onQuerySelected}
+          queries={this.state.queries}
+          selectedQuery={this.state.selectedQuery}        
+        />
         <Panel>
+          <Panel.Heading>
+            Queries
+          </Panel.Heading>
           <Panel.Body>
             <Form>
               <FormGroup controlId="queryDiagramSelector">
@@ -93,14 +104,13 @@ export default class QueryTab extends React.PureComponent<
                   <FormControl
                     componentClass="select"
                     placeholder="Select Query"
-                    value={this.state.name}
+                    defaultValue={this.state.name}
                     onChange={this.onQuerySelected}
                   >
                     {this.state.queries.map(q => (q ?
                       <option
                         key={q.id}
                         value={q.id}
-                        selected={q.id === this.state.id}
                       >
                         {q.name}
                       </option> : undefined
@@ -127,29 +137,24 @@ export default class QueryTab extends React.PureComponent<
           onAddElement={this.onQueryAddElement}
           onRemoveElement={this.onQueryRemoveElement}
         />
-        <Panel>
-          <Panel.Heading>Query Settings</Panel.Heading>
-          <Panel.Body>
-            <Form>
-              <Checkbox
-                defaultChecked={this.props.autoLayout}
-                onChange={this.autoLayoutToggled}
-              > 
-                {" Auto Layout "}
-              </Checkbox>
-            </Form>
-          </Panel.Body>
-        </Panel>
+        <QuerySettings
+          autoLayout={this.props.autoLayout}
+          onAutoLayoutToggled={this.props.onAutoLayoutToggled}
+        />
       </React.Fragment>
     );
   }
 
-  private autoLayoutToggled = (event: React.FormEvent<Checkbox>) => {
-    this.props.onAutoLayoutToggled(!this.props.autoLayout);
-  };
-
   private onQuerySelected = (event: any /*: React.FormEvent<FormControl>*/) => {
     this.setState({ selectedQuery: event.target.value });
+  };
+
+  private onNewQuery = () => {
+    const newQuery = new Query(this.props.model);
+    this.setState({ 
+      queries: this.state.queries.push(newQuery),
+      selectedQuery: newQuery,
+     });
   };
 
   private onQueryChanged = (query: IQuery) => {

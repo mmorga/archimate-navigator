@@ -53,10 +53,10 @@ export default class QueryWizard extends React.PureComponent<
               <ControlLabel>Viewpoint</ControlLabel>
               <FormControl
                 componentClass="select"
-                value={this.props.query.viewpoint}
+                defaultValue={this.props.query.viewpoint}
                 onChange={this.onViewpointChanged}
               >
-                {Viewpoints.map(v => <option key={v} selected={v === this.props.query.viewpoint} value={v}>{v}</option>)}
+                {Viewpoints.map(v => <option key={v} value={v}>{v}</option>)}
               </FormControl>
               <FormControl.Feedback />
             </FormGroup>
@@ -96,6 +96,7 @@ export default class QueryWizard extends React.PureComponent<
                 max="100"
                 step="1"
                 value={this.props.query.pathDepth}
+                onChange={this.onPathDepthChanged}
               />
               <FormControl.Feedback />
             </FormGroup>
@@ -107,6 +108,10 @@ export default class QueryWizard extends React.PureComponent<
 
   private onQueryNameChanged = (event: any) => {
     this.setState({ name: event.target.value });
+  };
+
+  private onPathDepthChanged = (event: any) => {
+    this.setState({ pathDepth: Number.parseInt(event.target.value, 10) });
   };
 
   private onViewpointChanged = (event: any) => {

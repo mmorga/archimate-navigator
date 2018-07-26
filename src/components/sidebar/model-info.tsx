@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Col, ControlLabel, Form, FormControl, FormGroup } from "react-bootstrap";
 import { Diagram, Model } from "../../archimate-model";
 import "../archimate-navigator.css";
 
@@ -16,25 +17,30 @@ export default class ModelInfo extends React.Component<
 
   public render() {
     return (
-      <React.Fragment>
-        <div className="row">
-          <label className="col-sm-3">Model</label>
-          <p className="col-sm-9"><strong>{this.props.model.name}</strong></p>
-        </div>
+      <Form horizontal={true}>
+        <FormGroup>
+          <Col componentClass={ControlLabel} sm={2}><small className="text-muted">Model</small></Col>
+          <Col sm={10}>
+            <FormControl.Static><strong>{this.props.model.name}</strong></FormControl.Static>
+          </Col>
+        </FormGroup>
         {this.diagramRow()}
-      </React.Fragment>
+      </Form>
     );
   }
 
   protected diagramRow() {
     if (this.props.selectedDiagram) {
       return (
-        <div className="row">
-          <label className="col-sm-3">Diagram</label>
-          <p className="col-sm-9">
-            <strong>{this.props.selectedDiagram.name}</strong> <small>&lt;{this.props.selectedDiagram.viewpointDescription()}&nbsp;Viewpoint&gt;</small>
-          </p>
-        </div>
+        <FormGroup>
+          <Col componentClass={ControlLabel} sm={2}><small className="text-muted">Diagram</small></Col>
+          <Col sm={10}>
+            <FormControl.Static>
+              <strong>{this.props.selectedDiagram.name}</strong> {" "}
+              <small>&lt;{this.props.selectedDiagram.viewpointDescription()}&nbsp;Viewpoint&gt;</small>
+            </FormControl.Static>
+          </Col>
+        </FormGroup>
       );
     } else {
       return null;
