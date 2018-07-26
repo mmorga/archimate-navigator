@@ -8,6 +8,9 @@ import {
   HelpBlock,
   ListGroup,
   ListGroupItem,
+  OverlayTrigger,
+  Tooltip,
+  Well,
 } from "react-bootstrap";
 import { Element, IQuery } from "../../../archimate-model";
 import ElementPicker from "./element-picker";
@@ -36,27 +39,37 @@ export default class QueryElementsForm extends React.PureComponent<
   }
 
   public render() {
+    const tooltip = (
+      <Tooltip>
+        Add elements to the query.
+      </Tooltip>
+    );
     return (
       <React.Fragment>
         <FormGroup controlId="elements">
           <ControlLabel>Elements</ControlLabel>
-          <ListGroup>
-            {this.props.selectedElements.map(el => (el ?
-              <ListGroupItem key={el.id}>
-                <div className="pull-right">
-                  <Button bsSize="xsmall" bsStyle="danger" onClick={this.onRemoveElement.bind(this, el)}>
-                    <Glyphicon glyph="remove" />
-                  </Button>
-                </div>
-                <span className="text-info">{el.type}</span>{": "}
-                {<span className="text-primary">{el.name}</span> || <span className="text-muted">unnamed</span>}
-              </ListGroupItem> : undefined
-            ))}
-          </ListGroup>
-          <Button bsSize="xsmall" onClick={this.onShowElementPicker}>
-            <Glyphicon glyph="add" /> Add...
-          </Button>
-          <HelpBlock>Select Elements to begin query with</HelpBlock>
+          <OverlayTrigger placement="right" overlay={tooltip}>
+            <Button bsSize="xsmall" className="pull-right" onClick={this.onShowElementPicker}>
+              <Glyphicon glyph="plus-sign" /> Add...
+            </Button>
+          </OverlayTrigger>
+          {this.props.selectedElements.size > 0 ?
+          <Well>
+            <ListGroup>
+              {this.props.selectedElements.map(el => (el ?
+                <ListGroupItem key={el.id}>
+                  <div className="pull-right">
+                    <Button bsSize="xsmall" bsStyle="danger" onClick={this.onRemoveElement.bind(this, el)}>
+                      <Glyphicon glyph="remove" />
+                    </Button>
+                  </div>
+                  <span className="text-info">{el.type}</span>{": "}
+                  {<span className="text-primary">{el.name}</span> || <span className="text-muted">unnamed</span>}
+                </ListGroupItem> : undefined
+              ))}
+            </ListGroup>
+          </Well> : null}
+          <HelpBlock>Elements to begin query with</HelpBlock>
         </FormGroup>
         <ElementPicker 
           allElements={this.props.allElements}

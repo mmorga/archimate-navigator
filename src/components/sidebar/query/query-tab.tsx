@@ -7,9 +7,9 @@ import {
   Diagram,
   Element,
   IQuery,
-  LogicError,
   Model,
-  Query
+  Query,
+  RelationshipType
 } from "../../../archimate-model";
 import QueryPicker from "./query-picker";
 import QuerySettings from "./query-settings";
@@ -46,6 +46,7 @@ export default class QueryTab extends React.PureComponent<
       name: query.name,
       pathDepth: query.pathDepth,
       queries: List([query]),
+      relationshipTypes: query.relationshipTypes,
       relationships: query.relationships,
       selectedQuery: query,
       viewpoint: query.viewpoint,
@@ -89,9 +90,12 @@ export default class QueryTab extends React.PureComponent<
           selectedDiagram={this.props.selectedDiagram}
           query={this.state.selectedQuery}
           elements={this.state.elements}
+          relationshipTypes={this.state.relationshipTypes}
           onQueryChanged={this.onQueryChanged}
           onAddElement={this.onQueryAddElement}
           onRemoveElement={this.onQueryRemoveElement}
+          onRemoveRelationshipType={this.onRemoveRelationshipType}
+          onAddRelationshipType={this.onAddRelationshipType}
         />
         <QuerySettings
           autoLayout={this.props.autoLayout}
@@ -125,17 +129,25 @@ export default class QueryTab extends React.PureComponent<
   };
 
   private onQueryRemoveElement = (element: Element) => {
-    const prevElements = this.state.selectedQuery.elements;
     const nextElements = List<Element>(this.state.selectedQuery.elements.filter(e => e ? (e.id !== element.id) : false));
-    if (prevElements === nextElements) {
-      throw new LogicError("Expected Lists to be different instances");
-    }
-    if (prevElements.size !== (nextElements.size + 1)) {
-      throw new LogicError("Expected Lists sizes to differ");
-    }
     this.state.selectedQuery.elements = nextElements;
     this.setState({
       elements: nextElements,
+    });
+  };
+
+  private onAddRelationshipType = (relationshipType: RelationshipType) => {
+    this.state.selectedQuery.relationshipTypes = this.state.selectedQuery.relationshipTypes.push(relationshipType);
+    this.setState({
+      relationshipTypes: this.state.relationshipTypes.push(relationshipType)
+    });
+  };
+
+  private onRemoveRelationshipType = (relationshipType: RelationshipType) => {
+    const nextRelationshipTypes = List<RelationshipType>(this.state.selectedQuery.relationshipTypes.filter(e => e ? (e !== relationshipType) : false));
+    this.state.selectedQuery.relationshipTypes = nextRelationshipTypes;
+    this.setState({
+      relationshipTypes: nextRelationshipTypes,
     });
   };
 }

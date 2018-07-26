@@ -2,6 +2,7 @@ import { List } from "immutable";
 import { Element } from "./element";
 import { Model } from "./model";
 import { Relationship } from "./relationship";
+import { RelationshipType, RelationshipTypes } from "./relationship-type";
 import { ViewpointType } from "./viewpoint-type";
 
 export interface IQuery {
@@ -11,6 +12,7 @@ export interface IQuery {
   viewpoint: ViewpointType;
   elements: List<Element>;
   relationships: List<Relationship>;
+  relationshipTypes: List<RelationshipType>;
   pathDepth: number;
 }
 
@@ -21,6 +23,7 @@ export class Query implements IQuery {
   public viewpoint: ViewpointType;
   public elements: List<Element>;
   public relationships: List<Relationship>;
+  public relationshipTypes: List<RelationshipType>;
   public pathDepth: number;
 
   constructor(model: Model) {
@@ -30,6 +33,7 @@ export class Query implements IQuery {
     this.viewpoint = ViewpointType.Total;
     this.elements = List<Element>();
     this.relationships = List<Relationship>();
+    this.relationshipTypes = List<RelationshipType>(RelationshipTypes);
     this.pathDepth = 3;
   }
 

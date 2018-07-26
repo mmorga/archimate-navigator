@@ -1,29 +1,28 @@
 import { List } from "immutable";
 import * as React from "react";
 import {
-  Button,
-  Checkbox,
   ControlLabel,
   Form,
   FormControl,
   FormGroup,
-  Glyphicon,
   HelpBlock,
-  ListGroup,
-  ListGroupItem,
   Panel
 } from "react-bootstrap";
-import { Diagram, Element, IQuery, Model, Viewpoints } from "../../../archimate-model";
+import { Diagram, Element, IQuery, Model, RelationshipType, Viewpoints } from "../../../archimate-model";
 import QueryElementsForm from "./query-elements-form";
+import RelationshipTypeFilterForm from "./relationship-type-filter-form";
 
 interface IProps {
   elements: List<Element>;
   model: Model;
+  relationshipTypes: List<RelationshipType>;
   selectedDiagram: Diagram | undefined;
   query: IQuery;
   onQueryChanged: (query: IQuery) => void;
   onAddElement: (element: Element) => void;
   onRemoveElement: (element: Element) => void;
+  onAddRelationshipType: (relationshipType: RelationshipType) => void;
+  onRemoveRelationshipType: (relationshipType: RelationshipType) => void;
 }
 
 export default class QueryWizard extends React.PureComponent<
@@ -69,26 +68,11 @@ export default class QueryWizard extends React.PureComponent<
               <FormControl.Feedback />
               <HelpBlock>Filters the valid elements and relationships for the query results</HelpBlock>
             </FormGroup>
-            <FormGroup controlId="relationships">
-              <ControlLabel>Relationships</ControlLabel>
-              <ListGroup>
-                {this.props.query.relationships.map(el => (el ? 
-                  <ListGroupItem key={el.id}>
-                    <div className="pull-right">
-                      <Button bsSize="xsmall" bsStyle="danger">
-                        <Glyphicon glyph="remove" />
-                      </Button>
-                    </div>
-                    <span className="text-info">{el.type}</span>{": "}
-                    {<span className="text-primary">{el.name}</span> || <span className="text-muted">unnamed</span>}
-                  </ListGroupItem> : undefined
-                ))}
-              </ListGroup>
-              <Button bsSize="xsmall">
-                <Glyphicon glyph="add" /> Add...
-              </Button>
-              <Checkbox>Include Derived Relationships</Checkbox>
-            </FormGroup>
+            <RelationshipTypeFilterForm
+              selectedRelationshipTypes={this.props.relationshipTypes}
+              onAddRelationshipType={this.props.onAddRelationshipType}
+              onRemoveRelationshipType={this.props.onRemoveRelationshipType}
+            />
             <FormGroup controlId="options">
               <ControlLabel>Path Depth</ControlLabel>
               <input
