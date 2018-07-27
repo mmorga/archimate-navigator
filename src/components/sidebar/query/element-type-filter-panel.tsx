@@ -14,8 +14,6 @@ import CollapsibleFormGroup, { ValidationState } from "./collapsible-form-group"
 import ElementPicker from "./element-picker";
 
 interface IProps {
-  eventKey: string;
-  expanded: boolean;
   query: Query;
   onQueryChanged: (query: Query) => void;
 }
@@ -48,19 +46,16 @@ export default class ElementTypeFilterPanel extends React.PureComponent<
 
   public render() {
     const tooltip = (
-      <Tooltip>
+      <Tooltip id="element-type-tooltip">
         Select Elements Types to filter by
       </Tooltip>
     );
     return (
       <React.Fragment>
         <CollapsibleFormGroup
-          eventKey={this.props.eventKey} 
-          expanded={this.props.expanded}
+          defaultExpanded={false}
           label={this.label()}
           labelStyle={this.props.query.elementTypes.size === 0 ? "danger" : "default"}
-          controlId="element-types"
-          defaultExpanded={false}
           title="Element Types Filter"
           validationState={this.state.validationState}
         >

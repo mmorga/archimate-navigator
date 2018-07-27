@@ -3,6 +3,8 @@ import * as React from "react";
 import {
   Button,
   ButtonGroup,
+  Checkbox,
+  FormGroup,
   Glyphicon,
   HelpBlock,
   ListGroup,
@@ -10,16 +12,14 @@ import {
   OverlayTrigger,
   Tooltip
 } from "react-bootstrap";
-import { RelationshipType, RelationshipTypes } from "../../../archimate-model";
+import { Query, RelationshipType, RelationshipTypes } from "../../../archimate-model";
 import CollapsibleFormGroup, {
   ValidationState
 } from "./collapsible-form-group";
 
 interface IProps {
-  eventKey: string;
-  expanded: boolean;
-  selectedRelationshipTypes: Set<RelationshipType>;
-  onChange: (relationshipTypes: Set<RelationshipType>) => void;
+  query: Query,
+  onQueryChanged: (query: Query) => void;
 }
 
 interface IState {
@@ -38,19 +38,20 @@ export default class RelationshipTypeFilterPanel extends React.PureComponent<
   }
 
   public render() {
-    const noneTooltip = <Tooltip>Unselect all Relationship Types</Tooltip>;
-    const allTooltip = <Tooltip>Select all Relationship Types</Tooltip>;
+    const noneTooltip = <Tooltip id="relationship-type-none-tooltip">Unselect all Relationship Types</Tooltip>;
+    const allTooltip = <Tooltip id="relationship-type-all-tooltip">Select all Relationship Types</Tooltip>;
     return (
       <CollapsibleFormGroup
-        eventKey={this.props.eventKey}
-        expanded={this.props.expanded}
         label={this.label()}
-        labelStyle={this.props.selectedRelationshipTypes.size === 0 ? "danger" : "default"}
-        controlId="relationship-types"
+        labelStyle={this.props.query.relationshipTypes.size === 0 ? "danger" : "default"}
         defaultExpanded={false}
         title="Relationship Types Filter"
         validationState={this.state.validationState}
       >
+        <FormGroup>
+          <Checkbox onClick={this.onDerivedRelationsToggle}>Include Derived Relations</Checkbox>
+        </FormGroup>
+
         <ButtonGroup>
           <OverlayTrigger placement="top" overlay={allTooltip}>
             <Button onClick={this.onSelectAll}>All</Button>
@@ -81,8 +82,8 @@ export default class RelationshipTypeFilterPanel extends React.PureComponent<
 
   public componentDidUpdate(prevProps: IProps, prevState: IState) {
     if (
-      this.props.selectedRelationshipTypes !==
-      prevProps.selectedRelationshipTypes
+      this.props.query.relationshipTypes !==
+      prevProps.query.relationshipTypes
     ) {
       const newValidationState = this.validationState();
       if (newValidationState !== prevState.validationState) {
@@ -92,7 +93,7 @@ export default class RelationshipTypeFilterPanel extends React.PureComponent<
   }
 
   private validationState(): ValidationState {
-    if (this.props.selectedRelationshipTypes.size === 0) {
+    if (this.props.query.relationshipTypes.size === 0) {
       return "error";
     } else {
       return null;
@@ -100,28 +101,49 @@ export default class RelationshipTypeFilterPanel extends React.PureComponent<
   }
 
   private onSelectAll = () => {
-    this.props.onChange(Set<RelationshipType>(RelationshipTypes));
+    this.props.onQueryChanged(
+      this.props.query.updateQuery({
+        relationshipTypes: Set<RelationshipType>(RelationshipTypes)
+      })
+    );
   };
+
   private onSelectNone = () => {
-    this.props.onChange(Set<RelationshipType>());
+    this.props.onQueryChanged(
+      this.props.query.updateQuery({
+        relationshipTypes: Set<RelationshipType>()
+      })
+    );
   };
 
   private onAddClick = (relationshipType: RelationshipType, event: any) => {
-    this.props.onChange(
-      this.props.selectedRelationshipTypes.add(relationshipType)
+    this.props.onQueryChanged(
+      this.props.query.updateQuery({
+        relationshipTypes: this.props.query.relationshipTypes.add(relationshipType)
+      })
     );
   };
 
   private onRemoveClick = (relationshipType: RelationshipType, event: any) => {
-    this.props.onChange(
-      this.props.selectedRelationshipTypes.remove(relationshipType)
+    this.props.onQueryChanged(
+      this.props.query.updateQuery({
+        relationshipTypes: this.props.query.relationshipTypes.remove(relationshipType)
+      })
     );
   };
 
+  private onDerivedRelationsToggle = (event: any) => {
+    this.props.onQueryChanged(
+      this.props.query.updateQuery({
+        includeDerivedRelations: !this.props.query.includeDerivedRelations
+      })
+    );
+  }
+
   private addRemoveRelationshipType(el: RelationshipType): JSX.Element {
     // TODO: should be working with Immutable v4
-    // const isSelected = this.props.selectedRelationshipTypes.includes(el);
-    const isSelected = this.props.selectedRelationshipTypes.some(
+    // const isSelected = this.props.query.relationshipTypes.includes(el);
+    const isSelected = this.props.query.relationshipTypes.some(
       e => (e ? e === el : false)
     );
     const glyph = isSelected ? "remove" : "plus";
@@ -137,7 +159,7 @@ export default class RelationshipTypeFilterPanel extends React.PureComponent<
   }
 
   private label() {
-    const count = this.props.selectedRelationshipTypes.size; 
+    const count = this.props.query.relationshipTypes.size; 
     switch (count) {
       case RelationshipTypes.length:
         return "All";

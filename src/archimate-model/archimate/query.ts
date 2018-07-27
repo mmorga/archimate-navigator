@@ -7,38 +7,41 @@ import { RelationshipType, RelationshipTypes } from "./relationship-type";
 import { ViewpointType } from "./viewpoint-type";
 
 interface IQueryUpdateProps {
-  id?: string;
-  model?: Model;
-  name?: string;
-  viewpoint?: ViewpointType;
   elements?: Set<Element>;
   elementTypes?: Set<ElementType>;
+  id?: string;
+  includeDerivedRelations?: boolean;
+  model?: Model;
+  name?: string;
+  pathDepth?: number;
   relationships?: Set<Relationship>;
   relationshipTypes?: Set<RelationshipType>;
-  pathDepth?: number;
+  viewpoint?: ViewpointType;
 }
 
 export class Query {
-  public id: string;
-  public model: Model;
-  public name: string;
-  public viewpoint: ViewpointType;
   public elements: Set<Element>;
   public elementTypes: Set<ElementType>;
+  public id: string;
+  public includeDerivedRelations: boolean;
+  public model: Model;
+  public name: string;
+  public pathDepth: number;
   public relationships: Set<Relationship>;
   public relationshipTypes: Set<RelationshipType>;
-  public pathDepth: number;
+  public viewpoint: ViewpointType;
 
   constructor(model: Model) {
-    this.id = model.makeUniqueId();
-    this.model = model;
-    this.name = "New Query";
-    this.viewpoint = ViewpointType.Total;
     this.elements = Set<Element>();
     this.elementTypes = Set<ElementType>(ElementTypes);
+    this.id = model.makeUniqueId();
+    this.includeDerivedRelations = false;
+    this.model = model;
+    this.name = "New Query";
+    this.pathDepth = 3;
     this.relationships = Set<Relationship>();
     this.relationshipTypes = Set<RelationshipType>(RelationshipTypes);
-    this.pathDepth = 3;
+    this.viewpoint = ViewpointType.Total;
   }
 
   public updateQuery(props: IQueryUpdateProps): Query {

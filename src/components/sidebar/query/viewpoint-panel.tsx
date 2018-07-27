@@ -7,8 +7,6 @@ import { Query, Viewpoints } from "../../../archimate-model";
 import CollapsibleFormGroup from "./collapsible-form-group";
 
 interface IProps {
-  eventKey: string;
-  expanded: boolean;
   query: Query;
   onQueryChanged: (query: Query) => void;
 }
@@ -23,10 +21,7 @@ export default class ViewpointPanel extends React.PureComponent<
   public render() {
     return (
       <CollapsibleFormGroup
-          eventKey={this.props.eventKey}
-          expanded={this.props.expanded} 
           label={this.props.query.viewpoint}
-          controlId="viewpoint"
           defaultExpanded={false}
           title="Viewpoint" >
         <FormControl

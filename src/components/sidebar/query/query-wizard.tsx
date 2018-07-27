@@ -1,4 +1,3 @@
-import { Set } from "immutable";
 import * as React from "react";
 import {
   ControlLabel,
@@ -6,13 +5,11 @@ import {
   FormControl,
   FormGroup,
   Panel,
-  PanelGroup
 } from "react-bootstrap";
 import {
   Diagram,
   Model,
   Query,
-  RelationshipType,
 } from "../../../archimate-model";
 import ElementTypeFilterPanel from "./element-type-filter-panel";
 import ElementsPanel from "./elements-panel";
@@ -27,24 +24,9 @@ interface IProps {
   onQueryChanged: (query: Query) => void;
 }
 
-enum WizardPanelGroup {
-  Elements = "1",
-  Viewpoint = "2",
-  ElementType = "3",
-  RelationshipType = "4",
-  Options = "5",
-}
-
-interface IState {
-  activeKey: WizardPanelGroup;
-}
-
-export default class QueryWizard extends React.PureComponent<IProps, IState> {
+export default class QueryWizard extends React.PureComponent<IProps> {
   constructor(props: IProps) {
     super(props);
-    this.state = {
-      activeKey: WizardPanelGroup.Elements,
-    }
   }
 
   public render() {
@@ -68,37 +50,21 @@ export default class QueryWizard extends React.PureComponent<IProps, IState> {
                 />
                 <FormControl.Feedback />
               </FormGroup>
-              <PanelGroup 
-                  accordion={true} 
-                  id="query-panel-group"
-                  activeKey={this.state.activeKey}
-                  onSelect={this.handleSelect}>
-                <ElementsPanel
-                  eventKey={WizardPanelGroup.Elements}
-                  expanded={this.state.activeKey === WizardPanelGroup.Elements}
-                  query={this.props.query}
-                  onQueryChanged={this.props.onQueryChanged} />
-                <ViewpointPanel
-                  eventKey={WizardPanelGroup.Viewpoint}
-                  expanded={this.state.activeKey === WizardPanelGroup.Viewpoint}
-                  query={this.props.query}
-                  onQueryChanged={this.props.onQueryChanged} />
-                <ElementTypeFilterPanel
-                  eventKey={WizardPanelGroup.ElementType}
-                  expanded={this.state.activeKey === WizardPanelGroup.ElementType}
-                  query={this.props.query}
-                  onQueryChanged={this.props.onQueryChanged} />
-                <RelationshipTypeFilterPanel
-                  eventKey={WizardPanelGroup.RelationshipType}
-                  expanded={this.state.activeKey === WizardPanelGroup.RelationshipType}
-                  selectedRelationshipTypes={this.props.query.relationshipTypes}
-                  onChange={this.onChangeRelationshipTypes} />
-                <OptionsPanel
-                  eventKey={WizardPanelGroup.Options}
-                  expanded={this.state.activeKey === WizardPanelGroup.Options}
-                  query={this.props.query}
-                  onQueryChanged={this.props.onQueryChanged} />
-              </PanelGroup>
+              <ElementsPanel
+                query={this.props.query}
+                onQueryChanged={this.props.onQueryChanged} />
+              <ViewpointPanel
+                query={this.props.query}
+                onQueryChanged={this.props.onQueryChanged} />
+              <ElementTypeFilterPanel
+                query={this.props.query}
+                onQueryChanged={this.props.onQueryChanged} />
+              <RelationshipTypeFilterPanel
+                query={this.props.query}
+                onQueryChanged={this.props.onQueryChanged} />
+              <OptionsPanel
+                query={this.props.query}
+                onQueryChanged={this.props.onQueryChanged} />
             </Form>
           </Panel.Body>
         </Panel.Collapse>
@@ -109,14 +75,4 @@ export default class QueryWizard extends React.PureComponent<IProps, IState> {
   private onQueryNameChanged = (event: any) => {
     this.props.onQueryChanged(this.props.query.updateQuery({ name: event.target.value }));
   };
-
-  private onChangeRelationshipTypes = (
-    relationshipTypes: Set<RelationshipType>
-  ) => {
-    this.props.onQueryChanged(this.props.query.updateQuery({relationshipTypes}));
-  };
-
-  private handleSelect(activeKey: any) {
-    this.setState({ activeKey });
-  }
 }

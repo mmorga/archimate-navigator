@@ -13,8 +13,6 @@ import CollapsibleFormGroup from "./collapsible-form-group";
 import ElementPicker from "./element-picker";
 
 interface IProps {
-  eventKey: string;
-  expanded: boolean;
   query: Query;
   onQueryChanged: (query: Query) => void;
 }
@@ -47,18 +45,15 @@ export default class ElementsPanel extends React.PureComponent<
 
   public render() {
     const tooltip = (
-      <Tooltip>
+      <Tooltip id="elements-tooltip">
         Add elements to the query.
       </Tooltip>
     );
     return (
       <React.Fragment>
         <CollapsibleFormGroup
-          eventKey={this.props.eventKey}
-          expanded={this.props.expanded}
           label={this.label()}
           labelStyle={this.props.query.elements.size === 0 ? "danger" : "default"}
-          controlId="elements"
           defaultExpanded={true}
           title="Elements"
           validationState={this.state.valid}

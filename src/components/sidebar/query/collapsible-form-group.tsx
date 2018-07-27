@@ -1,6 +1,5 @@
 import * as React from "react";
 import {
-  FormGroup,
   Label,
   Panel,
 } from "react-bootstrap";
@@ -8,11 +7,8 @@ import {
 export type ValidationState = "success" | "warning" | "error" | null;
 
 interface IProps {
-  eventKey: string;
-  expanded: boolean;
   label?: React.ReactText | JSX.Element;
   labelStyle?: "default" | "primary" | "success" | "info" | "warning" | "danger";
-  controlId?: string;
   defaultExpanded?: boolean;
   title: string | JSX.Element;
   validationState?: ValidationState;
@@ -29,7 +25,7 @@ export default class CollapsibleFormGroup extends React.PureComponent<
 
   public render() {
     return (
-      <Panel eventKey={this.props.eventKey} expanded={this.props.expanded} style={{margin: "0 -13px 0 -13px"}}>
+      <Panel defaultExpanded={this.props.defaultExpanded} style={{margin: "0 -13px -1.1em -13px"}}>
         <Panel.Heading>
           <Panel.Title toggle={true}>
             <span className={this.titleClass()}>
@@ -39,9 +35,7 @@ export default class CollapsibleFormGroup extends React.PureComponent<
           </Panel.Title>
         </Panel.Heading>
         <Panel.Body collapsible={true}>
-          <FormGroup controlId={this.props.controlId}>
-            {this.props.children}
-          </FormGroup>
+          {this.props.children}
         </Panel.Body>
       </Panel>
     );
