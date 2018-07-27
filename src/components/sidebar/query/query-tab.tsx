@@ -1,4 +1,4 @@
-import { List } from "immutable";
+import { List, Set } from "immutable";
 import * as React from "react";
 import {
   Checkbox,
@@ -6,10 +6,9 @@ import {
 import {
   Diagram,
   Element,
-  IQuery,
   Model,
   Query,
-  RelationshipType
+  RelationshipType,
 } from "../../../archimate-model";
 import QueryPicker from "./query-picker";
 import QuerySettings from "./query-settings";
@@ -27,9 +26,9 @@ interface IProps {
   selectedDiagram: Diagram | undefined;
 }
 
-interface IState extends IQuery {
-  queries: List<IQuery>;
-  selectedQuery: IQuery;
+interface IState extends Query {
+  queries: List<Query>;
+  selectedQuery: Query;
 }
 
 export default class QueryTab extends React.PureComponent<
@@ -46,7 +45,7 @@ export default class QueryTab extends React.PureComponent<
       name: query.name,
       pathDepth: query.pathDepth,
       queries: List([query]),
-      relationshipTypes: query.relationshipTypes,
+      relationshipTypes: Set<RelationshipType>(),
       relationships: query.relationships,
       selectedQuery: query,
       viewpoint: query.viewpoint,
@@ -90,12 +89,9 @@ export default class QueryTab extends React.PureComponent<
           selectedDiagram={this.props.selectedDiagram}
           query={this.state.selectedQuery}
           elements={this.state.elements}
-          relationshipTypes={this.state.relationshipTypes}
           onQueryChanged={this.onQueryChanged}
           onAddElement={this.onQueryAddElement}
           onRemoveElement={this.onQueryRemoveElement}
-          onRemoveRelationshipType={this.onRemoveRelationshipType}
-          onAddRelationshipType={this.onAddRelationshipType}
         />
         <QuerySettings
           autoLayout={this.props.autoLayout}
@@ -117,7 +113,7 @@ export default class QueryTab extends React.PureComponent<
      });
   };
 
-  private onQueryChanged = (query: IQuery) => {
+  private onQueryChanged = (query: Query) => {
     this.state.selectedQuery.viewpoint = query.viewpoint;
     this.setState({
       selectedQuery: query,
@@ -137,21 +133,6 @@ export default class QueryTab extends React.PureComponent<
     this.state.selectedQuery.elements = nextElements;
     this.setState({
       elements: nextElements,
-    });
-  };
-
-  private onAddRelationshipType = (relationshipType: RelationshipType) => {
-    this.state.selectedQuery.relationshipTypes = this.state.selectedQuery.relationshipTypes.push(relationshipType);
-    this.setState({
-      relationshipTypes: this.state.relationshipTypes.push(relationshipType)
-    });
-  };
-
-  private onRemoveRelationshipType = (relationshipType: RelationshipType) => {
-    const nextRelationshipTypes = List<RelationshipType>(this.state.selectedQuery.relationshipTypes.filter(e => e ? (e !== relationshipType) : false));
-    this.state.selectedQuery.relationshipTypes = nextRelationshipTypes;
-    this.setState({
-      relationshipTypes: nextRelationshipTypes,
     });
   };
 }

@@ -11,7 +11,7 @@ import {
   OverlayTrigger,
   Tooltip,
 } from "react-bootstrap";
-import { Element, IQuery } from "../../../archimate-model";
+import { Element, Query } from "../../../archimate-model";
 import ElementPicker from "./element-picker";
 
 interface IProps {
@@ -19,7 +19,7 @@ interface IProps {
   selectedElements: List<Element>;
   onAddElement: (element: Element) => void;
   onRemoveElement: (element: Element) => void;
-  onQueryChanged: (query: IQuery) => void;
+  onQueryChanged: (query: Query) => void;
 }
 
 interface IState {

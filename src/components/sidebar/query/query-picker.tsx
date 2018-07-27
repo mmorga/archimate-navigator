@@ -10,14 +10,14 @@ import {
   Panel,
 } from "react-bootstrap";
 import {
-  IQuery,
+  Query,
 } from "../../../archimate-model";
 
 interface IProps {
   onNewQuery: () => void;
-  onQuerySelected: (query: IQuery) => void;
-  queries: List<IQuery>;
-  selectedQuery: IQuery;
+  onQuerySelected: (query: Query) => void;
+  queries: List<Query>;
+  selectedQuery: Query;
 }
 
 export default class QueryTab extends React.PureComponent<

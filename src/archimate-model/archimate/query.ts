@@ -1,29 +1,18 @@
-import { List } from "immutable";
+import { List, Set } from "immutable";
 import { Element } from "./element";
 import { Model } from "./model";
 import { Relationship } from "./relationship";
 import { RelationshipType, RelationshipTypes } from "./relationship-type";
 import { ViewpointType } from "./viewpoint-type";
 
-export interface IQuery {
-  id: string;
-  model: Model;
-  name: string;
-  viewpoint: ViewpointType;
-  elements: List<Element>;
-  relationships: List<Relationship>;
-  relationshipTypes: List<RelationshipType>;
-  pathDepth: number;
-}
-
-export class Query implements IQuery {
+export class Query {
   public id: string;
   public model: Model;
   public name: string;
   public viewpoint: ViewpointType;
   public elements: List<Element>;
   public relationships: List<Relationship>;
-  public relationshipTypes: List<RelationshipType>;
+  public relationshipTypes: Set<RelationshipType>;
   public pathDepth: number;
 
   constructor(model: Model) {
@@ -33,9 +22,13 @@ export class Query implements IQuery {
     this.viewpoint = ViewpointType.Total;
     this.elements = List<Element>();
     this.relationships = List<Relationship>();
-    this.relationshipTypes = List<RelationshipType>(RelationshipTypes);
+    this.relationshipTypes = Set<RelationshipType>(RelationshipTypes);
     this.pathDepth = 3;
   }
+
+  // public availableElementTypes(): Set<ElementType> {
+
+  // }
 
   // Add this once Immutable v4 is released
   // public hashCode(): number {

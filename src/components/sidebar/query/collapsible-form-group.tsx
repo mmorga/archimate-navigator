@@ -1,15 +1,19 @@
 import * as React from "react";
 import {
-  Badge,
   FormGroup,
+  Label,
   Panel,
 } from "react-bootstrap";
 
+export type ValidationState = "success" | "warning" | "error" | null;
+
 interface IProps {
-  badge?: React.ReactText | JSX.Element;
+  label?: React.ReactText | JSX.Element;
+  labelStyle?: "default" | "primary" | "success" | "info" | "warning" | "danger";
   controlId?: string;
   defaultExpanded?: boolean;
   title: string | JSX.Element;
+  validationState?: ValidationState;
 }
 
 export default class CollapsibleFormGroup extends React.PureComponent<
@@ -27,8 +31,10 @@ export default class CollapsibleFormGroup extends React.PureComponent<
         <Panel defaultExpanded={this.props.defaultExpanded} style={{margin: "0 -13px 0 -13px"}}>
           <Panel.Heading>
             <Panel.Title toggle={true}>
-              {this.props.title}
-              {this.props.badge ? <Badge className="pull-right">{this.props.badge}</Badge> : null}
+              <span className={this.titleClass()}>
+                {this.props.title}
+              </span>
+              {this.props.label ? <Label bsStyle={this.props.labelStyle} className="pull-right">{this.props.label}</Label> : null}
             </Panel.Title>
           </Panel.Heading>
           <Panel.Collapse>
@@ -41,5 +47,18 @@ export default class CollapsibleFormGroup extends React.PureComponent<
         </Panel>
       </React.Fragment>
     );
+  }
+
+  private titleClass(): string | undefined {
+    switch(this.props.validationState) {
+      case "success":
+        return "text-success";
+      case "warning":
+        return "text-warning";
+      case "error":
+        return "text-danger";
+      default:
+        return undefined;
+    }
   }
 }

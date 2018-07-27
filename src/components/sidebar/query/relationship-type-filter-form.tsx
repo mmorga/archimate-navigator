@@ -1,4 +1,4 @@
-import { List } from "immutable";
+import { Set } from "immutable";
 import * as React from "react";
 import {
   Button,
@@ -8,21 +8,20 @@ import {
   ListGroup,
   ListGroupItem,
   OverlayTrigger,
-  Tooltip,
-  Well,
+  Tooltip
 } from "react-bootstrap";
 import { RelationshipType, RelationshipTypes } from "../../../archimate-model";
-import CollapsibleFormGroup from "./collapsible-form-group";
-import RelationshipTypePicker from "./relationship-type-picker";
+import CollapsibleFormGroup, {
+  ValidationState
+} from "./collapsible-form-group";
 
 interface IProps {
-  selectedRelationshipTypes: List<RelationshipType>;
-  onAddRelationshipType: (relationshipType: RelationshipType) => void;
-  onRemoveRelationshipType: (relationshipType: RelationshipType) => void;
+  selectedRelationshipTypes: Set<RelationshipType>;
+  onChange: (relationshipTypes: Set<RelationshipType>) => void;
 }
 
 interface IState {
-  showRelationshipTypePicker: boolean;
+  validationState: ValidationState;
 }
 
 export default class RelationshipTypeFilterForm extends React.PureComponent<
@@ -32,85 +31,118 @@ export default class RelationshipTypeFilterForm extends React.PureComponent<
   constructor(props: IProps) {
     super(props);
     this.state = {
-      showRelationshipTypePicker: false,
-    }
+      validationState: this.validationState()
+    };
   }
 
   public render() {
-    const tooltip = (
-      <Tooltip>
-        Select Relationship Types filter criteria
-      </Tooltip>
-    );
-    const allTooltip = (
-      <Tooltip>
-        Select all Relationship Types
-      </Tooltip>
-    );
-    const badge = (
-      this.props.selectedRelationshipTypes.size === RelationshipTypes.length 
-      ? "All" 
-      : this.props.selectedRelationshipTypes.size);
+    const noneTooltip = <Tooltip>Unselect all Relationship Types</Tooltip>;
+    const allTooltip = <Tooltip>Select all Relationship Types</Tooltip>;
     return (
       <React.Fragment>
         <CollapsibleFormGroup
-            badge={badge}
-            controlId="relationship-types"
-            defaultExpanded={false}
-            title="Relationship Types Filter">
-          <ButtonGroup className="pull-right">
-          <OverlayTrigger placement="right" overlay={allTooltip}>
-              <Button bsSize="xsmall" onClick={this.onSelectAll}>
-                All
-              </Button>
+          label={this.label()}
+          labelStyle={this.props.selectedRelationshipTypes.size === 0 ? "danger" : "default"}
+          controlId="relationship-types"
+          defaultExpanded={false}
+          title="Relationship Types Filter"
+          validationState={this.state.validationState}
+        >
+          <ButtonGroup>
+            <OverlayTrigger placement="top" overlay={allTooltip}>
+              <Button onClick={this.onSelectAll}>All</Button>
             </OverlayTrigger>
-            <OverlayTrigger placement="right" overlay={tooltip}>
-              <Button bsSize="xsmall" onClick={this.onShowRelationshipTypePicker}>
-                Select...
-              </Button>
+            <OverlayTrigger placement="top" overlay={noneTooltip}>
+              <Button onClick={this.onSelectNone}>None</Button>
             </OverlayTrigger>
           </ButtonGroup>
-          {this.props.selectedRelationshipTypes.size > 0 ?
-          <Well>
-            {this.props.selectedRelationshipTypes.size < RelationshipTypes.length ?
-            <ListGroup>
-              {this.props.selectedRelationshipTypes.map(el => (el ?
-                <ListGroupItem key={el}>
-                  <div className="pull-right">
-                    <Button bsSize="xsmall" bsStyle="danger" onClick={this.onRemoveRelationshipType.bind(this, el)}>
-                      <Glyphicon glyph="remove" />
-                    </Button>
-                  </div>
-                  {<span className="text-primary">{el}</span>}
-                </ListGroupItem> : undefined
-              ))}
-            </ListGroup> : "All"}
-          </Well> : null}
-          <HelpBlock>Relationship Types to include in the query (defaults to all)</HelpBlock>
+          <ListGroup>
+            {RelationshipTypes.sort().map(
+              el =>
+                el ? (
+                  <ListGroupItem key={el}>
+                    <div className="pull-right">
+                      {this.addRemoveRelationshipType(el)}
+                    </div>
+                    {<span className="text-primary">{el}</span>}
+                  </ListGroupItem>
+                ) : (
+                  undefined
+                )
+            )}
+          </ListGroup>
+          <HelpBlock>Relationship Types to include in the query</HelpBlock>
         </CollapsibleFormGroup>
-        <RelationshipTypePicker 
-          selectedRelationshipTypes={this.props.selectedRelationshipTypes}
-          onAdd={this.props.onAddRelationshipType}
-          onRemove={this.props.onRemoveRelationshipType}
-          onClose={this.onCloseRelationshipTypePicker}
-          show={this.state.showRelationshipTypePicker}
-        />
       </React.Fragment>
     );
   }
 
-  private onShowRelationshipTypePicker = (event: any) => {
-    this.setState({ showRelationshipTypePicker: true });
-  };
+  public componentDidUpdate(prevProps: IProps, prevState: IState) {
+    if (
+      this.props.selectedRelationshipTypes !==
+      prevProps.selectedRelationshipTypes
+    ) {
+      const newValidationState = this.validationState();
+      if (newValidationState !== prevState.validationState) {
+        this.setState({ validationState: newValidationState });
+      }
+    }
+  }
 
-  private onCloseRelationshipTypePicker = () => {
-    this.setState({ showRelationshipTypePicker: false });
+  private validationState(): ValidationState {
+    if (this.props.selectedRelationshipTypes.size === 0) {
+      return "error";
+    } else {
+      return null;
+    }
   }
 
   private onSelectAll = () => {
-    // TODO: Implement this
+    this.props.onChange(Set<RelationshipType>(RelationshipTypes));
+  };
+  private onSelectNone = () => {
+    this.props.onChange(Set<RelationshipType>());
+  };
+
+  private onAddClick = (relationshipType: RelationshipType, event: any) => {
+    this.props.onChange(
+      this.props.selectedRelationshipTypes.add(relationshipType)
+    );
+  };
+
+  private onRemoveClick = (relationshipType: RelationshipType, event: any) => {
+    this.props.onChange(
+      this.props.selectedRelationshipTypes.remove(relationshipType)
+    );
+  };
+
+  private addRemoveRelationshipType(el: RelationshipType): JSX.Element {
+    // TODO: should be working with Immutable v4
+    // const isSelected = this.props.selectedRelationshipTypes.includes(el);
+    const isSelected = this.props.selectedRelationshipTypes.some(
+      e => (e ? e === el : false)
+    );
+    const glyph = isSelected ? "remove" : "plus";
+    const onClick = isSelected
+      ? this.onRemoveClick.bind(this, el)
+      : this.onAddClick.bind(this, el);
+    const bsStyle = isSelected ? "danger" : "primary";
+    return (
+      <Button bsSize="xsmall" bsStyle={bsStyle} onClick={onClick}>
+        <Glyphicon glyph={glyph} />
+      </Button>
+    );
   }
-  private onRemoveRelationshipType = (relationshipType: RelationshipType, event: any) => {
-    this.props.onRemoveRelationshipType(relationshipType);
+
+  private label() {
+    const count = this.props.selectedRelationshipTypes.size; 
+    switch (count) {
+      case RelationshipTypes.length:
+        return "All";
+      case 0:
+        return "Pick one+";
+      default:
+        return count.toString(10);
+    }
   }
 }
