@@ -10,7 +10,6 @@ import {
   ListGroupItem,
   OverlayTrigger,
   Tooltip,
-  Well,
 } from "react-bootstrap";
 import { Element, IQuery } from "../../../archimate-model";
 import ElementPicker from "./element-picker";
@@ -25,6 +24,7 @@ interface IProps {
 
 interface IState {
   showElementPicker: boolean;
+  valid: "success" | "warning" | "error";
 }
 
 export default class QueryElementsForm extends React.PureComponent<
@@ -35,6 +35,16 @@ export default class QueryElementsForm extends React.PureComponent<
     super(props);
     this.state = {
       showElementPicker: false,
+      valid: this.props.selectedElements.size > 0 ? "success" : "error",
+    }
+  }
+
+  public componentDidUpdate(prevProps: IProps, prevState: IState) {
+    if (this.props.selectedElements !== prevProps.selectedElements) {
+      const newValidationState = this.validationState();
+      if (newValidationState !== prevState.valid) {
+        this.setState({valid: newValidationState});
+      }
     }
   }
 
@@ -46,7 +56,7 @@ export default class QueryElementsForm extends React.PureComponent<
     );
     return (
       <React.Fragment>
-        <FormGroup controlId="elements">
+        <FormGroup controlId="elements" validationState={this.state.valid}>
           <ControlLabel>Elements</ControlLabel>
           <OverlayTrigger placement="right" overlay={tooltip}>
             <Button bsSize="xsmall" className="pull-right" onClick={this.onShowElementPicker}>
@@ -54,7 +64,6 @@ export default class QueryElementsForm extends React.PureComponent<
             </Button>
           </OverlayTrigger>
           {this.props.selectedElements.size > 0 ?
-          <Well>
             <ListGroup>
               {this.props.selectedElements.map(el => (el ?
                 <ListGroupItem key={el.id}>
@@ -68,8 +77,8 @@ export default class QueryElementsForm extends React.PureComponent<
                 </ListGroupItem> : undefined
               ))}
             </ListGroup>
-          </Well> : null}
-          <HelpBlock>Elements to begin query with</HelpBlock>
+            : null}
+          <HelpBlock>Elements to begin query with. Pick at least one.</HelpBlock>
         </FormGroup>
         <ElementPicker 
           allElements={this.props.allElements}
@@ -90,7 +99,12 @@ export default class QueryElementsForm extends React.PureComponent<
   private onRemoveElement = (element: Element, event: any) => {
     this.props.onRemoveElement(element);
   }
+
   private onCloseElementPicker = () => {
     this.setState({ showElementPicker: false });
+  }
+
+  private validationState = () => {
+    return this.props.selectedElements.size > 0 ? "success" : "error";
   }
 }

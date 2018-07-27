@@ -3,8 +3,6 @@ import * as React from "react";
 import {
   Button,
   ButtonGroup,
-  ControlLabel,
-  FormGroup,
   Glyphicon,
   HelpBlock,
   ListGroup,
@@ -14,6 +12,7 @@ import {
   Well,
 } from "react-bootstrap";
 import { RelationshipType, RelationshipTypes } from "../../../archimate-model";
+import CollapsibleFormGroup from "./collapsible-form-group";
 import RelationshipTypePicker from "./relationship-type-picker";
 
 interface IProps {
@@ -48,10 +47,17 @@ export default class RelationshipTypeFilterForm extends React.PureComponent<
         Select all Relationship Types
       </Tooltip>
     );
+    const badge = (
+      this.props.selectedRelationshipTypes.size === RelationshipTypes.length 
+      ? "All" 
+      : this.props.selectedRelationshipTypes.size);
     return (
       <React.Fragment>
-        <FormGroup controlId="relationship-types">
-          <ControlLabel>Relationship Types Filter</ControlLabel>
+        <CollapsibleFormGroup
+            badge={badge}
+            controlId="relationship-types"
+            defaultExpanded={false}
+            title="Relationship Types Filter">
           <ButtonGroup className="pull-right">
           <OverlayTrigger placement="right" overlay={allTooltip}>
               <Button bsSize="xsmall" onClick={this.onSelectAll}>
@@ -81,7 +87,7 @@ export default class RelationshipTypeFilterForm extends React.PureComponent<
             </ListGroup> : "All"}
           </Well> : null}
           <HelpBlock>Relationship Types to include in the query (defaults to all)</HelpBlock>
-        </FormGroup>
+        </CollapsibleFormGroup>
         <RelationshipTypePicker 
           selectedRelationshipTypes={this.props.selectedRelationshipTypes}
           onAdd={this.props.onAddRelationshipType}

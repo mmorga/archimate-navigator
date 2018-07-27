@@ -118,7 +118,11 @@ export default class QueryTab extends React.PureComponent<
   };
 
   private onQueryChanged = (query: IQuery) => {
-    this.setState({ selectedQuery: query });
+    this.state.selectedQuery.viewpoint = query.viewpoint;
+    this.setState({
+      selectedQuery: query,
+      viewpoint: query.viewpoint,
+    });
   };
 
   private onQueryAddElement = (element: Element) => {

@@ -248,3 +248,12 @@ table.properties>caption {
   stroke-width: 2px;
   stroke-dasharray: 10;
 }
+
+@keyframes archimate-dash {
+  from {
+    stroke-dashoffset: 0;
+  }
+  to {
+    stroke-dashoffset: 19;
+  }
+}

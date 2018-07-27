@@ -19,18 +19,22 @@ export default class QuerySettings extends React.PureComponent<
 
   public render() {
     return (
-      <Panel>
-        <Panel.Heading>Query Settings</Panel.Heading>
-        <Panel.Body>
-          <Form>
-            <Checkbox
-              defaultChecked={this.props.autoLayout}
-              onChange={this.autoLayoutToggled}
-            > 
-              {" Auto Layout "}
-            </Checkbox>
-          </Form>
-        </Panel.Body>
+      <Panel defaultExpanded={false}>
+        <Panel.Heading>
+          <Panel.Title componentClass="h3" toggle={true}>Query Settings</Panel.Title>
+        </Panel.Heading>
+        <Panel.Collapse>
+          <Panel.Body>
+            <Form>
+              <Checkbox
+                defaultChecked={this.props.autoLayout}
+                onChange={this.autoLayoutToggled}
+              > 
+                {" Auto Layout "}
+              </Checkbox>
+            </Form>
+          </Panel.Body>
+        </Panel.Collapse>
       </Panel>
     );
   }
