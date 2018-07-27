@@ -16,6 +16,8 @@ import CollapsibleFormGroup, {
 } from "./collapsible-form-group";
 
 interface IProps {
+  eventKey: string;
+  expanded: boolean;
   selectedRelationshipTypes: Set<RelationshipType>;
   onChange: (relationshipTypes: Set<RelationshipType>) => void;
 }
@@ -24,7 +26,7 @@ interface IState {
   validationState: ValidationState;
 }
 
-export default class RelationshipTypeFilterForm extends React.PureComponent<
+export default class RelationshipTypeFilterPanel extends React.PureComponent<
   IProps,
   IState
 > {
@@ -39,41 +41,41 @@ export default class RelationshipTypeFilterForm extends React.PureComponent<
     const noneTooltip = <Tooltip>Unselect all Relationship Types</Tooltip>;
     const allTooltip = <Tooltip>Select all Relationship Types</Tooltip>;
     return (
-      <React.Fragment>
-        <CollapsibleFormGroup
-          label={this.label()}
-          labelStyle={this.props.selectedRelationshipTypes.size === 0 ? "danger" : "default"}
-          controlId="relationship-types"
-          defaultExpanded={false}
-          title="Relationship Types Filter"
-          validationState={this.state.validationState}
-        >
-          <ButtonGroup>
-            <OverlayTrigger placement="top" overlay={allTooltip}>
-              <Button onClick={this.onSelectAll}>All</Button>
-            </OverlayTrigger>
-            <OverlayTrigger placement="top" overlay={noneTooltip}>
-              <Button onClick={this.onSelectNone}>None</Button>
-            </OverlayTrigger>
-          </ButtonGroup>
-          <ListGroup>
-            {RelationshipTypes.sort().map(
-              el =>
-                el ? (
-                  <ListGroupItem key={el}>
-                    <div className="pull-right">
-                      {this.addRemoveRelationshipType(el)}
-                    </div>
-                    {<span className="text-primary">{el}</span>}
-                  </ListGroupItem>
-                ) : (
-                  undefined
-                )
-            )}
-          </ListGroup>
-          <HelpBlock>Relationship Types to include in the query</HelpBlock>
-        </CollapsibleFormGroup>
-      </React.Fragment>
+      <CollapsibleFormGroup
+        eventKey={this.props.eventKey}
+        expanded={this.props.expanded}
+        label={this.label()}
+        labelStyle={this.props.selectedRelationshipTypes.size === 0 ? "danger" : "default"}
+        controlId="relationship-types"
+        defaultExpanded={false}
+        title="Relationship Types Filter"
+        validationState={this.state.validationState}
+      >
+        <ButtonGroup>
+          <OverlayTrigger placement="top" overlay={allTooltip}>
+            <Button onClick={this.onSelectAll}>All</Button>
+          </OverlayTrigger>
+          <OverlayTrigger placement="top" overlay={noneTooltip}>
+            <Button onClick={this.onSelectNone}>None</Button>
+          </OverlayTrigger>
+        </ButtonGroup>
+        <ListGroup>
+          {RelationshipTypes.sort().map(
+            el =>
+              el ? (
+                <ListGroupItem key={el}>
+                  <div className="pull-right">
+                    {this.addRemoveRelationshipType(el)}
+                  </div>
+                  {<span className="text-primary">{el}</span>}
+                </ListGroupItem>
+              ) : (
+                undefined
+              )
+          )}
+        </ListGroup>
+        <HelpBlock>Relationship Types to include in the query</HelpBlock>
+      </CollapsibleFormGroup>
     );
   }
 

@@ -18,17 +18,16 @@ import {
   ElementType,
   Layer,
   layerElements,
-  Layers
+  Layers,
+  Query
 } from "../../../archimate-model";
 
 type ElementTypeFilterType = ElementType | string;
 
 interface IProps {
-  allElements: List<Element>;
-  selectedElements: List<Element>;
-  onAdd: (element: Element) => void;
-  onRemove: (element: Element) => void;
+  onChange: (query: Query) => void;
   onClose: () => void;
+  query: Query;
   show: boolean;
 }
 
@@ -162,11 +161,19 @@ export default class ElementPicker extends React.PureComponent<IProps, IState> {
   };
 
   private onAddClick = (element: Element, event: any) => {
-    this.props.onAdd(element);
+    this.props.onChange(
+      this.props.query.updateQuery({
+        elements: this.props.query.elements.add(element)
+      })
+    );
   };
 
   private onRemoveClick = (element: Element, event: any) => {
-    this.props.onRemove(element);
+    this.props.onChange(
+      this.props.query.updateQuery({
+        elements: this.props.query.elements.remove(element)
+      })
+    );
   };
 
   private onClose = (event: any) => {
@@ -199,7 +206,7 @@ export default class ElementPicker extends React.PureComponent<IProps, IState> {
     if (this.state.fuse === undefined) {
       const fuseElementTypes = this.filteredElementTypes();
       const fuseFilteredElements = List<Element>(
-        this.props.allElements.filter(e => e ? fuseElementTypes.some(et => et === e.type) : false)
+        this.allElements().filter(e => e ? fuseElementTypes.some(et => et === e.type) : false)
       );
       this.setState({
         fuseElementTypes,
@@ -234,7 +241,7 @@ export default class ElementPicker extends React.PureComponent<IProps, IState> {
   private addRemoveElement(el: Element): JSX.Element {
     // TODO: should be working with Immutable v4 
     // const isSelected = this.props.selectedElements.includes(el);
-    const isSelected = this.props.selectedElements.some(e => e ? e.id === el.id : false);
+    const isSelected = this.props.query.elements.some(e => e ? e.id === el.id : false);
     const glyph = isSelected ? "remove" : "plus";
     const onClick = isSelected ? this.onRemoveClick.bind(this, el): this.onAddClick.bind(this, el);
     const bsStyle = isSelected ? "danger" : "primary";
@@ -247,5 +254,9 @@ export default class ElementPicker extends React.PureComponent<IProps, IState> {
         <Glyphicon glyph={glyph} />
       </Button>
     );
+  }
+
+  private allElements = () => {
+    return List<Element>(this.props.query.model.elements);
   }
 }

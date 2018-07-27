@@ -1,14 +1,12 @@
-import { List, Set } from "immutable";
+import { List } from "immutable";
 import * as React from "react";
 import {
   Checkbox,
 } from "react-bootstrap";
 import {
   Diagram,
-  Element,
   Model,
   Query,
-  RelationshipType,
 } from "../../../archimate-model";
 import QueryPicker from "./query-picker";
 import QuerySettings from "./query-settings";
@@ -26,7 +24,7 @@ interface IProps {
   selectedDiagram: Diagram | undefined;
 }
 
-interface IState extends Query {
+interface IState {
   queries: List<Query>;
   selectedQuery: Query;
 }
@@ -39,16 +37,8 @@ export default class QueryTab extends React.PureComponent<
     super(props);
     const query = new Query(this.props.model);
     this.state = {
-      elements: query.elements,
-      id: query.id,
-      model: query.model,
-      name: query.name,
-      pathDepth: query.pathDepth,
       queries: List([query]),
-      relationshipTypes: Set<RelationshipType>(),
-      relationships: query.relationships,
       selectedQuery: query,
-      viewpoint: query.viewpoint,
     };
   }
 
@@ -60,19 +50,6 @@ export default class QueryTab extends React.PureComponent<
         selectedQuery: query,
       });
     } 
-    if (prevState.selectedQuery !== this.state.selectedQuery) {
-      // TODO: Save previous values back to old selectedQuery\
-      const query = this.state.selectedQuery;
-      this.setState({
-        elements: query.elements,
-        id: query.id,
-        model: query.model,
-        name: query.name,
-        pathDepth: query.pathDepth,
-        relationships: query.relationships,
-        viewpoint: query.viewpoint,
-      });
-    }
   }
 
   public render() {
@@ -88,10 +65,7 @@ export default class QueryTab extends React.PureComponent<
           model={this.props.model}
           selectedDiagram={this.props.selectedDiagram}
           query={this.state.selectedQuery}
-          elements={this.state.elements}
           onQueryChanged={this.onQueryChanged}
-          onAddElement={this.onQueryAddElement}
-          onRemoveElement={this.onQueryRemoveElement}
         />
         <QuerySettings
           autoLayout={this.props.autoLayout}
@@ -114,25 +88,8 @@ export default class QueryTab extends React.PureComponent<
   };
 
   private onQueryChanged = (query: Query) => {
-    this.state.selectedQuery.viewpoint = query.viewpoint;
     this.setState({
       selectedQuery: query,
-      viewpoint: query.viewpoint,
-    });
-  };
-
-  private onQueryAddElement = (element: Element) => {
-    this.state.selectedQuery.elements = this.state.selectedQuery.elements.push(element);
-    this.setState({
-      elements: this.state.elements.push(element)
-    });
-  };
-
-  private onQueryRemoveElement = (element: Element) => {
-    const nextElements = List<Element>(this.state.selectedQuery.elements.filter(e => e ? (e.id !== element.id) : false));
-    this.state.selectedQuery.elements = nextElements;
-    this.setState({
-      elements: nextElements,
     });
   };
 }

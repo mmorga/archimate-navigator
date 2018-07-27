@@ -1,9 +1,6 @@
-import { List } from "immutable";
 import * as React from "react";
 import {
   Button,
-  ControlLabel,
-  FormGroup,
   Glyphicon,
   HelpBlock,
   ListGroup,
@@ -12,13 +9,13 @@ import {
   Tooltip,
 } from "react-bootstrap";
 import { Element, Query } from "../../../archimate-model";
+import CollapsibleFormGroup from "./collapsible-form-group";
 import ElementPicker from "./element-picker";
 
 interface IProps {
-  allElements: List<Element>;
-  selectedElements: List<Element>;
-  onAddElement: (element: Element) => void;
-  onRemoveElement: (element: Element) => void;
+  eventKey: string;
+  expanded: boolean;
+  query: Query;
   onQueryChanged: (query: Query) => void;
 }
 
@@ -27,7 +24,7 @@ interface IState {
   valid: "success" | "warning" | "error";
 }
 
-export default class QueryElementsForm extends React.PureComponent<
+export default class ElementsPanel extends React.PureComponent<
   IProps,
   IState
 > {
@@ -35,12 +32,12 @@ export default class QueryElementsForm extends React.PureComponent<
     super(props);
     this.state = {
       showElementPicker: false,
-      valid: this.props.selectedElements.size > 0 ? "success" : "error",
+      valid: this.props.query.elements.size > 0 ? "success" : "error",
     }
   }
 
   public componentDidUpdate(prevProps: IProps, prevState: IState) {
-    if (this.props.selectedElements !== prevProps.selectedElements) {
+    if (this.props.query.elements !== prevProps.query.elements) {
       const newValidationState = this.validationState();
       if (newValidationState !== prevState.valid) {
         this.setState({valid: newValidationState});
@@ -56,16 +53,24 @@ export default class QueryElementsForm extends React.PureComponent<
     );
     return (
       <React.Fragment>
-        <FormGroup controlId="elements" validationState={this.state.valid}>
-          <ControlLabel>Elements</ControlLabel>
+        <CollapsibleFormGroup
+          eventKey={this.props.eventKey}
+          expanded={this.props.expanded}
+          label={this.label()}
+          labelStyle={this.props.query.elements.size === 0 ? "danger" : "default"}
+          controlId="elements"
+          defaultExpanded={true}
+          title="Elements"
+          validationState={this.state.valid}
+        >
           <OverlayTrigger placement="right" overlay={tooltip}>
             <Button bsSize="xsmall" className="pull-right" onClick={this.onShowElementPicker}>
               <Glyphicon glyph="plus-sign" /> Add...
             </Button>
           </OverlayTrigger>
-          {this.props.selectedElements.size > 0 ?
+          {this.props.query.elements.size > 0 ?
             <ListGroup>
-              {this.props.selectedElements.map(el => (el ?
+              {this.props.query.elements.map(el => (el ?
                 <ListGroupItem key={el.id}>
                   <div className="pull-right">
                     <Button bsSize="xsmall" bsStyle="danger" onClick={this.onRemoveElement.bind(this, el)}>
@@ -79,12 +84,10 @@ export default class QueryElementsForm extends React.PureComponent<
             </ListGroup>
             : null}
           <HelpBlock>Elements to begin query with. Pick at least one.</HelpBlock>
-        </FormGroup>
-        <ElementPicker 
-          allElements={this.props.allElements}
-          selectedElements={this.props.selectedElements}
-          onAdd={this.props.onAddElement}
-          onRemove={this.props.onRemoveElement}
+        </CollapsibleFormGroup>
+        <ElementPicker
+          query={this.props.query}
+          onChange={this.props.onQueryChanged}
           onClose={this.onCloseElementPicker}
           show={this.state.showElementPicker}
         />
@@ -97,7 +100,11 @@ export default class QueryElementsForm extends React.PureComponent<
   };
 
   private onRemoveElement = (element: Element, event: any) => {
-    this.props.onRemoveElement(element);
+    this.props.onQueryChanged(
+      this.props.query.updateQuery({
+        elements: this.props.query.elements.remove(element)
+      })
+    );
   }
 
   private onCloseElementPicker = () => {
@@ -105,6 +112,16 @@ export default class QueryElementsForm extends React.PureComponent<
   }
 
   private validationState = () => {
-    return this.props.selectedElements.size > 0 ? "success" : "error";
+    return this.props.query.elements.size > 0 ? "success" : "error";
+  }
+
+  private label() {
+    const count = this.props.query.elements.size; 
+    switch (count) {
+      case 0:
+        return "Pick one+";
+      default:
+        return count.toString(10);
+    }
   }
 }

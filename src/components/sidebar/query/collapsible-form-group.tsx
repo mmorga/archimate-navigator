@@ -8,6 +8,8 @@ import {
 export type ValidationState = "success" | "warning" | "error" | null;
 
 interface IProps {
+  eventKey: string;
+  expanded: boolean;
   label?: React.ReactText | JSX.Element;
   labelStyle?: "default" | "primary" | "success" | "info" | "warning" | "danger";
   controlId?: string;
@@ -27,25 +29,21 @@ export default class CollapsibleFormGroup extends React.PureComponent<
 
   public render() {
     return (
-      <React.Fragment>
-        <Panel defaultExpanded={this.props.defaultExpanded} style={{margin: "0 -13px 0 -13px"}}>
-          <Panel.Heading>
-            <Panel.Title toggle={true}>
-              <span className={this.titleClass()}>
-                {this.props.title}
-              </span>
-              {this.props.label ? <Label bsStyle={this.props.labelStyle} className="pull-right">{this.props.label}</Label> : null}
-            </Panel.Title>
-          </Panel.Heading>
-          <Panel.Collapse>
-            <Panel.Body>
-              <FormGroup controlId={this.props.controlId}>
-                {this.props.children}
-              </FormGroup>
-            </Panel.Body>
-          </Panel.Collapse>
-        </Panel>
-      </React.Fragment>
+      <Panel eventKey={this.props.eventKey} expanded={this.props.expanded} style={{margin: "0 -13px 0 -13px"}}>
+        <Panel.Heading>
+          <Panel.Title toggle={true}>
+            <span className={this.titleClass()}>
+              {this.props.title}
+            </span>
+            {this.props.label ? <Label bsStyle={this.props.labelStyle} className="pull-right">{this.props.label}</Label> : null}
+          </Panel.Title>
+        </Panel.Heading>
+        <Panel.Body collapsible={true}>
+          <FormGroup controlId={this.props.controlId}>
+            {this.props.children}
+          </FormGroup>
+        </Panel.Body>
+      </Panel>
     );
   }
 
