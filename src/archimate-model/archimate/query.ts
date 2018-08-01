@@ -108,11 +108,24 @@ export class Query {
   private diagramNodesAndConnections(diagram: Diagram, elementsRelationships: [Element[], Relationship[]]): [ViewNode[], Connection[]] {
     const elements = elementsRelationships[0];
     const relationships = elementsRelationships[1];
+    const relationshipElements = relationships
+        .reduce((acc: Element[], rel: Relationship) => {
+          const source = rel.sourceElement();
+          const target = rel.targetElement();
+          if (source === undefined) {
+            throw new LogicError(`Relationship ${rel.id} source ${rel.source} Element not found`)
+          }
+          if (target === undefined) {
+            throw new LogicError(`Relationship ${rel.id} target ${rel.target} Element not found`)
+          }
+          return acc.concat([source as Element, target as Element]);
+        }, []);
+
     const elementViewNodeMap: Map<string, ViewNode> =
-        elements.reduce(
+        elements.concat(relationshipElements).reduce(
           (acc: Map<string, ViewNode>, el: Element) => acc.set(el.id, this.viewNodeFor(el, diagram)),
           new Map<string, ViewNode>());
-
+    
     const connections: Connection[] =
         relationships.map(rel => this.connectionFor(rel, elementViewNodeMap, diagram))
 
@@ -134,10 +147,10 @@ export class Query {
     const sourceViewNode = elementViewNodeMap.get(relationship.source);
     const targetViewNode = elementViewNodeMap.get(relationship.target);
     if (sourceViewNode === undefined) {
-      throw new LogicError("Source ViewNode not found");
+      throw new LogicError(`Source ViewNode id: ${relationship.source} not found`);
     }
     if (targetViewNode === undefined) {
-      throw new LogicError("Target ViewNode not found");
+      throw new LogicError(`Target ViewNode id: ${relationship.target} not found`);
     }
     const conn = new Connection(
       this.model,
@@ -167,6 +180,7 @@ export class Query {
       }
       resultElements.push(item.element);
       item.element.relationships()
+          .filter(rel => rel.source && rel.target)
           .filter(this.relationshipTypesFilter)
           .filter(this.relationshipElementTypesFilter)
           .forEach(relationship => {

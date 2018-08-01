@@ -1,6 +1,6 @@
 import * as d3force from "d3-force";
 import * as React from "react";
-import { Connection, Diagram, IConnection, IEntity, IEntityRef, IViewNode, ViewNode } from "../../archimate-model";
+import { Connection, Diagram, DiagramType, IConnection, IEntity, IEntityRef, IViewNode, ViewNode } from "../../archimate-model";
 import { entityClickedFunc } from "../common";
 import ArchimateConnection from "./archimate-connection";
 import ArchimateSvg from "./archimate-svg";
@@ -13,20 +13,11 @@ interface IProps {
   selectedEntity?: IEntity;
   entityClicked: entityClickedFunc;
   diagramClicked: entityClickedFunc;
-  autoLayout?: boolean;
 }
 
 interface IState {
-  loadedDiagram?: Diagram;
-  selectedEntity?: IEntity;
-  svg: void | Document;
-  error?: any;
-  loadedSrc?: string;
-  isCached?: boolean;
   simulation?: d3force.Simulation<ViewNode, Connection> | undefined;
   tickCount: number;
-  nodes: ViewNode[];
-  connections: Connection[];
 }
 
 export default class ArchimateDiagramView extends React.PureComponent<
@@ -38,11 +29,9 @@ export default class ArchimateDiagramView extends React.PureComponent<
   constructor(props: IProps) {
     super(props);
     this.state = {
-      connections: this.props.selectedDiagram ? this.props.selectedDiagram.connections : [],
-      isCached: false,
-      nodes: this.props.selectedDiagram ? this.props.selectedDiagram.nodes : [],
-      selectedEntity: this.props.selectedEntity,
-      svg: undefined,
+      // connections: this.props.selectedDiagram ? this.props.selectedDiagram.connections : [],
+      // nodes: this.props.selectedDiagram ? this.props.selectedDiagram.nodes : [],
+      simulation: undefined, // this.autoLayout(),
       tickCount: 0,
     };
   }
@@ -54,7 +43,7 @@ export default class ArchimateDiagramView extends React.PureComponent<
           key={this.props.selectedDiagram.id}
           diagram={this.props.selectedDiagram}
         >
-          {this.state.nodes.map(node => (
+          {this.nodes().map(node => (
             React.createElement(
               archimateViewNode(node),
               {
@@ -67,9 +56,9 @@ export default class ArchimateDiagramView extends React.PureComponent<
               }
             )
           ))}
-          {this.state.connections.map(conn => (
+          {this.connections().map(conn => (
             <ArchimateConnection
-                autoLayout={this.props.autoLayout}
+                autoLayout={this.isAutoLayout()}
                 key={conn.id}
                 connection={conn}
                 onClicked={this.props.entityClicked}
@@ -92,14 +81,19 @@ export default class ArchimateDiagramView extends React.PureComponent<
   }
 
   public componentDidMount() {
-    if (this.props.autoLayout && (this.state.simulation === undefined)) {
-      this.setState({simulation: this.autoLayout()});
+    if (this.isAutoLayout()) {
+      this.setState({ simulation: this.autoLayout() });
     }
   }
 
   public componentDidUpdate(prevProps: IProps) {
-    if ((prevProps.autoLayout !== this.props.autoLayout) && (this.state.simulation === undefined)) {
-      this.setState({simulation: this.autoLayout()});
+    if (prevProps.selectedDiagram !== this.props.selectedDiagram) {
+      if (this.state.simulation) {
+        this.state.simulation.stop();
+      }
+      this.setState({
+        simulation: this.isAutoLayout() ? this.autoLayout() : undefined
+      });
     }
   }
 
@@ -107,6 +101,18 @@ export default class ArchimateDiagramView extends React.PureComponent<
     if (this.state.simulation) {
       this.state.simulation.stop();
     }
+  }
+
+  private connections(): Connection[] {
+    return this.props.selectedDiagram ? this.props.selectedDiagram.connections : [];
+  }
+
+  private nodes(): ViewNode[] {
+    return this.props.selectedDiagram ? this.props.selectedDiagram.nodes : [];
+  }
+
+  private isAutoLayout() {
+    return (this.props.selectedDiagram && (this.props.selectedDiagram.type === DiagramType.ModelQuery)) || false;
   }
 
   // TODO: We have a problem with edges that target an edge.
@@ -180,8 +186,8 @@ export default class ArchimateDiagramView extends React.PureComponent<
   private ticked = () => {
     // Update…
     this.setState({
-      connections: (this.props.selectedDiagram as Diagram).connections,
-      nodes: (this.props.selectedDiagram as Diagram).nodes,
+      // connections: (this.props.selectedDiagram as Diagram).connections,
+      // nodes: (this.props.selectedDiagram as Diagram).nodes,
       tickCount: this.state.tickCount + 1,
     })
     this.forceUpdate();

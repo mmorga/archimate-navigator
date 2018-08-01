@@ -18,14 +18,13 @@ export type autoLayoutToggledFunc = (
 ) => void;
 
 interface IProps {
-  autoLayout: boolean;
   model: Model;
-  onAutoLayoutToggled: (autoLayout: boolean) => void;
   selectedDiagram: Diagram | undefined;
   onDiagramUpdated: (diagram: Diagram) => void;
 }
 
 interface IState {
+  autoLayout: boolean;
   queries: List<Query>;
   selectedQuery: Query;
 }
@@ -38,6 +37,7 @@ export default class QueryTab extends React.PureComponent<
     super(props);
     const query = new Query(this.props.model);
     this.state = {
+      autoLayout: true,
       queries: List([query]),
       selectedQuery: query,
     };
@@ -69,8 +69,8 @@ export default class QueryTab extends React.PureComponent<
           onQueryChanged={this.onQueryChanged}
         />
         <QuerySettings
-          autoLayout={this.props.autoLayout}
-          onAutoLayoutToggled={this.props.onAutoLayoutToggled}
+          autoLayout={this.state.autoLayout}
+          onAutoLayoutToggled={this.onAutoLayoutToggled}
         />
       </React.Fragment>
     );
@@ -78,10 +78,8 @@ export default class QueryTab extends React.PureComponent<
 
   private onQuerySelected = (event: any /*: React.FormEvent<FormControl>*/) => {
     const query = event.target.value as Query;
-    const diagram = query.run();
     this.setState({ selectedQuery: query });
-    this.props.onDiagramUpdated(diagram);
-  };
+  }
 
   private onNewQuery = () => {
     const newQuery = new Query(this.props.model);
@@ -89,11 +87,17 @@ export default class QueryTab extends React.PureComponent<
       queries: this.state.queries.push(newQuery),
       selectedQuery: newQuery,
      });
-  };
+  }
 
   private onQueryChanged = (query: Query) => {
+    const diagram = query.run();
     this.setState({
       selectedQuery: query,
     });
-  };
+    this.props.onDiagramUpdated(diagram);
+  }
+
+  private onAutoLayoutToggled = (event: any) => {
+    this.setState({ autoLayout: !this.state.autoLayout });
+  }
 }

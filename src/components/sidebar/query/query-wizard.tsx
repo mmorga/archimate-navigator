@@ -77,7 +77,7 @@ export default class QueryWizard extends React.PureComponent<IProps> {
   private runQuery = (event: any) => {
     this.props.onQueryChanged(this.props.query);
   }
-  
+
   private onQueryNameChanged = (event: any) => {
     this.props.onQueryChanged(this.props.query.updateQuery({ name: event.target.value }));
   };

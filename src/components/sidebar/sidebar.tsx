@@ -17,11 +17,9 @@ export enum SidebarTab {
 }
 
 interface IProps {
-  autoLayout: boolean;
   diagramLinkClicked: entityClickedFunc;
   entityClicked: entityClickedFunc;
   model: Model;
-  onAutoLayoutToggled: (autoLayout: boolean) => void;
   onDiagramUpdated: (diagram: Diagram) => void;
   onTabSelected: (eventKey: any) => void;
   selectedDiagram?: Diagram;
@@ -86,9 +84,7 @@ export default class Sidebar extends React.Component<IProps, IState> {
           </Tab>
           <Tab eventKey={SidebarTab.GraphTab} title="Query">
             <QueryTab
-              autoLayout={this.props.autoLayout}
               model={this.props.model}
-              onAutoLayoutToggled={this.props.onAutoLayoutToggled}
               selectedDiagram={this.props.selectedDiagram}
               onDiagramUpdated={this.props.onDiagramUpdated}
             />

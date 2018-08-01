@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Alert, Button, Modal } from "react-bootstrap";
-import { Diagram, IEntity, Model, parse } from "../archimate-model";
+import { Diagram, IEntity, LogicError, Model, parse } from "../archimate-model";
 import "./archimate-navigator.css";
 import ArchimateDiagramView from "./main/archimate-diagram-view";
 import Sidebar, { SidebarTab } from "./sidebar/sidebar";
@@ -12,7 +12,6 @@ interface IProps {
 }
 
 interface IState {
-  autolayout: boolean;
   error?: any;
   loadStart?: number;
   loadTime?: number;
@@ -40,7 +39,6 @@ export default class ArchimateNavigator extends React.Component<
     const selectedEntity =
       model.lookup(props.selectedEntityId) || selectedDiagram;
     this.state = {
-      autolayout: false,
       model,
       selectedDiagram,
       selectedEntity,
@@ -56,11 +54,9 @@ export default class ArchimateNavigator extends React.Component<
         {this.workingView()}
         <div className="archimate-row">
           <Sidebar
-            autoLayout={this.state.autolayout}
             diagramLinkClicked={this.onDiagramLinkClick}
             entityClicked={this.onEntityClick}
             model={this.state.model}
-            onAutoLayoutToggled={this.onAutoLayoutToggled}
             onDiagramUpdated={this.onDiagramLinkClick}
             onTabSelected={this.onSidebarTabSelected}
             selectedDiagram={this.state.selectedDiagram}
@@ -70,7 +66,6 @@ export default class ArchimateNavigator extends React.Component<
           <div className="archimate-diagram-view">
             <div className="archimate-svg-container">
               <ArchimateDiagramView
-                autoLayout={this.state.autolayout}
                 key={
                   this.state.selectedDiagram
                     ? this.state.selectedDiagram.id
@@ -207,6 +202,7 @@ export default class ArchimateNavigator extends React.Component<
     event?: React.MouseEvent<Element>
   ) => {
     if (!entity) {
+      throw new LogicError("diagram wasn't passed");
       this.setState({ selectedDiagram: undefined });
       return;
     }
@@ -235,10 +231,6 @@ export default class ArchimateNavigator extends React.Component<
     if (entity instanceof Diagram) {
       this.onDiagramLinkClick(entity as Diagram);
     }
-  };
-
-  private onAutoLayoutToggled = (autolayout: boolean) => {
-    this.setState({ autolayout });
   };
 
   // Called when a sidebar tab is clicked.

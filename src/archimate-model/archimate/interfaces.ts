@@ -57,8 +57,8 @@ export interface IEntityRef {
 }
 
 export interface IRelationship extends IEntity {
-  source?: string; // comparison_attr: :id, writable: true, default: nil
-  target?: string; // comparison_attr: :id, writable: true, default: nil
+  source: string; // comparison_attr: :id, writable: true, default: nil
+  target: string; // comparison_attr: :id, writable: true, default: nil
   accessType?: AccessType; // default: nil
 
   sourceElement(): IEntity | undefined;
