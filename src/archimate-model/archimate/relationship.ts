@@ -15,17 +15,19 @@ export class Relationship implements IRelationship {
   public name?: string;
   public documentation?: string;
   public properties: Property[];
-  public source?: string;
-  public target?: string;
+  public source: string;
+  public target: string;
   public accessType?: AccessType;
   public derived: boolean = false;
   public strength?: string;
   public model: IModel;
 
-  constructor(model: IModel, type: RelationshipType) {
+  constructor(model: IModel, type: RelationshipType, source: string, target: string) {
     this.model = model;
     this.type = type;
     this.id = model.makeUniqueId();
+    this.source = source;
+    this.target = target;
     this.properties = [];
   }
 

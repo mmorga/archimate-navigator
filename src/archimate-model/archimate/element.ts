@@ -53,6 +53,14 @@ export class Element implements IEntity, IHasRelationships {
     return this.relationshipCache;
   }
 
+  public sourceRelationships(): IRelationship[] {
+    return this.model.relationships.filter(rel => (rel.source === this.id));
+  }
+
+  public targetRelationships(): IRelationship[] {
+    return this.model.relationships.filter(rel => (rel.target === this.id));
+  }
+
   // Diagrams that this entity is referenced in.
   public diagrams() {
     if (this.diagramCache) {

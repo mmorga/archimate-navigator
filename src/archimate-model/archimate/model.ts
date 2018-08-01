@@ -4,16 +4,14 @@ import {
   IEntity,
   IHasOrganizations,
   IIdentifiable,
-  IModel
+  IModel,
 } from "./interfaces";
 import { Organization } from "./organization";
 import { Property } from "./property";
 import { Relationship } from "./relationship";
 
-function emptyIndexHash() {
-  return new Map<string, IEntity>();
-}
-
+export type AdjacencyList = Map<Element, Relationship[]>;
+  
 // This is the root model type.
 // It is a container for the elements, relationships, diagrams and
 // organizations of the model.
@@ -100,6 +98,11 @@ export class Model implements IModel {
     this.indexHash.delete(node.id);
   }
 
+  public adjacencyList(): AdjacencyList {
+    const list = new Map<Element, Relationship[]>();
+    return this.elements.reduce(adjacencyListReducer, list);
+  }
+
   private rebuildIndex(missingId?: string) {
     if (missingId === undefined) {
       return this;
@@ -141,4 +144,12 @@ export class Model implements IModel {
     ref.organizations.forEach(regFunc);
     return ref;
   }
+}
+
+function emptyIndexHash() {
+  return new Map<string, IEntity>();
+}
+
+function adjacencyListReducer(alMap: AdjacencyList, cv: Element): AdjacencyList {
+  return alMap.set(cv, cv.relationships() as Relationship[]);
 }

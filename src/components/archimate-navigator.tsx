@@ -61,6 +61,7 @@ export default class ArchimateNavigator extends React.Component<
             entityClicked={this.onEntityClick}
             model={this.state.model}
             onAutoLayoutToggled={this.onAutoLayoutToggled}
+            onDiagramUpdated={this.onDiagramLinkClick}
             onTabSelected={this.onSidebarTabSelected}
             selectedDiagram={this.state.selectedDiagram}
             selectedEntity={this.state.selectedEntity}

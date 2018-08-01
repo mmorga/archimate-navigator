@@ -20,8 +20,9 @@ export type autoLayoutToggledFunc = (
 interface IProps {
   autoLayout: boolean;
   model: Model;
-  onAutoLayoutToggled: (autoLayout: boolean) => void,
+  onAutoLayoutToggled: (autoLayout: boolean) => void;
   selectedDiagram: Diagram | undefined;
+  onDiagramUpdated: (diagram: Diagram) => void;
 }
 
 interface IState {
@@ -76,7 +77,10 @@ export default class QueryTab extends React.PureComponent<
   }
 
   private onQuerySelected = (event: any /*: React.FormEvent<FormControl>*/) => {
-    this.setState({ selectedQuery: event.target.value });
+    const query = event.target.value as Query;
+    const diagram = query.run();
+    this.setState({ selectedQuery: query });
+    this.props.onDiagramUpdated(diagram);
   };
 
   private onNewQuery = () => {

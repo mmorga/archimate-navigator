@@ -22,6 +22,7 @@ interface IProps {
   entityClicked: entityClickedFunc;
   model: Model;
   onAutoLayoutToggled: (autoLayout: boolean) => void;
+  onDiagramUpdated: (diagram: Diagram) => void;
   onTabSelected: (eventKey: any) => void;
   selectedDiagram?: Diagram;
   selectedEntity?: IEntity;
@@ -89,6 +90,7 @@ export default class Sidebar extends React.Component<IProps, IState> {
               model={this.props.model}
               onAutoLayoutToggled={this.props.onAutoLayoutToggled}
               selectedDiagram={this.props.selectedDiagram}
+              onDiagramUpdated={this.props.onDiagramUpdated}
             />
           </Tab>
         </Tabs>

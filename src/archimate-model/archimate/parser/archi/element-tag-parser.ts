@@ -2,7 +2,7 @@ import { AccessType } from "../../access-type";
 import { DiagramType } from "../../diagram-type";
 import { Element as ArchiElement } from "../../element";
 import { ElementType } from "../../element-type";
-import { IModel } from "../../interfaces";
+import { IModel, ParserError } from "../../interfaces";
 import { Relationship } from "../../relationship";
 import { RelationshipType } from "../../relationship-type";
 import { DiagramParser } from "./diagram-parser";
@@ -44,13 +44,19 @@ export class ElementTagParser {
   }
 
   private parseArchimateRelationship(el: Element, type: RelationshipType) {
-    const relationship = new Relationship(this.model, type);
+    const source = getStringAttribute(el, "source");
+    const target = getStringAttribute(el, "target");
+    if (source === undefined) {
+      throw new ParserError("Expected source to be present");
+    }
+    if (target === undefined) {
+      throw new ParserError("Expected target to be present");
+    }
+    const relationship = new Relationship(this.model, type, source, target);
     relationship.id = getStringAttribute(el, "id") || "";
     relationship.name = getStringAttribute(el, "name") || "";
     relationship.documentation = this.documentationParser.value(el);
     relationship.properties = this.propertiesParser.properties(el);
-    relationship.source = getStringAttribute(el, "source");
-    relationship.target = getStringAttribute(el, "target");
     relationship.strength = getStringAttribute(el, "strength");
     relationship.accessType = this.parseAccessType(el);
     this.model.relationships.push(relationship);
