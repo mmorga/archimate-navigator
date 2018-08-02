@@ -1,6 +1,5 @@
 import * as React from "react";
 import {
-  Button,
   ControlLabel,
   Form,
   FormControl,
@@ -66,16 +65,11 @@ export default class QueryWizard extends React.PureComponent<IProps> {
               <OptionsPanel
                 query={this.props.query}
                 onQueryChanged={this.props.onQueryChanged} />
-              <Button onClick={this.runQuery}>Run</Button>
             </Form>
           </Panel.Body>
         </Panel.Collapse>
       </Panel>
     );
-  }
-
-  private runQuery = (event: any) => {
-    this.props.onQueryChanged(this.props.query);
   }
 
   private onQueryNameChanged = (event: any) => {

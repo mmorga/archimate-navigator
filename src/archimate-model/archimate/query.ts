@@ -52,7 +52,7 @@ export class Query {
     this.includeDerivedRelations = false;
     this.model = model;
     this.name = "New Query";
-    this.pathDepth = 3;
+    this.pathDepth = 2;
     this.relationships = Set<Relationship>();
     this.relationshipTypes = Set<RelationshipType>(RelationshipTypes);
     this.viewpoint = ViewpointType.Total;
@@ -168,7 +168,7 @@ export class Query {
     let visited = Set<Element>(this.elements);
     const queue: ISearchQueueItem[] = 
         Array.from<Element>(this.elements.toJS())
-        .map(el => ({element: el, depth: 0}));
+        .map(el => ({element: el, depth: 1}));
 
     const resultElements: Element[] = [];
     const resultRelationships: Relationship[] = [];

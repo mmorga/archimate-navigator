@@ -35,6 +35,7 @@ export class Diagram implements IDiagram {
   }
 
   public relationships(): Relationship[] {
+    // TODO: expire this if the diagram changes
     if (this.relationshipsCache) {
       return this.relationshipsCache;
     }
@@ -46,6 +47,7 @@ export class Diagram implements IDiagram {
   }
 
   public elements(): Element[] {
+    // TODO: expire this if the diagram changes
     if (this.elementsCache) {
       return this.elementsCache;
     }
@@ -57,6 +59,7 @@ export class Diagram implements IDiagram {
   }
 
   public diagrams(): Diagram[] {
+    // TODO: expire this if the diagram changes
     if (this.diagramsCache) {
       return this.diagramsCache;
     }
@@ -92,7 +95,10 @@ export class Diagram implements IDiagram {
   public calculateMaxExtents() {
     const nodeVals =
       this.nodes
-          .map(node => node.bounds as Bounds)
+          .map(node => {
+            const bounds = node.bounds as Bounds;
+            return new Bounds(node.x || bounds.x || 0, node.y || bounds.y || 0, bounds.width, bounds.height);
+          })
           .map(bounds => [bounds.x || 0, bounds.y || 0, bounds.width, bounds.height]);
           // TODO: Add connection calculation
     // doc.css(".archimate-relationship")

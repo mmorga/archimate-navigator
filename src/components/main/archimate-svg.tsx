@@ -1,33 +1,33 @@
-import createPanZoom from "panzoom";
 import * as React from "react";
 import { Diagram } from "../../archimate-model";
 import "./archimate-svg.css";
 
 interface IProps {
   diagram: Diagram;
+  // viewBox: SVGRect;
 }
 
 interface IState {
   viewBox?: SVGRect;
-  panzoom?: any; // PanZoom.IPanZoom;
-  x: number;
-  y: number;
 }
 
 export default class ArchimateSvg extends React.PureComponent<IProps, IState> {
-  private svgTopGroup: React.RefObject<SVGGElement>;
-  private panzoom: object | undefined = undefined;
-
   constructor(props: IProps) {
     super(props);
     this.state = {
       viewBox: this.props.diagram.calculateMaxExtents(),
-      x: 0,
-      y: 0,
     }
-    this.svgLoaded = this.svgLoaded.bind(this);
-    this.svgResized = this.svgResized.bind(this);
-    this.svgTopGroup = React.createRef();
+  }
+
+  public componentDidUpdate(prevProps: IProps, prevState: IState) {
+    const viewBox = this.props.diagram.calculateMaxExtents();
+    if ((prevState.viewBox === undefined) ||
+        (prevState.viewBox.height !== viewBox.height) ||
+        (prevState.viewBox.width !== viewBox.width) ||
+        (prevState.viewBox.x !== viewBox.x) ||
+        (prevState.viewBox.y !== viewBox.y)) {
+      this.setState({ viewBox });
+    }
   }
 
   public render() {
@@ -218,42 +218,14 @@ export default class ArchimateSvg extends React.PureComponent<IProps, IState> {
             <polygon points="12.5,6.25 22.5,12.5 12.5,18.75 2.5,12.5" fill="white" stroke="black"/>
           </marker>
         </defs>
-        <g ref={this.svgTopGroup}>
-          { this.props.children }
-        </g>
+        { this.props.children }
       </svg>
     );
   }
 
-  public componentDidMount() {
-    const svgTopGroup = this.svgTopGroup.current;
-    if (svgTopGroup && (this.props.diagram.nodes.length > 0)) {
-      // TODO: Send the typescript type as a patch
-      if (this.state.panzoom === undefined) {
-        const panzoom = createPanZoom(svgTopGroup, {});
-        panzoom.moveTo(this.state.x, this.state.y);
-        this.setState({panzoom});
-      }
-    }
-  }
-
-  public componentWillUnmount() {
-    if (this.panzoom) {
-      if (this.state.panzoom) {
-        // TODO:
-        this.state.panzoom.dispose();
-        this.setState({panzoom: undefined});
-      }
-    }
-  }
-
-  public svgLoaded(evt: React.SyntheticEvent<SVGSVGElement>) {
+  public svgLoaded = (evt: React.SyntheticEvent<SVGSVGElement>) => {
     const svg = evt.currentTarget;
     const bbox = svg.getBBox();
     this.setState({viewBox: bbox})
-  }
-  
-  public svgResized(evt: React.SyntheticEvent<SVGSVGElement>) {
-    this.svgLoaded(evt);
   }
 }

@@ -1,4 +1,5 @@
 import * as d3force from "d3-force";
+import createPanZoom from "panzoom";
 import * as React from "react";
 import { Connection, Diagram, DiagramType, IConnection, IEntity, IEntityRef, IViewNode, ViewNode } from "../../archimate-model";
 import { entityClickedFunc } from "../common";
@@ -16,6 +17,7 @@ interface IProps {
 }
 
 interface IState {
+  panzoom?: any; // PanZoom.IPanZoom;
   simulation?: d3force.Simulation<ViewNode, Connection> | undefined;
   tickCount: number;
 }
@@ -24,16 +26,16 @@ export default class ArchimateDiagramView extends React.PureComponent<
   IProps,
   IState
 > {
-  private nodeWidth = 120;
+  private nodeWidth = 120; // TODO: this should be from the SVG diagram stuff.
+  private svgTopGroup: React.RefObject<SVGGElement>;
 
   constructor(props: IProps) {
     super(props);
     this.state = {
-      // connections: this.props.selectedDiagram ? this.props.selectedDiagram.connections : [],
-      // nodes: this.props.selectedDiagram ? this.props.selectedDiagram.nodes : [],
-      simulation: undefined, // this.autoLayout(),
+      simulation: undefined,
       tickCount: 0,
     };
+    this.svgTopGroup = React.createRef();
   }
 
   public render() {
@@ -43,32 +45,34 @@ export default class ArchimateDiagramView extends React.PureComponent<
           key={this.props.selectedDiagram.id}
           diagram={this.props.selectedDiagram}
         >
-          {this.nodes().map(node => (
-            React.createElement(
-              archimateViewNode(node),
-              {
-                key: node.id,
-                onClicked: this.props.entityClicked,
-                selected: this.nodeIsSelected(node),
-                viewNode: node,
-                x: node.x || node.bounds.left,
-                y: node.y || node.bounds.top,
-              }
-            )
-          ))}
-          {this.connections().map(conn => (
-            <ArchimateConnection
-                autoLayout={this.isAutoLayout()}
-                key={conn.id}
-                connection={conn}
-                onClicked={this.props.entityClicked}
-                selected={this.nodeIsSelected(conn)}
-                fromX={conn.sourceBounds().left}
-                fromY={conn.sourceBounds().top}
-                toX={conn.targetBounds().left}
-                toY={conn.targetBounds().top}
-            />
-          ))}
+          <g ref={this.svgTopGroup} transform="matrix(1, 0, 0, 1, 5, 5)">
+            {this.nodes().map(node => (
+              React.createElement(
+                archimateViewNode(node),
+                {
+                  key: node.id,
+                  onClicked: this.props.entityClicked,
+                  selected: this.nodeIsSelected(node),
+                  viewNode: node,
+                  x: node.x || node.bounds.left,
+                  y: node.y || node.bounds.top,
+                }
+              )
+            ))}
+            {this.connections().map(conn => (
+              <ArchimateConnection
+                  autoLayout={this.isAutoLayout()}
+                  key={conn.id}
+                  connection={conn}
+                  onClicked={this.props.entityClicked}
+                  selected={this.nodeIsSelected(conn)}
+                  fromX={conn.sourceBounds().left}
+                  fromY={conn.sourceBounds().top}
+                  toX={conn.targetBounds().left}
+                  toY={conn.targetBounds().top}
+              />
+            ))}
+          </g>
         </ArchimateSvg>
       );
     } else {
@@ -81,6 +85,14 @@ export default class ArchimateDiagramView extends React.PureComponent<
   }
 
   public componentDidMount() {
+    const svgTopGroup = this.svgTopGroup.current;
+    if (svgTopGroup && (this.nodes().length > 0)) {
+      if (this.state.panzoom === undefined) {
+        const panzoom = createPanZoom(svgTopGroup, {});
+        panzoom.moveTo(0, 0);
+        this.setState({panzoom});
+      }
+    }
     if (this.isAutoLayout()) {
       this.setState({ simulation: this.autoLayout() });
     }
@@ -98,6 +110,11 @@ export default class ArchimateDiagramView extends React.PureComponent<
   }
 
   public componentWillUnmount() {
+    if (this.state.panzoom) {
+      this.state.panzoom.dispose();
+      this.setState({panzoom: undefined});
+    }
+  
     if (this.state.simulation) {
       this.state.simulation.stop();
     }
@@ -120,12 +137,6 @@ export default class ArchimateDiagramView extends React.PureComponent<
     if (this.props.selectedDiagram === undefined) {
       return undefined;
     }
-    // TODO: Make this better
-    // const svgEl = document.querySelector("svg");
-    // if (svgEl === null) {
-    //   return false;
-    // }
-    // const clientRect = svgEl.getClientRects()[0];
 
     // TODO: Needs to be a way to handle edges that connect to other edges
     //       current solution is to remove the edge from the selected set.
@@ -135,39 +146,42 @@ export default class ArchimateDiagramView extends React.PureComponent<
         .id((node: IViewNode, i: number, nodesData: IViewNode[]) => node.id)
         // TODO: experiment with this
         .distance(this.adjustLinkDistance);
+    const extents = this.props.selectedDiagram.calculateMaxExtents();
     return (
       d3force
         .forceSimulation(this.props.selectedDiagram.nodes)
-        // .force(
-        //   "center",
-        //   d3force.forceCenter(clientRect.width / 2, clientRect.height / 2)
-        // )
+        .force("center", d3force.forceCenter(extents.width / 2, extents.height / 2))
         .force("collide", d3force.forceCollide(this.nodeWidth))
-        .force(
-          "link",
-          forceLink
-        )
+        .force("link", forceLink)
         .force("charge", d3force.forceManyBody())
         .on("tick", this.ticked)
     );
-
-    // this.graphNodes.updateNodes(graph.nodes);
-    // this.graphLinks.updateLinks(graph.links);
-
-    // TODO: on resize, the center point of the simulation force need to be set.
-    // initResizeHandler(() => {
-    //     const resizeClientRect = curDiagramParent.getClientRects()[0];
-    //     simulation.force("center", d3force.forceCenter(resizeClientRect.width / 2, resizeClientRect.height / 2));
-    // });
-
-    // TODO: while the simulation is running, periodically reset the view box if
-    //       the user hasn't already started to zoom in.
-    // function resetViewBoxUnlessZoomed() {
-    //     if (graphG.attr("transform") === "translate(0,0)") {
-    //         resetViewBox(svgEl);
-    //     }
-    // }
   }
+
+  // TODO: on resize, the center point of the simulation force need to be set.
+  // private initResizeHandler = () => {
+  //   if (!this.state.simulation) {
+  //     return;
+  //   }
+  //   const resizeClientRect = this.getClientRect();
+  //   this.state.simulation.force("center", d3force.forceCenter(resizeClientRect.width / 2, resizeClientRect.height / 2));
+  // };
+
+  // TODO: while the simulation is running, periodically reset the view box if
+  //       the user hasn't already started to zoom in.
+  // private resetViewBoxUnlessZoomed = () => {
+  //   if (this.svgTopGroup.current) {
+  //   // if (this.svgTopGroup.current.attr("transform") === "translate(0,0)") {
+  //     this.resetPanZoom();
+  //   }
+  // }
+
+  // private resetPanZoom = () => {
+  //   if (this.props.selectedDiagram && this.state.panzoom) {
+  //     const viewBox = this.props.selectedDiagram.calculateMaxExtents();
+  //     // this.state.panzoom.moveTo(viewBox.x, viewBox.y, 1);
+  //   }
+  // }
 
   private adjustLinkDistance = (d: IConnection): number => {
     // switch (d.linkType) {
@@ -186,12 +200,29 @@ export default class ArchimateDiagramView extends React.PureComponent<
   private ticked = () => {
     // Update…
     this.setState({
-      // connections: (this.props.selectedDiagram as Diagram).connections,
-      // nodes: (this.props.selectedDiagram as Diagram).nodes,
       tickCount: this.state.tickCount + 1,
-    })
+    });
+    if (this.state.simulation && this.props.selectedDiagram) {
+      const extents = this.props.selectedDiagram.calculateMaxExtents();
+      const x = extents.width / 2;
+      const y = extents.height / 2;
+      this.state.simulation.force("center", d3force.forceCenter(x, y));
+      if (this.state.panzoom) {
+        let scaleMultiplier = 1;
+        if (this.svgTopGroup && this.svgTopGroup.current) {
+          const svg = this.svgTopGroup.current;
+          if (svg) {
+            const clientRect = svg.getClientRects()[0];
+            const xScale =  (extents.width + 20) / clientRect.width;
+            const yScale =  (extents.height + 20) / clientRect.height;
+            scaleMultiplier = Math.min(xScale, yScale);
+          }
+        }
+        this.state.panzoom.zoomTo(x, y, scaleMultiplier)
+      }
+    }
     this.forceUpdate();
-    // resetViewBoxUnlessZoomed();  // TODO: hook this up with Svg class instance
+    // this.resetViewBoxUnlessZoomed();
   };
 
   private nodeIsSelected(node: IEntityRef): boolean {
