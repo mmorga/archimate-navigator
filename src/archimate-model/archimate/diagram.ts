@@ -36,9 +36,9 @@ export class Diagram implements IDiagram {
 
   public relationships(): Relationship[] {
     // TODO: expire this if the diagram changes
-    if (this.relationshipsCache) {
-      return this.relationshipsCache;
-    }
+    // if (this.relationshipsCache) {
+    //   return this.relationshipsCache;
+    // }
     this.relationshipsCache = this.connections
         .map(conn => conn.entityInstance())
         .filter(el => el !== undefined)
@@ -48,9 +48,9 @@ export class Diagram implements IDiagram {
 
   public elements(): Element[] {
     // TODO: expire this if the diagram changes
-    if (this.elementsCache) {
-      return this.elementsCache;
-    }
+    // if (this.elementsCache) {
+    //   return this.elementsCache;
+    // }
     this.elementsCache = this.nodes
         .map(viewNode => viewNode.entityInstance())
         .filter(entity => entity instanceof Element)

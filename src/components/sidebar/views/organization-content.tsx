@@ -1,3 +1,5 @@
+import { isEqual } from "lodash-es";
+import memoize from "memoize-one";
 import * as React from "react";
 import { IEntity, Organization } from "../../../archimate-model";
 import "../../archimate-navigator.css";
@@ -6,29 +8,80 @@ import OrganizationItem from "./organization-item";
 import OrganizationTree from "./organization-tree";
 
 interface IProps {
-  organization: Organization;
+  // model: Model;
+  // organization: Organization;
+  organizations: Organization[];
+  items: IEntity[];
   entityClicked: entityClickedFunc;
   selectedEntity: IEntity | undefined;
 }
 
+interface IState {
+  itemEntities: string[];
+}
+
 // Displays the list of organizations and entities that belong to the given organization
-export default class OrganizationContent extends React.PureComponent<IProps> {
+export default class OrganizationContent extends React.Component<IProps, IState> {
+  public static getDerivedStateFromProps(props: Readonly<IProps>, state: Readonly<IState>): IState | null {
+    const itemEntities = props.items.map(i => i.id);
+    if (state && isEqual(itemEntities, state.itemEntities)) {
+      return null;
+    } else {
+      return { itemEntities };
+    }
+  }
+
+  private sortedOrganizations = memoize<(organizations: Organization[]) => Organization[]>(
+    organizations => organizations.sort(entitySortFunc)
+  );
+
+  // private sortedItems = memoize<(items: string[]) => IEntity[]>(
+  //   items => items
+  //       .map(id => this.props.model.lookup(id))
+  //       .filter(e => e !== undefined)
+  //       .map(e => e as IEntity)
+  //       .sort(entitySortFunc)
+  // );
+
   constructor(props: IProps) {
     super(props);
+    this.state = {
+      itemEntities: []
+    }
   }
+
+  public shouldComponentUpdate(nextProps: Readonly<IProps>, nextState: Readonly<IState>): boolean {
+    if ((this.props.organizations !== nextProps.organizations) ||
+        (this.props.items !== nextProps.items) ||
+        (this.props.selectedEntity !== nextProps.selectedEntity)) {
+      return true;
+    }
+
+    if (this.state.itemEntities.length !== nextState.itemEntities.length) {
+      return true;
+    }
+
+    return !isEqual(this.state.itemEntities, nextState.itemEntities);
+  }
+
+  // public componentDidUpdate(prevProps: IProps) {
+  // }
 
   public render() {
     return (
       <ul className="archimate-organization-list">
-        {this.props.organization.organizations.sort(entitySortFunc).map(organization => (
+        {this.sortedOrganizations(this.props.organizations).map(organization => (
           <OrganizationTree
             key={organization.id}
-            organization={organization}
+            organizationName={organization.name}
+            organizationId={organization.id}
+            organizations={organization.organizations}
+            items={organization.itemEntities()}
             entityClicked={this.props.entityClicked}
             selectedEntity={this.props.selectedEntity}
           />
         ))}
-        {this.props.organization.itemEntities().sort(entitySortFunc).map(entity => (
+        {this.props.items.sort(entitySortFunc).map(entity => (
           <OrganizationItem
             key={entity.id}
             entity={entity}

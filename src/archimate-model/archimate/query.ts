@@ -43,7 +43,6 @@ export class Query {
   public relationships: Set<Relationship>;
   public relationshipTypes: Set<RelationshipType>;
   public viewpoint: ViewpointType;
-  private diagram: Diagram;
 
   constructor(model: Model) {
     this.elements = Set<Element>();
@@ -56,8 +55,6 @@ export class Query {
     this.relationships = Set<Relationship>();
     this.relationshipTypes = Set<RelationshipType>(RelationshipTypes);
     this.viewpoint = ViewpointType.Total;
-    this.diagram = new Diagram(this.model, DiagramType.ModelQuery);
-    this.model.diagrams.push(this.diagram);
   }
 
   public updateQuery(props: IQueryUpdateProps): Query {
@@ -95,14 +92,29 @@ export class Query {
   // }
 
   public run(): Diagram {
-    const nodesConns = this.diagramNodesAndConnections(this.diagram, this.queryResultElementsAndRelationships());
-    this.diagram.id = this.id;
-    this.diagram.name = this.name;
+    const diagram = this.findOrCreateDiagram();
+    const nodesConns = this.diagramNodesAndConnections(diagram, this.queryResultElementsAndRelationships());
+    diagram.name = this.name;
     // diagram.properties = TODO: convert this query into properties so queries can be saved in the standard file format
-    this.diagram.viewpoint = this.viewpoint;
-    this.diagram.nodes = nodesConns[0];
-    this.diagram.connections = nodesConns[1];
-    return this.diagram;
+    diagram.viewpoint = this.viewpoint;
+    diagram.nodes = nodesConns[0];
+    diagram.connections = nodesConns[1];
+    return diagram;
+  }
+
+  // TODO: re-write this. Diagram should only be added once to the Model. Updates should replace the
+  // diagram in the model diagram set.
+  private findOrCreateDiagram(): Diagram {
+    let diagram = this.model.lookupDiagram(this.id);
+    if (diagram) {
+      return diagram;
+    }
+    diagram = new Diagram(this.model, DiagramType.ModelQuery);
+    diagram.id = this.id;
+    diagram.name = this.name;
+    this.model.diagrams.push(diagram);
+    this.model.viewOrganization().items.push(diagram.id);
+    return diagram;
   }
 
   private diagramNodesAndConnections(diagram: Diagram, elementsRelationships: [Element[], Relationship[]]): [ViewNode[], Connection[]] {

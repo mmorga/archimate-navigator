@@ -5,7 +5,12 @@ import { entityClickedFunc } from "../../common";
 import OrganizationContent from "./organization-content";
 
 interface IProps {
-  organization: Organization;
+  // model: Model;
+  // organization: Organization;
+  organizationName: string | undefined;
+  organizationId: string;
+  organizations: Organization[];
+  items: IEntity[];
   entityClicked: entityClickedFunc;
   selectedEntity: IEntity | undefined;
 }
@@ -25,10 +30,10 @@ export default class OrganizationTree extends React.PureComponent<IProps, IState
   }
 
   public render(): JSX.Element {
-    const ulId = `${this.props.organization.id}`;
+    const ulId = `${this.props.organizationId}`;
     const linkHref = `#${ulId}`;
     return (
-      <li key={this.props.organization.id} id={this.props.organization.id}>
+      <li key={this.props.organizationId} id={this.props.organizationId}>
         <a
           className="archimate-folder text-muted"
           role="button"
@@ -37,11 +42,12 @@ export default class OrganizationTree extends React.PureComponent<IProps, IState
           onClick={this.handleClick}
         >
           <span className={this.state.collapse ? "glyphicon glyphicon-folder-close" : "glyphicon glyphicon-folder-open"} />
-          &nbsp;{this.props.organization.name}
+          &nbsp;{this.props.organizationName}
         </a>
         <ul id={ulId} className={this.state.collapse ? "archimate-organization-list collapse" : "archimate-organization-list"}>
           <OrganizationContent 
-            organization={this.props.organization}
+            organizations={this.props.organizations}
+            items={this.props.items}
             entityClicked={this.props.entityClicked}
             selectedEntity={this.props.selectedEntity}
           />

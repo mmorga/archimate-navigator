@@ -49,8 +49,9 @@ export default class Sidebar extends React.Component<IProps, IState> {
         }}
       >
         <ModelInfo
-          model={this.props.model}
-          selectedDiagram={this.props.selectedDiagram}
+          modelName={this.props.model.name}
+          diagramName={this.props.selectedDiagram ? this.props.selectedDiagram.name : undefined}
+          diagramViewpoint={this.props.selectedDiagram ? this.props.selectedDiagram.viewpointDescription() : undefined}
         />
         <Tabs
           id="archimate-sidebar-tabs"
@@ -61,11 +62,8 @@ export default class Sidebar extends React.Component<IProps, IState> {
         >
           <Tab eventKey={SidebarTab.DiagramTreeTab} title="Views">
             <ViewsTab
-              organization={
-                this.props.model.organizations[
-                  this.props.model.organizations.length - 1
-                ]
-              }
+              organizations={this.props.model.viewOrganization().organizations}
+              items={this.props.model.viewOrganization().itemEntities()}
               selectedEntity={this.props.selectedDiagram}
               entityClicked={this.props.diagramLinkClicked}
             />

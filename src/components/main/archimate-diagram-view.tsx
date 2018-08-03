@@ -43,7 +43,8 @@ export default class ArchimateDiagramView extends React.PureComponent<
       return (
         <ArchimateSvg
           key={this.props.selectedDiagram.id}
-          diagram={this.props.selectedDiagram}
+          diagramName={this.props.selectedDiagram ? this.props.selectedDiagram.name : ""}
+          viewBox={this.props.selectedDiagram ? this.props.selectedDiagram.calculateMaxExtents() : undefined}
         >
           <g ref={this.svgTopGroup} transform="matrix(1, 0, 0, 1, 5, 5)">
             {this.nodes().map(node => (
@@ -121,11 +122,11 @@ export default class ArchimateDiagramView extends React.PureComponent<
   }
 
   private connections(): Connection[] {
-    return this.props.selectedDiagram ? this.props.selectedDiagram.connections : [];
+    return this.props.connections ? this.props.connections : [];
   }
 
   private nodes(): ViewNode[] {
-    return this.props.selectedDiagram ? this.props.selectedDiagram.nodes : [];
+    return this.props.nodes ? this.props.nodes : [];
   }
 
   private isAutoLayout() {
@@ -140,7 +141,7 @@ export default class ArchimateDiagramView extends React.PureComponent<
 
     // TODO: Needs to be a way to handle edges that connect to other edges
     //       current solution is to remove the edge from the selected set.
-    const connections = this.props.selectedDiagram.connections.filter(c => c.targetViewNode() instanceof ViewNode);
+    const connections = this.connections().filter(c => c.targetViewNode() instanceof ViewNode);
     const forceLink = d3force
         .forceLink<ViewNode, Connection>(connections)
         .id((node: IViewNode, i: number, nodesData: IViewNode[]) => node.id)
@@ -149,7 +150,7 @@ export default class ArchimateDiagramView extends React.PureComponent<
     const extents = this.props.selectedDiagram.calculateMaxExtents();
     return (
       d3force
-        .forceSimulation(this.props.selectedDiagram.nodes)
+        .forceSimulation(this.nodes())
         .force("center", d3force.forceCenter(extents.width / 2, extents.height / 2))
         .force("collide", d3force.forceCollide(this.nodeWidth))
         .force("link", forceLink)

@@ -6,7 +6,8 @@ import { entityClickedFunc } from "../../common";
 import OrganizationContent from "./organization-content";
 
 interface IProps {
-  organization: Organization;
+  organizations: Organization[];
+  items: IEntity[];
   entityClicked: entityClickedFunc;
   selectedEntity: IEntity | undefined;
 }
@@ -20,9 +21,10 @@ export default class ViewsTab extends React.PureComponent<IProps> {
     return (
       <Panel>
         <Panel.Body>
-          {this.props.organization ? (
-          <OrganizationContent 
-              organization={this.props.organization} 
+          {this.props.organizations ? (
+          <OrganizationContent
+              organizations={this.props.organizations} 
+              items={this.props.items}
               entityClicked={this.props.entityClicked} 
               selectedEntity={this.props.selectedEntity} 
           />) : undefined}

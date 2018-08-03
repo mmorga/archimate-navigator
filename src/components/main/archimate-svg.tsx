@@ -1,50 +1,29 @@
 import * as React from "react";
-import { Diagram } from "../../archimate-model";
 import "./archimate-svg.css";
 
 interface IProps {
-  diagram: Diagram;
-  // viewBox: SVGRect;
+  diagramName: string | undefined;
+  viewBox: SVGRect | undefined;
 }
 
-interface IState {
-  viewBox?: SVGRect;
-}
-
-export default class ArchimateSvg extends React.PureComponent<IProps, IState> {
+export default class ArchimateSvg extends React.PureComponent<IProps> {
   constructor(props: IProps) {
     super(props);
-    this.state = {
-      viewBox: this.props.diagram.calculateMaxExtents(),
-    }
-  }
-
-  public componentDidUpdate(prevProps: IProps, prevState: IState) {
-    const viewBox = this.props.diagram.calculateMaxExtents();
-    if ((prevState.viewBox === undefined) ||
-        (prevState.viewBox.height !== viewBox.height) ||
-        (prevState.viewBox.width !== viewBox.width) ||
-        (prevState.viewBox.x !== viewBox.x) ||
-        (prevState.viewBox.y !== viewBox.y)) {
-      this.setState({ viewBox });
-    }
   }
 
   public render() {
     const style2: React.CSSProperties = {fill:"none",stroke:"inherit",strokeWidth:1,strokeLinecap:"butt",strokeLinejoin:"miter"};
     const style3: React.CSSProperties = {fill:"none",stroke:"inherit",strokeWidth:1,strokeLinecap:"round",strokeLinejoin:"round"};
     const style4: React.CSSProperties = {fill:"none",stroke:"inherent",strokeWidth:0.7};
-    const vb: SVGRect = this.state.viewBox || {x: 0, y: 0, width: 800, height: 800};
+    const vb: SVGRect = this.props.viewBox || {x: 0, y: 0, width: 800, height: 800};
     return (
       <svg 
         className="archimate-svg"
         version="1.1"
         viewBox={`${vb.x} ${vb.y} ${vb.width} ${vb.height}`}
-        onLoad={this.svgLoaded}
         zoomAndPan="magnify"
         >
-        <title>{ this.props.diagram.name }</title>
-        <desc>{ this.props.diagram.documentation }</desc>
+        <title>{ this.props.diagramName }</title>
         <defs>
           <linearGradient 
               id="archimate-highlight-color"
@@ -221,11 +200,5 @@ export default class ArchimateSvg extends React.PureComponent<IProps, IState> {
         { this.props.children }
       </svg>
     );
-  }
-
-  public svgLoaded = (evt: React.SyntheticEvent<SVGSVGElement>) => {
-    const svg = evt.currentTarget;
-    const bbox = svg.getBBox();
-    this.setState({viewBox: bbox})
   }
 }

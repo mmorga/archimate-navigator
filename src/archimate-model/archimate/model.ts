@@ -71,6 +71,20 @@ export class Model implements IModel {
     }
   }
 
+  public viewOrganization(): Organization {
+    const viewOrg = this.organizations.find(o => o && o.type === "diagrams" ? true : false);
+    if (viewOrg) {
+      return viewOrg;
+    }
+    if (this.organizations.length === 0) {
+      const org = new Organization(this);
+      org.name = "Diagrams";
+      org.type = "diagrams";
+      this.organizations.push(org);
+    }
+    return this.organizations[this.organizations.length - 1];
+  }
+  
   public entities(): IEntity[] {
     return Array.from(this.indexHash.values());
   }

@@ -6,24 +6,24 @@ import ArchimateDiagramView from "./main/archimate-diagram-view";
 import Sidebar, { SidebarTab } from "./sidebar/sidebar";
 
 interface IProps {
-  modelUrl: string;
-  selectedDiagramId?: string;
-  selectedEntityId?: string;
+  modelUrl: string; // URL of model to load
+  selectedDiagramId?: string; // diagram id to load from model
+  selectedEntityId?: string; // entity id to select
 }
 
 interface IState {
-  error?: any;
-  loadStart?: number;
-  loadTime?: number;
-  model: Model;
-  parseDone?: number;
-  parseTime?: number;
-  parseStart?: number;
-  selectedDiagram?: Diagram;
-  selectedEntity?: IEntity;
-  sidebarTabKey: SidebarTab;
-  sidebarWidth: number;
-  working?: string;
+  error?: any; // Any error loading the model
+  loadStart?: number; // Timestamp when started loading the model
+  loadTime?: number; // Time spent loading the model
+  model: Model; // Currently loaded model
+  parseDone?: number; // Timestamp when parse complete
+  parseTime?: number; // Time spent parsing the model
+  parseStart?: number; // Timestamp when parse started
+  selectedDiagram?: Diagram; // Currently selected diagram
+  selectedEntity?: IEntity; // Currently selected entity (model, element, relationship, diagram)
+  sidebarTabKey: SidebarTab; // Currently selected sidebar tab
+  sidebarWidth: number; // Current pixel width of the sidebar
+  working?: string; // Progress bar message while loading/parsing
 }
 
 export default class ArchimateNavigator extends React.Component<
@@ -73,6 +73,8 @@ export default class ArchimateNavigator extends React.Component<
                 }
                 selectedEntity={this.state.selectedEntity}
                 selectedDiagram={this.state.selectedDiagram}
+                nodes={this.state.selectedDiagram ? this.state.selectedDiagram.nodes : undefined}
+                connections={this.state.selectedDiagram ? this.state.selectedDiagram.connections : undefined}
                 entityClicked={this.onEntityClick}
                 diagramClicked={this.onDiagramLinkClick}
               />
@@ -161,17 +163,20 @@ export default class ArchimateNavigator extends React.Component<
         <p>
           <Button onClick={this.onCloseException}>Close</Button>
         </p>
-      </Alert> 
+      </Alert>
     );
   }
 
   private onCloseException = () => {
-    this.setState({error: undefined});
-  }
+    this.setState({ error: undefined });
+  };
 
   private workingView() {
     return (
-      <Modal show={this.state.working ? true : false} onHide={this.onWorkingViewHide}>
+      <Modal
+        show={this.state.working ? true : false}
+        onHide={this.onWorkingViewHide}
+      >
         <Modal.Header>
           <Modal.Title>Loading...</Modal.Title>
         </Modal.Header>
@@ -194,8 +199,8 @@ export default class ArchimateNavigator extends React.Component<
   }
 
   private onWorkingViewHide = () => {
-    this.setState({working: undefined});
-  }
+    this.setState({ working: undefined });
+  };
 
   private onDiagramLinkClick = (
     entity: IEntity | undefined,
