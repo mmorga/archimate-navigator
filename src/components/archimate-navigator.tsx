@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Alert, Button, Modal } from "react-bootstrap";
-import { Diagram, IEntity, LogicError, Model, parse } from "../archimate-model";
+import { Diagram, IEntity, LogicError, Model, parse, ViewNode } from "../archimate-model";
 import "./archimate-navigator.css";
 import ArchimateDiagramView from "./main/archimate-diagram-view";
 import Sidebar, { SidebarTab } from "./sidebar/sidebar";
@@ -73,8 +73,12 @@ export default class ArchimateNavigator extends React.Component<
                 }
                 selectedEntity={this.state.selectedEntity}
                 selectedDiagram={this.state.selectedDiagram}
-                nodes={this.state.selectedDiagram ? this.state.selectedDiagram.nodes : undefined}
-                connections={this.state.selectedDiagram ? this.state.selectedDiagram.connections : undefined}
+                nodes={this.state.selectedDiagram ? this.state.selectedDiagram.nodes : []}
+                // TODO: Needs to be a way to handle edges that connect to other edges
+                //       current solution is to remove the edge from the selected set.
+                connections={this.state.selectedDiagram ? this.state.selectedDiagram.connections.filter(
+                  c => c.targetViewNode() instanceof ViewNode
+                ) : []} 
                 entityClicked={this.onEntityClick}
                 diagramClicked={this.onDiagramLinkClick}
               />
