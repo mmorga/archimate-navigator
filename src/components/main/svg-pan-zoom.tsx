@@ -36,6 +36,8 @@ const DIAGRAM_MARGIN = 24;
 
 const MOUSE_WHEEL_SPEED = 0.065;
 
+const BOUNDS_PADDING = 0.05;
+
 export default class SvgPanZoom extends React.PureComponent<
   IProps,
   IState
@@ -43,6 +45,8 @@ export default class SvgPanZoom extends React.PureComponent<
   private minZoom: number = 0;
   private maxZoom: number = Number.POSITIVE_INFINITY;
   private storedCTMResult?: Point;
+  private mouseX: number = 0;
+  private mouseY: number = 0;
 
   constructor(props: IProps) {
     super(props);
@@ -61,7 +65,7 @@ export default class SvgPanZoom extends React.PureComponent<
 
   public render() {
     return (
-      <g ref={this.props.svgPanZoomRef} transform={`matrix(${this.state.scale}, 0, 0, ${this.state.scale}, ${this.state.tx}, ${this.state.ty})`}>
+      <g onKeyDown={this.onKeyDown} ref={this.props.svgPanZoomRef} transform={`matrix(${this.state.scale}, 0, 0, ${this.state.scale}, ${this.state.tx}, ${this.state.ty})`}>
         {this.props.children}
       </g>
     );
@@ -73,12 +77,16 @@ export default class SvgPanZoom extends React.PureComponent<
     this.extents();
     if (this.props.svgPanZoomRef.current && this.props.svgPanZoomRef.current.ownerSVGElement) {
       const svg = this.props.svgPanZoomRef.current.ownerSVGElement;
-      wheel.addWheelListener(svg, this.onWheel);
+      svg.addEventListener("mousedown", this.onMouseDown);
+      wheel.addWheelListener(svg, this.onWheel, true);
     }
   }
 
   public componentDidUpdate(prevProps: IProps) {
     this.extents();
+    if ((prevProps.scale !== this.props.scale) && (numbersDiffer(this.props.scale, this.state.scale))) {
+      this.setState({ scale: this.props.scale });
+    }
     this.calculateTransform();
   }
 
@@ -86,6 +94,7 @@ export default class SvgPanZoom extends React.PureComponent<
     window.removeEventListener("resize", this.onSvgResize);
     if (this.props.svgPanZoomRef.current && this.props.svgPanZoomRef.current.ownerSVGElement) {
       const svg = this.props.svgPanZoomRef.current.ownerSVGElement;
+      svg.removeEventListener("mousedown", this.onMouseDown);
       wheel.removeWheelListener(svg, this.onWheel);
     }
   }
@@ -138,22 +147,114 @@ export default class SvgPanZoom extends React.PureComponent<
     if (numbersDiffer(this.state.ty, ty)) { this.setState({ ty }) };            
   }
 
+  private onMouseDown = (e: MouseEvent) => {
+    // for IE, left click == 1
+    // for Firefox, left click == 0
+    const isLeftButton = ((e.button === 1 && window.event !== null) || e.button === 0);
+    if (!isLeftButton) { return }
+
+    const offset = this.getOffsetXY(e);
+    const point = this.transformToScreen(offset.x, offset.y);
+    this.mouseX = point.x;
+    this.mouseY = point.y;
+
+    // We need to listen on document itself, since mouse can go outside of the
+    // window, and we will loose it
+    document.addEventListener('mousemove', this.onMouseMove)
+    document.addEventListener('mouseup', this.onMouseUp)
+    return false;
+  }
+
+  private onMouseMove = (e: MouseEvent) => {
+    const offset = this.getOffsetXY(e);
+    const point = this.transformToScreen(offset.x, offset.y);
+    const dx = point.x - this.mouseX;
+    const dy = point.y - this.mouseY;
+
+    this.mouseX = point.x;
+    this.mouseY = point.y;
+
+    this.internalMoveBy(dx, dy);
+  }
+
+  private onMouseUp = () => {
+    this.releaseDocumentMouse();
+  }
+
+  private releaseDocumentMouse = () => {
+    document.removeEventListener('mousemove', this.onMouseMove);
+    document.removeEventListener('mouseup', this.onMouseUp);
+  }
+
   private onWheel = (e: WheelEvent) => {
     // smoothScroll.cancel()
 
     const scaleMultiplier = getScaleMultiplier(e.deltaY)
 
     if (scaleMultiplier !== 1) {
-      this.props.onZoom(scaleMultiplier);
       const offset = this.getOffsetXY(e)
       this.publicZoomTo(offset.x, offset.y, scaleMultiplier)
-      // e.preventDefault()
+      e.preventDefault()
     }
   }
 
+  private onKeyDown = (e: React.KeyboardEvent<SVGGElement>) => {
+    let x = 0;
+    let y = 0;
+    let z = 0;
+    if (e.keyCode === 38) {
+      y = 1; // up
+    } else if (e.keyCode === 40) {
+      y = -1; // down
+    } else if (e.keyCode === 37) {
+      x = 1; // left
+    } else if (e.keyCode === 39) {
+      x = -1; // right
+    } else if (e.keyCode === 189 || e.keyCode === 109) { // DASH or SUBTRACT
+      z = 1; // `-` -  zoom out
+    } else if (e.keyCode === 187 || e.keyCode === 107) { // EQUAL SIGN or ADD
+      z = -1; // `=` - zoom in (equal sign on US layout is under `+`)
+    }
+
+    if (x || y) {
+      e.preventDefault()
+      e.stopPropagation()
+
+      const clientRect = this.owner().getBoundingClientRect();
+      // movement speed should be the same in both X and Y direction:
+      const offset = Math.min(clientRect.width, clientRect.height);
+      const moveSpeedRatio = 0.05;
+      const dx = offset * moveSpeedRatio * x;
+      const dy = offset * moveSpeedRatio * y;
+
+      this.internalMoveBy(dx, dy);
+    }
+
+    if (z) {
+      const scaleMultiplier = getScaleMultiplier(z);
+      const ownerRect = this.owner().getBoundingClientRect();
+      this.publicZoomTo(ownerRect.width/2, ownerRect.height/2, scaleMultiplier);
+    }
+  }
+
+  private moveTo(x: number, y: number) {
+    this.setState({
+      tx: x,
+      ty: y,
+    });
+
+    this.keepTransformInsideBounds();
+  }
+
+  private moveBy(dx: number, dy: number) {
+    this.moveTo(this.state.tx + dx, this.state.ty + dy);
+  }
+
+  private internalMoveBy(dx: number, dy: number, smooth?: boolean) {
+    return this.moveBy(dx, dy);
+  }
+
   private publicZoomTo(x: number, y: number, scaleMultiplier: number) {
-    // smoothScroll.cancel()
-    // cancelZoomAnimation()
     return this.zoomByRatio(x, y, scaleMultiplier)
   }
 
@@ -182,62 +283,85 @@ export default class SvgPanZoom extends React.PureComponent<
       ty: size.y - ratio * (size.y - this.state.ty),
     });
 
-    const transformAdjusted = this.keepTransformInsideBounds();
+    this.keepTransformInsideBounds();
     const scale = this.state.scale * ratio;
-    if (!transformAdjusted) {
-      if (numbersDiffer(this.state.scale, scale)) {
-        this.setState({ scale });
-      }
+    if (numbersDiffer(this.state.scale, scale)) {
+      this.setState({ scale });
     }
     this.props.onZoom(scale);
-    this.makeDirty()
   }
 
-  // TODO: Implement for animation
-  private makeDirty() {
-    // this.isDirty = true
-    // this.frameAnimation = window.requestAnimationFrame(this.frame)
-  }
-
-  // TODO: Implement me
   private keepTransformInsideBounds(): boolean {
-    // const boundingBox = getBoundingBox()
-    // if (!boundingBox) return
+    const boundingBox = this.getBoundingBox();
 
-    const adjusted = false;
-    /* 
-    var clientRect = getClientRect()
+    let adjusted = false;
+    const clientRect = this.getClientRect();
 
-    var diff = boundingBox.left - clientRect.right
+    let diff = boundingBox.left - clientRect.right;
     if (diff > 0) {
-      transform.x += diff
-      adjusted = true
+      this.setState({tx: this.state.tx + diff });
+      adjusted = true;
     }
     // check the other side:
-    diff = boundingBox.right - clientRect.left
+    diff = boundingBox.right - clientRect.left;
     if (diff < 0) {
-      transform.x += diff
-      adjusted = true
+      this.setState({tx: this.state.tx + diff });
+      adjusted = true;
     }
 
     // y axis:
-    diff = boundingBox.top - clientRect.bottom
+    diff = boundingBox.top - clientRect.bottom;
     if (diff > 0) {
       // we adjust transform, so that it matches exactly our bounding box:
-      // transform.y = boundingBox.top - (boundingBox.height + boundingBox.y) * transform.scale =>
-      // transform.y = boundingBox.top - (clientRect.bottom - transform.y) =>
-      // transform.y = diff + transform.y =>
-      transform.y += diff
-      adjusted = true
+      // this.state.ty = boundingBox.top - (boundingBox.height + boundingBox.y) * this.state.scale =>
+      // this.state.ty = boundingBox.top - (clientRect.bottom - this.state.ty) =>
+      // this.state.ty = diff + this.state.ty =>
+      this.setState({ ty: this.state.ty + diff });
+      adjusted = true;
     }
 
-    diff = boundingBox.bottom - clientRect.top
+    diff = boundingBox.bottom - clientRect.top;
     if (diff < 0) {
-      transform.y += diff
-      adjusted = true
+      this.setState({ ty: this.state.ty + diff });
+      adjusted = true;
     }
-    */
+
     return adjusted
+  }
+
+  private getClientRect() {
+    const bbox: SVGRect = this.owner().getBBox();
+    const leftTop = this.client(bbox.x, bbox.y);
+
+    return {
+      bottom: bbox.height * this.state.scale + leftTop.y,
+      left: leftTop.x,
+      right: bbox.width * this.state.scale + leftTop.x,
+      top: leftTop.y,
+    }
+  }
+
+  private client(x: number, y: number) {
+    return {
+      x: (x * this.state.scale) + this.state.tx,
+      y: (y * this.state.scale) + this.state.ty,
+    }
+  }
+
+  /**
+   * Returns bounding box that should be used to restrict scene movement.
+   */
+  private getBoundingBox() {
+    const ownerRect = this.owner().getBoundingClientRect();
+    const sceneWidth = ownerRect.width
+    const sceneHeight = ownerRect.height
+
+    return {
+      bottom: sceneHeight * (1 - BOUNDS_PADDING),
+      left: sceneWidth * BOUNDS_PADDING,
+      right: sceneWidth * (1 - BOUNDS_PADDING),
+      top: sceneHeight * BOUNDS_PADDING,
+    }
   }
 
   private transformToScreen(x: number, y: number) {
@@ -257,7 +381,7 @@ export default class SvgPanZoom extends React.PureComponent<
     return this.storedCTMResult;
   }
 
-  private getOffsetXY(e: WheelEvent): Point {
+  private getOffsetXY(e: MouseEvent | WheelEvent): Point {
     let offsetX: number;
     let offsetY: number;
 
