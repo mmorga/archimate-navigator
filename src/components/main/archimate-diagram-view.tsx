@@ -2,6 +2,7 @@ import * as d3force from "d3-force";
 import {is, Set} from "immutable";
 import * as React from "react";
 import { Button, Glyphicon } from "react-bootstrap";
+import * as wheel from "wheel";
 import {
   Connection,
   Diagram,
@@ -10,6 +11,7 @@ import {
   IEntity,
   IEntityRef,
   IViewNode,
+  LogicError,
   Point,
   VIEW_NODE_WIDTH,
   ViewNode
@@ -18,6 +20,11 @@ import { entityClickedFunc } from "../common";
 import ArchimateConnection from "./archimate-connection";
 import ArchimateSvg from "./archimate-svg";
 import archimateViewNode from "./archimate-view-node";
+
+interface IOffset {
+  x: number;
+  y: number;
+}
 
 interface IProps {
   selectedDiagram?: Diagram;
@@ -61,6 +68,9 @@ export default class ArchimateDiagramView extends React.PureComponent<
   private simulation?: d3force.Simulation<ViewNode, Connection>;
   private prevNodes: Set<string>;
   private prevConnections: Set<string>;
+  private minZoom: number = 0;
+  private maxZoom: number = Number.POSITIVE_INFINITY;
+  private storedCTMResult?: Point;
 
   constructor(props: IProps) {
     super(props);
@@ -149,6 +159,10 @@ export default class ArchimateDiagramView extends React.PureComponent<
     window.addEventListener("resize", this.onSvgResize);
     this.svgSize();
     this.extents();
+    if (this.svgTopGroup.current && this.svgTopGroup.current.ownerSVGElement) {
+      const svg = this.svgTopGroup.current.ownerSVGElement;
+      wheel.addWheelListener(svg, this.onWheel);
+    }
   }
 
   public componentDidUpdate(prevProps: IProps) {
@@ -162,6 +176,11 @@ export default class ArchimateDiagramView extends React.PureComponent<
       this.simulation.stop();
     }
     window.removeEventListener("resize", this.onSvgResize);
+    if (this.svgTopGroup.current && this.svgTopGroup.current.ownerSVGElement) {
+      const svg = this.svgTopGroup.current.ownerSVGElement;
+      wheel.removeWheelListener(svg, this.onWheel);
+    }
+
   }
 
   private connections(): Connection[] {
@@ -180,7 +199,6 @@ export default class ArchimateDiagramView extends React.PureComponent<
     );
   }
 
-  // TODO: We have a problem with edges that target an edge.
   private autoLayout() {
     if ((this.props.selectedDiagram === undefined) || !this.isAutoLayout()) {
       if (this.simulation) {
@@ -211,7 +229,6 @@ export default class ArchimateDiagramView extends React.PureComponent<
       this.forceLink = d3force
           .forceLink<ViewNode, Connection>(connections)
           .id((node: IViewNode, i: number, nodesData: IViewNode[]) => node.id)
-          // TODO: experiment with this
           .distance(this.adjustLinkDistance);
       this.simulation =
           d3force
@@ -363,6 +380,144 @@ export default class ArchimateDiagramView extends React.PureComponent<
     })
   }
 
+  private onWheel = (e: WheelEvent) => {
+    // smoothScroll.cancel()
+
+    const scaleMultiplier = getScaleMultiplier(e.deltaY)
+
+    if (scaleMultiplier !== 1) {
+      const offset = this.getOffsetXY(e)
+      this.publicZoomTo(offset.x, offset.y, scaleMultiplier)
+      e.preventDefault()
+    }
+  }
+
+  private publicZoomTo(x: number, y: number, scaleMultiplier: number) {
+    // smoothScroll.cancel()
+    // cancelZoomAnimation()
+    return this.zoomByRatio(x, y, scaleMultiplier)
+  }
+
+  private zoomByRatio(clientX: number, clientY: number, ratio: number) {
+    if (isNaN(clientX) || isNaN(clientY) || isNaN(ratio)) {
+      throw new Error('zoom requires valid numbers')
+    }
+
+    const newScale = this.state.scale * ratio;
+
+    if (newScale < this.minZoom) {
+      if (this.state.scale === this.minZoom) { return; }
+
+      ratio = this.minZoom / this.state.scale;
+    }
+    if (newScale > this.maxZoom) {
+      if (this.state.scale === this.maxZoom) { return; }
+
+      ratio = this.maxZoom / this.state.scale;
+    }
+
+    const size = this.transformToScreen(clientX, clientY);
+
+    this.setState({
+      tx: size.x - ratio * (size.x - this.state.tx),
+      ty: size.y - ratio * (size.y - this.state.ty),
+      zoomMode: ZoomMode.UserZoom,
+    });
+
+    const transformAdjusted = this.keepTransformInsideBounds();
+    if (!transformAdjusted) {
+      this.setState({ scale: this.state.scale * ratio });
+    }
+
+    // TODO: triggerEvent('zoom')
+
+    this.makeDirty()
+  }
+
+  // TODO: Implement for animation
+  private makeDirty() {
+    // this.isDirty = true
+    // this.frameAnimation = window.requestAnimationFrame(this.frame)
+  }
+
+  // TODO: Implement me
+  private keepTransformInsideBounds(): boolean {
+    // const boundingBox = getBoundingBox()
+    // if (!boundingBox) return
+
+    const adjusted = false;
+    /* 
+    var clientRect = getClientRect()
+
+    var diff = boundingBox.left - clientRect.right
+    if (diff > 0) {
+      transform.x += diff
+      adjusted = true
+    }
+    // check the other side:
+    diff = boundingBox.right - clientRect.left
+    if (diff < 0) {
+      transform.x += diff
+      adjusted = true
+    }
+
+    // y axis:
+    diff = boundingBox.top - clientRect.bottom
+    if (diff > 0) {
+      // we adjust transform, so that it matches exactly our bounding box:
+      // transform.y = boundingBox.top - (boundingBox.height + boundingBox.y) * transform.scale =>
+      // transform.y = boundingBox.top - (clientRect.bottom - transform.y) =>
+      // transform.y = diff + transform.y =>
+      transform.y += diff
+      adjusted = true
+    }
+
+    diff = boundingBox.bottom - clientRect.top
+    if (diff < 0) {
+      transform.y += diff
+      adjusted = true
+    }
+    */
+    return adjusted
+  }
+
+  private transformToScreen(x: number, y: number) {
+    const parentCTM = this.owner().getScreenCTM();
+    if (parentCTM) {
+      const parentScaleX = parentCTM.a;
+      const parentScaleY = parentCTM.d;
+      const parentOffsetX = parentCTM.e;
+      const parentOffsetY = parentCTM.f;
+      this.storedCTMResult = new Point(
+        x * parentScaleX - parentOffsetX,
+        y * parentScaleY - parentOffsetY
+      );
+    } else {
+      this.storedCTMResult = new Point(x, y);
+    }
+    return this.storedCTMResult;
+  }
+
+  private getOffsetXY(e: WheelEvent): IOffset {
+    let offsetX: number;
+    let offsetY: number;
+
+    // I tried using e.offsetX, but that gives wrong results for svg, when user clicks on a path.
+    const ownerRect = this.owner().getBoundingClientRect();
+    offsetX = e.clientX - ownerRect.left
+    offsetY = e.clientY - ownerRect.top
+
+    return {x: offsetX, y: offsetY};
+  }
+
+  private owner(): SVGSVGElement {
+    if (this.svgTopGroup.current && this.svgTopGroup.current.ownerSVGElement) {
+      return this.svgTopGroup.current.ownerSVGElement;
+    } else {
+      throw new LogicError("Shouldn't have called owner when this element isn't mounted");
+    }
+  }
+
   private onSvgResize = () => {
     this.svgSize();
   }
@@ -432,4 +587,17 @@ const MIN_DETECTABLE_CHANGE = 0.001;
 
 function numbersDiffer(a: number, b: number): boolean {
   return Math.abs(a - b) > MIN_DETECTABLE_CHANGE;
+}
+
+const MOUSE_WHEEL_SPEED = 0.065;
+
+function getScaleMultiplier(delta: number): number {
+  let scaleMultiplier = 1
+  if (delta > 0) { // zoom out
+    scaleMultiplier = (1 - MOUSE_WHEEL_SPEED)
+  } else if (delta < 0) { // zoom in
+    scaleMultiplier = (1 + MOUSE_WHEEL_SPEED)
+  }
+
+  return scaleMultiplier
 }
