@@ -9,7 +9,7 @@ import { IEntity, IRelationship, LogicError } from "./interfaces";
 import { Model } from "./model";
 import { Relationship } from "./relationship";
 import { RelationshipType, RelationshipTypes } from "./relationship-type";
-import { ViewNode } from "./view-node";
+import { VIEW_NODE_HEIGHT, VIEW_NODE_WIDTH, ViewNode } from "./view-node";
 import { ViewpointType } from "./viewpoint-type";
 
 interface IQueryUpdateProps {
@@ -149,7 +149,7 @@ export class Query {
   private viewNodeFor(el: Element, diagram: Diagram): ViewNode {
     const vn = new ViewNode(this.model, diagram);
     vn.type = "archimate:DiagramObject";
-    vn.bounds = new Bounds(700, 700, 120, 55);
+    vn.bounds = new Bounds(700, 700, VIEW_NODE_WIDTH, VIEW_NODE_HEIGHT);
     vn.element = el.id;
     vn.diagram = diagram;
     return vn;

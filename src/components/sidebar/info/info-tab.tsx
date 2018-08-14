@@ -94,18 +94,4 @@ export default class InfoTab extends React.PureComponent<IProps> {
       <PropertiesPanel properties={this.props.entity.properties || []} />
     );
   }
-
-  // private documentation(): JSX.Element | undefined {
-  //   if (this.props.entity === undefined) {
-  //     return undefined;
-  //   }   
-  //   const header = this.props.entity.documentation ? "Documentation" : (<React.Fragment>Documentation <span className="small">(none)</span></React.Fragment>);
-  //   return (
-  //     <Panel 
-  //         header={header}
-  //         initiallyCollapsed={!this.props.entity.documentation}>
-  //       { this.props.entity.documentation || "No Documentation" }
-  //     </Panel>
-  //   )
-  // }
 }

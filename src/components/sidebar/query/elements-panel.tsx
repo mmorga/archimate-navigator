@@ -59,9 +59,7 @@ export default class ElementsPanel extends React.PureComponent<
           validationState={this.state.valid}
         >
           <OverlayTrigger placement="right" overlay={tooltip}>
-            <Button bsSize="xsmall" className="pull-right" onClick={this.onShowElementPicker}>
-              <Glyphicon glyph="plus-sign" /> Add...
-            </Button>
+            <Button onClick={this.onShowElementPicker}> <Glyphicon glyph="plus-sign" /> Add... </Button>
           </OverlayTrigger>
           {this.props.query.elements.size > 0 ?
             <ListGroup>

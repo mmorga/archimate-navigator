@@ -42,6 +42,17 @@
   flex: 1 1 auto;
 }
 
+.archimate-zoombar {
+  opacity: 0.4;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.archimate-zoombar:hover {
+  opacity: 1;
+}
+
 /* Reset HTML elements used in SVG ArchiMate diagrams to prevent site
    styles from leaking into the SVG */
 

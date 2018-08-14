@@ -42,9 +42,9 @@ export default class ElementsTable extends React.PureComponent<IProps> {
     const header = !empty ? (
       "Elements"
     ) : (
-      <React.Fragment>
+      <>
         Elements <span className="small">(none)</span>
-      </React.Fragment>
+      </>
     );
     return (
       <Panel header={header} initiallyCollapsed={empty}>

@@ -11,12 +11,12 @@
     "immutable": "^3.8.2",
     "lodash-es": "^4.17.10",
     "memoize-one": "^4.0.0",
-    "panzoom": "^5.1.0",
     "react": "^16.4.2",
     "react-bootstrap": "^0.32.1",
     "react-dom": "^16.4.2",
     "react-markdown": "^3.4.1",
-    "react-scripts-ts": "2.16.0"
+    "react-scripts-ts": "2.16.0",
+    "wheel": "0.0.5"
   },
   "scripts": {
     "start": "react-scripts-ts start",

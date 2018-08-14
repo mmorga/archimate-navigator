@@ -15,12 +15,14 @@ export default class ArchimateSvg extends React.PureComponent<IProps> {
     const style2: React.CSSProperties = {fill:"none",stroke:"inherit",strokeWidth:1,strokeLinecap:"butt",strokeLinejoin:"miter"};
     const style3: React.CSSProperties = {fill:"none",stroke:"inherit",strokeWidth:1,strokeLinecap:"round",strokeLinejoin:"round"};
     const style4: React.CSSProperties = {fill:"none",stroke:"inherent",strokeWidth:0.7};
-    const vb: SVGRect = this.props.viewBox || {x: 0, y: 0, width: 800, height: 800};
+    // const vb: SVGRect = this.props.viewBox || {x: 0, y: 0, width: 800, height: 800};
     return (
       <svg 
         className="archimate-svg"
         version="1.1"
-        viewBox={`${vb.x} ${vb.y} ${vb.width} ${vb.height}`}
+        // viewBox={`${vb.x} ${vb.y} ${vb.width} ${vb.height}`}
+        // preserveAspectRatio="xMidYMid"
+        preserveAspectRatio="none"
         zoomAndPan="magnify"
         >
         <title>{ this.props.diagramName }</title>

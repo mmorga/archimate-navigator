@@ -130,6 +130,7 @@ export interface IConnection extends IEntity, d3force.SimulationLinkDatum<IViewN
   properties: IProperty[];
   // linkType: string;
   // weight: number;
+  entityInstance(): IEntity | undefined;
 }
 
 export interface IDiagram extends IEntity, IHasRelationships, IHasViews {

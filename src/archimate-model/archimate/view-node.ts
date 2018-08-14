@@ -4,6 +4,9 @@ import { Diagram } from "./diagram";
 import { IEntity, IEntityRef, IModel, IProperty, IViewNode } from "./interfaces";
 import { Style } from "./style";
 
+export const VIEW_NODE_WIDTH = 120; // TODO: this should be from the SVG diagram settings
+export const VIEW_NODE_HEIGHT = 55; // TODO: this should be from the SVG diagram settings
+
 // Graphical node type. It can contain child node types.
 // This can be specialized as Label and Container
 // In the ArchiMate v3 Schema, the tree of these nodes is:
