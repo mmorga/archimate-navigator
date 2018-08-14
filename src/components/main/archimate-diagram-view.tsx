@@ -21,11 +21,6 @@ import ArchimateConnection from "./archimate-connection";
 import ArchimateSvg from "./archimate-svg";
 import archimateViewNode from "./archimate-view-node";
 
-interface IOffset {
-  x: number;
-  y: number;
-}
-
 interface IProps {
   selectedDiagram?: Diagram;
   nodes?: ViewNode[];
@@ -498,16 +493,15 @@ export default class ArchimateDiagramView extends React.PureComponent<
     return this.storedCTMResult;
   }
 
-  private getOffsetXY(e: WheelEvent): IOffset {
+  private getOffsetXY(e: WheelEvent): Point {
     let offsetX: number;
     let offsetY: number;
 
-    // I tried using e.offsetX, but that gives wrong results for svg, when user clicks on a path.
     const ownerRect = this.owner().getBoundingClientRect();
     offsetX = e.clientX - ownerRect.left
     offsetY = e.clientY - ownerRect.top
 
-    return {x: offsetX, y: offsetY};
+    return new Point(offsetX, offsetY);
   }
 
   private owner(): SVGSVGElement {
