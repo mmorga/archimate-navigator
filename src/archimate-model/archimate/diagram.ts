@@ -27,8 +27,8 @@ export class Diagram implements IDiagram {
   public connections: Connection[];
   public path: string;
   private model: IModel;
-  private elementsCache?: Element[];
-  private relationshipsCache?: Relationship[];
+  private elementsCache?: Set<Element>;
+  private relationshipsCache?: Set<Relationship>;
   private diagramsCache?: Diagram[];
 
   constructor(model: IModel, type: DiagramType) {
@@ -46,11 +46,13 @@ export class Diagram implements IDiagram {
     // if (this.relationshipsCache) {
     //   return this.relationshipsCache;
     // }
-    this.relationshipsCache = this.connections
-      .map(conn => conn.entityInstance())
-      .filter(el => el !== undefined)
-      .map(rel => rel as Relationship);
-    return this.relationshipsCache;
+    this.relationshipsCache = new Set<Relationship>(
+      this.connections
+        .map(conn => conn.entityInstance())
+        .filter(el => el !== undefined)
+        .map(rel => rel as Relationship)
+    );
+    return Array.from(this.relationshipsCache);
   }
 
   public elements(): Element[] {
@@ -58,11 +60,13 @@ export class Diagram implements IDiagram {
     // if (this.elementsCache) {
     //   return this.elementsCache;
     // }
-    this.elementsCache = this.nodes
-      .map(viewNode => viewNode.entityInstance())
-      .filter(entity => entity instanceof Element)
-      .map(el => el as Element);
-    return this.elementsCache;
+    this.elementsCache = new Set<Element>(
+      this.nodes
+        .map(viewNode => viewNode.entityInstance())
+        .filter(entity => entity instanceof Element)
+        .map(el => el as Element)
+    );
+    return Array.from(this.elementsCache.values());
   }
 
   public diagrams(): Diagram[] {

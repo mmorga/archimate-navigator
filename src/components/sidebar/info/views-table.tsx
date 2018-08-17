@@ -1,5 +1,5 @@
 import * as React from "react";
-import { IDiagram } from "../../../archimate-model";
+import { IDiagram, IEntity } from "../../../archimate-model";
 import { entityClickedFunc } from "../../common";
 import EntityLink from "../entity-link";
 import Panel from "../panel";
@@ -24,7 +24,7 @@ export default class ViewsTable extends React.PureComponent<IProps> {
         </tr>
       ];
     } else {
-      tableRows = views.map(view => (
+      tableRows = views.sort(byName).map(view => (
         <tr key={view.path}>
           <td>
             <EntityLink
@@ -58,5 +58,34 @@ export default class ViewsTable extends React.PureComponent<IProps> {
         </table>
       </Panel>
     );
+  }
+}
+
+export function byName(a: IEntity, b: IEntity): number {
+  if (a === b) {
+    return 0;
+  }
+  return byOptionalString(a.name, b.name);
+}
+
+export function byOptionalString(
+  a: string | undefined,
+  b: string | undefined
+): number {
+  if (a === b) {
+    return 0;
+  }
+  if (a === undefined) {
+    if (b === undefined) {
+      return 0;
+    } else {
+      return -1;
+    }
+  } else {
+    if (b === undefined) {
+      return 1;
+    } else {
+      return a.localeCompare(b);
+    }
   }
 }

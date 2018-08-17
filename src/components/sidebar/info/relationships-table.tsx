@@ -26,23 +26,23 @@ export default class RelationshipsTable extends React.PureComponent<IProps> {
         </tr>
       ];
     } else {
-      tableRows = relationships.filter(r => r !== undefined).filter(r => r instanceof Relationship).map(relationship => (
-        <tr key={relationship.id}>
-          <td>
-            <EntityLink
-              entity={relationship}
-              entityClicked={this.props.entityClicked}
-              text={this.relationshipName(relationship)}
-            />
-          </td>
-          <td>
-            {this.relationshipRefLink(relationship.sourceElement())}
-          </td>
-          <td>
-            {this.relationshipRefLink(relationship.targetElement())}
-          </td>
-        </tr>
-      ));
+      tableRows = relationships
+        .filter(r => r !== undefined)
+        .filter(r => r instanceof Relationship)
+        .sort(byType)
+        .map(relationship => (
+          <tr key={relationship.id}>
+            <td>
+              <EntityLink
+                entity={relationship}
+                entityClicked={this.props.entityClicked}
+                text={this.relationshipName(relationship)}
+              />
+            </td>
+            <td>{this.relationshipRefLink(relationship.sourceElement())}</td>
+            <td>{this.relationshipRefLink(relationship.targetElement())}</td>
+          </tr>
+        ));
     }
     const empty = this.props.relationships.length === 0;
     const header = !empty ? (
@@ -77,7 +77,7 @@ export default class RelationshipsTable extends React.PureComponent<IProps> {
       <EntityLink
         entity={ref}
         entityClicked={this.props.entityClicked}
-        text={`${ref.name} (${ ref.type })`}
+        text={`${ref.name} (${ref.type})`}
       />
     );
   }
@@ -88,4 +88,12 @@ export default class RelationshipsTable extends React.PureComponent<IProps> {
     }
     return rel.type;
   }
+}
+
+export function byType(a: IEntity, b: IEntity): number {
+  if (a === b) {
+    return 0;
+  }
+
+  return a.type.localeCompare(b.type);
 }

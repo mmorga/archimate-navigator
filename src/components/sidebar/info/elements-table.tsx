@@ -24,7 +24,7 @@ export default class ElementsTable extends React.PureComponent<IProps> {
     ];
 
     if (this.props.elements.length > 0) {
-      elementRows = this.props.elements.map(element => {
+      elementRows = this.props.elements.sort(byTypeAndName).map(element => {
         return (
           <tr key={element.id}>
             <td>
@@ -59,5 +59,17 @@ export default class ElementsTable extends React.PureComponent<IProps> {
         </table>
       </Panel>
     );
+  }
+}
+
+export function byTypeAndName(a: Element, b: Element): number {
+  if (a === b) {
+    return 0;
+  }
+
+  if (a.type !== b.type) {
+    return a.type.localeCompare(b.type);
+  } else {
+    return a.name.localeCompare(b.name);
   }
 }

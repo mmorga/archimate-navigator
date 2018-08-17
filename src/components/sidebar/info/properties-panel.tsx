@@ -3,6 +3,7 @@ import * as React from "react";
 import ReactMarkdown from "react-markdown";
 import { Property } from "../../../archimate-model";
 import Panel from "../panel";
+import { byOptionalString } from "./views-table";
 
 interface IProps {
   properties: Property[];
@@ -23,7 +24,7 @@ export default class PropertiesPanel extends React.PureComponent<IProps> {
         </tr>
       ];
     } else {
-      tableRows = properties.map(property => (
+      tableRows = properties.sort(byKeyAndValue).map(property => (
         <tr key={property.key}>
           <td>{property.key}</td>
           <td>{this.value(property.value)}</td>
@@ -32,7 +33,13 @@ export default class PropertiesPanel extends React.PureComponent<IProps> {
     }
 
     const propertiesEmpty = this.props.properties.length === 0;
-    const header = !propertiesEmpty ? "Properties" : (<React.Fragment>Properties <span className="small">(none)</span></React.Fragment>);
+    const header = !propertiesEmpty ? (
+      "Properties"
+    ) : (
+      <React.Fragment>
+        Properties <span className="small">(none)</span>
+      </React.Fragment>
+    );
     return (
       <Panel header={header} initiallyCollapsed={propertiesEmpty}>
         <table className="table">
@@ -54,5 +61,17 @@ export default class PropertiesPanel extends React.PureComponent<IProps> {
     }
 
     return <i>undefined</i>;
+  }
+}
+
+export function byKeyAndValue(a: Property, b: Property): number {
+  if (a === b) {
+    return 0;
+  }
+
+  if (a.key !== b.key) {
+    return a.key.localeCompare(b.key);
+  } else {
+    return byOptionalString(a.value, b.value);
   }
 }
