@@ -1,8 +1,5 @@
 import * as React from "react";
-import {
-  FormControl,
-  HelpBlock
-} from "react-bootstrap";
+import { FormControl, HelpBlock } from "react-bootstrap";
 import { Query, Viewpoints } from "../../../archimate-model";
 import CollapsibleFormGroup from "./collapsible-form-group";
 
@@ -11,9 +8,7 @@ interface IProps {
   onQueryChanged: (query: Query) => void;
 }
 
-export default class ViewpointPanel extends React.PureComponent<
-  IProps
-> {
+export default class ViewpointPanel extends React.PureComponent<IProps> {
   constructor(props: IProps) {
     super(props);
   }
@@ -21,15 +16,16 @@ export default class ViewpointPanel extends React.PureComponent<
   public render() {
     return (
       <CollapsibleFormGroup
-          label={this.props.query.viewpoint}
-          defaultExpanded={false}
-          title="Viewpoint" >
+        label={this.props.query.viewpointType}
+        defaultExpanded={false}
+        title="Viewpoint"
+      >
         <FormControl
           componentClass="select"
-          defaultValue={this.props.query.viewpoint}
+          defaultValue={this.props.query.viewpointType}
           onChange={this.onViewpointChanged}
         >
-          {Viewpoints.map(v => (
+          {Viewpoints.sort().map(v => (
             <option key={v} value={v}>
               {v}
             </option>
@@ -37,14 +33,15 @@ export default class ViewpointPanel extends React.PureComponent<
         </FormControl>
         <FormControl.Feedback />
         <HelpBlock>
-          Filters the valid elements and relationships for the query
-          results
+          Filters the valid elements and relationships for the query results
         </HelpBlock>
       </CollapsibleFormGroup>
     );
   }
 
   private onViewpointChanged = (event: any) => {
-    this.props.onQueryChanged(this.props.query.updateQuery({viewpoint: event.target.value}));
+    this.props.onQueryChanged(
+      this.props.query.updateQuery({ viewpointType: event.target.value })
+    );
   };
 }

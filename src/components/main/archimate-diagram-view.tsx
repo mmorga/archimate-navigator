@@ -6,6 +6,7 @@ import {
   DiagramType,
   IEntity,
   IEntityRef,
+  IExtents,
   ViewNode
 } from "../../archimate-model";
 import { entityClickedFunc } from "../common";
@@ -13,7 +14,7 @@ import ArchimateConnection from "./archimate-connection";
 import ArchimateSvg from "./archimate-svg";
 import archimateViewNode from "./archimate-view-node";
 import ForceLayout from "./force-layout";
-import SvgPanZoom, { zoomIn, zoomOut } from "./svg-pan-zoom";
+import SvgPanZoom, { numbersDiffer, zoomIn, zoomOut } from "./svg-pan-zoom";
 
 interface IProps {
   selectedDiagram?: Diagram;
@@ -44,15 +45,21 @@ export default class ArchimateDiagramView extends React.PureComponent<
   IProps,
   IState
 > {
-  private svgTopGroup: React.RefObject<SVGGElement>;
 
+  public static diagramExtents(dia: Diagram | undefined): IExtents {
+    return dia ? dia.calculateMaxExtents() : { maxX: 0, maxY: 0, minX: 0, minY: 0 };
+  }
+
+  private svgTopGroup: React.RefObject<SVGGElement>;
+  
   constructor(props: IProps) {
     super(props);
+    const ext = ArchimateDiagramView.diagramExtents(this.props.selectedDiagram);
     this.state = {
-      maxX: 0,
-      maxY: 0,
-      minX: 0,
-      minY: 0,
+      maxX: ext.maxX,
+      maxY: ext.maxY,
+      minX: ext.minX,
+      minY: ext.minY,
       scale: 1,
       zoomMode: ZoomMode.FitToWindow,
     };
@@ -64,6 +71,7 @@ export default class ArchimateDiagramView extends React.PureComponent<
       return (
         <>
           <div className="archimate-zoombar" style={{ position: "absolute", top: 0, right: 0 }}>
+            {[this.state.minX, this.state.minY, this.state.maxX, this.state.maxY].join(", ")}
             <Button onClick={this.onOneHundredPercent}><small>1:1</small></Button>
             <Button onClick={this.onFitToWindow}><Glyphicon glyph="resize-full"/></Button>
             <Button onClick={this.onFitToWidth}><Glyphicon glyph="resize-horizontal"/></Button>
@@ -86,7 +94,10 @@ export default class ArchimateDiagramView extends React.PureComponent<
                 nodes={this.props.nodes}
                 onForceLayoutTick={this.onForceLayoutTick}>
               <SvgPanZoom
-                  onExtentsChange={this.onExtentsChange}
+                  maxX={this.state.maxX}
+                  maxY={this.state.maxY}
+                  minX={this.state.minX}
+                  minY={this.state.minY}
                   onZoom={this.onZoom}
                   svgPanZoomRef={this.svgTopGroup}
                   scale={this.state.scale}
@@ -133,6 +144,21 @@ export default class ArchimateDiagramView extends React.PureComponent<
           </p>
         </div>
       );
+    }
+  }
+
+  public componentDidUpdate() {
+    const ext = ArchimateDiagramView.diagramExtents(this.props.selectedDiagram);
+    if (numbersDiffer(this.state.maxX, ext.maxX) ||
+        numbersDiffer(this.state.maxY, ext.maxY) ||
+        numbersDiffer(this.state.minX, ext.minX) ||
+        numbersDiffer(this.state.minY, ext.minY)) {
+      this.setState({
+        maxX: ext.maxX,
+        maxY: ext.maxY,
+        minX: ext.minX,
+        minY: ext.minY,
+      });
     }
   }
 
@@ -192,15 +218,6 @@ export default class ArchimateDiagramView extends React.PureComponent<
   private onZoom = (scale: number) => {
     if ((this.state.scale !== scale) || (this.state.zoomMode !== ZoomMode.UserZoom)) {
       this.setState({scale, zoomMode: ZoomMode.UserZoom});
-    }
-  }
-
-  private onExtentsChange = (minX: number, maxX: number, minY: number, maxY: number) => {
-    if ((this.state.minX !== minX) ||
-        (this.state.maxX !== maxX) ||
-        (this.state.minY !== minY) ||
-        (this.state.maxY !== maxY)) {
-      this.setState({minX, maxX, minY, maxY});
     }
   }
 

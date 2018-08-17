@@ -9,7 +9,7 @@ import { RelationshipType } from "../relationship-type";
 import { ViewpointType } from "../viewpoint-type";
 
 function createTestElement(model: Model): Element {
-  const element = new Element(model, ElementType.ApplicationComponentElementType);
+  const element = new Element(model, ElementType.ApplicationComponent);
   return element;
 }
 
@@ -34,7 +34,7 @@ function createTestModel(): Model {
 test('diagram', () => {
   const model = createTestModel();
   const subject = new Query(model);
-  subject.viewpoint = ViewpointType.Application_cooperation;
+  subject.viewpointType = ViewpointType.Application_cooperation;
   subject.elements = Set<Element>(model.elements);
   subject.relationships = Set<Relationship>(model.relationships);
   const result = subject.run();

@@ -5,12 +5,13 @@ import { Diagram } from "./diagram";
 import { DiagramType } from "./diagram-type";
 import { Element } from "./element";
 import { ElementType, ElementTypes } from "./element-type";
-import { IEntity, IRelationship, LogicError } from "./interfaces";
+import { IRelationship, LogicError } from "./interfaces";
 import { Model } from "./model";
+import { QueryRunner } from "./query-runner";
 import { Relationship } from "./relationship";
 import { RelationshipType, RelationshipTypes } from "./relationship-type";
 import { VIEW_NODE_HEIGHT, VIEW_NODE_WIDTH, ViewNode } from "./view-node";
-import { ViewpointType } from "./viewpoint-type";
+import { ViewpointType, ViewpointTypeElementTypes } from "./viewpoint-type";
 
 interface IQueryUpdateProps {
   elements?: Set<Element>;
@@ -22,15 +23,11 @@ interface IQueryUpdateProps {
   pathDepth?: number;
   relationships?: Set<Relationship>;
   relationshipTypes?: Set<RelationshipType>;
-  viewpoint?: ViewpointType;
-}
-
-interface ISearchQueueItem {
-  element: Element;
-  depth: number;
+  viewpointType?: ViewpointType;
 }
 
 export type RelationshipFilter = (relationship: IRelationship) => boolean;
+export const EmptyElementTypeSet = Set<ElementType>();
 
 export class Query {
   public elements: Set<Element>;
@@ -42,7 +39,7 @@ export class Query {
   public pathDepth: number;
   public relationships: Set<Relationship>;
   public relationshipTypes: Set<RelationshipType>;
-  public viewpoint: ViewpointType;
+  public viewpointType: ViewpointType;
 
   constructor(model: Model) {
     this.elements = Set<Element>();
@@ -54,23 +51,43 @@ export class Query {
     this.pathDepth = 2;
     this.relationships = Set<Relationship>();
     this.relationshipTypes = Set<RelationshipType>(RelationshipTypes);
-    this.viewpoint = ViewpointType.Total;
+    this.viewpointType = ViewpointType.Total;
   }
 
   public updateQuery(props: IQueryUpdateProps): Query {
-    return Object.assign(
-      new Query(this.model),
-      this,
-      props
-    );
+    const adjustedProps = Object.assign({}, props);
+    if (props.viewpointType !== this.viewpointType) {
+      const elementTypes = props.elementTypes || this.elementTypes || [];
+      const viewpointElementTypes =
+        ViewpointTypeElementTypes.get(
+          props.viewpointType || ViewpointType.Total
+        ) || [];
+      adjustedProps.elementTypes = Set<ElementType>(
+        elementTypes.filter(
+          et => viewpointElementTypes.find(vet => vet === et) !== undefined
+        )
+      );
+      }
+
+    return Object.assign(new Query(this.model), this, adjustedProps);
   }
 
-  // TODO: This should return a set based on 
-  // * Selected Viewpoint
+  // TODO: This should return a set based on
+  // * Selected Viewpoint <Done>
   // * Selected Layer
   // * Active/Passive Structure or Behavior
   public availableElementTypes(): Set<ElementType> {
-    return Set<ElementType>(ElementTypes);
+    return Set<ElementType>(
+      ViewpointTypeElementTypes.get(
+        this.viewpointType || ViewpointType.Total
+      ) || ElementTypes
+    );
+  }
+
+  public unselectedElementTypes(): Set<ElementType> {
+    return Set<ElementType>(
+      this.availableElementTypes().filter(et => this.elementTypes.find(vet => vet === et) === undefined)
+    );
   }
 
   // Add this once Immutable v4 is released
@@ -92,11 +109,15 @@ export class Query {
   // }
 
   public run(): Diagram {
+    const queryResult = new QueryRunner(this);
     const diagram = this.findOrCreateDiagram();
-    const nodesConns = this.diagramNodesAndConnections(diagram, this.queryResultElementsAndRelationships());
+    const nodesConns = this.diagramNodesAndConnections(
+      diagram,
+      queryResult.run()
+    );
     diagram.name = this.name;
     // diagram.properties = TODO: convert this query into properties so queries can be saved in the standard file format
-    diagram.viewpoint = this.viewpoint;
+    diagram.viewpoint = this.viewpointType;
     diagram.nodes = nodesConns[0];
     diagram.connections = nodesConns[1];
     return diagram;
@@ -117,29 +138,42 @@ export class Query {
     return diagram;
   }
 
-  private diagramNodesAndConnections(diagram: Diagram, elementsRelationships: [Element[], Relationship[]]): [ViewNode[], Connection[]] {
+  private diagramNodesAndConnections(
+    diagram: Diagram,
+    elementsRelationships: [Element[], Relationship[]]
+  ): [ViewNode[], Connection[]] {
     const elements = elementsRelationships[0];
     const relationships = elementsRelationships[1];
-    const relationshipElements = relationships
-        .reduce((acc: Element[], rel: Relationship) => {
-          const source = rel.sourceElement();
-          const target = rel.targetElement();
-          if (source === undefined) {
-            throw new LogicError(`Relationship ${rel.id} source ${rel.source} Element not found`)
-          }
-          if (target === undefined) {
-            throw new LogicError(`Relationship ${rel.id} target ${rel.target} Element not found`)
-          }
-          return acc.concat([source as Element, target as Element]);
-        }, []);
+    const relationshipElements = relationships.reduce(
+      (acc: Element[], rel: Relationship) => {
+        const source = rel.sourceElement();
+        const target = rel.targetElement();
+        if (source === undefined) {
+          throw new LogicError(
+            `Relationship ${rel.id} source ${rel.source} Element not found`
+          );
+        }
+        if (target === undefined) {
+          throw new LogicError(
+            `Relationship ${rel.id} target ${rel.target} Element not found`
+          );
+        }
+        return acc.concat([source as Element, target as Element]);
+      },
+      []
+    );
 
-    const elementViewNodeMap: Map<string, ViewNode> =
-        elements.concat(relationshipElements).reduce(
-          (acc: Map<string, ViewNode>, el: Element) => acc.set(el.id, this.viewNodeFor(el, diagram)),
-          new Map<string, ViewNode>());
-    
-    const connections: Connection[] =
-        relationships.map(rel => this.connectionFor(rel, elementViewNodeMap, diagram))
+    const elementViewNodeMap: Map<string, ViewNode> = elements
+      .concat(relationshipElements)
+      .reduce(
+        (acc: Map<string, ViewNode>, el: Element) =>
+          acc.set(el.id, this.viewNodeFor(el, diagram)),
+        new Map<string, ViewNode>()
+      );
+
+    const connections: Connection[] = relationships.map(rel =>
+      this.connectionFor(rel, elementViewNodeMap, diagram)
+    );
 
     return [Array.from(elementViewNodeMap.values()), connections];
   }
@@ -155,14 +189,22 @@ export class Query {
     return vn;
   }
 
-  private connectionFor(relationship: Relationship, elementViewNodeMap: Map<string, ViewNode>, diagram: Diagram): Connection {
+  private connectionFor(
+    relationship: Relationship,
+    elementViewNodeMap: Map<string, ViewNode>,
+    diagram: Diagram
+  ): Connection {
     const sourceViewNode = elementViewNodeMap.get(relationship.source);
     const targetViewNode = elementViewNodeMap.get(relationship.target);
     if (sourceViewNode === undefined) {
-      throw new LogicError(`Source ViewNode id: ${relationship.source} not found`);
+      throw new LogicError(
+        `Source ViewNode id: ${relationship.source} not found`
+      );
     }
     if (targetViewNode === undefined) {
-      throw new LogicError(`Target ViewNode id: ${relationship.target} not found`);
+      throw new LogicError(
+        `Target ViewNode id: ${relationship.target} not found`
+      );
     }
     const conn = new Connection(
       this.model,
@@ -172,60 +214,5 @@ export class Query {
     );
     conn.relationship = relationship.id;
     return conn;
-  }
-
-  // Using a Breadth First Search approach
-  // Changes from a visit pattern to something that generates query results
-  private queryResultElementsAndRelationships(): [Element[], Relationship[]] {
-    let visited = Set<Element>(this.elements);
-    const queue: ISearchQueueItem[] = 
-        Array.from<Element>(this.elements.toJS())
-        .map(el => ({element: el, depth: 1}));
-
-    const resultElements: Element[] = [];
-    const resultRelationships: Relationship[] = [];
-    
-    while(queue.length > 0) {
-      const item = queue.pop();
-      if (!item) {
-        throw new LogicError("queue shouldn't be undefined");
-      }
-      resultElements.push(item.element);
-      item.element.relationships()
-          .filter(rel => rel.source && rel.target)
-          .filter(this.relationshipTypesFilter)
-          .filter(this.relationshipElementTypesFilter)
-          .forEach(relationship => {
-        const otherElement = relationship.sourceElement() === item.element ? relationship.targetElement() : relationship.sourceElement();
-
-        if (otherElement &&
-           (otherElement instanceof Element) &&
-           (!visited.includes(otherElement))) {
-          resultRelationships.push(relationship as Relationship);
-          visited = visited.add(otherElement);
-          if (item.depth < this.pathDepth) {
-            queue.push({element: otherElement, depth: item.depth + 1});
-          }
-        }
-      });
-    }
-    return [resultElements, resultRelationships];
-  }
-
-  private relationshipTypesFilter(): RelationshipFilter {
-    return ((relationship: IRelationship) => this.relationshipTypes.some(rt => rt ? rt === relationship.type : false));
-  }
-
-  private elementTypeFilter(e: IEntity | undefined): boolean {
-    return (e && (e instanceof Element) && this.elementTypes.includes(e.type)) || false;
-  }
-
-  private relationshipElementTypesFilter(): RelationshipFilter {
-    return ((relationship: IRelationship) => {
-      return [
-        relationship.sourceElement(),
-        relationship.targetElement()
-      ].every(this.elementTypeFilter);
-    });
   }
 }

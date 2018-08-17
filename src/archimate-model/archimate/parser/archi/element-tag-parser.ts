@@ -63,7 +63,7 @@ export class ElementTagParser {
   }
 
   private stringToAccessType(str: string): AccessType {
-    switch(str) {
+    switch (str) {
       case "1":
         return AccessType.Read;
       case "2":
@@ -97,279 +97,210 @@ export class ElementTagParser {
     }
     const typeStr = (t as Attr).value.replace("archimate:", "");
     switch (typeStr) {
-      case ElementType.BusinessActorElementType:
-        this.parseArchimateElement(el, ElementType.BusinessActorElementType);
+      case ElementType.BusinessActor:
+        this.parseArchimateElement(el, ElementType.BusinessActor);
         break;
-      case ElementType.BusinessCollaborationElementType:
-        this.parseArchimateElement(
-          el,
-          ElementType.BusinessCollaborationElementType
-        );
+      case ElementType.BusinessCollaboration:
+        this.parseArchimateElement(el, ElementType.BusinessCollaboration);
         break;
-      case ElementType.BusinessEventElementType:
-        this.parseArchimateElement(el, ElementType.BusinessEventElementType);
+      case ElementType.BusinessEvent:
+        this.parseArchimateElement(el, ElementType.BusinessEvent);
         break;
-      case ElementType.BusinessFunctionElementType:
-        this.parseArchimateElement(el, ElementType.BusinessFunctionElementType);
+      case ElementType.BusinessFunction:
+        this.parseArchimateElement(el, ElementType.BusinessFunction);
         break;
-      case ElementType.BusinessInteractionElementType:
-        this.parseArchimateElement(
-          el,
-          ElementType.BusinessInteractionElementType
-        );
+      case ElementType.BusinessInteraction:
+        this.parseArchimateElement(el, ElementType.BusinessInteraction);
         break;
-      case ElementType.BusinessInterfaceElementType:
-        this.parseArchimateElement(
-          el,
-          ElementType.BusinessInterfaceElementType
-        );
+      case ElementType.BusinessInterface:
+        this.parseArchimateElement(el, ElementType.BusinessInterface);
         break;
-      case ElementType.BusinessObjectElementType:
-        this.parseArchimateElement(el, ElementType.BusinessObjectElementType);
+      case ElementType.BusinessObject:
+        this.parseArchimateElement(el, ElementType.BusinessObject);
         break;
-      case ElementType.BusinessProcessElementType:
-        this.parseArchimateElement(el, ElementType.BusinessProcessElementType);
+      case ElementType.BusinessProcess:
+        this.parseArchimateElement(el, ElementType.BusinessProcess);
         break;
-      case ElementType.BusinessRoleElementType:
-        this.parseArchimateElement(el, ElementType.BusinessRoleElementType);
+      case ElementType.BusinessRole:
+        this.parseArchimateElement(el, ElementType.BusinessRole);
         break;
-      case ElementType.BusinessServiceElementType:
-        this.parseArchimateElement(el, ElementType.BusinessServiceElementType);
+      case ElementType.BusinessService:
+        this.parseArchimateElement(el, ElementType.BusinessService);
         break;
-      case ElementType.ContractElementType:
-        this.parseArchimateElement(el, ElementType.ContractElementType);
+      case ElementType.Contract:
+        this.parseArchimateElement(el, ElementType.Contract);
         break;
-      case ElementType.LocationElementType:
-        this.parseArchimateElement(el, ElementType.LocationElementType);
+      case ElementType.Location:
+        this.parseArchimateElement(el, ElementType.Location);
         break;
-      case ElementType.ProductElementType:
-        this.parseArchimateElement(el, ElementType.ProductElementType);
+      case ElementType.Product:
+        this.parseArchimateElement(el, ElementType.Product);
         break;
-      case ElementType.RepresentationElementType:
-        this.parseArchimateElement(el, ElementType.RepresentationElementType);
+      case ElementType.Representation:
+        this.parseArchimateElement(el, ElementType.Representation);
         break;
-      case ElementType.ApplicationCollaborationElementType:
-        this.parseArchimateElement(
-          el,
-          ElementType.ApplicationCollaborationElementType
-        );
+      case ElementType.ApplicationCollaboration:
+        this.parseArchimateElement(el, ElementType.ApplicationCollaboration);
         break;
-      case ElementType.ApplicationComponentElementType:
-        this.parseArchimateElement(
-          el,
-          ElementType.ApplicationComponentElementType
-        );
+      case ElementType.ApplicationComponent:
+        this.parseArchimateElement(el, ElementType.ApplicationComponent);
         break;
-      case ElementType.ApplicationEventElementType:
-        this.parseArchimateElement(el, ElementType.ApplicationEventElementType);
+      case ElementType.ApplicationEvent:
+        this.parseArchimateElement(el, ElementType.ApplicationEvent);
         break;
-      case ElementType.ApplicationFunctionElementType:
-        this.parseArchimateElement(
-          el,
-          ElementType.ApplicationFunctionElementType
-        );
+      case ElementType.ApplicationFunction:
+        this.parseArchimateElement(el, ElementType.ApplicationFunction);
         break;
-      case ElementType.ApplicationInteractionElementType:
-        this.parseArchimateElement(
-          el,
-          ElementType.ApplicationInteractionElementType
-        );
+      case ElementType.ApplicationInteraction:
+        this.parseArchimateElement(el, ElementType.ApplicationInteraction);
         break;
-      case ElementType.ApplicationInterfaceElementType:
-        this.parseArchimateElement(
-          el,
-          ElementType.ApplicationInterfaceElementType
-        );
+      case ElementType.ApplicationInterface:
+        this.parseArchimateElement(el, ElementType.ApplicationInterface);
         break;
-      case ElementType.ApplicationProcessElementType:
-        this.parseArchimateElement(
-          el,
-          ElementType.ApplicationProcessElementType
-        );
+      case ElementType.ApplicationProcess:
+        this.parseArchimateElement(el, ElementType.ApplicationProcess);
         break;
-      case ElementType.ApplicationServiceElementType:
-        this.parseArchimateElement(
-          el,
-          ElementType.ApplicationServiceElementType
-        );
+      case ElementType.ApplicationService:
+        this.parseArchimateElement(el, ElementType.ApplicationService);
         break;
-      case ElementType.DataObjectElementType:
-        this.parseArchimateElement(el, ElementType.DataObjectElementType);
+      case ElementType.DataObject:
+        this.parseArchimateElement(el, ElementType.DataObject);
         break;
-      case ElementType.ArtifactElementType:
-        this.parseArchimateElement(el, ElementType.ArtifactElementType);
+      case ElementType.Artifact:
+        this.parseArchimateElement(el, ElementType.Artifact);
         break;
-      case ElementType.CommunicationNetworkElementType:
-        this.parseArchimateElement(
-          el,
-          ElementType.CommunicationNetworkElementType
-        );
+      case ElementType.CommunicationNetwork:
+        this.parseArchimateElement(el, ElementType.CommunicationNetwork);
         break;
-      case ElementType.CommunicationPathElementType:
-        this.parseArchimateElement(
-          el,
-          ElementType.CommunicationPathElementType
-        );
+      case ElementType.CommunicationPath:
+        this.parseArchimateElement(el, ElementType.CommunicationPath);
         break;
-      case ElementType.DeviceElementType:
-        this.parseArchimateElement(el, ElementType.DeviceElementType);
+      case ElementType.Device:
+        this.parseArchimateElement(el, ElementType.Device);
         break;
-      case ElementType.InfrastructureFunctionElementType:
-        this.parseArchimateElement(
-          el,
-          ElementType.InfrastructureFunctionElementType
-        );
+      case ElementType.InfrastructureFunction:
+        this.parseArchimateElement(el, ElementType.InfrastructureFunction);
         break;
-      case ElementType.InfrastructureInterfaceElementType:
-        this.parseArchimateElement(
-          el,
-          ElementType.InfrastructureInterfaceElementType
-        );
+      case ElementType.InfrastructureInterface:
+        this.parseArchimateElement(el, ElementType.InfrastructureInterface);
         break;
-      case ElementType.InfrastructureServiceElementType:
-        this.parseArchimateElement(
-          el,
-          ElementType.InfrastructureServiceElementType
-        );
+      case ElementType.InfrastructureService:
+        this.parseArchimateElement(el, ElementType.InfrastructureService);
         break;
-      case ElementType.NetworkElementType:
-        this.parseArchimateElement(el, ElementType.NetworkElementType);
+      case ElementType.Network:
+        this.parseArchimateElement(el, ElementType.Network);
         break;
-      case ElementType.NodeElementType:
-        this.parseArchimateElement(el, ElementType.NodeElementType);
+      case ElementType.Node:
+        this.parseArchimateElement(el, ElementType.Node);
         break;
-      case ElementType.PathElementType:
-        this.parseArchimateElement(el, ElementType.PathElementType);
+      case ElementType.Path:
+        this.parseArchimateElement(el, ElementType.Path);
         break;
-      case ElementType.SystemSoftwareElementType:
-        this.parseArchimateElement(el, ElementType.SystemSoftwareElementType);
+      case ElementType.SystemSoftware:
+        this.parseArchimateElement(el, ElementType.SystemSoftware);
         break;
-      case ElementType.TechnologyCollaborationElementType:
-        this.parseArchimateElement(
-          el,
-          ElementType.TechnologyCollaborationElementType
-        );
+      case ElementType.TechnologyCollaboration:
+        this.parseArchimateElement(el, ElementType.TechnologyCollaboration);
         break;
-      case ElementType.TechnologyEventElementType:
-        this.parseArchimateElement(el, ElementType.TechnologyEventElementType);
+      case ElementType.TechnologyEvent:
+        this.parseArchimateElement(el, ElementType.TechnologyEvent);
         break;
-      case ElementType.TechnologyFunctionElementType:
-        this.parseArchimateElement(
-          el,
-          ElementType.TechnologyFunctionElementType
-        );
+      case ElementType.TechnologyFunction:
+        this.parseArchimateElement(el, ElementType.TechnologyFunction);
         break;
-      case ElementType.TechnologyInteractionElementType:
-        this.parseArchimateElement(
-          el,
-          ElementType.TechnologyInteractionElementType
-        );
+      case ElementType.TechnologyInteraction:
+        this.parseArchimateElement(el, ElementType.TechnologyInteraction);
         break;
-      case ElementType.TechnologyInterfaceElementType:
-        this.parseArchimateElement(
-          el,
-          ElementType.TechnologyInterfaceElementType
-        );
+      case ElementType.TechnologyInterface:
+        this.parseArchimateElement(el, ElementType.TechnologyInterface);
         break;
-      case ElementType.TechnologyObjectElementType:
-        this.parseArchimateElement(el, ElementType.TechnologyObjectElementType);
+      case ElementType.TechnologyObject:
+        this.parseArchimateElement(el, ElementType.TechnologyObject);
         break;
-      case ElementType.TechnologyProcessElementType:
-        this.parseArchimateElement(
-          el,
-          ElementType.TechnologyProcessElementType
-        );
+      case ElementType.TechnologyProcess:
+        this.parseArchimateElement(el, ElementType.TechnologyProcess);
         break;
-      case ElementType.TechnologyServiceElementType:
-        this.parseArchimateElement(
-          el,
-          ElementType.TechnologyServiceElementType
-        );
+      case ElementType.TechnologyService:
+        this.parseArchimateElement(el, ElementType.TechnologyService);
         break;
-      case ElementType.DistributionNetworkElementType:
-        this.parseArchimateElement(
-          el,
-          ElementType.DistributionNetworkElementType
-        );
+      case ElementType.DistributionNetwork:
+        this.parseArchimateElement(el, ElementType.DistributionNetwork);
         break;
-      case ElementType.EquipmentElementType:
-        this.parseArchimateElement(el, ElementType.EquipmentElementType);
+      case ElementType.Equipment:
+        this.parseArchimateElement(el, ElementType.Equipment);
         break;
-      case ElementType.FacilityElementType:
-        this.parseArchimateElement(el, ElementType.FacilityElementType);
+      case ElementType.Facility:
+        this.parseArchimateElement(el, ElementType.Facility);
         break;
-      case ElementType.MaterialElementType:
-        this.parseArchimateElement(el, ElementType.MaterialElementType);
+      case ElementType.Material:
+        this.parseArchimateElement(el, ElementType.Material);
         break;
-      case ElementType.AssessmentElementType:
-        this.parseArchimateElement(el, ElementType.AssessmentElementType);
+      case ElementType.Assessment:
+        this.parseArchimateElement(el, ElementType.Assessment);
         break;
-      case ElementType.ConstraintElementType:
-        this.parseArchimateElement(el, ElementType.ConstraintElementType);
+      case ElementType.Constraint:
+        this.parseArchimateElement(el, ElementType.Constraint);
         break;
-      case ElementType.DriverElementType:
-        this.parseArchimateElement(el, ElementType.DriverElementType);
+      case ElementType.Driver:
+        this.parseArchimateElement(el, ElementType.Driver);
         break;
-      case ElementType.GoalElementType:
-        this.parseArchimateElement(el, ElementType.GoalElementType);
+      case ElementType.Goal:
+        this.parseArchimateElement(el, ElementType.Goal);
         break;
-      case ElementType.MeaningElementType:
-        this.parseArchimateElement(el, ElementType.MeaningElementType);
+      case ElementType.Meaning:
+        this.parseArchimateElement(el, ElementType.Meaning);
         break;
-      case ElementType.OutcomeElementType:
-        this.parseArchimateElement(el, ElementType.OutcomeElementType);
+      case ElementType.Outcome:
+        this.parseArchimateElement(el, ElementType.Outcome);
         break;
-      case ElementType.PrincipleElementType:
-        this.parseArchimateElement(el, ElementType.PrincipleElementType);
+      case ElementType.Principle:
+        this.parseArchimateElement(el, ElementType.Principle);
         break;
-      case ElementType.RequirementElementType:
-        this.parseArchimateElement(el, ElementType.RequirementElementType);
+      case ElementType.Requirement:
+        this.parseArchimateElement(el, ElementType.Requirement);
         break;
-      case ElementType.StakeholderElementType:
-        this.parseArchimateElement(el, ElementType.StakeholderElementType);
+      case ElementType.Stakeholder:
+        this.parseArchimateElement(el, ElementType.Stakeholder);
         break;
-      case ElementType.ValueElementType:
-        this.parseArchimateElement(el, ElementType.ValueElementType);
+      case ElementType.Value:
+        this.parseArchimateElement(el, ElementType.Value);
         break;
-      case ElementType.DeliverableElementType:
-        this.parseArchimateElement(el, ElementType.DeliverableElementType);
+      case ElementType.Deliverable:
+        this.parseArchimateElement(el, ElementType.Deliverable);
         break;
-      case ElementType.GapElementType:
-        this.parseArchimateElement(el, ElementType.GapElementType);
+      case ElementType.Gap:
+        this.parseArchimateElement(el, ElementType.Gap);
         break;
-      case ElementType.ImplementationEventElementType:
-        this.parseArchimateElement(
-          el,
-          ElementType.ImplementationEventElementType
-        );
+      case ElementType.ImplementationEvent:
+        this.parseArchimateElement(el, ElementType.ImplementationEvent);
         break;
-      case ElementType.PlateauElementType:
-        this.parseArchimateElement(el, ElementType.PlateauElementType);
+      case ElementType.Plateau:
+        this.parseArchimateElement(el, ElementType.Plateau);
         break;
-      case ElementType.WorkPackageElementType:
-        this.parseArchimateElement(el, ElementType.WorkPackageElementType);
+      case ElementType.WorkPackage:
+        this.parseArchimateElement(el, ElementType.WorkPackage);
         break;
-      case ElementType.AndJunctionElementType:
-      case ElementType.JunctionElementType:
-      case ElementType.OrJunctionElementType:
+      case ElementType.AndJunction:
+      case ElementType.Junction:
+      case ElementType.OrJunction:
         const jTypeAttr = el.attributes.getNamedItem("type");
         if (jTypeAttr && jTypeAttr.value === "or") {
-          this.parseArchimateElement(el, ElementType.OrJunctionElementType);
+          this.parseArchimateElement(el, ElementType.OrJunction);
         } else {
-          this.parseArchimateElement(el, ElementType.JunctionElementType);
+          this.parseArchimateElement(el, ElementType.Junction);
         }
         break;
-      case ElementType.CapabilityElementType:
-        this.parseArchimateElement(el, ElementType.CapabilityElementType);
+      case ElementType.Capability:
+        this.parseArchimateElement(el, ElementType.Capability);
         break;
-      case ElementType.CourseOfActionElementType:
-        this.parseArchimateElement(el, ElementType.CourseOfActionElementType);
+      case ElementType.CourseOfAction:
+        this.parseArchimateElement(el, ElementType.CourseOfAction);
         break;
-      case ElementType.ResourceElementType:
-        this.parseArchimateElement(el, ElementType.ResourceElementType);
+      case ElementType.Resource:
+        this.parseArchimateElement(el, ElementType.Resource);
         break;
-      case ElementType.GroupingElementType:
-        this.parseArchimateElement(el, ElementType.GroupingElementType);
+      case ElementType.Grouping:
+        this.parseArchimateElement(el, ElementType.Grouping);
         break;
       case RelationshipType.Composition:
         this.parseArchimateRelationship(el, RelationshipType.Composition);
@@ -400,8 +331,8 @@ export class ElementTagParser {
       case RelationshipType.Flow:
         this.parseArchimateRelationship(el, RelationshipType.Flow);
         break;
-        case RelationshipType.Specialization:
-        case RelationshipType.Specialisation:
+      case RelationshipType.Specialization:
+      case RelationshipType.Specialisation:
         this.parseArchimateRelationship(el, RelationshipType.Specialization);
         break;
       case RelationshipType.Association:

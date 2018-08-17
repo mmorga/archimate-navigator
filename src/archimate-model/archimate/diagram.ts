@@ -1,11 +1,18 @@
-import { Bounds } from "./bounds";
 import { Connection } from "./connection";
 import { DiagramType } from "./diagram-type";
 import { Element } from "./element";
-import { IDiagram, IModel } from "./interfaces";
+import {
+  IDiagram,
+  IExtents,
+  IModel,
+  InitExtents,
+  IViewConceptType
+} from "./interfaces";
 import { Property } from "./property";
 import { Relationship } from "./relationship";
 import { ViewNode } from "./view-node";
+
+const DIAGRAM_MARGIN = 10;
 
 export class Diagram implements IDiagram {
   public id: string;
@@ -40,9 +47,9 @@ export class Diagram implements IDiagram {
     //   return this.relationshipsCache;
     // }
     this.relationshipsCache = this.connections
-        .map(conn => conn.entityInstance())
-        .filter(el => el !== undefined)
-        .map(rel => rel as Relationship);
+      .map(conn => conn.entityInstance())
+      .filter(el => el !== undefined)
+      .map(rel => rel as Relationship);
     return this.relationshipsCache;
   }
 
@@ -52,9 +59,9 @@ export class Diagram implements IDiagram {
     //   return this.elementsCache;
     // }
     this.elementsCache = this.nodes
-        .map(viewNode => viewNode.entityInstance())
-        .filter(entity => entity instanceof Element)
-        .map(el => el as Element);
+      .map(viewNode => viewNode.entityInstance())
+      .filter(entity => entity instanceof Element)
+      .map(el => el as Element);
     return this.elementsCache;
   }
 
@@ -64,9 +71,9 @@ export class Diagram implements IDiagram {
       return this.diagramsCache;
     }
     this.diagramsCache = this.nodes
-        .map(viewNode => viewNode.entityInstance())
-        .filter(entity => entity instanceof Diagram)
-        .map(el => el as Diagram);
+      .map(viewNode => viewNode.entityInstance())
+      .filter(entity => entity instanceof Diagram)
+      .map(el => el as Diagram);
     return this.diagramsCache;
   }
 
@@ -80,66 +87,47 @@ export class Diagram implements IDiagram {
 
   public viewpointDescription(): string {
     if (this.viewpoint === undefined) {
-      switch(this.type) {
+      switch (this.type) {
         case "canvas:CanvasModel":
           return "Canvas";
         case "archimate:SketchModel":
           return "Sketch";
         default:
           return "Total";
-      }  
+      }
     }
     return this.viewpoint.toString();
   }
 
-  public calculateMaxExtents() {
-    const nodeVals =
-      this.nodes
-          .map(node => {
-            const bounds = node.bounds as Bounds;
-            return new Bounds(node.x || bounds.x || 0, node.y || bounds.y || 0, bounds.width, bounds.height);
-          })
-          .map(bounds => [bounds.x || 0, bounds.y || 0, bounds.width, bounds.height]);
-          // TODO: Add connection calculation
-    // doc.css(".archimate-relationship")
-    //   .each { |path|
-    //     path.attr("d").split(" ").each_slice(3) do |point|
-    //       nodeVals << [point[1].to_i, point[2].to_i, 0, 0]
-    //     end
-    //   }
+  public calculateMaxExtents(): IExtents {
+    const viewConcepts: IViewConceptType[] = (this
+      .nodes as IViewConceptType[]).concat(this.connections);
 
-    if (nodeVals.length < 1) {
+    if (viewConcepts.length < 1) {
       return {
-        height: 0,
-        width: 0,
-        x: 0,
-        y: 0,
+        maxX: 0,
+        maxY: 0,
+        minX: 0,
+        minY: 0
       };
     }
 
-    const minFunc = (prev: undefined | number, cur: number) => {
-      let p = prev || Number.MAX_SAFE_INTEGER;
-      if (cur < p) {
-        p = cur;
-      }
-      return p;
-    }
-    const maxFunc = (prev: undefined | number, cur: number) => {
-      let p = prev || Number.MIN_SAFE_INTEGER;
-      if (cur > p) {
-        p = cur;
-      }
-      return p;
-    }
-    const minX = nodeVals.map(v => v[0]).reduce(minFunc);
-    const maxX = nodeVals.map(v => v[0] + v[2]).reduce(maxFunc);
-    const minY = nodeVals.map(v => v[1]).reduce(minFunc);
-    const maxY = nodeVals.map(v => v[1] + v[3]).reduce(maxFunc);
+    const extents: IExtents = viewConcepts
+      .map(vc => vc.extents())
+      .reduce((accExtents: IExtents, vcExtents: IExtents) => {
+        return {
+          maxX: Math.max(vcExtents.maxX, accExtents.maxX),
+          maxY: Math.max(vcExtents.maxY, accExtents.maxY),
+          minX: Math.min(vcExtents.minX, accExtents.minX),
+          minY: Math.min(vcExtents.minY, accExtents.minY)
+        };
+      }, InitExtents);
+
     return {
-      height: maxY - minY + 20,
-      width: maxX - minX + 20,
-      x: minX - 10,
-      y: minY - 10,
+      maxX: extents.maxX + DIAGRAM_MARGIN * 2,
+      maxY: extents.maxY + DIAGRAM_MARGIN * 2,
+      minX: extents.minX - DIAGRAM_MARGIN,
+      minY: extents.minY - DIAGRAM_MARGIN
     };
-  }  
+  }
 }

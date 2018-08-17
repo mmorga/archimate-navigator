@@ -12,7 +12,7 @@ interface IProps {
 }
 
 interface IState {
-  textAnchor?: TextAnchorProperty; 
+  textAnchor?: TextAnchorProperty;
   lineHeight: number;
   bbox?: number;
   width?: number;
@@ -41,7 +41,7 @@ export default class EntityLabel extends React.PureComponent<IProps, IState> {
   constructor(props: IProps) {
     super(props);
     let textAnchor: TextAnchorProperty = "middle";
-    switch(this.props.textAlign) {
+    switch (this.props.textAlign) {
       case "left":
         textAnchor = "start";
         break;
@@ -51,7 +51,7 @@ export default class EntityLabel extends React.PureComponent<IProps, IState> {
     }
     this.state = {
       lineHeight: 12, // TODO: This needs to be calculated
-      textAnchor,
+      textAnchor
     };
   }
 
@@ -66,12 +66,17 @@ export default class EntityLabel extends React.PureComponent<IProps, IState> {
         <clipPath id={clipPathId}>
           <path d={this.clipPathD()} />
         </clipPath>
-        <text clipPath={`url(#${clipPathId})`} x={this.lineX()} y={tb.y} style={this.textStyle()}>
+        <text
+          clipPath={`url(#${clipPathId})`}
+          x={this.lineX()}
+          y={tb.y}
+          style={this.textStyle()}
+        >
           <TextFlow
-              text={this.props.label} 
-              bounds={this.props.textBounds}
-              badgeBounds={this.props.badgeBounds} 
-              style={this.textStyle(this.state.textAnchor)} 
+            text={this.props.label}
+            bounds={this.props.textBounds}
+            badgeBounds={this.props.badgeBounds}
+            style={this.textStyle(this.state.textAnchor)}
           />
         </text>
       </React.Fragment>
@@ -80,26 +85,45 @@ export default class EntityLabel extends React.PureComponent<IProps, IState> {
 
   private clipPathD() {
     const tb = this.props.textBounds;
-    if (this.props.badgeBounds && (this.props.badgeBounds.height + 2 < tb.height)) {
+    if (
+      this.props.badgeBounds &&
+      this.props.badgeBounds.height + 2 < tb.height
+    ) {
       const bb = this.props.badgeBounds;
       const badgeNotchHeight = bb.height + 2;
       return [
-        "M", tb.left, tb.top,
-        "h", tb.width - bb.width - 2,
-        "v", badgeNotchHeight,
-        "h", bb.width + 2,
-        "v", tb.height - badgeNotchHeight,
-        "h", - tb.width,
+        "M",
+        tb.left,
+        tb.top,
+        "h",
+        tb.width - bb.width - 2,
+        "v",
+        badgeNotchHeight,
+        "h",
+        bb.width + 2,
+        "v",
+        tb.height - badgeNotchHeight,
+        "h",
+        -tb.width,
         "z"
-      ].map(i => i.toString()).join(" ");
+      ]
+        .map(i => i.toString())
+        .join(" ");
     } else {
       return [
-        "M", tb.left, tb.top,
-        "h", tb.width,
-        "v", tb.height,
-        "h", - tb.width,
+        "M",
+        tb.left,
+        tb.top,
+        "h",
+        tb.width,
+        "v",
+        tb.height,
+        "h",
+        -tb.width,
         "z"
-      ].map(i => i.toString()).join(" ");
+      ]
+        .map(i => i.toString())
+        .join(" ");
     }
   }
   private lineX(idx = 0) {
@@ -107,36 +131,50 @@ export default class EntityLabel extends React.PureComponent<IProps, IState> {
       return 0;
     }
     const textBounds = this.props.textBounds as Bounds;
-    switch(this.state.textAnchor) {
-    case "start":
-      return textBounds.left;
-    case "end":
-      if (idx > 0) {
-        return textBounds.right;
-      } else {
-        return textBounds.right - this.props.badgeBounds.width;
-      }
-    default:
-      if (idx > 0) {
-        return textBounds.center().x;
-      } else {
-        return textBounds.center().x - (this.props.badgeBounds.width / 2.0);
-      }
+    switch (this.state.textAnchor) {
+      case "start":
+        return textBounds.left;
+      case "end":
+        if (idx > 0) {
+          return textBounds.right;
+        } else {
+          return textBounds.right - this.props.badgeBounds.width;
+        }
+      default:
+        if (idx > 0) {
+          return textBounds.center().x;
+        } else {
+          return textBounds.center().x - this.props.badgeBounds.width / 2.0;
+        }
     }
   }
 
   private textStyle(textAnchor?: TextAnchorProperty): React.CSSProperties {
     const style = this.props.child.style;
     if (style === undefined) {
-      return {};
+      return {
+        textAlign: "center",
+        textAnchor: "middle"
+      };
     }
     const cssStyle: React.CSSProperties = {};
-    if (style.fontColor) { cssStyle.fill = style.fontColor.toRGBA() }
-    if (style.font && style.font.name) { cssStyle.fontFamily = style.font.name }
-    if (style.font && style.font.size) { cssStyle.fontSize = style.font.size }
-    if (this.props.textAlign) { cssStyle.textAlign = this.props.textAlign } 
-    if (style.textAlignment) { cssStyle.textAlign = style.textAlignment }
-    cssStyle.textAnchor = textAnchor || (this.state ? this.state.textAnchor : "middle");
+    if (style.fontColor) {
+      cssStyle.fill = style.fontColor.toRGBA();
+    }
+    if (style.font && style.font.name) {
+      cssStyle.fontFamily = style.font.name;
+    }
+    if (style.font && style.font.size) {
+      cssStyle.fontSize = style.font.size;
+    }
+    if (this.props.textAlign) {
+      cssStyle.textAlign = this.props.textAlign;
+    }
+    if (style.textAlignment) {
+      cssStyle.textAlign = style.textAlignment;
+    }
+    cssStyle.textAnchor =
+      textAnchor || (this.state ? this.state.textAnchor : "middle");
     return cssStyle;
   }
 }

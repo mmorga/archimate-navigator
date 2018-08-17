@@ -1,5 +1,5 @@
 import { Bounds } from "./bounds";
-import { IConnection, IEntity, IEntityRef, IModel, IProperty, LogicError } from "./interfaces";
+import { IConnection, IEntity, IEntityRef, IExtents, IModel, InitExtents, IProperty, LogicError } from "./interfaces";
 import { Path } from "./path";
 import { Point } from "./point";
 import { Style } from "./style";
@@ -99,6 +99,18 @@ export class Connection implements IConnection, IEntityRef {
   public absolutePosition() {
     const pt = new Path(this).midpoint();
     return new Bounds(pt.x, pt.y, 0, 0);
+  }
+
+  public extents(): IExtents {
+    const path = new Path(this);
+    return path.points.reduce((extents: IExtents, point: Point) => {
+      return {
+        maxX: Math.max(point.x, extents.maxX),
+        maxY: Math.max(point.y, extents.maxY),
+        minX: Math.min(point.x, extents.minX),
+        minY: Math.min(point.y, extents.minY),
+      };
+    }, InitExtents);
   }
 
   private srcTargetLookup(id: string): ViewNode | Connection {

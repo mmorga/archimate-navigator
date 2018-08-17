@@ -2,6 +2,7 @@ import * as d3force from "d3-force";
 import { AccessType } from "./access-type";
 import { Bounds } from "./bounds";
 import { Point } from "./point";
+import { RelationshipType } from "./relationship-type";
 import { Style } from "./style";
 
 export interface IPoint {
@@ -11,6 +12,20 @@ export interface IPoint {
   subtract(other: IPoint): number;
   toString(): string;
   inside(bounds: IBounds): boolean;
+}
+
+export interface IExtents {
+  maxX: number;
+  maxY: number;
+  minX: number;
+  minY: number;
+}
+
+export const InitExtents: IExtents = {
+  maxX: Number.MIN_SAFE_INTEGER,
+  maxY: Number.MIN_SAFE_INTEGER,
+  minX: Number.MAX_SAFE_INTEGER,
+  minY: Number.MAX_SAFE_INTEGER,
 }
 
 export interface IRange {
@@ -57,6 +72,7 @@ export interface IEntityRef {
 }
 
 export interface IRelationship extends IEntity {
+  type: RelationshipType;
   source: string; // comparison_attr: :id, writable: true, default: nil
   target: string; // comparison_attr: :id, writable: true, default: nil
   accessType?: AccessType; // default: nil
@@ -77,17 +93,16 @@ export interface IHasViews {
   diagrams(): IDiagram[];
 }
 
-export interface IViewNode extends IEntity, d3force.SimulationNodeDatum {
-  // ArchiMate ViewConceptType Attributes
-  id: string;
-  name?: string;
-  documentation?: string;
-  // @note type here was used for the Element/Relationship/Diagram type
-  type: string;
+export interface IViewConceptType extends IEntity {
   style?: Style;
-
   // @note viewRefs are pointers to 0-* Diagrams for diagram drill in defined in abstract View Concept
   viewRefs?: string;
+
+  entityInstance(): IEntity | undefined;
+  extents(): IExtents;
+}
+
+export interface IViewNode extends IViewConceptType, d3force.SimulationNodeDatum {
 
   // @todo document where this comes from
   content?: string;
@@ -102,8 +117,8 @@ export interface IViewNode extends IEntity, d3force.SimulationNodeDatum {
   // ArchiMate Container Attributes
   // container doesn't distinguish between nodes and connections
 
-  nodes: IViewNode[];
-  connections: object[];
+  // nodes: IViewNode[];
+  // connections: object[];
 
   // Element
   element?: string;
@@ -115,22 +130,16 @@ export interface IViewNode extends IEntity, d3force.SimulationNodeDatum {
 /**
  * Data type for ArchiMate relationships
  */
-export interface IConnection extends IEntity, d3force.SimulationLinkDatum<IViewNode> {
-  id: string;
-  name?: string;
-  documentation?: string;
-  type: string;
+export interface IConnection extends IViewConceptType, d3force.SimulationLinkDatum<IViewNode> {
   sourceAttachment?: Point;
   bendpoints: Point[];
   targetAttachment?: Point;
   source: string;
   target: string;
   relationship?: string;
-  style?: Style;
   properties: IProperty[];
   // linkType: string;
   // weight: number;
-  entityInstance(): IEntity | undefined;
 }
 
 export interface IDiagram extends IEntity, IHasRelationships, IHasViews {
