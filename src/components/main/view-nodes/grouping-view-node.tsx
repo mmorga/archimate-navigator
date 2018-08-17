@@ -16,7 +16,7 @@ export default class GroupingViewNode extends GroupViewNode {
     const bounds = this.props.viewNode.absolutePosition();
     const groupHeaderHeight = 21;
     return (
-      <React.Fragment>
+      <>
         <rect
           x={bounds.left}
           y={bounds.top + groupHeaderHeight}
@@ -33,7 +33,7 @@ export default class GroupingViewNode extends GroupViewNode {
           className={this.state.backgroundClass} 
           style={this.shapeStyle()}
         />
-      </React.Fragment>
+      </>
     );
   }
 }

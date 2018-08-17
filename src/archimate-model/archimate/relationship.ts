@@ -22,7 +22,12 @@ export class Relationship implements IRelationship {
   public strength?: string;
   public model: IModel;
 
-  constructor(model: IModel, type: RelationshipType, source: string, target: string) {
+  constructor(
+    model: IModel,
+    type: RelationshipType,
+    source: string,
+    target: string
+  ) {
     this.model = model;
     this.type = type;
     this.id = model.makeUniqueId();
@@ -63,8 +68,10 @@ export class Relationship implements IRelationship {
 
   // Diagrams that this entity is referenced in.
   public diagrams() {
-    return this.model.diagrams.filter(dia => dia.relationships().find(rel => rel.id === this.id));
-    }
+    return this.model.diagrams.filter(dia =>
+      dia.relationships().find(rel => rel.id === this.id)
+    );
+  }
 
   // replace_item_with(item, replacement) {
   //   super

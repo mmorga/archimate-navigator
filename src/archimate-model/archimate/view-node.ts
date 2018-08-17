@@ -1,7 +1,14 @@
 import { Bounds, zeroBounds } from "./bounds";
 import { Connection } from "./connection";
 import { Diagram } from "./diagram";
-import { IEntity, IEntityRef, IExtents, IModel, IProperty, IViewNode } from "./interfaces";
+import {
+  IEntity,
+  IEntityRef,
+  IExtents,
+  IModel,
+  IProperty,
+  IViewNode
+} from "./interfaces";
 import { Style } from "./style";
 
 export const VIEW_NODE_WIDTH = 120; // TODO: this should be from the SVG diagram settings
@@ -143,7 +150,7 @@ export class ViewNode implements IViewNode, IEntityRef {
       this.x || this.bounds.left,
       this.y || this.bounds.top,
       this.bounds.width,
-      this.bounds.height,
+      this.bounds.height
     );
   }
 
@@ -152,8 +159,8 @@ export class ViewNode implements IViewNode, IEntityRef {
       maxX: (this.x || this.bounds.left) + this.bounds.width,
       maxY: (this.y || this.bounds.top) + this.bounds.height,
       minX: this.x || this.bounds.left,
-      minY: this.y || this.bounds.top,
-    }
+      minY: this.y || this.bounds.top
+    };
   }
 
   public inside(other: ViewNode | Connection): boolean {

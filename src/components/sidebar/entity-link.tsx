@@ -18,7 +18,10 @@ export default class EntityLink extends React.PureComponent<IProps> {
     const text = this.props.text ? this.props.text : this.props.entity!.name;
     if (this.props.entity) {
       return (
-        <a href={this.props.entity!.href} onClick={this.props.entityClicked.bind(this, this.props.entity)}>
+        <a
+          href={this.props.entity!.href}
+          onClick={this.props.entityClicked.bind(this, this.props.entity)}
+        >
           {this.props.children}
           <span className={this.props.textClass}>{text}</span>
         </a>

@@ -21,7 +21,11 @@ export default class EntityIdPanel extends React.PureComponent<IProps> {
 
   public render() {
     const entity = this.props.entity;
-    const name = entity ? entity.name : (<span className="text-muted">Nothing Selected</span>);
+    const name = entity ? (
+      entity.name
+    ) : (
+      <span className="text-muted">Nothing Selected</span>
+    );
     return (
       <Panel>
         <table className="table">
@@ -40,13 +44,13 @@ export default class EntityIdPanel extends React.PureComponent<IProps> {
   private entityContent(): React.ReactFragment {
     const entity = this.props.entity;
     if (entity instanceof Diagram) {
-      return (this.diagramContent());
+      return this.diagramContent();
     } else if (entity instanceof Relationship) {
-      return (this.relationshipContent());
+      return this.relationshipContent();
     } else if (entity instanceof Element) {
-      return (this.elementContent());
+      return this.elementContent();
     } else {
-      return([]);
+      return [];
     }
   }
 
@@ -69,7 +73,7 @@ export default class EntityIdPanel extends React.PureComponent<IProps> {
       <EntityLink
         entity={ref}
         entityClicked={this.props.entityClicked}
-        text={`${ref.name} (${ ref.type })`}
+        text={`${ref.name} (${ref.type})`}
       />
     );
   }
@@ -77,7 +81,7 @@ export default class EntityIdPanel extends React.PureComponent<IProps> {
   private relationshipContent(): React.ReactFragment {
     const relationship = this.props.entity as Relationship;
     return (
-      <React.Fragment>
+      <>
         <tr key="relationship-type">
           <th>Relationship</th>
           <td>{relationship.type}</td>
@@ -90,7 +94,7 @@ export default class EntityIdPanel extends React.PureComponent<IProps> {
           <th>Target</th>
           <td>{this.relationshipRefLink(relationship.targetElement())}</td>
         </tr>
-      </React.Fragment>
+      </>
     );
   }
 

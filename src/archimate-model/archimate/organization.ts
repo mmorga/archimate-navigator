@@ -22,13 +22,13 @@ export class Organization implements IOrganization {
   }
 
   public item(id: string): Organization | undefined {
-    return (this.model.lookup(id) as Organization);
+    return this.model.lookup(id) as Organization;
   }
 
   public itemEntities(): IEntity[] {
     return this.items
       .map(itemId => this.item(itemId))
-      .filter(maybeItem => maybeItem !== undefined)            
+      .filter(maybeItem => maybeItem !== undefined)
       .map(item => item as IEntity);
   }
 

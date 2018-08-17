@@ -16,7 +16,7 @@ export default class DeviceViewNode extends BadgedNodeViewNode {
     ].join(" ");
   
     return (
-      <React.Fragment>
+      <>
         <rect
           x={bounds.left}
           y={bounds.top}
@@ -29,7 +29,7 @@ export default class DeviceViewNode extends BadgedNodeViewNode {
         />
         <path d={decorationPath} className={backgroundClass} style={style} />
         <path d={decorationPath} className="archimate-decoration" style={style} />
-      </React.Fragment> 
+      </> 
     );  
   }
 

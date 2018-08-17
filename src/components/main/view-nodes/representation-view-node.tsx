@@ -13,7 +13,7 @@ export default class RepresentationViewNode extends DataObjectViewNode {
   public entityShape(): JSX.Element {
     const bounds = this.props.viewNode.absolutePosition();
     return (
-      <React.Fragment>
+      <>
         <path
             d={[
                 "M", bounds.left, bounds.top,
@@ -31,7 +31,7 @@ export default class RepresentationViewNode extends DataObjectViewNode {
             style={this.shapeStyle()}
         />
         <rect key="data-decoration" x={bounds.left} y={bounds.top} width={bounds.width} height={this.state.margin} className="archimate-decoration" />
-      </React.Fragment>
+      </>
     );
   }
 }

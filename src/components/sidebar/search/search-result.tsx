@@ -1,5 +1,10 @@
 import * as React from "react";
-import { Diagram, Element, IEntity, Relationship } from "../../../archimate-model";
+import {
+  Diagram,
+  Element,
+  IEntity,
+  Relationship
+} from "../../../archimate-model";
 import { entityClickedFunc } from "../../common";
 import EntityLink from "../entity-link";
 

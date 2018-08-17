@@ -41,9 +41,9 @@ export default class ViewsTable extends React.PureComponent<IProps> {
     const header = !empty ? (
       "Views"
     ) : (
-      <React.Fragment>
+      <>
         Views <span className="small">(none)</span>
-      </React.Fragment>
+      </>
     );
     return (
       <Panel header={header} initiallyCollapsed={empty}>

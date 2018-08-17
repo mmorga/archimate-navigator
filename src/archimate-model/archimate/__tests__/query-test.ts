@@ -3,7 +3,7 @@ import { Diagram } from "../diagram";
 import { Element } from "../element";
 import { ElementType } from "../element-type";
 import { Model } from "../model";
-import { Query } from  "../query";
+import { Query } from "../query";
 import { Relationship } from "../relationship";
 import { RelationshipType } from "../relationship-type";
 import { ViewpointType } from "../viewpoint-type";
@@ -13,8 +13,17 @@ function createTestElement(model: Model): Element {
   return element;
 }
 
-function createTestRelationship(model: Model, source: Element, target: Element): Relationship {
-  const relationship = new Relationship(model, RelationshipType.Serving, source.id, target.id);
+function createTestRelationship(
+  model: Model,
+  source: Element,
+  target: Element
+): Relationship {
+  const relationship = new Relationship(
+    model,
+    RelationshipType.Serving,
+    source.id,
+    target.id
+  );
   relationship.source = source.id;
   relationship.target = target.id;
   return relationship;
@@ -31,7 +40,7 @@ function createTestModel(): Model {
   return model;
 }
 
-test('diagram', () => {
+test("diagram", () => {
   const model = createTestModel();
   const subject = new Query(model);
   subject.viewpointType = ViewpointType.Application_cooperation;

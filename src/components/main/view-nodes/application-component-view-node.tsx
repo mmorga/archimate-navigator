@@ -43,21 +43,21 @@ export default class ApplicationComponentViewNode extends BadgedRectViewNode {
       const mainBoxX = bounds.left + 21.0 / 2;
       const mainBoxWidth = bounds.width - 21 / 2;
       return (
-        <React.Fragment>
+        <>
           <rect x={mainBoxX} y={bounds.top} width={mainBoxWidth} height={bounds.height} className={this.state.backgroundClass} style={this.shapeStyle()} />
           {this.componentDecoration(bounds.left, bounds.top + 10)}
           {this.componentDecoration(bounds.left, bounds.top + 30)}
-        </React.Fragment>
+        </>
       );
     }
   }
 
   private componentDecoration(left: number, top: number) {
     return (
-      <React.Fragment>
+      <>
         <rect x={left} y={top} width="21" height="13" className={this.state.backgroundClass} style={this.shapeStyle()} />
         <rect x={left} y={top} width="21" height="13" className="archimate-decoration" />
-      </React.Fragment>
+      </>
     );
   }
 }

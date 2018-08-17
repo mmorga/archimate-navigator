@@ -36,9 +36,9 @@ export default class PropertiesPanel extends React.PureComponent<IProps> {
     const header = !propertiesEmpty ? (
       "Properties"
     ) : (
-      <React.Fragment>
+      <>
         Properties <span className="small">(none)</span>
-      </React.Fragment>
+      </>
     );
     return (
       <Panel header={header} initiallyCollapsed={propertiesEmpty}>
@@ -49,7 +49,7 @@ export default class PropertiesPanel extends React.PureComponent<IProps> {
               <th>Value</th>
             </tr>
           </thead>
-          <tbody id="archimate-element-properties">{tableRows}</tbody>
+          <tbody id="element-properties">{tableRows}</tbody>
         </table>
       </Panel>
     );

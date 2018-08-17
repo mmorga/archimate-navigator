@@ -62,7 +62,7 @@ export default class EntityLabel extends React.PureComponent<IProps, IState> {
     const tb = this.props.textBounds;
     const clipPathId = `${this.props.child.id}-clip-path`;
     return (
-      <React.Fragment>
+      <>
         <clipPath id={clipPathId}>
           <path d={this.clipPathD()} />
         </clipPath>
@@ -79,7 +79,7 @@ export default class EntityLabel extends React.PureComponent<IProps, IState> {
             style={this.textStyle(this.state.textAnchor)}
           />
         </text>
-      </React.Fragment>
+      </>
     );
   }
 

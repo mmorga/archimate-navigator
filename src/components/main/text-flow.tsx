@@ -29,9 +29,9 @@ export default class TextFlow extends React.PureComponent<IProps, IState> {
 
   public render() {
     return (
-      <React.Fragment>
+      <>
         {this.tspans()}
-      </React.Fragment>
+      </>
     );
   }
 

@@ -16,7 +16,7 @@ export default class DocumentationPanel extends React.PureComponent<IProps> {
   public render() {
     const hasContent = (this.props.str && (this.props.str.trim().length > 0));
     const title = this.props.header || "Documentation";
-    const header = hasContent ? title : (<React.Fragment>{title} <span className="small">(none)</span></React.Fragment>);
+    const header = hasContent ? title : (<>{title} <span className="small">(none)</span></>);
     return (
       <Panel 
           header={header}

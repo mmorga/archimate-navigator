@@ -1,5 +1,14 @@
 import { Bounds } from "./bounds";
-import { IConnection, IEntity, IEntityRef, IExtents, IModel, InitExtents, IProperty, LogicError } from "./interfaces";
+import {
+  IConnection,
+  IEntity,
+  IEntityRef,
+  IExtents,
+  IModel,
+  InitExtents,
+  IProperty,
+  LogicError
+} from "./interfaces";
 import { Path } from "./path";
 import { Point } from "./point";
 import { Style } from "./style";
@@ -108,7 +117,7 @@ export class Connection implements IConnection, IEntityRef {
         maxX: Math.max(point.x, extents.maxX),
         maxY: Math.max(point.y, extents.maxY),
         minX: Math.min(point.x, extents.minX),
-        minY: Math.min(point.y, extents.minY),
+        minY: Math.min(point.y, extents.minY)
       };
     }, InitExtents);
   }

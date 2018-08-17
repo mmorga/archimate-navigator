@@ -18,7 +18,7 @@ export default class GroupViewNode extends DefaultViewNode {
   public entityShape(): JSX.Element {
     const bounds = this.props.viewNode.absolutePosition();
     return (
-      <React.Fragment>
+      <>
         <rect
             x={bounds.left}
             y={bounds.top + this.groupHeaderHeight}
@@ -42,7 +42,7 @@ export default class GroupViewNode extends DefaultViewNode {
             height={this.groupHeaderHeight}
             className={"archimate-decoration"}
         />)
-      </React.Fragment>
+      </>
     );
   }
 

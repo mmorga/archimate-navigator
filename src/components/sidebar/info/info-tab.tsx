@@ -27,14 +27,19 @@ export default class InfoTab extends React.PureComponent<IProps> {
 
   public render() {
     return (
-      <React.Fragment>
-        <EntityIdPanel entity={this.props.entity} entityClicked={this.props.entityClicked} />
-        <DocumentationPanel str={this.props.entity ? this.props.entity.documentation : undefined} />
+      <>
+        <EntityIdPanel
+          entity={this.props.entity}
+          entityClicked={this.props.entityClicked}
+        />
+        <DocumentationPanel
+          str={this.props.entity ? this.props.entity.documentation : undefined}
+        />
         {this.properties()}
         {this.elements()}
         {this.relationships()}
         {this.views()}
-      </React.Fragment>
+      </>
     );
   }
 
@@ -50,7 +55,6 @@ export default class InfoTab extends React.PureComponent<IProps> {
     } else {
       return undefined;
     }
-
   }
   private relationships(): JSX.Element | undefined {
     if (
@@ -90,8 +94,6 @@ export default class InfoTab extends React.PureComponent<IProps> {
     if (this.props.entity === undefined) {
       return undefined;
     }
-    return (
-      <PropertiesPanel properties={this.props.entity.properties || []} />
-    );
+    return <PropertiesPanel properties={this.props.entity.properties || []} />;
   }
 }

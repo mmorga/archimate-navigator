@@ -55,7 +55,7 @@ export default class QueryTab extends React.PureComponent<
 
   public render() {
     return (
-      <React.Fragment>
+      <>
         <QueryPicker
           onNewQuery={this.onNewQuery}
           onQuerySelected={this.onQuerySelected}
@@ -72,7 +72,7 @@ export default class QueryTab extends React.PureComponent<
           autoLayout={this.state.autoLayout}
           onAutoLayoutToggled={this.onAutoLayoutToggled}
         />
-      </React.Fragment>
+      </>
     );
   }
 

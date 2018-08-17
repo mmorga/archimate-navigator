@@ -21,8 +21,14 @@ interface IState {
 }
 
 // Displays the list of organizations and entities that belong to the given organization
-export default class OrganizationContent extends React.Component<IProps, IState> {
-  public static getDerivedStateFromProps(props: Readonly<IProps>, state: Readonly<IState>): IState | null {
+export default class OrganizationContent extends React.Component<
+  IProps,
+  IState
+> {
+  public static getDerivedStateFromProps(
+    props: Readonly<IProps>,
+    state: Readonly<IState>
+  ): IState | null {
     const itemEntities = props.items.map(i => i.id);
     if (state && isEqual(itemEntities, state.itemEntities)) {
       return null;
@@ -31,9 +37,9 @@ export default class OrganizationContent extends React.Component<IProps, IState>
     }
   }
 
-  private sortedOrganizations = memoize<(organizations: Organization[]) => Organization[]>(
-    organizations => organizations.sort(entitySortFunc)
-  );
+  private sortedOrganizations = memoize<
+    (organizations: Organization[]) => Organization[]
+  >(organizations => organizations.sort(entitySortFunc));
 
   // private sortedItems = memoize<(items: string[]) => IEntity[]>(
   //   items => items
@@ -47,13 +53,18 @@ export default class OrganizationContent extends React.Component<IProps, IState>
     super(props);
     this.state = {
       itemEntities: []
-    }
+    };
   }
 
-  public shouldComponentUpdate(nextProps: Readonly<IProps>, nextState: Readonly<IState>): boolean {
-    if ((this.props.organizations !== nextProps.organizations) ||
-        (this.props.items !== nextProps.items) ||
-        (this.props.selectedEntity !== nextProps.selectedEntity)) {
+  public shouldComponentUpdate(
+    nextProps: Readonly<IProps>,
+    nextState: Readonly<IState>
+  ): boolean {
+    if (
+      this.props.organizations !== nextProps.organizations ||
+      this.props.items !== nextProps.items ||
+      this.props.selectedEntity !== nextProps.selectedEntity
+    ) {
       return true;
     }
 
@@ -70,17 +81,19 @@ export default class OrganizationContent extends React.Component<IProps, IState>
   public render() {
     return (
       <ul className="archimate-organization-list">
-        {this.sortedOrganizations(this.props.organizations).map(organization => (
-          <OrganizationTree
-            key={organization.id}
-            organizationName={organization.name}
-            organizationId={organization.id}
-            organizations={organization.organizations}
-            items={organization.itemEntities()}
-            entityClicked={this.props.entityClicked}
-            selectedEntity={this.props.selectedEntity}
-          />
-        ))}
+        {this.sortedOrganizations(this.props.organizations).map(
+          organization => (
+            <OrganizationTree
+              key={organization.id}
+              organizationName={organization.name}
+              organizationId={organization.id}
+              organizations={organization.organizations}
+              items={organization.itemEntities()}
+              entityClicked={this.props.entityClicked}
+              selectedEntity={this.props.selectedEntity}
+            />
+          )
+        )}
         {this.props.items.sort(entitySortFunc).map(entity => (
           <OrganizationItem
             key={entity.id}

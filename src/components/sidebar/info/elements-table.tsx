@@ -62,7 +62,10 @@ export default class ElementsTable extends React.PureComponent<IProps> {
   }
 }
 
-export function byTypeAndName(a: Element, b: Element): number {
+export function byTypeAndName(
+  a: Element,
+  b: Element
+): number {
   if (a === b) {
     return 0;
   }

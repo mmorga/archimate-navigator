@@ -84,10 +84,7 @@ export default class ElementPicker extends React.PureComponent<IProps, IState> {
                 onChange={this.onLayerFilterChanged}
               >
                 {this.allLayers.map(v => (
-                  <option
-                    key={v}
-                    value={v}
-                  >
+                  <option key={v} value={v}>
                     {v}
                   </option>
                 ))}
@@ -102,10 +99,7 @@ export default class ElementPicker extends React.PureComponent<IProps, IState> {
                 onChange={this.onElementTypeFilterChanged}
               >
                 {this.state.elementTypesFilterElements.map(v => (
-                  <option
-                    key={v}
-                    value={v}
-                  >
+                  <option key={v} value={v}>
                     {v}
                   </option>
                 ))}
@@ -131,18 +125,23 @@ export default class ElementPicker extends React.PureComponent<IProps, IState> {
               <ListGroup>
                 {this.state.results
                   .slice(0, Math.min(20, this.state.results.size))
-                  .map(el => (el ?
-                    <ListGroupItem key={el.id}>
-                      <div className="pull-right">
-                        {this.addRemoveElement(el)}
-                      </div>
-                      <span className="text-info">{el.type}</span>
-                      {": "}
-                      {<span className="text-primary">{el.name}</span> || (
-                        <span className="text-muted">unnamed</span>
-                      )}
-                    </ListGroupItem> : undefined
-                  ))}
+                  .map(
+                    el =>
+                      el ? (
+                        <ListGroupItem key={el.id}>
+                          <div className="pull-right">
+                            {this.addRemoveElement(el)}
+                          </div>
+                          <span className="text-info">{el.type}</span>
+                          {": "}
+                          {<span className="text-primary">{el.name}</span> || (
+                            <span className="text-muted">unnamed</span>
+                          )}
+                        </ListGroupItem>
+                      ) : (
+                        undefined
+                      )
+                  )}
               </ListGroup>
               <FormControl.Feedback />
             </FormGroup>
@@ -206,7 +205,9 @@ export default class ElementPicker extends React.PureComponent<IProps, IState> {
     if (this.state.fuse === undefined) {
       const fuseElementTypes = this.filteredElementTypes();
       const fuseFilteredElements = List<Element>(
-        this.allElements().filter(e => e ? fuseElementTypes.some(et => et === e.type) : false)
+        this.allElements().filter(
+          e => (e ? fuseElementTypes.some(et => et === e.type) : false)
+        )
       );
       this.setState({
         fuseElementTypes,
@@ -217,19 +218,25 @@ export default class ElementPicker extends React.PureComponent<IProps, IState> {
     }
     const results: List<Element> =
       this.state.search.length > 0
-        ? List<Element>((this.state.fuse as Fuse).search(this.state.search))
+        ? List<Element>(
+            (this.state.fuse as Fuse).search(this.state.search)
+          )
         : List<Element>();
     this.setState({ results });
   }
 
-  private elementTypesForLayer = (layer: Layer | string): List<ElementTypeFilterType> => {
-    return List<ElementTypeFilterType>(layerElements(layer === "All" ? Layer.None : (layer as Layer)).sort()).unshift("All");
+  private elementTypesForLayer = (
+    layer: Layer | string
+  ): List<ElementTypeFilterType> => {
+    return List<ElementTypeFilterType>(
+      layerElements(layer === "All" ? Layer.None : (layer as Layer)).sort()
+    ).unshift("All");
   };
 
   private filteredElementTypes(): List<ElementType> {
     if (this.state.elementTypeFilter === "All") {
       return List(
-          this.state.elementTypesFilterElements
+        this.state.elementTypesFilterElements
           .filter(et => et !== "All")
           .map(et => et as ElementType)
       );
@@ -239,18 +246,18 @@ export default class ElementPicker extends React.PureComponent<IProps, IState> {
   }
 
   private addRemoveElement(el: Element): JSX.Element {
-    // TODO: should be working with Immutable v4 
+    // TODO: should be working with Immutable v4
     // const isSelected = this.props.selectedElements.includes(el);
-    const isSelected = this.props.query.elements.some(e => e ? e.id === el.id : false);
+    const isSelected = this.props.query.elements.some(
+      e => (e ? e.id === el.id : false)
+    );
     const glyph = isSelected ? "remove" : "plus";
-    const onClick = isSelected ? this.onRemoveClick.bind(this, el): this.onAddClick.bind(this, el);
+    const onClick = isSelected
+      ? this.onRemoveClick.bind(this, el)
+      : this.onAddClick.bind(this, el);
     const bsStyle = isSelected ? "danger" : "primary";
     return (
-      <Button
-        bsSize="xsmall"
-        bsStyle={bsStyle}
-        onClick={onClick}
-      >
+      <Button bsSize="xsmall" bsStyle={bsStyle} onClick={onClick}>
         <Glyphicon glyph={glyph} />
       </Button>
     );
@@ -258,5 +265,5 @@ export default class ElementPicker extends React.PureComponent<IProps, IState> {
 
   private allElements = () => {
     return List<Element>(this.props.query.model.elements);
-  }
+  };
 }

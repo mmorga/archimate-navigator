@@ -4,14 +4,14 @@ import {
   IEntity,
   IHasOrganizations,
   IIdentifiable,
-  IModel,
+  IModel
 } from "./interfaces";
 import { Organization } from "./organization";
 import { Property } from "./property";
 import { Relationship } from "./relationship";
 
 export type AdjacencyList = Map<Element, Relationship[]>;
-  
+
 // This is the root model type.
 // It is a container for the elements, relationships, diagrams and
 // organizations of the model.
@@ -38,7 +38,7 @@ export class Model implements IModel {
     IIdentifiable
   >();
   public version?: string;
-  public diagrams: Diagram[] = []; // Diagram[] = [];
+  public diagrams: Diagram[] = [];
   public viewpoints: IIdentifiable[] = [];
   public href?: string | undefined;
   public type: string;
@@ -53,7 +53,7 @@ export class Model implements IModel {
   }
 
   public lookup(id: string | undefined): IEntity | undefined {
-    if ((id === undefined) || (id === "")) {
+    if (id === undefined || id === "") {
       return undefined;
     }
     if (this.indexHash.get(id) === undefined) {
@@ -72,7 +72,9 @@ export class Model implements IModel {
   }
 
   public viewOrganization(): Organization {
-    const viewOrg = this.organizations.find(o => o && o.type === "diagrams" ? true : false);
+    const viewOrg = this.organizations.find(
+      o => (o && o.type === "diagrams" ? true : false)
+    );
     if (viewOrg) {
       return viewOrg;
     }
@@ -84,7 +86,7 @@ export class Model implements IModel {
     }
     return this.organizations[this.organizations.length - 1];
   }
-  
+
   public entities(): IEntity[] {
     return Array.from(this.indexHash.values());
   }
@@ -164,6 +166,9 @@ function emptyIndexHash() {
   return new Map<string, IEntity>();
 }
 
-function adjacencyListReducer(alMap: AdjacencyList, cv: Element): AdjacencyList {
+function adjacencyListReducer(
+  alMap: AdjacencyList,
+  cv: Element
+): AdjacencyList {
   return alMap.set(cv, cv.relationships() as Relationship[]);
 }

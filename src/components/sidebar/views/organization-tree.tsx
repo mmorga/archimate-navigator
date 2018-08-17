@@ -21,7 +21,10 @@ interface IState {
 
 // TODO: save the open closed state to localStorage
 // (https://developer.mozilla.org/en-US/docs/Web/API/Web_Storage_API/Using_the_Web_Storage_API)
-export default class OrganizationTree extends React.PureComponent<IProps, IState> {
+export default class OrganizationTree extends React.PureComponent<
+  IProps,
+  IState
+> {
   constructor(props: IProps) {
     super(props);
     this.state = {
@@ -41,11 +44,25 @@ export default class OrganizationTree extends React.PureComponent<IProps, IState
           href={linkHref}
           onClick={this.handleClick}
         >
-          <span className={this.state.collapse ? "glyphicon glyphicon-folder-close" : "glyphicon glyphicon-folder-open"} />
-          &nbsp;{this.props.organizationName}
+          <span
+            className={
+              this.state.collapse
+                ? "glyphicon glyphicon-folder-close"
+                : "glyphicon glyphicon-folder-open"
+            }
+          />
+          &nbsp;
+          {this.props.organizationName}
         </a>
-        <ul id={ulId} className={this.state.collapse ? "archimate-organization-list collapse" : "archimate-organization-list"}>
-          <OrganizationContent 
+        <ul
+          id={ulId}
+          className={
+            this.state.collapse
+              ? "archimate-organization-list collapse"
+              : "archimate-organization-list"
+          }
+        >
+          <OrganizationContent
             organizations={this.props.organizations}
             items={this.props.items}
             entityClicked={this.props.entityClicked}

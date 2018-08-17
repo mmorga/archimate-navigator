@@ -67,7 +67,7 @@ export class Query {
           et => viewpointElementTypes.find(vet => vet === et) !== undefined
         )
       );
-      }
+    }
 
     return Object.assign(new Query(this.model), this, adjustedProps);
   }
@@ -86,7 +86,9 @@ export class Query {
 
   public unselectedElementTypes(): Set<ElementType> {
     return Set<ElementType>(
-      this.availableElementTypes().filter(et => this.elementTypes.find(vet => vet === et) === undefined)
+      this.availableElementTypes().filter(
+        et => this.elementTypes.find(vet => vet === et) === undefined
+      )
     );
   }
 
@@ -158,7 +160,10 @@ export class Query {
             `Relationship ${rel.id} target ${rel.target} Element not found`
           );
         }
-        return acc.concat([source as Element, target as Element]);
+        return acc.concat([
+          source as Element,
+          target as Element
+        ]);
       },
       []
     );

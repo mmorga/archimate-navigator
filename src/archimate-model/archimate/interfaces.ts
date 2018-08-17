@@ -25,8 +25,8 @@ export const InitExtents: IExtents = {
   maxX: Number.MIN_SAFE_INTEGER,
   maxY: Number.MIN_SAFE_INTEGER,
   minX: Number.MAX_SAFE_INTEGER,
-  minY: Number.MAX_SAFE_INTEGER,
-}
+  minY: Number.MAX_SAFE_INTEGER
+};
 
 export interface IRange {
   begin: number;
@@ -102,8 +102,9 @@ export interface IViewConceptType extends IEntity {
   extents(): IExtents;
 }
 
-export interface IViewNode extends IViewConceptType, d3force.SimulationNodeDatum {
-
+export interface IViewNode
+  extends IViewConceptType,
+    d3force.SimulationNodeDatum {
   // @todo document where this comes from
   content?: string;
 
@@ -130,7 +131,9 @@ export interface IViewNode extends IViewConceptType, d3force.SimulationNodeDatum
 /**
  * Data type for ArchiMate relationships
  */
-export interface IConnection extends IViewConceptType, d3force.SimulationLinkDatum<IViewNode> {
+export interface IConnection
+  extends IViewConceptType,
+    d3force.SimulationLinkDatum<IViewNode> {
   sourceAttachment?: Point;
   bendpoints: Point[];
   targetAttachment?: Point;
@@ -142,7 +145,10 @@ export interface IConnection extends IViewConceptType, d3force.SimulationLinkDat
   // weight: number;
 }
 
-export interface IDiagram extends IEntity, IHasRelationships, IHasViews {
+export interface IDiagram
+  extends IEntity,
+    IHasRelationships,
+    IHasViews {
   viewpoint?: string;
   nodes: IViewNode[];
   connectionRouterType?: string;

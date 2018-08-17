@@ -13,7 +13,7 @@ export default class DeliverableViewNode extends DefaultViewNode {
   public entityShape(): JSX.Element {
     const bounds = this.props.viewNode.absolutePosition();
     return (
-      <React.Fragment>
+      <>
         <path
             d={[
                 "M", bounds.left, bounds.top,
@@ -30,7 +30,7 @@ export default class DeliverableViewNode extends DefaultViewNode {
             className={this.state.backgroundClass}
             style={this.shapeStyle()}
         />
-      </React.Fragment>
+      </>
     );
   }
 }

@@ -46,7 +46,7 @@ export class QueryRunner {
           relationships: resultRelationships,
           searchQueueItem: item,
           visited
-        })
+        });
     }
     return [resultElements, resultRelationships];
   }
@@ -60,11 +60,14 @@ interface ISpiderAccumulator {
   visited: Set<Element>;
 }
 
-export function spiderRelationships(acc: ISpiderAccumulator, relationship: IRelationship): ISpiderAccumulator {
+export function spiderRelationships(
+  acc: ISpiderAccumulator,
+  relationship: IRelationship
+): ISpiderAccumulator {
   const otherElement =
-  relationship.sourceElement() === acc.searchQueueItem.element
-    ? relationship.targetElement()
-    : relationship.sourceElement();
+    relationship.sourceElement() === acc.searchQueueItem.element
+      ? relationship.targetElement()
+      : relationship.sourceElement();
 
   if (
     otherElement &&
@@ -74,20 +77,27 @@ export function spiderRelationships(acc: ISpiderAccumulator, relationship: IRela
     acc.relationships.push(relationship as Relationship);
     acc.visited = acc.visited.add(otherElement);
     if (acc.searchQueueItem.depth < acc.maxPathDepth) {
-      acc.queue.push({ element: otherElement, depth: acc.searchQueueItem.depth + 1 });
+      acc.queue.push({
+        depth: acc.searchQueueItem.depth + 1,
+        element: otherElement
+      });
     }
   }
   return acc;
 }
 
-export function relationshipTypesFilter(relationshipTypes: Set<RelationshipType>): (relationship: IRelationship) => boolean {
+export function relationshipTypesFilter(
+  relationshipTypes: Set<RelationshipType>
+): (relationship: IRelationship) => boolean {
   return (relationship: IRelationship) =>
-    relationshipTypes.includes(relationship.type)
-      // rt => (rt ? rt === relationship.type : false)
-    // );
+    relationshipTypes.includes(relationship.type);
+  // rt => (rt ? rt === relationship.type : false)
+  // );
 }
 
-export function relationshipElementTypesFilter(elementTypes: Set<ElementType>): ((relationship: IRelationship) => boolean) {
+export function relationshipElementTypesFilter(
+  elementTypes: Set<ElementType>
+): ((relationship: IRelationship) => boolean) {
   return (relationship: IRelationship) => {
     return [relationship.sourceElement(), relationship.targetElement()].every(
       elementTypeFilter(elementTypes)
@@ -95,10 +105,13 @@ export function relationshipElementTypesFilter(elementTypes: Set<ElementType>): 
   };
 }
 
-export function elementTypeFilter(elementTypes: Set<ElementType>): ((e: IEntity | undefined) => boolean) {
+export function elementTypeFilter(
+  elementTypes: Set<ElementType>
+): ((e: IEntity | undefined) => boolean) {
   return (e: IEntity | undefined): boolean => {
     return (
-      (e && e instanceof Element && elementTypes.includes(e.type)) || false
+      (e && e instanceof Element && elementTypes.includes(e.type)) ||
+      false
     );
   };
 }
