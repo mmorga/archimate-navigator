@@ -71,7 +71,6 @@ export default class ArchimateDiagramView extends React.PureComponent<
       return (
         <>
           <div className="archimate-zoombar" style={{ position: "absolute", top: 0, right: 0 }}>
-            {[this.state.minX, this.state.minY, this.state.maxX, this.state.maxY].join(", ")}
             <Button onClick={this.onOneHundredPercent}><small>1:1</small></Button>
             <Button onClick={this.onFitToWindow}><Glyphicon glyph="resize-full"/></Button>
             <Button onClick={this.onFitToWidth}><Glyphicon glyph="resize-horizontal"/></Button>

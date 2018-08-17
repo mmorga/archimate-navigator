@@ -400,13 +400,12 @@ export default class SvgPanZoom extends React.PureComponent<
   private svgSize = () => {
     if (this.props.svgPanZoomRef && this.props.svgPanZoomRef.current && this.props.svgPanZoomRef.current.ownerSVGElement) {
       const svg: SVGSVGElement = this.props.svgPanZoomRef.current.ownerSVGElement;
-      const clientHeight = svg.clientHeight;
-      if (numbersDiffer(clientHeight, this.state.clientHeight)) {
-        this.setState({ clientHeight });
-      }
-      const clientWidth = svg.clientWidth;
-      if (numbersDiffer(clientWidth, this.state.clientWidth)) {
-        this.setState({ clientWidth });
+      const rect = svg.getClientRects()[0];
+      const clientHeight = rect.height;
+      const clientWidth = rect.width;
+      if (numbersDiffer(clientHeight, this.state.clientHeight) ||
+          numbersDiffer(clientWidth, this.state.clientWidth)) {
+        this.setState({ clientHeight, clientWidth });
       }
     }
   }
