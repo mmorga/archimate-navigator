@@ -145,10 +145,7 @@ export interface IConnection
   // weight: number;
 }
 
-export interface IDiagram
-  extends IEntity,
-    IHasRelationships,
-    IHasViews {
+export interface IDiagram extends IEntity, IHasRelationships, IHasViews {
   viewpoint?: string;
   nodes: IViewNode[];
   connectionRouterType?: string;

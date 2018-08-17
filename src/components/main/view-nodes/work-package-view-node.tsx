@@ -7,7 +7,7 @@ export default class WorkPackageViewNode extends BadgedRoundedRectViewNode {
     this.state = {
       ...this.state,
       badge: undefined,
-      badgeBounds: undefined,
-    }
+      badgeBounds: undefined
+    };
   }
 }

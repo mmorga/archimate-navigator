@@ -6,7 +6,7 @@ export default class CollaborationViewNode extends BadgedRectViewNode {
     super(props);
     this.state = {
       ...this.state,
-      badge: "#archimate-collaboration-badge",
+      badge: "#archimate-collaboration-badge"
     };
   }
 }

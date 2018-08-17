@@ -6,7 +6,7 @@ export default class ConstraintViewNode extends MotivationViewNode {
     super(props);
     this.state = {
       ...this.state,
-      badge: "#archimate-constraint-badge",
+      badge: "#archimate-constraint-badge"
     };
   }
 }

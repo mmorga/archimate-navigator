@@ -218,9 +218,7 @@ export default class ElementPicker extends React.PureComponent<IProps, IState> {
     }
     const results: List<Element> =
       this.state.search.length > 0
-        ? List<Element>(
-            (this.state.fuse as Fuse).search(this.state.search)
-          )
+        ? List<Element>((this.state.fuse as Fuse).search(this.state.search))
         : List<Element>();
     this.setState({ results });
   }

@@ -4,13 +4,9 @@ import {
   Form,
   FormControl,
   FormGroup,
-  Panel,
+  Panel
 } from "react-bootstrap";
-import {
-  Diagram,
-  Model,
-  Query,
-} from "../../../archimate-model";
+import { Diagram, Model, Query } from "../../../archimate-model";
 import ElementTypeFilterPanel from "./element-type-filter-panel";
 import ElementsPanel from "./elements-panel";
 import OptionsPanel from "./options-panel";
@@ -52,19 +48,24 @@ export default class QueryWizard extends React.PureComponent<IProps> {
               </FormGroup>
               <ElementsPanel
                 query={this.props.query}
-                onQueryChanged={this.props.onQueryChanged} />
+                onQueryChanged={this.props.onQueryChanged}
+              />
               <ViewpointPanel
                 query={this.props.query}
-                onQueryChanged={this.props.onQueryChanged} />
+                onQueryChanged={this.props.onQueryChanged}
+              />
               <ElementTypeFilterPanel
                 query={this.props.query}
-                onQueryChanged={this.props.onQueryChanged} />
+                onQueryChanged={this.props.onQueryChanged}
+              />
               <RelationshipTypeFilterPanel
                 query={this.props.query}
-                onQueryChanged={this.props.onQueryChanged} />
+                onQueryChanged={this.props.onQueryChanged}
+              />
               <OptionsPanel
                 query={this.props.query}
-                onQueryChanged={this.props.onQueryChanged} />
+                onQueryChanged={this.props.onQueryChanged}
+              />
             </Form>
           </Panel.Body>
         </Panel.Collapse>
@@ -73,6 +74,8 @@ export default class QueryWizard extends React.PureComponent<IProps> {
   }
 
   private onQueryNameChanged = (event: any) => {
-    this.props.onQueryChanged(this.props.query.updateQuery({ name: event.target.value }));
+    this.props.onQueryChanged(
+      this.props.query.updateQuery({ name: event.target.value })
+    );
   };
 }

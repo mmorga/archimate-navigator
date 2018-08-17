@@ -47,8 +47,8 @@ import WorkPackageViewNode from "./view-nodes/work-package-view-node";
 
 export default function archimateViewNode(viewNode: ViewNode) {
   const elType = elementType(viewNode);
-  switch(elType) {
-    case "AndJunction": 
+  switch (elType) {
+    case "AndJunction":
     case "Junction":
       return JunctionViewNode;
     case "OrJunction":

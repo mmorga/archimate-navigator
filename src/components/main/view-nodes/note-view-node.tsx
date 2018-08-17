@@ -8,8 +8,8 @@ export default class NoteViewNode extends DefaultViewNode {
       ...this.state,
       backgroundClass: "archimate-note-background",
       textAlign: "left",
-      textBounds: this.props.viewNode.absolutePosition().reducedBy(3),
-      };
+      textBounds: this.props.viewNode.absolutePosition().reducedBy(3)
+    };
   }
 
   public entityShape(): JSX.Element {
@@ -17,14 +17,21 @@ export default class NoteViewNode extends DefaultViewNode {
     return (
       <path
         d={[
-            "m", bounds.left, bounds.top,
-            "h", bounds.width,
-            "v", bounds.height - 8,
-            "l", -8, 8,
-            "h", -(bounds.width - 8),
-            "z"
-          ].join(" ")}
-        className={this.state.backgroundClass} 
+          "m",
+          bounds.left,
+          bounds.top,
+          "h",
+          bounds.width,
+          "v",
+          bounds.height - 8,
+          "l",
+          -8,
+          8,
+          "h",
+          -(bounds.width - 8),
+          "z"
+        ].join(" ")}
+        className={this.state.backgroundClass}
         style={this.shapeStyle()}
       />
     );

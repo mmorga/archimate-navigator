@@ -6,7 +6,7 @@ export default class ResourceViewNode extends BadgedRectViewNode {
     super(props);
     this.state = {
       ...this.state,
-      badge: "#archimate-resource-badge",
+      badge: "#archimate-resource-badge"
     };
   }
 }

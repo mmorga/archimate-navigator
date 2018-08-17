@@ -1,5 +1,5 @@
-import {ViewpointType} from "../../viewpoint-type";
-import {getStringAttribute} from "./dom-helpers";
+import { ViewpointType } from "../../viewpoint-type";
+import { getStringAttribute } from "./dom-helpers";
 
 const archiViewpointMap = new Map<string, ViewpointType | undefined>([
   ["1", undefined], // ViewpointType.Actor_cooperation,
@@ -49,7 +49,7 @@ const archiViewpointMap = new Map<string, ViewpointType | undefined>([
   ["resource", undefined], // ViewpointType.Resource,
   ["strategy", ViewpointType.Strategy],
   ["technology", ViewpointType.Technology],
-  ["technology_usage", ViewpointType.Technology_usage],
+  ["technology_usage", ViewpointType.Technology_usage]
 ]);
 
 export class ViewpointParser {

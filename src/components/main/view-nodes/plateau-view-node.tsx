@@ -7,7 +7,7 @@ export default class PlateauViewNode extends BadgedNodeViewNode {
     this.state = {
       ...this.state,
       backgroundClass: "archimate-implementation2-background",
-      badge: "#archimate-plateau-badge",
+      badge: "#archimate-plateau-badge"
     };
   }
 }

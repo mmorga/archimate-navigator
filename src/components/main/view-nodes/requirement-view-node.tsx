@@ -6,7 +6,7 @@ export default class RequirementViewNode extends MotivationViewNode {
     super(props);
     this.state = {
       ...this.state,
-      badge: "#archimate-requirement-badge",
+      badge: "#archimate-requirement-badge"
     };
   }
 }

@@ -10,12 +10,12 @@ export default class ProcessViewNode extends BadgedRoundedRectViewNode {
       this.state = {
         ...this.state,
         badgeBounds: zeroBounds(),
-        textBounds: this.textBounds(),
+        textBounds: this.textBounds()
       };
     } else {
       this.state = {
         ...this.state,
-        badge: "#archimate-process-badge",
+        badge: "#archimate-process-badge"
       };
     }
   }
@@ -33,7 +33,12 @@ export default class ProcessViewNode extends BadgedRoundedRectViewNode {
     const shaftTop = bounds.top + bounds.height * 0.15;
     const shaftBottom = bounds.bottom - bounds.height * 0.15;
     const left = bounds.left;
-    const textBounds = new Bounds(left, shaftTop, bounds.width - bounds.height * 0.25, shaftBottom - shaftTop);
+    const textBounds = new Bounds(
+      left,
+      shaftTop,
+      bounds.width - bounds.height * 0.25,
+      shaftBottom - shaftTop
+    );
     return textBounds.reducedBy(2);
   }
 
@@ -51,18 +56,32 @@ export default class ProcessViewNode extends BadgedRoundedRectViewNode {
     return (
       <path
         d={[
-          "M", left, shaftTop,
-          "L", arrowBack, shaftTop,
-          "L", arrowBack, top,
-          "L", right, middle,
-          "L", arrowBack, bottom,
-          "L", arrowBack, shaftBottom,
-          "L", left, shaftBottom,
+          "M",
+          left,
+          shaftTop,
+          "L",
+          arrowBack,
+          shaftTop,
+          "L",
+          arrowBack,
+          top,
+          "L",
+          right,
+          middle,
+          "L",
+          arrowBack,
+          bottom,
+          "L",
+          arrowBack,
+          shaftBottom,
+          "L",
+          left,
+          shaftBottom,
           "z"
         ].join(" ")}
         className={this.state.backgroundClass}
         style={this.shapeStyle()}
-        />
+      />
     );
   }
 }

@@ -14,9 +14,7 @@ test("elementTypeFilter", () => {
   const model = new Model();
 
   expect(filter(undefined)).toBe(false);
-  expect(filter(new Element(model, ElementType.Assessment))).toBe(
-    false
-  );
+  expect(filter(new Element(model, ElementType.Assessment))).toBe(false);
   expect(filter(new Element(model, ElementType.Artifact))).toBe(true);
 });
 

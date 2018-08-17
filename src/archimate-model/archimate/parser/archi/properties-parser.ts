@@ -11,7 +11,9 @@ export class PropertiesParser {
   }
 
   public properties(parent: Element) {
-    const els = Array.from(parent.children).filter(node => node.nodeName === "property");
+    const els = Array.from(parent.children).filter(
+      node => node.nodeName === "property"
+    );
     if (els === null) {
       return [];
     }

@@ -20,8 +20,12 @@ export class Bounds implements IBounds {
   public readonly right: number;
   public readonly bottom: number;
 
-
-  constructor(x: number | undefined, y: number | undefined, width: number, height: number) {
+  constructor(
+    x: number | undefined,
+    y: number | undefined,
+    width: number,
+    height: number
+  ) {
     this.x = x;
     this.y = y;
     this.width = width;
@@ -33,11 +37,18 @@ export class Bounds implements IBounds {
   }
 
   public offset(os: Bounds): Bounds {
-    return new Bounds(this.left + os.left, this.top + os.top, this.width, this.height);
+    return new Bounds(
+      this.left + os.left,
+      this.top + os.top,
+      this.width,
+      this.height
+    );
   }
 
   public toString() {
-    return `Bounds(x: ${this.x}, y: ${this.y}, width: ${this.width}, height: ${this.height})`;
+    return `Bounds(x: ${this.x}, y: ${this.y}, width: ${this.width}, height: ${
+      this.height
+    })`;
   }
 
   public xRange() {
@@ -45,7 +56,7 @@ export class Bounds implements IBounds {
   }
 
   public yRange() {
-    return new Range(this.top, this.bottom)
+    return new Range(this.top, this.bottom);
   }
 
   // public top {
@@ -66,7 +77,10 @@ export class Bounds implements IBounds {
 
   public center(): Point {
     // return new Bounds(this.left + this.width / 2.0, this.top + this.height / 2.0, 0, 0);
-    return new Point(this.left + this.width / 2.0, this.top + this.height / 2.0);
+    return new Point(
+      this.left + this.width / 2.0,
+      this.top + this.height / 2.0
+    );
   }
 
   public above(other: Bounds) {
@@ -86,19 +100,26 @@ export class Bounds implements IBounds {
   }
 
   public reducedBy(val: number) {
-    return new Bounds(this.left + val, this.top + val, this.width - val * 2, this.height - val * 2);
+    return new Bounds(
+      this.left + val,
+      this.top + val,
+      this.width - val * 2,
+      this.height - val * 2
+    );
   }
 
   // Tests if this bounds is inside the argument Bounds
   public inside(other: Bounds) {
-    return this.left > other.left &&
+    return (
+      this.left > other.left &&
       this.right < other.right &&
       this.top > other.top &&
-      this.bottom < other.bottom;
+      this.bottom < other.bottom
+    );
   }
 
   public empty() {
-    return (this.width === 0.0) && (this.height === 0.0);
+    return this.width === 0.0 && this.height === 0.0;
   }
 }
 

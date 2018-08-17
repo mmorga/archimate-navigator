@@ -13,7 +13,10 @@ export default class Panel extends React.PureComponent<IProps, IState> {
   constructor(props: IProps) {
     super(props);
     this.state = {
-      collapse: (this.props.initiallyCollapsed === undefined) ? false : this.props.initiallyCollapsed,
+      collapse:
+        this.props.initiallyCollapsed === undefined
+          ? false
+          : this.props.initiallyCollapsed
     };
   }
 
@@ -34,7 +37,7 @@ export default class Panel extends React.PureComponent<IProps, IState> {
   public componentDidUpdate(prevProps: IProps) {
     if (this.props.initiallyCollapsed !== prevProps.initiallyCollapsed) {
       this.setState({
-        collapse: this.props.initiallyCollapsed ? true : false,
+        collapse: this.props.initiallyCollapsed ? true : false
       });
     }
   }

@@ -6,7 +6,7 @@ export default class PrincipleViewNode extends MotivationViewNode {
     super(props);
     this.state = {
       ...this.state,
-      badge: "#archimate-principle-badge",
+      badge: "#archimate-principle-badge"
     };
   }
 }

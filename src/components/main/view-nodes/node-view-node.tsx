@@ -8,20 +8,24 @@ export default class NodeViewNode extends BadgedNodeViewNode {
     if (this.props.viewNode.childType === "1") {
       this.state = {
         ...this.state,
-        badge: "#archimate-node-badge",
-       };
+        badge: "#archimate-node-badge"
+      };
     } else {
       this.state = {
         ...this.state,
         badge: undefined,
-        badgeBounds: undefined,
-       };
+        badgeBounds: undefined
+      };
     }
   }
 
   public entityShape(): JSX.Element {
     if (this.props.viewNode.childType === "1") {
-      return BadgedRectViewNode.path(this.props.viewNode.absolutePosition(), this.state.backgroundClass, this.shapeStyle());
+      return BadgedRectViewNode.path(
+        this.props.viewNode.absolutePosition(),
+        this.state.backgroundClass,
+        this.shapeStyle()
+      );
     } else {
       return super.entityShape();
     }

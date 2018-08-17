@@ -1,13 +1,7 @@
 import { List } from "immutable";
 import * as React from "react";
-import {
-  Checkbox,
-} from "react-bootstrap";
-import {
-  Diagram,
-  Model,
-  Query,
-} from "../../../archimate-model";
+import { Checkbox } from "react-bootstrap";
+import { Diagram, Model, Query } from "../../../archimate-model";
 import QueryPicker from "./query-picker";
 import QuerySettings from "./query-settings";
 import QueryWizard from "./query-wizard";
@@ -29,17 +23,14 @@ interface IState {
   selectedQuery: Query;
 }
 
-export default class QueryTab extends React.PureComponent<
-  IProps,
-  IState
-> {
+export default class QueryTab extends React.PureComponent<IProps, IState> {
   constructor(props: IProps) {
     super(props);
     const query = new Query(this.props.model);
     this.state = {
       autoLayout: true,
       queries: List([query]),
-      selectedQuery: query,
+      selectedQuery: query
     };
   }
 
@@ -48,9 +39,9 @@ export default class QueryTab extends React.PureComponent<
       const query = new Query(this.props.model);
       this.setState({
         queries: List([query]),
-        selectedQuery: query,
+        selectedQuery: query
       });
-    } 
+    }
   }
 
   public render() {
@@ -60,7 +51,7 @@ export default class QueryTab extends React.PureComponent<
           onNewQuery={this.onNewQuery}
           onQuerySelected={this.onQuerySelected}
           queries={this.state.queries}
-          selectedQuery={this.state.selectedQuery}        
+          selectedQuery={this.state.selectedQuery}
         />
         <QueryWizard
           model={this.props.model}
@@ -79,25 +70,25 @@ export default class QueryTab extends React.PureComponent<
   private onQuerySelected = (event: any /*: React.FormEvent<FormControl>*/) => {
     const query = event.target.value as Query;
     this.setState({ selectedQuery: query });
-  }
+  };
 
   private onNewQuery = () => {
     const newQuery = new Query(this.props.model);
-    this.setState({ 
+    this.setState({
       queries: this.state.queries.push(newQuery),
-      selectedQuery: newQuery,
-     });
-  }
+      selectedQuery: newQuery
+    });
+  };
 
   private onQueryChanged = (query: Query) => {
     const diagram = query.run();
     this.setState({
-      selectedQuery: query,
+      selectedQuery: query
     });
     this.props.onDiagramUpdated(diagram);
-  }
+  };
 
   private onAutoLayoutToggled = (event: any) => {
     this.setState({ autoLayout: !this.state.autoLayout });
-  }
+  };
 }

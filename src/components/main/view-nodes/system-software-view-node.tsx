@@ -6,7 +6,7 @@ export default class SystemSoftwareViewNode extends BadgedRectViewNode {
     super(props);
     this.state = {
       ...this.state,
-      badge: "#archimate-system-software-badge",
+      badge: "#archimate-system-software-badge"
     };
   }
 }

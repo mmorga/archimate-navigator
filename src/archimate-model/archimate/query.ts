@@ -160,10 +160,7 @@ export class Query {
             `Relationship ${rel.id} target ${rel.target} Element not found`
           );
         }
-        return acc.concat([
-          source as Element,
-          target as Element
-        ]);
+        return acc.concat([source as Element, target as Element]);
       },
       []
     );

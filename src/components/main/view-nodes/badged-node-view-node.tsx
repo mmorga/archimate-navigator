@@ -9,7 +9,7 @@ export default class BadgedNodeViewNode extends DefaultViewNode {
       ...this.state,
       badgeBounds: this.badgeBounds(),
       margin: 14,
-      textBounds: this.textBounds(),
+      textBounds: this.textBounds()
     };
   }
 
@@ -20,40 +20,70 @@ export default class BadgedNodeViewNode extends DefaultViewNode {
     const nodeBoxWidth = bounds.width - margin;
     return (
       <g className={this.state.backgroundClass} style={this.shapeStyle()}>
-        <path 
+        <path
           d={[
-              "M", bounds.left, bounds.bottom,
-              "v", -nodeBoxHeight,
-              "l", margin, -margin,
-              "h", nodeBoxWidth,
-              "v", nodeBoxHeight,
-              "l", -margin, margin,
-              "z"
-            ].join(" ")}
+            "M",
+            bounds.left,
+            bounds.bottom,
+            "v",
+            -nodeBoxHeight,
+            "l",
+            margin,
+            -margin,
+            "h",
+            nodeBoxWidth,
+            "v",
+            nodeBoxHeight,
+            "l",
+            -margin,
+            margin,
+            "z"
+          ].join(" ")}
         />
-        <path 
+        <path
           d={[
-              "M", bounds.left, bounds.top + margin,
-              "l", margin, -margin,
-              "h", nodeBoxWidth,
-              "v", nodeBoxHeight,
-              "l", -margin, margin,
-              "v", -nodeBoxHeight,
-              "z",
-              "M", bounds.right, bounds.top,
-              "l", -margin, margin
-            ].join(" ")}
+            "M",
+            bounds.left,
+            bounds.top + margin,
+            "l",
+            margin,
+            -margin,
+            "h",
+            nodeBoxWidth,
+            "v",
+            nodeBoxHeight,
+            "l",
+            -margin,
+            margin,
+            "v",
+            -nodeBoxHeight,
+            "z",
+            "M",
+            bounds.right,
+            bounds.top,
+            "l",
+            -margin,
+            margin
+          ].join(" ")}
           className="archimate-decoration"
         />
-        <path 
+        <path
           d={[
-              "M", bounds.left, bounds.top + margin,
-              "h", nodeBoxWidth,
-              "l", margin, -margin,
-              "M", bounds.left + nodeBoxWidth, bounds.bottom,
-              "v", -nodeBoxHeight
-            ].join(" ")}
-          style={{fill:"none",stroke:"inherit"}}
+            "M",
+            bounds.left,
+            bounds.top + margin,
+            "h",
+            nodeBoxWidth,
+            "l",
+            margin,
+            -margin,
+            "M",
+            bounds.left + nodeBoxWidth,
+            bounds.bottom,
+            "v",
+            -nodeBoxHeight
+          ].join(" ")}
+          style={{ fill: "none", stroke: "inherit" }}
         />
       </g>
     );
@@ -75,6 +105,11 @@ export default class BadgedNodeViewNode extends DefaultViewNode {
     const margin = 14;
     const nodeBoxHeight = bounds.height - margin;
     const nodeBoxWidth = bounds.width - margin;
-    return new Bounds(bounds.left + 1, bounds.top + margin + 1, nodeBoxWidth - 2, nodeBoxHeight - 2);
+    return new Bounds(
+      bounds.left + 1,
+      bounds.top + margin + 1,
+      nodeBoxWidth - 2,
+      nodeBoxHeight - 2
+    );
   }
 }

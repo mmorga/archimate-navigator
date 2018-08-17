@@ -6,7 +6,7 @@ export default class StakeholderViewNode extends MotivationViewNode {
     super(props);
     this.state = {
       ...this.state,
-      badge: "#archimate-role-badge",
+      badge: "#archimate-role-badge"
     };
   }
 }

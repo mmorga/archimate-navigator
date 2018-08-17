@@ -31,7 +31,9 @@ export class ViewNodeParser {
   }
 
   public viewNodes(parent: Element): ViewNode[] {
-    const children = Array.from(parent.children).filter(node => node.nodeName === "child");
+    const children = Array.from(parent.children).filter(
+      node => node.nodeName === "child"
+    );
     if (children.length === 0) {
       return [];
     }
@@ -77,5 +79,5 @@ export class ViewNodeParser {
       viewNode.bounds
     );
     return [viewNode].concat(viewNodeParser.viewNodes(child));
-   }
+  }
 }

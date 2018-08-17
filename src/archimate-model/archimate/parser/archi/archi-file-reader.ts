@@ -24,18 +24,17 @@ export class ArchiFileReader {
     const modelNode = modelNodes[0];
     model.id = getStringAttribute(modelNode, "id") || model.makeUniqueId();
     model.name = getStringAttribute(modelNode, "name") || "ArchiMate Model";
-    model.documentation = (new DocumentationParser()).value(modelNode, "purpose") || "";
-    model.organizations = (new FolderParser(model)).organizations(modelNode);
-    const elementTagParser = new ElementTagParser(model, doc)
+    model.documentation =
+      new DocumentationParser().value(modelNode, "purpose") || "";
+    model.organizations = new FolderParser(model).organizations(modelNode);
+    const elementTagParser = new ElementTagParser(model, doc);
     elementTagParser.elements();
     return model;
   }
 
   private fixBendpoints(model: Model) {
     const dConns = model.diagrams.map(d => d.connections);
-    const connections: Connection[] = new Array<Connection>().concat(
-      ...dConns
-    );
+    const connections: Connection[] = new Array<Connection>().concat(...dConns);
     connections.forEach(connection => {
       connection.bendpoints.forEach(bendpoint => {
         bendpoint.x += connection.startLocation().x;

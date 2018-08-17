@@ -1,6 +1,6 @@
 import { IRange } from "./interfaces";
 
-export default class Range implements IRange{
+export default class Range implements IRange {
   public begin: number;
   public end: number;
 
@@ -19,6 +19,6 @@ export default class Range implements IRange{
   }
 
   public cover(n: number): boolean {
-    return ((this.begin <= n) && (n <= this.end));
+    return this.begin <= n && n <= this.end;
   }
 }

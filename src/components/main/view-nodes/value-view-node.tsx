@@ -7,7 +7,7 @@ export default class ValueViewNode extends DefaultViewNode {
     super(props);
     this.state = {
       ...this.state,
-      textBounds: this.textBounds(),
+      textBounds: this.textBounds()
     };
   }
 
@@ -18,10 +18,17 @@ export default class ValueViewNode extends DefaultViewNode {
     const cy = bounds.top + bounds.height / 2.0;
     const ry = bounds.height / 2.0 - 1;
     return (
-      <ellipse cx={cx} cy={cy} rx={rx} ry={ry} className={this.state.backgroundClass} style={this.shapeStyle()} />
+      <ellipse
+        cx={cx}
+        cy={cy}
+        rx={rx}
+        ry={ry}
+        className={this.state.backgroundClass}
+        style={this.shapeStyle()}
+      />
     );
   }
-  
+
   protected textBounds(): Bounds {
     const textBounds = super.textBounds();
     return new Bounds(

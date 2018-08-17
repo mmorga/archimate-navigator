@@ -7,7 +7,7 @@ export default class DiagramRefViewNode extends BadgedRectViewNode {
     this.state = {
       ...this.state,
       backgroundClass: "archimate-diagram-model-reference-background",
-      badge: "#archimate-diagram-model-reference-badge",
+      badge: "#archimate-diagram-model-reference-badge"
     };
   }
 }

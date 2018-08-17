@@ -4,7 +4,9 @@ import { getIntAttribute } from "./dom-helpers";
 
 export class BoundsParser {
   public bounds(parentElement: Element) {
-    const el = Array.from(parentElement.children).find(node => node.nodeName === "bounds");
+    const el = Array.from(parentElement.children).find(
+      node => node.nodeName === "bounds"
+    );
     if (el === null) {
       return undefined;
     }

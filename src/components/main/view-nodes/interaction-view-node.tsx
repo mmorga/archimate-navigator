@@ -6,7 +6,7 @@ export default class InteractionViewNode extends BadgedRoundedRectViewNode {
     super(props);
     this.state = {
       ...this.state,
-      badge: "#archimate-interaction-badge",
+      badge: "#archimate-interaction-badge"
     };
   }
 }

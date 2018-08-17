@@ -7,7 +7,7 @@ export default class ArtifactViewNode extends BadgedRectViewNode {
     super(props);
     this.state = {
       ...this.state,
-      badge: "archimate-artifact-badge",
+      badge: "archimate-artifact-badge"
     };
   }
 
@@ -16,23 +16,34 @@ export default class ArtifactViewNode extends BadgedRectViewNode {
     const margin = 18;
     return (
       <g className={this.state.backgroundClass} style={this.shapeStyle()}>
-        <path 
+        <path
           d={[
-              "M", bounds.left, bounds.top,
-              "h", bounds.width - margin,
-              "l", margin, margin,
-              "v", bounds.height - margin,
-              "h", -bounds.width,
-              "z"
-            ].join(" ")}
+            "M",
+            bounds.left,
+            bounds.top,
+            "h",
+            bounds.width - margin,
+            "l",
+            margin,
+            margin,
+            "v",
+            bounds.height - margin,
+            "h",
+            -bounds.width,
+            "z"
+          ].join(" ")}
         />
-        <path 
+        <path
           d={[
-              "M", bounds.right - margin, bounds.top,
-              "v", margin,
-              "h", margin,
-              "z"
-            ].join(" ")}
+            "M",
+            bounds.right - margin,
+            bounds.top,
+            "v",
+            margin,
+            "h",
+            margin,
+            "z"
+          ].join(" ")}
           className="archimate-decoration"
         />
       </g>

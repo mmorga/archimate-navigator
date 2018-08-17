@@ -1,18 +1,12 @@
 import * as React from "react";
-import {
-  Checkbox,
-  Form,
-  Panel
-} from "react-bootstrap";
+import { Checkbox, Form, Panel } from "react-bootstrap";
 
 interface IProps {
   autoLayout: boolean;
-  onAutoLayoutToggled: (autoLayout: boolean) => void,
+  onAutoLayoutToggled: (autoLayout: boolean) => void;
 }
 
-export default class QuerySettings extends React.PureComponent<
-  IProps
-> {
+export default class QuerySettings extends React.PureComponent<IProps> {
   constructor(props: IProps) {
     super(props);
   }
@@ -21,7 +15,9 @@ export default class QuerySettings extends React.PureComponent<
     return (
       <Panel defaultExpanded={false}>
         <Panel.Heading>
-          <Panel.Title componentClass="h3" toggle={true}>Query Settings</Panel.Title>
+          <Panel.Title componentClass="h3" toggle={true}>
+            Query Settings
+          </Panel.Title>
         </Panel.Heading>
         <Panel.Collapse>
           <Panel.Body>
@@ -29,7 +25,7 @@ export default class QuerySettings extends React.PureComponent<
               <Checkbox
                 defaultChecked={this.props.autoLayout}
                 onChange={this.autoLayoutToggled}
-              > 
+              >
                 {" Auto Layout "}
               </Checkbox>
             </Form>

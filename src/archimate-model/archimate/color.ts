@@ -50,16 +50,16 @@ export class Color {
       vals.push(this.scaledAlpha());
     }
     const vs = vals
-        .filter(v => v !== undefined)
-        .map<number>(v => v as number)
-        .map(v => v.toString(16))
-        .map(s => s.trim())
-        .map(s => s.length === 1 ? `0${s}` : s)
-        .join('');
+      .filter(v => v !== undefined)
+      .map<number>(v => v as number)
+      .map(v => v.toString(16))
+      .map(s => s.trim())
+      .map(s => (s.length === 1 ? `0${s}` : s))
+      .join("");
 
     return `#${vs}`;
     // return `#${vs[0]}${vs[1]}${vs[2]}${vs[3]}`;
-        // if ((this.a === undefined) || (this.a === 100)) {
+    // if ((this.a === undefined) || (this.a === 100)) {
     //   return ``
     //   return format("#%02x%02x%02x", this.r, this.g, this.b);
     // } else {

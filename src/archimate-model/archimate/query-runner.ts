@@ -110,8 +110,7 @@ export function elementTypeFilter(
 ): ((e: IEntity | undefined) => boolean) {
   return (e: IEntity | undefined): boolean => {
     return (
-      (e && e instanceof Element && elementTypes.includes(e.type)) ||
-      false
+      (e && e instanceof Element && elementTypes.includes(e.type)) || false
     );
   };
 }

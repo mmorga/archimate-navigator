@@ -61,43 +61,51 @@ export default class ElementTypeFilterPanel extends React.PureComponent<
           <Button onClick={this.onNone}>None</Button>
         </ButtonGroup>
         <ListGroup>
-          {this.props.query.elementTypes.sort().map(
-            el =>
-              el ? (
-                <ListGroupItem key={el}>
-                  <div className="pull-right">
-                    <Button
-                      bsSize="xsmall"
-                      bsStyle="danger"
-                      onClick={this.onRemoveElementType.bind(this, el)}
-                    >
-                      <Glyphicon glyph="remove" />
-                    </Button>
-                  </div>
-                  <span className="text-primary">{el}</span>
-                </ListGroupItem>
-              ) : (
-                undefined
-              )
-          ).concat(this.props.query.unselectedElementTypes().sort().map(
-            el =>
-              el ? (
-                <ListGroupItem key={el}>
-                  <div className="pull-right">
-                    <Button
-                      bsSize="xsmall"
-                      bsStyle="success"
-                      onClick={this.onAddElementType.bind(this, el)}
-                    >
-                      <Glyphicon glyph="plus" />
-                    </Button>
-                  </div>
-                  <span className="text-primary">{el}</span>
-                </ListGroupItem>
-              ) : (
-                undefined
-              )
-          ))}
+          {this.props.query.elementTypes
+            .sort()
+            .map(
+              el =>
+                el ? (
+                  <ListGroupItem key={el}>
+                    <div className="pull-right">
+                      <Button
+                        bsSize="xsmall"
+                        bsStyle="danger"
+                        onClick={this.onRemoveElementType.bind(this, el)}
+                      >
+                        <Glyphicon glyph="remove" />
+                      </Button>
+                    </div>
+                    <span className="text-primary">{el}</span>
+                  </ListGroupItem>
+                ) : (
+                  undefined
+                )
+            )
+            .concat(
+              this.props.query
+                .unselectedElementTypes()
+                .sort()
+                .map(
+                  el =>
+                    el ? (
+                      <ListGroupItem key={el}>
+                        <div className="pull-right">
+                          <Button
+                            bsSize="xsmall"
+                            bsStyle="success"
+                            onClick={this.onAddElementType.bind(this, el)}
+                          >
+                            <Glyphicon glyph="plus" />
+                          </Button>
+                        </div>
+                        <span className="text-primary">{el}</span>
+                      </ListGroupItem>
+                    ) : (
+                      undefined
+                    )
+                )
+            )}
         </ListGroup>
         <HelpBlock>Element Types to include in results</HelpBlock>
       </CollapsibleFormGroup>
@@ -119,7 +127,6 @@ export default class ElementTypeFilterPanel extends React.PureComponent<
       })
     );
   };
-
 
   private onAddElementType = (elementType: ElementType, event: any) => {
     this.props.onQueryChanged(

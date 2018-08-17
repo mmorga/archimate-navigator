@@ -52,29 +52,34 @@ export class Path {
     }
     let bendpoints: string[][] = [];
     if (!this.autoLayout) {
-      bendpoints = this.eachCons(this.points, 3).map(pts => this.curve_segment(pts[0], pts[1], pts[2]));
+      bendpoints = this.eachCons(this.points, 3).map(pts =>
+        this.curve_segment(pts[0], pts[1], pts[2])
+      );
     }
-    const dCmds: string[] = ([] as string[]).concat(      
+    const dCmds: string[] = ([] as string[]).concat(
       this.move_to(this.points[0]), // Starting point (Source)
       ...bendpoints,
       this.line_to(this.points[this.points.length - 1]) // Ending point (Target)
     );
     this.dCmds = dCmds;
 
-    return (dCmds.join(" "));
+    return dCmds.join(" ");
   }
 
   // this.param fraction Float 0.0-1.0
   // this.return Point at the given percent along line between start and end
   public point(fraction: number): Point {
     let lengthFromStart = this.length() * fraction;
-    const pt = this.segments.reduce((acc: Point | undefined, segment: Segment) => {
-      if ((acc === undefined) && (segment.length() >= lengthFromStart)) {
-        return segment.fromStart(lengthFromStart);
-      }
-      lengthFromStart -= segment.length()
-      return acc;
-    }, undefined);
+    const pt = this.segments.reduce(
+      (acc: Point | undefined, segment: Segment) => {
+        if (acc === undefined && segment.length() >= lengthFromStart) {
+          return segment.fromStart(lengthFromStart);
+        }
+        lengthFromStart -= segment.length();
+        return acc;
+      },
+      undefined
+    );
     return pt ? (pt as Point) : new Point(0.0, 0.0);
   }
 
@@ -82,7 +87,7 @@ export class Path {
   public midpoint(): Point {
     return this.point(0.5);
   }
-    
+
   // Takes the bounds of two objects and returns the optimal points
   // between from the edge of `a` to the edge of `b`
   // if left/right range of both overlap, use centerpoint of overlap range as x val
@@ -128,8 +133,7 @@ export class Path {
 
   private normalizedBendPoints(): Bounds[] {
     return (
-      this.connection
-        .bendpoints
+      this.connection.bendpoints
         // TODO: Remove bendpoints that are inside of the bounds of the source or target element
         // .filter(bendpoint => {
         //   return ![this.sourceBounds, this.targetBounds].some(bounds => bendpoint.inside(bounds));
@@ -148,18 +152,16 @@ export class Path {
   }
 
   private calcPoints(): Point[] {
-    const boundsAry = new Array<Bounds>().concat(
-      this.sourceBounds,
-      this.normalizedBendPoints(),
-      this.targetBounds,
-    ).filter(b => b !== undefined);
+    const boundsAry = new Array<Bounds>()
+      .concat(this.sourceBounds, this.normalizedBendPoints(), this.targetBounds)
+      .filter(b => b !== undefined);
 
     // const points = this.boundsToPoints(bounds[0], bounds[1]);
     let points: Point[] = [];
     let a = boundsAry.shift() as Bounds;
     while (boundsAry.length > 0) {
       const b = boundsAry.shift() as Bounds;
-      points = points.concat(this.boundsToPoints(a, b))
+      points = points.concat(this.boundsToPoints(a, b));
       a = b;
     }
     // JS doesn't do objects justice!!!
@@ -179,7 +181,10 @@ export class Path {
     if (this.pathLength) {
       return this.pathLength;
     }
-    this.pathLength = this.segmentLengths().reduce((total, length) => total + length, 0);
+    this.pathLength = this.segmentLengths().reduce(
+      (total, length) => total + length,
+      0
+    );
     return this.pathLength;
   }
 
@@ -198,10 +203,7 @@ export class Path {
   private curve_segment(a: Point, b: Point, c: Point): string[] {
     const pt1 = new Segment(a, b).fromEnd(LINE_CURVE_RADIUS);
     const pt2 = new Segment(b, c).fromStart(LINE_CURVE_RADIUS);
-    return [
-      this.line_to(pt1),
-      this.q_curve(b, pt2)
-    ]
+    return [this.line_to(pt1), this.q_curve(b, pt2)];
   }
 
   private eachCons(ary: Point[], cons: number): Point[][] {
@@ -213,6 +215,6 @@ export class Path {
     for (let i = 0; i < len; ++i) {
       mappedAry[i] = i;
     }
-    return mappedAry.map(i => [ary[i], ary[i+1], ary[i+2]]);
+    return mappedAry.map(i => [ary[i], ary[i + 1], ary[i + 2]]);
   }
 }

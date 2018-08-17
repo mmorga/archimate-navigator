@@ -7,11 +7,9 @@ import {
   FormGroup,
   HelpBlock,
   InputGroup,
-  Panel,
+  Panel
 } from "react-bootstrap";
-import {
-  Query,
-} from "../../../archimate-model";
+import { Query } from "../../../archimate-model";
 
 interface IProps {
   onNewQuery: () => void;
@@ -20,9 +18,7 @@ interface IProps {
   selectedQuery: Query;
 }
 
-export default class QueryTab extends React.PureComponent<
-  IProps
-> {
+export default class QueryTab extends React.PureComponent<IProps> {
   constructor(props: IProps) {
     super(props);
   }
@@ -31,7 +27,9 @@ export default class QueryTab extends React.PureComponent<
     return (
       <Panel defaultExpanded={true}>
         <Panel.Heading>
-          <Panel.Title componentClass="h3" toggle={true}>Queries</Panel.Title>
+          <Panel.Title componentClass="h3" toggle={true}>
+            Queries
+          </Panel.Title>
         </Panel.Heading>
         <Panel.Collapse>
           <Panel.Body>
@@ -44,14 +42,16 @@ export default class QueryTab extends React.PureComponent<
                     defaultValue={this.props.selectedQuery.name}
                     onChange={this.onQuerySelected}
                   >
-                    {this.props.queries.map(q => (q ?
-                      <option
-                        key={q.id}
-                        value={q.id}
-                      >
-                        {q.name}
-                      </option> : undefined
-                    ))}
+                    {this.props.queries.map(
+                      q =>
+                        q ? (
+                          <option key={q.id} value={q.id}>
+                            {q.name}
+                          </option>
+                        ) : (
+                          undefined
+                        )
+                    )}
                   </FormControl>
                   <FormControl.Feedback />
                   <InputGroup.Button onClick={this.props.onNewQuery}>
@@ -71,7 +71,7 @@ export default class QueryTab extends React.PureComponent<
 
   private onQuerySelected = (event: any) => {
     const queryId = event.target.value;
-    const query = this.props.queries.find(q => q ? q.id === queryId : false);
+    const query = this.props.queries.find(q => (q ? q.id === queryId : false));
     this.props.onQuerySelected(query);
   };
 }

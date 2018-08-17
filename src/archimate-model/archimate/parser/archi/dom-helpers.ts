@@ -14,7 +14,10 @@ export function getNSStringAttribute(node: Element, name: string, ns?: string) {
   return (attr as Attr).value;
 }
 
-export function getIntAttribute(node: Element, name: string): number | undefined {
+export function getIntAttribute(
+  node: Element,
+  name: string
+): number | undefined {
   const strVal = getStringAttribute(node, name);
   if (strVal === undefined) {
     return undefined;

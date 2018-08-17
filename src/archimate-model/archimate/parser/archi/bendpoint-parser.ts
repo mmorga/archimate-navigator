@@ -7,7 +7,9 @@ export class BendpointParser {
   }
 
   public bendpoints(parent: Element): Point[] {
-    const children = Array.from(parent.children).filter(node => node.nodeName === "bendpoint");
+    const children = Array.from(parent.children).filter(
+      node => node.nodeName === "bendpoint"
+    );
     if (children === undefined) {
       return [];
     }

@@ -7,7 +7,7 @@ export default class MotivationViewNode extends DefaultViewNode {
     super(props);
     this.state = {
       ...this.state,
-      badgeBounds: this.badgeBounds(),
+      badgeBounds: this.badgeBounds()
     };
   }
 
@@ -19,16 +19,28 @@ export default class MotivationViewNode extends DefaultViewNode {
     return (
       <path
         d={[
-            "M", bounds.left + margin, bounds.top,
-            "h", width,
-            "l", margin, margin,
-            "v", height,
-            "l", -margin, margin,
-            "h", -width,
-            "l", -margin, -margin,
-            "v", -height,
-            "z"
-          ].join(" ")}
+          "M",
+          bounds.left + margin,
+          bounds.top,
+          "h",
+          width,
+          "l",
+          margin,
+          margin,
+          "v",
+          height,
+          "l",
+          -margin,
+          margin,
+          "h",
+          -width,
+          "l",
+          -margin,
+          -margin,
+          "v",
+          -height,
+          "z"
+        ].join(" ")}
         className={this.state.backgroundClass}
         style={this.shapeStyle()}
       />

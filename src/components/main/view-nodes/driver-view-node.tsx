@@ -6,7 +6,7 @@ export default class DriverViewNode extends MotivationViewNode {
     super(props);
     this.state = {
       ...this.state,
-      badge: "#archimate-driver-badge",
+      badge: "#archimate-driver-badge"
     };
   }
 }

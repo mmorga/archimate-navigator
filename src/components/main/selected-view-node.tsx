@@ -13,9 +13,9 @@ export default class SelectedViewNode extends React.PureComponent<IProps> {
   public render() {
     const b = this.props.bounds;
     return (
-      <rect 
+      <rect
         className="archimate-selected-element-highlight"
-        style={{display:"inherit"}}
+        style={{ display: "inherit" }}
         x={b.x}
         y={b.y}
         width={b.width}

@@ -9,12 +9,12 @@ export default class InterfaceViewNode extends BadgedRectViewNode {
       this.state = {
         ...this.state,
         badge: undefined,
-        badgeBounds: undefined,
+        badgeBounds: undefined
       };
     } else {
       this.state = {
         ...this.state,
-        badge: "#archimate-interface-badge",
+        badge: "#archimate-interface-badge"
       };
     }
   }

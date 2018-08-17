@@ -6,7 +6,7 @@ export default class FunctionViewNode extends BadgedRoundedRectViewNode {
     super(props);
     this.state = {
       ...this.state,
-      badge: "#archimate-function-badge",
+      badge: "#archimate-function-badge"
     };
   }
 }

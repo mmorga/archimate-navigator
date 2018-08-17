@@ -10,8 +10,8 @@ export default class GroupViewNode extends DefaultViewNode {
     this.state = {
       ...this.state,
       backgroundClass: "archimate-group-background",
-      textAlign: "left",      
-      textBounds: this.textBounds(),
+      textAlign: "left",
+      textBounds: this.textBounds()
     };
   }
 
@@ -20,34 +20,40 @@ export default class GroupViewNode extends DefaultViewNode {
     return (
       <>
         <rect
-            x={bounds.left}
-            y={bounds.top + this.groupHeaderHeight}
-            width={bounds.width}
-            height={bounds.height - this.groupHeaderHeight}
-            className={this.state.backgroundClass}
-            style={this.shapeStyle()}
+          x={bounds.left}
+          y={bounds.top + this.groupHeaderHeight}
+          width={bounds.width}
+          height={bounds.height - this.groupHeaderHeight}
+          className={this.state.backgroundClass}
+          style={this.shapeStyle()}
         />
-        <rect 
-            x={bounds.left}
-            y={bounds.top}
-            width={bounds.width / 2.0}
-            height={this.groupHeaderHeight}
-            className={this.state.backgroundClass}
-            style={this.shapeStyle()}
+        <rect
+          x={bounds.left}
+          y={bounds.top}
+          width={bounds.width / 2.0}
+          height={this.groupHeaderHeight}
+          className={this.state.backgroundClass}
+          style={this.shapeStyle()}
         />
-        <rect 
-            x={bounds.left}
-            y={bounds.top}
-            width={bounds.width / 2.0}
-            height={this.groupHeaderHeight}
-            className={"archimate-decoration"}
-        />)
+        <rect
+          x={bounds.left}
+          y={bounds.top}
+          width={bounds.width / 2.0}
+          height={this.groupHeaderHeight}
+          className={"archimate-decoration"}
+        />
+        )
       </>
     );
   }
 
   protected textBounds(): Bounds {
     const bounds = this.props.viewNode.absolutePosition();
-    return new Bounds(bounds.left + 3, bounds.top, (bounds.width / 2.0) - 6, this.groupHeaderHeight);
+    return new Bounds(
+      bounds.left + 3,
+      bounds.top,
+      bounds.width / 2.0 - 6,
+      this.groupHeaderHeight
+    );
   }
 }

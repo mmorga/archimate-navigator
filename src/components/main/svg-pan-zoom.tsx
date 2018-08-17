@@ -1,9 +1,6 @@
 import * as React from "react";
 import * as wheel from "wheel";
-import {
-  LogicError,
-  Point,
-} from "../../archimate-model";
+import { LogicError, Point } from "../../archimate-model";
 
 interface IProps {
   maxX: number;
@@ -20,7 +17,7 @@ enum ZoomMode {
   OneToOne,
   FitToWindow,
   FitToWindowWidth,
-  UserZoom,
+  UserZoom
 }
 
 interface IState {
@@ -37,10 +34,7 @@ const MOUSE_WHEEL_SPEED = 0.065;
 
 const BOUNDS_PADDING = 0.05;
 
-export default class SvgPanZoom extends React.PureComponent<
-  IProps,
-  IState
-> {
+export default class SvgPanZoom extends React.PureComponent<IProps, IState> {
   private minZoom: number = 0;
   private maxZoom: number = Number.POSITIVE_INFINITY;
   private storedCTMResult?: Point;
@@ -54,13 +48,19 @@ export default class SvgPanZoom extends React.PureComponent<
       clientWidth: 0,
       scale: props.scale,
       tx: 0,
-      ty: 0,
+      ty: 0
     };
   }
 
   public render() {
     return (
-      <g onKeyDown={this.onKeyDown} ref={this.props.svgPanZoomRef} transform={`matrix(${this.state.scale}, 0, 0, ${this.state.scale}, ${this.state.tx}, ${this.state.ty})`}>
+      <g
+        onKeyDown={this.onKeyDown}
+        ref={this.props.svgPanZoomRef}
+        transform={`matrix(${this.state.scale}, 0, 0, ${this.state.scale}, ${
+          this.state.tx
+        }, ${this.state.ty})`}
+      >
         {this.props.children}
       </g>
     );
@@ -69,7 +69,10 @@ export default class SvgPanZoom extends React.PureComponent<
   public componentDidMount() {
     window.addEventListener("resize", this.onSvgResize);
     this.svgSize();
-    if (this.props.svgPanZoomRef.current && this.props.svgPanZoomRef.current.ownerSVGElement) {
+    if (
+      this.props.svgPanZoomRef.current &&
+      this.props.svgPanZoomRef.current.ownerSVGElement
+    ) {
       const svg = this.props.svgPanZoomRef.current.ownerSVGElement;
       svg.addEventListener("mousedown", this.onMouseDown);
       wheel.addWheelListener(svg, this.onWheel, true);
@@ -77,7 +80,10 @@ export default class SvgPanZoom extends React.PureComponent<
   }
 
   public componentDidUpdate(prevProps: IProps) {
-    if ((prevProps.scale !== this.props.scale) && (numbersDiffer(this.props.scale, this.state.scale))) {
+    if (
+      prevProps.scale !== this.props.scale &&
+      numbersDiffer(this.props.scale, this.state.scale)
+    ) {
       this.setState({ scale: this.props.scale });
     }
     this.calculateTransform();
@@ -85,7 +91,10 @@ export default class SvgPanZoom extends React.PureComponent<
 
   public componentWillUnmount() {
     window.removeEventListener("resize", this.onSvgResize);
-    if (this.props.svgPanZoomRef.current && this.props.svgPanZoomRef.current.ownerSVGElement) {
+    if (
+      this.props.svgPanZoomRef.current &&
+      this.props.svgPanZoomRef.current.ownerSVGElement
+    ) {
       const svg = this.props.svgPanZoomRef.current.ownerSVGElement;
       svg.removeEventListener("mousedown", this.onMouseDown);
       wheel.removeWheelListener(svg, this.onWheel);
@@ -104,47 +113,57 @@ export default class SvgPanZoom extends React.PureComponent<
     // const maxScaleX = (this.state.clientWidth - DIAGRAM_MARGIN) / (width * 4);
     // const minScaleY = (this.state.clientHeight - DIAGRAM_MARGIN) / VIEW_NODE_HEIGHT;
     // const maxScaleY = (this.state.clientHeight - DIAGRAM_MARGIN) / (height * 4);
-    switch(this.props.zoomMode) {
+    switch (this.props.zoomMode) {
       case ZoomMode.FitToWindow:
         scale = Math.min(scalex, scaley);
-        tx = (this.state.clientWidth - (scale * width)) / 2 - this.props.minX;
-        ty = (this.state.clientHeight - (scale * height)) / 2 - this.props.minY;
+        tx = (this.state.clientWidth - scale * width) / 2 - this.props.minX;
+        ty = (this.state.clientHeight - scale * height) / 2 - this.props.minY;
         break;
       case ZoomMode.FitToWindowWidth:
         scale = scalex;
-        tx = (this.state.clientWidth - (scale * width)) / 2 - this.props.minX;
+        tx = (this.state.clientWidth - scale * width) / 2 - this.props.minX;
         if (height * scale + DIAGRAM_MARGIN > this.state.clientHeight) {
-          ty = (DIAGRAM_MARGIN / 2) - this.props.minY;
+          ty = DIAGRAM_MARGIN / 2 - this.props.minY;
         } else {
-          ty = (this.state.clientHeight - (scale * height)) / 2 - this.props.minY;
+          ty = (this.state.clientHeight - scale * height) / 2 - this.props.minY;
         }
         break;
       case ZoomMode.OneToOne:
         scale = 1;
         if (width + DIAGRAM_MARGIN > this.state.clientWidth) {
-          tx = (DIAGRAM_MARGIN / 2) - this.props.minX;
+          tx = DIAGRAM_MARGIN / 2 - this.props.minX;
         } else {
-          tx = (this.state.clientWidth - (scale * width)) / 2 - this.props.minX;
+          tx = (this.state.clientWidth - scale * width) / 2 - this.props.minX;
         }
         if (height * scale + DIAGRAM_MARGIN > this.state.clientHeight) {
-          ty = (DIAGRAM_MARGIN / 2) - this.props.minY;
+          ty = DIAGRAM_MARGIN / 2 - this.props.minY;
         } else {
-          ty = (this.state.clientHeight - (scale * height)) / 2 - this.props.minY;
+          ty = (this.state.clientHeight - scale * height) / 2 - this.props.minY;
         }
         break;
       case ZoomMode.UserZoom:
       default:
     }
-    if (numbersDiffer(this.state.scale, scale)) { this.setState({scale}); this.props.onZoom(scale) };
-    if (numbersDiffer(this.state.tx, tx)) { this.setState({ tx }) };
-    if (numbersDiffer(this.state.ty, ty)) { this.setState({ ty }) };            
-  }
+    if (numbersDiffer(this.state.scale, scale)) {
+      this.setState({ scale });
+      this.props.onZoom(scale);
+    }
+    if (numbersDiffer(this.state.tx, tx)) {
+      this.setState({ tx });
+    }
+    if (numbersDiffer(this.state.ty, ty)) {
+      this.setState({ ty });
+    }
+  };
 
   private onMouseDown = (e: MouseEvent) => {
     // for IE, left click == 1
     // for Firefox, left click == 0
-    const isLeftButton = ((e.button === 1 && window.event !== null) || e.button === 0);
-    if (!isLeftButton) { return }
+    const isLeftButton =
+      (e.button === 1 && window.event !== null) || e.button === 0;
+    if (!isLeftButton) {
+      return;
+    }
 
     const offset = this.getOffsetXY(e);
     const point = this.transformToScreen(offset.x, offset.y);
@@ -153,10 +172,10 @@ export default class SvgPanZoom extends React.PureComponent<
 
     // We need to listen on document itself, since mouse can go outside of the
     // window, and we will loose it
-    document.addEventListener('mousemove', this.onMouseMove)
-    document.addEventListener('mouseup', this.onMouseUp)
+    document.addEventListener("mousemove", this.onMouseMove);
+    document.addEventListener("mouseup", this.onMouseUp);
     return false;
-  }
+  };
 
   private onMouseMove = (e: MouseEvent) => {
     const offset = this.getOffsetXY(e);
@@ -168,28 +187,28 @@ export default class SvgPanZoom extends React.PureComponent<
     this.mouseY = point.y;
 
     this.internalMoveBy(dx, dy);
-  }
+  };
 
   private onMouseUp = () => {
     this.releaseDocumentMouse();
-  }
+  };
 
   private releaseDocumentMouse = () => {
-    document.removeEventListener('mousemove', this.onMouseMove);
-    document.removeEventListener('mouseup', this.onMouseUp);
-  }
+    document.removeEventListener("mousemove", this.onMouseMove);
+    document.removeEventListener("mouseup", this.onMouseUp);
+  };
 
   private onWheel = (e: WheelEvent) => {
     // smoothScroll.cancel()
 
-    const scaleMultiplier = getScaleMultiplier(e.deltaY)
+    const scaleMultiplier = getScaleMultiplier(e.deltaY);
 
     if (scaleMultiplier !== 1) {
-      const offset = this.getOffsetXY(e)
-      this.publicZoomTo(offset.x, offset.y, scaleMultiplier)
-      e.preventDefault()
+      const offset = this.getOffsetXY(e);
+      this.publicZoomTo(offset.x, offset.y, scaleMultiplier);
+      e.preventDefault();
     }
-  }
+  };
 
   private onKeyDown = (e: React.KeyboardEvent<SVGGElement>) => {
     let x = 0;
@@ -203,15 +222,17 @@ export default class SvgPanZoom extends React.PureComponent<
       x = 1; // left
     } else if (e.keyCode === 39) {
       x = -1; // right
-    } else if (e.keyCode === 189 || e.keyCode === 109) { // DASH or SUBTRACT
+    } else if (e.keyCode === 189 || e.keyCode === 109) {
+      // DASH or SUBTRACT
       z = 1; // `-` -  zoom out
-    } else if (e.keyCode === 187 || e.keyCode === 107) { // EQUAL SIGN or ADD
+    } else if (e.keyCode === 187 || e.keyCode === 107) {
+      // EQUAL SIGN or ADD
       z = -1; // `=` - zoom in (equal sign on US layout is under `+`)
     }
 
     if (x || y) {
-      e.preventDefault()
-      e.stopPropagation()
+      e.preventDefault();
+      e.stopPropagation();
 
       const clientRect = this.owner().getBoundingClientRect();
       // movement speed should be the same in both X and Y direction:
@@ -226,14 +247,18 @@ export default class SvgPanZoom extends React.PureComponent<
     if (z) {
       const scaleMultiplier = getScaleMultiplier(z);
       const ownerRect = this.owner().getBoundingClientRect();
-      this.publicZoomTo(ownerRect.width/2, ownerRect.height/2, scaleMultiplier);
+      this.publicZoomTo(
+        ownerRect.width / 2,
+        ownerRect.height / 2,
+        scaleMultiplier
+      );
     }
-  }
+  };
 
   private moveTo(x: number, y: number) {
     this.setState({
       tx: x,
-      ty: y,
+      ty: y
     });
 
     this.keepTransformInsideBounds();
@@ -248,23 +273,27 @@ export default class SvgPanZoom extends React.PureComponent<
   }
 
   private publicZoomTo(x: number, y: number, scaleMultiplier: number) {
-    return this.zoomByRatio(x, y, scaleMultiplier)
+    return this.zoomByRatio(x, y, scaleMultiplier);
   }
 
   private zoomByRatio(clientX: number, clientY: number, ratio: number) {
     if (isNaN(clientX) || isNaN(clientY) || isNaN(ratio)) {
-      throw new Error('zoom requires valid numbers')
+      throw new Error("zoom requires valid numbers");
     }
 
     const newScale = this.state.scale * ratio;
 
     if (newScale < this.minZoom) {
-      if (this.state.scale === this.minZoom) { return; }
+      if (this.state.scale === this.minZoom) {
+        return;
+      }
 
       ratio = this.minZoom / this.state.scale;
     }
     if (newScale > this.maxZoom) {
-      if (this.state.scale === this.maxZoom) { return; }
+      if (this.state.scale === this.maxZoom) {
+        return;
+      }
 
       ratio = this.maxZoom / this.state.scale;
     }
@@ -273,7 +302,7 @@ export default class SvgPanZoom extends React.PureComponent<
 
     this.setState({
       tx: size.x - ratio * (size.x - this.state.tx),
-      ty: size.y - ratio * (size.y - this.state.ty),
+      ty: size.y - ratio * (size.y - this.state.ty)
     });
 
     this.keepTransformInsideBounds();
@@ -292,13 +321,13 @@ export default class SvgPanZoom extends React.PureComponent<
 
     let diff = boundingBox.left - clientRect.right;
     if (diff > 0) {
-      this.setState({tx: this.state.tx + diff });
+      this.setState({ tx: this.state.tx + diff });
       adjusted = true;
     }
     // check the other side:
     diff = boundingBox.right - clientRect.left;
     if (diff < 0) {
-      this.setState({tx: this.state.tx + diff });
+      this.setState({ tx: this.state.tx + diff });
       adjusted = true;
     }
 
@@ -319,7 +348,7 @@ export default class SvgPanZoom extends React.PureComponent<
       adjusted = true;
     }
 
-    return adjusted
+    return adjusted;
   }
 
   private getClientRect() {
@@ -330,15 +359,15 @@ export default class SvgPanZoom extends React.PureComponent<
       bottom: bbox.height * this.state.scale + leftTop.y,
       left: leftTop.x,
       right: bbox.width * this.state.scale + leftTop.x,
-      top: leftTop.y,
-    }
+      top: leftTop.y
+    };
   }
 
   private client(x: number, y: number) {
     return {
-      x: (x * this.state.scale) + this.state.tx,
-      y: (y * this.state.scale) + this.state.ty,
-    }
+      x: x * this.state.scale + this.state.tx,
+      y: y * this.state.scale + this.state.ty
+    };
   }
 
   /**
@@ -346,15 +375,15 @@ export default class SvgPanZoom extends React.PureComponent<
    */
   private getBoundingBox() {
     const ownerRect = this.owner().getBoundingClientRect();
-    const sceneWidth = ownerRect.width
-    const sceneHeight = ownerRect.height
+    const sceneWidth = ownerRect.width;
+    const sceneHeight = ownerRect.height;
 
     return {
       bottom: sceneHeight * (1 - BOUNDS_PADDING),
       left: sceneWidth * BOUNDS_PADDING,
       right: sceneWidth * (1 - BOUNDS_PADDING),
-      top: sceneHeight * BOUNDS_PADDING,
-    }
+      top: sceneHeight * BOUNDS_PADDING
+    };
   }
 
   private transformToScreen(x: number, y: number) {
@@ -379,36 +408,48 @@ export default class SvgPanZoom extends React.PureComponent<
     let offsetY: number;
 
     const ownerRect = this.owner().getBoundingClientRect();
-    offsetX = e.clientX - ownerRect.left
-    offsetY = e.clientY - ownerRect.top
+    offsetX = e.clientX - ownerRect.left;
+    offsetY = e.clientY - ownerRect.top;
 
     return new Point(offsetX, offsetY);
   }
 
   private owner(): SVGSVGElement {
-    if (this.props.svgPanZoomRef.current && this.props.svgPanZoomRef.current.ownerSVGElement) {
+    if (
+      this.props.svgPanZoomRef.current &&
+      this.props.svgPanZoomRef.current.ownerSVGElement
+    ) {
       return this.props.svgPanZoomRef.current.ownerSVGElement;
     } else {
-      throw new LogicError("Shouldn't have called owner when this element isn't mounted");
+      throw new LogicError(
+        "Shouldn't have called owner when this element isn't mounted"
+      );
     }
   }
 
   private onSvgResize = () => {
     this.svgSize();
-  }
+  };
 
   private svgSize = () => {
-    if (this.props.svgPanZoomRef && this.props.svgPanZoomRef.current && this.props.svgPanZoomRef.current.ownerSVGElement) {
-      const svg: SVGSVGElement = this.props.svgPanZoomRef.current.ownerSVGElement;
+    if (
+      this.props.svgPanZoomRef &&
+      this.props.svgPanZoomRef.current &&
+      this.props.svgPanZoomRef.current.ownerSVGElement
+    ) {
+      const svg: SVGSVGElement = this.props.svgPanZoomRef.current
+        .ownerSVGElement;
       const rect = svg.getClientRects()[0];
       const clientHeight = rect.height;
       const clientWidth = rect.width;
-      if (numbersDiffer(clientHeight, this.state.clientHeight) ||
-          numbersDiffer(clientWidth, this.state.clientWidth)) {
+      if (
+        numbersDiffer(clientHeight, this.state.clientHeight) ||
+        numbersDiffer(clientWidth, this.state.clientWidth)
+      ) {
         this.setState({ clientHeight, clientWidth });
       }
     }
-  }
+  };
 }
 
 const MIN_DETECTABLE_CHANGE = 0.001;
@@ -418,14 +459,16 @@ export function numbersDiffer(a: number, b: number): boolean {
 }
 
 function getScaleMultiplier(delta: number): number {
-  let scaleMultiplier = 1
-  if (delta > 0) { // zoom out
-    scaleMultiplier = (1 - MOUSE_WHEEL_SPEED)
-  } else if (delta < 0) { // zoom in
-    scaleMultiplier = (1 + MOUSE_WHEEL_SPEED)
+  let scaleMultiplier = 1;
+  if (delta > 0) {
+    // zoom out
+    scaleMultiplier = 1 - MOUSE_WHEEL_SPEED;
+  } else if (delta < 0) {
+    // zoom in
+    scaleMultiplier = 1 + MOUSE_WHEEL_SPEED;
   }
 
-  return scaleMultiplier
+  return scaleMultiplier;
 }
 
 export function zoomIn(scale: number): number {

@@ -6,7 +6,7 @@ export default class BusinessActorViewNode extends BadgedRectViewNode {
     super(props);
     this.state = {
       ...this.state,
-      badge: "#archimate-actor-badge",
+      badge: "#archimate-actor-badge"
     };
   }
 }

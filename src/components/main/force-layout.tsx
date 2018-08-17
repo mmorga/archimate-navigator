@@ -1,11 +1,7 @@
 import * as d3force from "d3-force";
-import {is, Set} from "immutable";
+import { is, Set } from "immutable";
 import * as React from "react";
-import {
-  Connection,
-  VIEW_NODE_WIDTH,
-  ViewNode
-} from "../../archimate-model";
+import { Connection, VIEW_NODE_WIDTH, ViewNode } from "../../archimate-model";
 
 interface IProps {
   centerX: number;
@@ -18,7 +14,7 @@ interface IProps {
 
 const DEFAULT_DISTANCE = 30; // Default distance for D3 Force simulations
 
-export default class ForceLayout extends React.PureComponent<IProps> { 
+export default class ForceLayout extends React.PureComponent<IProps> {
   private forceLink?: d3force.ForceLink<ViewNode, Connection>;
   private simulation?: d3force.Simulation<ViewNode, Connection>;
   private prevNodes: Set<string>;
@@ -40,17 +36,19 @@ export default class ForceLayout extends React.PureComponent<IProps> {
     }
     // TODO: look into doing this in a web worker
     this.forceLink = d3force
-        .forceLink<ViewNode, Connection>(this.props.connections)
-        .id((node: ViewNode, i: number, nodesData: ViewNode[]) => node.id)
-        .distance(this.adjustLinkDistance);
-    this.simulation =
-        d3force
-          .forceSimulation(this.props.nodes)
-          .force("center", d3force.forceCenter(this.props.centerX, this.props.centerY))
-          .force("collide", d3force.forceCollide(VIEW_NODE_WIDTH))
-          .force("link", this.forceLink)
-          .force("charge", d3force.forceManyBody())
-          .on("tick", this.ticked);
+      .forceLink<ViewNode, Connection>(this.props.connections)
+      .id((node: ViewNode, i: number, nodesData: ViewNode[]) => node.id)
+      .distance(this.adjustLinkDistance);
+    this.simulation = d3force
+      .forceSimulation(this.props.nodes)
+      .force(
+        "center",
+        d3force.forceCenter(this.props.centerX, this.props.centerY)
+      )
+      .force("collide", d3force.forceCollide(VIEW_NODE_WIDTH))
+      .force("link", this.forceLink)
+      .force("charge", d3force.forceManyBody())
+      .on("tick", this.ticked);
   }
 
   public componentDidUpdate(prevProps: IProps) {
@@ -62,10 +60,14 @@ export default class ForceLayout extends React.PureComponent<IProps> {
     }
 
     // If our set of nodes and connections haven't changed, then nothing to do here.
-    const nextConnections = Set.of<string>(...this.props.connections.map(c => c.id));
+    const nextConnections = Set.of<string>(
+      ...this.props.connections.map(c => c.id)
+    );
     const nextNodes = Set.of<string>(...this.props.nodes.map(n => n.id));
-    if (is(this.prevConnections, nextConnections) &&
-        is(this.prevNodes, nextNodes)) {
+    if (
+      is(this.prevConnections, nextConnections) &&
+      is(this.prevNodes, nextNodes)
+    ) {
       return;
     }
     this.prevNodes = nextNodes;
@@ -97,8 +99,8 @@ export default class ForceLayout extends React.PureComponent<IProps> {
   private adjustLinkDistance = (d: Connection): number => {
     const rel = d.entityInstance();
     const relType = rel ? rel.type : "";
-    const dist = (x: number) => DEFAULT_DISTANCE * x / 100;
-    switch(relType) {
+    const dist = (x: number) => (DEFAULT_DISTANCE * x) / 100;
+    switch (relType) {
       case "Influence":
         return dist(200);
       case "Access":
@@ -128,7 +130,9 @@ export default class ForceLayout extends React.PureComponent<IProps> {
         "center",
         d3force.forceCenter(this.props.centerX, this.props.centerY)
       );
-      if (this.props.onForceLayoutTick) { this.props.onForceLayoutTick(); }
+      if (this.props.onForceLayoutTick) {
+        this.props.onForceLayoutTick();
+      }
     }
   };
 }

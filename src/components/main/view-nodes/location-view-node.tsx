@@ -7,7 +7,7 @@ export default class LocationViewNode extends BadgedRectViewNode {
     this.state = {
       ...this.state,
       backgroundClass: "archimate-location-background",
-      badge: "#archimate-location-badge",
-};
+      badge: "#archimate-location-badge"
+    };
   }
 }

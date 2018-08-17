@@ -10,12 +10,12 @@ export default class ServiceViewNode extends BadgedRoundedRectViewNode {
       this.state = {
         ...this.state,
         badgeBounds: zeroBounds(),
-        textBounds: this.textBounds(),
+        textBounds: this.textBounds()
       };
     } else {
       this.state = {
         ...this.state,
-        badge: "#archimate-service-badge",
+        badge: "#archimate-service-badge"
       };
     }
   }

@@ -6,7 +6,7 @@ export default class DistributionNetworkViewNode extends BadgedRectViewNode {
     super(props);
     this.state = {
       ...this.state,
-      badge: "#archimate-distribution-network-badge",
+      badge: "#archimate-distribution-network-badge"
     };
   }
 }

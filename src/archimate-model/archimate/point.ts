@@ -10,14 +10,11 @@ export class Point {
   }
 
   public equals(other: Point): boolean {
-    return ((this.x === other.x) && (this.y === other.y))
+    return this.x === other.x && this.y === other.y;
   }
 
   public subtract(other: Point): number {
-    return Math.sqrt(
-      ((other.x - this.x)**2) +
-      ((other.y - this.y)**2)
-    );
+    return Math.sqrt((other.x - this.x) ** 2 + (other.y - this.y) ** 2);
   }
 
   public toString(): string {
@@ -30,7 +27,6 @@ export class Point {
     if (bounds === undefined) {
       return false;
     }
-    return bounds.xRange().cover(this.x) &&
-      bounds.yRange().cover(this.y);
+    return bounds.xRange().cover(this.x) && bounds.yRange().cover(this.y);
   }
 }

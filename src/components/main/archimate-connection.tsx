@@ -29,7 +29,7 @@ export default class ArchimateConnection extends React.PureComponent<
     this.state = {
       path: new Path(this.props.connection, this.props.autoLayout),
       sourceEntity: this.props.connection.sourceViewNode(),
-      targetEntity: this.props.connection.targetViewNode(),
+      targetEntity: this.props.connection.targetViewNode()
     };
   }
 
@@ -55,13 +55,15 @@ export default class ArchimateConnection extends React.PureComponent<
   }
 
   public componentDidUpdate(prevProps: IProps) {
-    if ((this.props.fromX !== prevProps.fromX) || 
-        (this.props.fromY !== prevProps.fromY) || 
-        (this.props.toX !== prevProps.toX) || 
-        (this.props.toY !== prevProps.toY) ||
-        (this.props.autoLayout !== prevProps.autoLayout)) {
+    if (
+      this.props.fromX !== prevProps.fromX ||
+      this.props.fromY !== prevProps.fromY ||
+      this.props.toX !== prevProps.toX ||
+      this.props.toY !== prevProps.toY ||
+      this.props.autoLayout !== prevProps.autoLayout
+    ) {
       this.setState({
-        path: new Path(this.props.connection, this.props.autoLayout),
+        path: new Path(this.props.connection, this.props.autoLayout)
       });
     }
   }
@@ -72,15 +74,16 @@ export default class ArchimateConnection extends React.PureComponent<
     }
     const attrs = this.pathAttrs();
     attrs.className = "archimate-selected-element-highlight";
-    return (
-      <path {...attrs} />
-    );
+    return <path {...attrs} />;
   }
 
   private groupAttrs(): React.SVGProps<SVGGElement> {
-    const attrs: React.SVGProps<SVGGElement> = { id: this.props.connection.id,  };
+    const attrs: React.SVGProps<SVGGElement> = { id: this.props.connection.id };
     if (this.props.onClicked) {
-      attrs.onClick = this.props.onClicked.bind(this, this.props.connection.entityInstance());
+      attrs.onClick = this.props.onClicked.bind(
+        this,
+        this.props.connection.entityInstance()
+      );
     }
     return attrs;
   }

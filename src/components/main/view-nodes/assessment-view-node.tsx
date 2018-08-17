@@ -6,7 +6,7 @@ export default class AssessmentViewNode extends MotivationViewNode {
     super(props);
     this.state = {
       ...this.state,
-      badge: "#archimate-assessment-badge",
+      badge: "#archimate-assessment-badge"
     };
   }
 }
