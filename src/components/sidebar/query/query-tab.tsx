@@ -3,7 +3,6 @@ import * as React from "react";
 import { Checkbox } from "react-bootstrap";
 import { Diagram, Model, Query } from "../../../archimate-model";
 import QueryPicker from "./query-picker";
-import QuerySettings from "./query-settings";
 import QueryWizard from "./query-wizard";
 
 export type autoLayoutToggledFunc = (
@@ -59,10 +58,6 @@ export default class QueryTab extends React.PureComponent<IProps, IState> {
           query={this.state.selectedQuery}
           onQueryChanged={this.onQueryChanged}
         />
-        <QuerySettings
-          autoLayout={this.state.autoLayout}
-          onAutoLayoutToggled={this.onAutoLayoutToggled}
-        />
       </>
     );
   }
@@ -86,9 +81,5 @@ export default class QueryTab extends React.PureComponent<IProps, IState> {
       selectedQuery: query
     });
     this.props.onDiagramUpdated(diagram);
-  };
-
-  private onAutoLayoutToggled = (event: any) => {
-    this.setState({ autoLayout: !this.state.autoLayout });
   };
 }

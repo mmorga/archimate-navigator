@@ -25,7 +25,7 @@ export default class QueryTab extends React.PureComponent<IProps> {
 
   public render() {
     return (
-      <Panel defaultExpanded={true}>
+      <Panel defaultExpanded={false}>
         <Panel.Heading>
           <Panel.Title componentClass="h3" toggle={true}>
             Queries

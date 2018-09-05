@@ -6,6 +6,7 @@ import { DiagramType } from "./diagram-type";
 import { Element } from "./element";
 import { ElementType, ElementTypes } from "./element-type";
 import { IRelationship, LogicError } from "./interfaces";
+import { Layer, Layers } from "./layers";
 import { Model } from "./model";
 import { QueryRunner } from "./query-runner";
 import { Relationship } from "./relationship";
@@ -18,6 +19,7 @@ interface IQueryUpdateProps {
   elementTypes?: Set<ElementType>;
   id?: string;
   includeDerivedRelations?: boolean;
+  layerFilter?: Set<Layer>;
   model?: Model;
   name?: string;
   pathDepth?: number;
@@ -34,6 +36,7 @@ export class Query {
   public elementTypes: Set<ElementType>;
   public id: string;
   public includeDerivedRelations: boolean;
+  public layerFilter: Set<Layer>;
   public model: Model;
   public name: string;
   public pathDepth: number;
@@ -46,6 +49,7 @@ export class Query {
     this.elementTypes = Set<ElementType>(ElementTypes);
     this.id = model.makeUniqueId();
     this.includeDerivedRelations = false;
+    this.layerFilter = Set<Layer>(Layers);
     this.model = model;
     this.name = "New Query";
     this.pathDepth = 2;
