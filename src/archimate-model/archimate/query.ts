@@ -59,21 +59,7 @@ export class Query {
   }
 
   public updateQuery(props: IQueryUpdateProps): Query {
-    const adjustedProps = Object.assign({}, props);
-    if (props.viewpointType !== this.viewpointType) {
-      const elementTypes = props.elementTypes || this.elementTypes || [];
-      const viewpointElementTypes =
-        ViewpointTypeElementTypes.get(
-          props.viewpointType || ViewpointType.Total
-        ) || [];
-      adjustedProps.elementTypes = Set<ElementType>(
-        elementTypes.filter(
-          et => viewpointElementTypes.find(vet => vet === et) !== undefined
-        )
-      );
-    }
-
-    return Object.assign(new Query(this.model), this, adjustedProps);
+    return Object.assign(new Query(this.model), this, props);
   }
 
   // TODO: This should return a set based on

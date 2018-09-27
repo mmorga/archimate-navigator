@@ -7,7 +7,6 @@ export class PropertiesParser {
 
   constructor(model: IModel) {
     this.model = model;
-    this.handleElement = this.handleElement.bind(this);
   }
 
   public properties(parent: Element) {
@@ -20,7 +19,7 @@ export class PropertiesParser {
     return els.map(this.handleElement);
   }
 
-  private handleElement(el: Element) {
+  private handleElement = (el: Element) => {
     const key = getStringAttribute(el, "key");
     const value = getStringAttribute(el, "value");
     if (key === undefined) {

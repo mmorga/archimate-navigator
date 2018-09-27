@@ -150,14 +150,11 @@ export class Model implements IModel {
     return ref;
   }
 
-  private registerOrg(org: Organization) {
-    this.indexOrganizations(org);
-    this.indexHash.set(org.id, org);
-  }
-
   private indexOrganizations(ref: IHasOrganizations) {
-    const regFunc = this.registerOrg.bind(this);
-    ref.organizations.forEach(regFunc);
+    ref.organizations.forEach(org => {
+      this.indexOrganizations(org);
+      this.indexHash.set(org.id, org);
+      });
     return ref;
   }
 }

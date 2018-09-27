@@ -2,10 +2,6 @@ import { Point } from "../../point";
 import { getStringAttribute } from "./dom-helpers";
 
 export class BendpointParser {
-  constructor() {
-    this.createPoint = this.createPoint.bind(this);
-  }
-
   public bendpoints(parent: Element): Point[] {
     const children = Array.from(parent.children).filter(
       node => node.nodeName === "bendpoint"
@@ -16,7 +12,7 @@ export class BendpointParser {
     return children.map(this.createPoint);
   }
 
-  private createPoint(child: Element): Point {
+  private createPoint = (child: Element): Point => {
     return new Point(
       this.parseAttrInt(child, "startX"),
       this.parseAttrInt(child, "startY")

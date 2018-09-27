@@ -7,7 +7,6 @@ export class FolderParser {
 
   constructor(model: IModel) {
     this.model = model;
-    this.createOrganization = this.createOrganization.bind(this);
   }
 
   public organizations(parent: Element): Organization[] {
@@ -20,7 +19,7 @@ export class FolderParser {
     return children.map(this.createOrganization, this);
   }
 
-  private createOrganization(child: Element): Organization {
+  private createOrganization = (child: Element): Organization => {
     const organization = new Organization(this.model);
     organization.id = getStringAttribute(child, "id") || "noid"; // this.model.makeUniqueId();
     organization.name = getStringAttribute(child, "name");

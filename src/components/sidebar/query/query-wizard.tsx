@@ -20,12 +20,13 @@ import {
   DisplayLayers,
   Element,
   ElementType,
+  elementTypesForViewpoint,
   Layer,
   Model,
   Query,
   Viewpoints
 } from "../../../archimate-model";
-import ElementTypeFilter from "./element-type-filter";
+import ElementTypeFilter from "./query-wizard-form/element-type-filter";
 import LayerCheckbox from "./query-wizard-form/layer-checkbox";
 
 type ElementTypeFilterType = ElementType | string;
@@ -93,8 +94,8 @@ export default class QueryWizard extends React.PureComponent<IProps, IState> {
                 <ControlLabel>Viewpoint</ControlLabel>
                 <FormControl
                   componentClass="select"
-                  defaultValue={this.props.query.viewpointType}
                   onChange={this.onViewpointChanged}
+                  value={this.props.query.viewpointType}
                 >
                   {Viewpoints.sort().map(v => (
                     <option key={v} value={v}>
@@ -186,8 +187,12 @@ export default class QueryWizard extends React.PureComponent<IProps, IState> {
   };
 
   private onViewpointChanged = (event: any) => {
+    const viewpointType = event.target.value;
     this.props.onQueryChanged(
-      this.props.query.updateQuery({ viewpointType: event.target.value })
+      this.props.query.updateQuery({ 
+        elementTypes: Set<ElementType>(elementTypesForViewpoint(viewpointType, this.props.query.elementTypes)),
+        viewpointType,
+      })
     );
   };
 

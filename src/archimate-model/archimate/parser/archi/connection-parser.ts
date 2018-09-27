@@ -19,7 +19,6 @@ export class ConnectionParser {
     this.model = model;
     this.diagram = diagram;
     this.offset = offset;
-    this.createConnection = this.createConnection.bind(this);
     this.documentationParser = new DocumentationParser();
     this.bendpointParser = new BendpointParser();
     this.styleParser = new StyleParser();
@@ -35,7 +34,7 @@ export class ConnectionParser {
     return children.map(this.createConnection);
   }
 
-  private createConnection(child: Element): Connection {
+  private createConnection = (child: Element): Connection => {
     const type =
       getNSStringAttribute(
         child,

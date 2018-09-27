@@ -23,7 +23,6 @@ export class ViewNodeParser {
     this.model = model;
     this.diagram = diagram;
     this.offset = offset;
-    this.createViewNode = this.createViewNode.bind(this);
     this.documentationParser = new DocumentationParser();
     this.contentParser = new ContentParser();
     this.boundsParser = new BoundsParser();
@@ -42,7 +41,7 @@ export class ViewNodeParser {
       .reduce((acc: ViewNode[], curr: ViewNode[]) => acc.concat(curr));
   }
 
-  private createViewNode(child: Element): ViewNode[] {
+  private createViewNode = (child: Element): ViewNode[] => {
     const viewNode = new ViewNode(this.model, this.diagram);
     viewNode.id = getStringAttribute(child, "id") || this.model.makeUniqueId();
     viewNode.name = getStringAttribute(child, "name");

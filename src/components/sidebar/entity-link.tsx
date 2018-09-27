@@ -20,7 +20,7 @@ export default class EntityLink extends React.PureComponent<IProps> {
       return (
         <a
           href={this.props.entity!.href}
-          onClick={this.props.entityClicked.bind(this, this.props.entity)}
+          onClick={this.entityClicked}
         >
           {this.props.children}
           <span className={this.props.textClass}>{text}</span>
@@ -30,4 +30,6 @@ export default class EntityLink extends React.PureComponent<IProps> {
       return undefined;
     }
   }
+
+  private entityClicked = () => this.props.entityClicked(this.props.entity);
 }

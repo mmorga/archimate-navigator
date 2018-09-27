@@ -1,3 +1,4 @@
+import { is, Set } from "immutable";
 import {
   ConnectorElementTypes,
   CoreElementTypes,
@@ -41,7 +42,8 @@ export enum ViewpointType {
   Application_structure = "Application structure",
   Infrastructure = "Infrastructure",
   Infrastructure_usage = "Infrastructure usage",
-  Landscape_map = "Landscape map"
+  Landscape_map = "Landscape map",
+  Custom = "Custom"
 }
 
 export const Viewpoints: Readonly<ViewpointType[]> = [
@@ -80,7 +82,8 @@ export const Viewpoints: Readonly<ViewpointType[]> = [
   ViewpointType.Application_structure,
   ViewpointType.Infrastructure,
   ViewpointType.Infrastructure_usage,
-  ViewpointType.Landscape_map
+  ViewpointType.Landscape_map,
+  ViewpointType.Custom
 ];
 
 export const ViewpointTypeElementTypes = new Map<
@@ -395,3 +398,33 @@ export const ViewpointTypeElementTypes = new Map<
   [ViewpointType.Technology, CoreElementTypes],
   [ViewpointType.Total, ElementTypes]
 ]);
+
+export function viewpointForElementTypes(
+  elementTypes: Set<ElementType>
+): ViewpointType {
+  let viewpoint = ViewpointType.Custom;
+  ViewpointTypeElementTypes.forEach(
+    (value: Readonly<ElementType[]>, key: ViewpointType) => {
+      if (is(elementTypes, Set<ElementType>(value))) {
+        viewpoint = key;
+      }
+    }
+  );
+  return viewpoint;
+}
+
+export function elementTypesForViewpoint(
+  viewpointType: ViewpointType,
+  currentElementTypes: Set<ElementType>
+): Set<ElementType> {
+  if (viewpointType === ViewpointType.Custom) {
+    return currentElementTypes;
+  } else {
+    const elementTypes = ViewpointTypeElementTypes.get(viewpointType);
+    if (elementTypes === undefined) {
+      return currentElementTypes;
+    } else {
+      return Set<ElementType>(elementTypes);
+    }
+  }
+}

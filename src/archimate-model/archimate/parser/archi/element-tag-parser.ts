@@ -20,7 +20,6 @@ export class ElementTagParser {
   constructor(model: IModel, doc: XMLDocument) {
     this.model = model;
     this.doc = doc;
-    this.handleElement = this.handleElement.bind(this);
     this.diagramParser = new DiagramParser(model);
     this.documentationParser = new DocumentationParser();
     this.propertiesParser = new PropertiesParser(model);
@@ -87,7 +86,7 @@ export class ElementTagParser {
     this.model.diagrams.push(this.diagramParser.diagram(el, type));
   }
 
-  private handleElement(el: Element) {
+  private handleElement = (el: Element) => {
     const t = el.attributes.getNamedItemNS(
       "http://www.w3.org/2001/XMLSchema-instance",
       "type"

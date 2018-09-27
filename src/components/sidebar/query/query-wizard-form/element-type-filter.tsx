@@ -2,7 +2,7 @@ import * as React from "react";
 import {
   Checkbox, ControlLabel, FormGroup, Glyphicon
 } from "react-bootstrap";
-import { ElementType, elementTypeLayer, Query } from "../../../archimate-model";
+import { ElementType, Query, viewpointForElementTypes } from "../../../../archimate-model";
 
 interface IProps {
   onQueryChanged: (query: Query) => void;
@@ -191,8 +191,12 @@ export default class ElementTypeFilter extends React.PureComponent<IProps, IStat
     );
   }
 
-  private onToggle = (elementType: ElementType, event: any) => {
-    // TODO: implement me
+  private onToggle = (elementType: ElementType, event: React.FormEvent<Checkbox>) => {
+    const elementTypes = this.props.query.elementTypes.includes(elementType) ?
+      this.props.query.elementTypes.delete(elementType) : this.props.query.elementTypes.add(elementType);
+    this.props.onQueryChanged(
+      this.props.query.updateQuery({ elementTypes, viewpointType: viewpointForElementTypes(elementTypes) })
+    );
   }
 
   private checkboxes(...elementTypes: ElementType[]) {
@@ -200,8 +204,8 @@ export default class ElementTypeFilter extends React.PureComponent<IProps, IStat
       return (
         <Checkbox 
             key={elementType}
-            checked={this.props.query.layerFilter.includes(elementTypeLayer(elementType)) && this.props.query.elementTypes.includes(elementType)}
-            onClick={this.onToggle.bind(this, elementType)}
+            checked={this.props.query.elementTypes.includes(elementType)}
+            onChange={this.onToggle.bind(this, elementType)}
         >
           {elementType}
         </Checkbox>
