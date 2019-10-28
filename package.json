@@ -4,7 +4,7 @@
   "main": "electron-starter.js",
   "private": true,
   "dependencies": {
-    "bootstrap": "^3.3.7",
+    "bootstrap": "^3.4.1",
     "csstype": "^2.5.6",
     "d3-force": "^1.1.0",
     "electron": "^2.0.9",
