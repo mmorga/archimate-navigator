@@ -23,7 +23,7 @@
   "scripts": {
     "start": "react-scripts-ts start",
     "build": "react-scripts-ts build",
-    "build-site": "rm -rf docs && cp -a build/ docs",
+    "build-site": "export PUBLIC_URL='/archimate-navigator' && npm run-script build && rm -rf docs && cp -a build/ docs",
     "test": "react-scripts-ts test --env=jsdom",
     "eject": "react-scripts-ts eject",
     "electron": "electron ."
