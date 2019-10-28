@@ -26,7 +26,8 @@
     "build-site": "export PUBLIC_URL='/archimate-navigator' && npm run-script build && rm -rf docs && cp -a build/ docs",
     "test": "react-scripts-ts test --env=jsdom",
     "eject": "react-scripts-ts eject",
-    "electron": "electron ."
+    "electron": "electron .",
+    "serve": "npm run-script build && serve -s build"
   },
   "devDependencies": {
     "@types/d3-force": "^1.2.1",
