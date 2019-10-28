@@ -7,7 +7,7 @@ import "./index.css";
 import registerServiceWorker from "./registerServiceWorker";
 
 ReactDOM.render(
-  <ArchimateNavigator modelUrl="/archimate-navigator/archimate/ArchiSurance V3.archimate" />,
+  <ArchimateNavigator modelUrl="./archimate/ArchiSurance V3.archimate" />,
   // <ArchimateNavigator modelUrl="/archimate/everything.archimate" />,
   // <ArchimateNavigator modelUrl="/archimate/sample.archimate" />,
   document.getElementById("root") as HTMLElement
