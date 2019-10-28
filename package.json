@@ -11,7 +11,7 @@
     "fuse.js": "^3.2.1",
     "github-markdown-css": "^2.10.0",
     "immutable": "^3.8.2",
-    "lodash-es": "^4.17.10",
+    "lodash-es": "^4.17.15",
     "memoize-one": "^4.0.0",
     "react": "^16.4.2",
     "react-bootstrap": "^0.32.1",
@@ -31,7 +31,7 @@
   "devDependencies": {
     "@types/d3-force": "^1.2.1",
     "@types/jest": "^23.3.1",
-    "@types/lodash-es": "^4.17.1",
+    "@types/lodash-es": "^4.17.3",
     "@types/memoize-one": "^3.1.1",
     "@types/node": "^10.7.1",
     "@types/react": "^16.4.10",
