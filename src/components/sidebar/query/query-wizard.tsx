@@ -41,7 +41,7 @@ interface IProps {
 interface IState {
   elementTypeFilter: ElementTypeFilterType;
   elementTypeFilterCollapsed: boolean;
-  fuse?: Fuse;
+  fuse?: Fuse<Element, Fuse.FuseOptions<any>>;
   fuseElementTypes?: Set<ElementType>;
   fuseFilteredElements?: Set<Element>;
   layerFilterCollapsed: boolean;
@@ -97,7 +97,7 @@ export default class QueryWizard extends React.PureComponent<IProps, IState> {
                   onChange={this.onViewpointChanged}
                   value={this.props.query.viewpointType}
                 >
-                  {Viewpoints.sort().map(v => (
+                  {Viewpoints.map(v => v).sort().map(v => (
                     <option key={v} value={v}>
                       {v}
                     </option>
@@ -269,12 +269,12 @@ export default class QueryWizard extends React.PureComponent<IProps, IState> {
         fuseElementTypes,
         fuseFilteredElements
       });
-      const fuse = new Fuse(fuseFilteredElements.toJS(), this.fuseOptions);
+      const fuse = new Fuse<Element, Fuse.FuseOptions<any>>(fuseFilteredElements.toJS(), this.fuseOptions);
       this.setState({ fuse });
     }
     const results: List<Element> =
       this.state.search.length > 0
-        ? List<Element>((this.state.fuse as Fuse).search(this.state.search))
+        ? List<Element>((this.state.fuse as Fuse<Element, Fuse.FuseOptions<any>>).search(this.state.search))
         : List<Element>();
     this.setState({ results });
   }

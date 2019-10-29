@@ -34,7 +34,7 @@ interface IProps {
 interface IState {
   elementTypeFilter: ElementTypeFilterType;
   elementTypesFilterElements: List<ElementTypeFilterType>;
-  fuse?: Fuse;
+  fuse?: Fuse<Element, Fuse.FuseOptions<any>>;
   fuseElementTypes?: List<ElementType>;
   fuseFilteredElements?: List<Element>;
   layerFilter: Layer | string;
@@ -213,12 +213,12 @@ export default class ElementPicker extends React.PureComponent<IProps, IState> {
         fuseElementTypes,
         fuseFilteredElements
       });
-      const fuse = new Fuse(fuseFilteredElements.toJS(), this.fuseOptions);
+      const fuse = new Fuse<Element, Fuse.FuseOptions<any>>(fuseFilteredElements.toJS(), this.fuseOptions);
       this.setState({ fuse });
     }
     const results: List<Element> =
       this.state.search.length > 0
-        ? List<Element>((this.state.fuse as Fuse).search(this.state.search))
+        ? List<Element>((this.state.fuse as Fuse<Element, Fuse.FuseOptions<any>>).search(this.state.search))
         : List<Element>();
     this.setState({ results });
   }
@@ -227,7 +227,7 @@ export default class ElementPicker extends React.PureComponent<IProps, IState> {
     layer: Layer | string
   ): List<ElementTypeFilterType> => {
     return List<ElementTypeFilterType>(
-      layerElements(layer === "All" ? Layer.None : (layer as Layer)).sort()
+      layerElements(layer === "All" ? Layer.None : (layer as Layer)).map(v => v).sort()
     ).unshift("All");
   };
 

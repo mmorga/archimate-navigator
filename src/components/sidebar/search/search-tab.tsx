@@ -8,7 +8,7 @@ import {
   InputGroup,
   Panel
 } from "react-bootstrap";
-import { Model } from "../../../archimate-model";
+import { IEntity, Model } from "../../../archimate-model";
 import { entityClickedFunc } from "../../common";
 import SearchResult from "./search-result";
 
@@ -19,7 +19,7 @@ interface IProps {
 }
 
 interface IState {
-  fuse: Fuse;
+  fuse: Fuse<IEntity, Fuse.FuseOptions<any>>;
   results: any[];
   search: string;
 }
@@ -38,7 +38,7 @@ export default class SearchTab extends React.PureComponent<IProps, IState> {
     super(props);
 
     this.state = {
-      fuse: new Fuse(this.props.model.entities(), this.fuseOptions),
+      fuse: new Fuse<IEntity, Fuse.FuseOptions<any>>(this.props.model.entities(), this.fuseOptions),
       results: [],
       search: this.props.searchText || ""
     };
@@ -47,7 +47,7 @@ export default class SearchTab extends React.PureComponent<IProps, IState> {
   public componentWillReceiveProps(nextProps: IProps) {
     if (this.props.model !== nextProps.model) {
       this.setState({
-        fuse: new Fuse(nextProps.model.entities(), this.fuseOptions)
+        fuse: new Fuse<IEntity, Fuse.FuseOptions<any>>(nextProps.model.entities(), this.fuseOptions)
       });
     }
   }
