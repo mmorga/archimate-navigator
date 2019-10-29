@@ -12,10 +12,6 @@ interface IProps {
 
 // Displays the list of organizations and entities that belong to the given organization
 export default class OrganizationItem extends React.PureComponent<IProps> {
-  constructor(props: IProps) {
-    super(props);
-  }
-
   public render() {
     return (
       <li

@@ -21,10 +21,6 @@ interface IProps {
 }
 
 export default class InfoTab extends React.PureComponent<IProps> {
-  constructor(props: IProps) {
-    super(props);
-  }
-
   public render() {
     return (
       <>

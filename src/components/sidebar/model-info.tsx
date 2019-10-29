@@ -15,10 +15,6 @@ interface IProps {
 }
 
 export default class ModelInfo extends React.Component<IProps> {
-  constructor(props: IProps) {
-    super(props);
-  }
-
   public render() {
     return (
       <Form horizontal={true}>

@@ -232,9 +232,8 @@ export default class ArchimateNavigator extends React.Component<
     event?: React.MouseEvent<Element>
   ) => {
     if (!entity) {
-      throw new LogicError("diagram wasn't passed");
       this.setState({ selectedDiagram: undefined });
-      return;
+      throw new LogicError("diagram wasn't passed");
     }
     const diagram = entity as Diagram;
     this.setState({

@@ -7,10 +7,6 @@ interface IProps {
 }
 
 export default class ArchimateSvg extends React.PureComponent<IProps> {
-  constructor(props: IProps) {
-    super(props);
-  }
-
   public render() {
     const style2: React.CSSProperties = {
       fill: "none",

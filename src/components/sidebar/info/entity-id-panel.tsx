@@ -15,10 +15,6 @@ interface IProps {
 }
 
 export default class EntityIdPanel extends React.PureComponent<IProps> {
-  constructor(props: IProps) {
-    super(props);
-  }
-
   public render() {
     const entity = this.props.entity;
     const name = entity ? (

@@ -7,10 +7,6 @@ interface IProps {
 }
 
 export default class QuerySettings extends React.PureComponent<IProps> {
-  constructor(props: IProps) {
-    super(props);
-  }
-
   public render() {
     return (
       <Panel defaultExpanded={false}>

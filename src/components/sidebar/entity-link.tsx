@@ -10,10 +10,6 @@ interface IProps {
 }
 
 export default class EntityLink extends React.PureComponent<IProps> {
-  constructor(props: IProps) {
-    super(props);
-  }
-
   public render() {
     const text = this.props.text ? this.props.text : this.props.entity!.name;
     if (this.props.entity) {

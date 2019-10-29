@@ -14,10 +14,6 @@ interface IProps {
 }
 
 export default class SearchResult extends React.PureComponent<IProps> {
-  constructor(props: IProps) {
-    super(props);
-  }
-
   public render() {
     return (
       <li>

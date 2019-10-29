@@ -9,10 +9,6 @@ interface IProps {
 }
 
 export default class LayerCheckbox extends React.PureComponent<IProps> {
-  constructor(props: IProps) {
-    super(props);
-  }
-
   public render() {
     return (
       <Checkbox

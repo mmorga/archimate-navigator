@@ -9,10 +9,6 @@ interface IProps {
 }
 
 export default class DocumentationPanel extends React.PureComponent<IProps> {
-  constructor(props: IProps) {
-    super(props);
-  }
-
   public render() {
     const hasContent = this.props.str && this.props.str.trim().length > 0;
     const title = this.props.header || "Documentation";

@@ -13,10 +13,6 @@ interface IProps {
 }
 
 export default class ViewsTab extends React.PureComponent<IProps> {
-  constructor(props: IProps) {
-    super(props);
-  }
-
   public render() {
     return (
       <Panel>

@@ -13,7 +13,6 @@ export function parse(doc: XMLDocument) {
     case "http://www.opengroup.org/xsd/archimate/3.0/":
     case "http://www.opengroup.org/xsd/archimate":
       throw new UnsupportedFormat("Format not supported", ns);
-      break;
     default:
       model = new ArchiFileReader().parse(doc);
   }

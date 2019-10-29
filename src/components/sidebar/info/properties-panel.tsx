@@ -10,10 +10,6 @@ interface IProps {
 }
 
 export default class PropertiesPanel extends React.PureComponent<IProps> {
-  constructor(props: IProps) {
-    super(props);
-  }
-
   public render() {
     const properties = this.props.properties ? this.props.properties : [];
     let tableRows = null;

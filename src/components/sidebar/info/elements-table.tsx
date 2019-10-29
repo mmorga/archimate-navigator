@@ -10,10 +10,6 @@ interface IProps {
 }
 
 export default class ElementsTable extends React.PureComponent<IProps> {
-  constructor(props: IProps) {
-    super(props);
-  }
-
   public render() {
     let elementRows = [
       <tr key="no-elements">

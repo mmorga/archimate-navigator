@@ -6,10 +6,6 @@ interface IProps {
 }
 
 export default class SelectedViewNode extends React.PureComponent<IProps> {
-  constructor(props: IProps) {
-    super(props);
-  }
-
   public render() {
     const b = this.props.bounds;
     return (

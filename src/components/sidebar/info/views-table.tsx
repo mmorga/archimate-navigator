@@ -10,10 +10,6 @@ interface IProps {
 }
 
 export default class ViewsTable extends React.PureComponent<IProps> {
-  constructor(props: IProps) {
-    super(props);
-  }
-
   public render() {
     const views = this.props.views ? this.props.views : [];
     let tableRows = null;

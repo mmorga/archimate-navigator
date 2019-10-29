@@ -19,10 +19,6 @@ interface IProps {
 }
 
 export default class QueryTab extends React.PureComponent<IProps> {
-  constructor(props: IProps) {
-    super(props);
-  }
-
   public render() {
     return (
       <Panel defaultExpanded={false}>

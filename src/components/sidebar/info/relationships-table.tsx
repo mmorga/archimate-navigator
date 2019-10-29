@@ -10,10 +10,6 @@ interface IProps {
 }
 
 export default class RelationshipsTable extends React.PureComponent<IProps> {
-  constructor(props: IProps) {
-    super(props);
-  }
-
   public render() {
     const relationships = this.props.relationships
       ? this.props.relationships
