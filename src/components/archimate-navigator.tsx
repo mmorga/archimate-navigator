@@ -126,7 +126,13 @@ export default class ArchimateNavigator extends React.Component<
           const xmlDocument = parser.parseFromString(str, "application/xml");
           let parsedModel;
           try {
-            parsedModel = parse(xmlDocument.children[0].ownerDocument);
+            if (xmlDocument.children[0].ownerDocument) {
+              parsedModel = parse(xmlDocument.children[0].ownerDocument);
+            } else {
+              this.setState({
+                error: "ArchiMate Model Document was null"
+              });
+            }
           } catch (err) {
             this.setState({
               error: err
@@ -236,7 +242,7 @@ export default class ArchimateNavigator extends React.Component<
       selectedEntity: diagram
     });
     if (diagram && diagram.id && diagram.id.length > 0) {
-      location.hash = `#${diagram.id}`;
+      window.location.hash = `#${diagram.id}`;
     }
   };
 

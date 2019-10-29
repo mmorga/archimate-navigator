@@ -69,6 +69,9 @@ export default class TextFlow extends React.PureComponent<IProps, IState> {
   private textWidth(str: string): number {
     const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     const svgDoc = svg.ownerDocument;
+    if (!svgDoc) {
+      return 0;
+    }
     const text: SVGTextElement = svgDoc.createElementNS(
       "http://www.w3.org/2000/svg",
       "text"

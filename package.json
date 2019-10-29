@@ -4,6 +4,15 @@
   "main": "electron-starter.js",
   "private": true,
   "dependencies": {
+    "@types/d3-force": "^1.2.1",
+    "@types/jest": "24.0.20",
+    "@types/lodash-es": "^4.17.3",
+    "@types/memoize-one": "^4.0.3",
+    "@types/node": "12.11.7",
+    "@types/react": "16.9.11",
+    "@types/react-bootstrap": "^0.32.20",
+    "@types/react-dom": "16.9.3",
+    "@types/wheel": "0.0.0",
     "bootstrap": "^3.4.1",
     "csstype": "^2.6.7",
     "d3-force": "^1.2.1",
@@ -17,28 +26,11 @@
     "react-bootstrap": "^0.32.4",
     "react-dom": "^16.11.0",
     "react-markdown": "^3.6.0",
-    "react-scripts-ts": "2.17.0",
+    "react-scripts": "3.2.0",
+    "typescript": "3.6.4",
     "wheel": "0.0.5"
   },
-  "scripts": {
-    "start": "react-scripts-ts start",
-    "build": "react-scripts-ts build",
-    "build-site": "export PUBLIC_URL='/archimate-navigator' && npm run-script build && rm -rf docs && cp -a build/ docs",
-    "test": "react-scripts-ts test --env=jsdom",
-    "eject": "react-scripts-ts eject",
-    "electron": "electron .",
-    "serve": "npm run-script build && serve -s build"
-  },
   "devDependencies": {
-    "@types/d3-force": "^1.2.1",
-    "@types/jest": "^23.3.1",
-    "@types/lodash-es": "^4.17.3",
-    "@types/memoize-one": "^3.1.2",
-    "@types/node": "^12.11.7",
-    "@types/react": "^16.9.11",
-    "@types/react-bootstrap": "^0.32.20",
-    "@types/react-dom": "^16.9.3",
-    "@types/wheel": "0.0.0",
     "eslint": "^6.6.0",
     "eslint-config-standard": "^14.1.0",
     "eslint-plugin-import": "^2.18.2",
@@ -47,6 +39,31 @@
     "eslint-plugin-standard": "^4.0.1",
     "prettier": "^1.18.2",
     "tslint": "^5.20.0",
-    "typescript": "^2.9.2"
+    "tslint-config-prettier": "^1.18.0",
+    "tslint-react": "^4.1.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "build-site": "export PUBLIC_URL='/archimate-navigator' && npm run-script build && rm -rf docs && cp -a build/ docs",
+    "electron": "electron .",
+    "serve": "npm run-script build && serve -s build"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }

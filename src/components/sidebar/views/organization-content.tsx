@@ -1,5 +1,5 @@
 import { isEqual } from "lodash-es";
-import memoize from "memoize-one";
+import memoizeOne from 'memoize-one';
 import * as React from "react";
 import { IEntity, Organization } from "../../../archimate-model";
 import "../../archimate-navigator.css";
@@ -37,7 +37,7 @@ export default class OrganizationContent extends React.Component<
     }
   }
 
-  private sortedOrganizations = memoize<
+  private sortedOrganizations = memoizeOne<
     (organizations: Organization[]) => Organization[]
   >(organizations => organizations.sort(entitySortFunc));
 
