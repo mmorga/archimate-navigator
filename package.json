@@ -16,7 +16,7 @@
     "bootstrap": "^3.4.1",
     "csstype": "^2.6.7",
     "d3-force": "^1.2.1",
-    "electron": "^9.4.0",
+    "electron": "^11.5.0",
     "fuse.js": "^3.4.5",
     "github-markdown-css": "^2.10.0",
     "immutable": "^3.8.2",
