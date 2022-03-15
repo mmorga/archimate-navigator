@@ -20,7 +20,7 @@
     "fuse.js": "^3.4.5",
     "github-markdown-css": "^2.10.0",
     "immutable": "^3.8.2",
-    "lodash-es": "^4.17.15",
+    "lodash-es": "^4.17.21",
     "memoize-one": "^4.0.3",
     "react": "^16.11.0",
     "react-bootstrap": "^0.32.4",
