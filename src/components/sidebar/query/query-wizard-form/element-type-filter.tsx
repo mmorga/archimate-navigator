@@ -191,7 +191,7 @@ export default class ElementTypeFilter extends React.PureComponent<IProps, IStat
     );
   }
 
-  private onToggle = (elementType: ElementType, event: React.FormEvent<Checkbox>) => {
+  private onToggle = (elementType: ElementType, _event: React.FormEvent<Checkbox>) => {
     const elementTypes = this.props.query.elementTypes.includes(elementType) ?
       this.props.query.elementTypes.delete(elementType) : this.props.query.elementTypes.add(elementType);
     this.props.onQueryChanged(

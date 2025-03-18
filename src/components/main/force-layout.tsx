@@ -10,6 +10,7 @@ interface IProps {
   autoLayout: boolean;
   nodes: ViewNode[];
   onForceLayoutTick?: () => void;
+  children?: React.ReactNode;
 }
 
 const DEFAULT_DISTANCE = 30; // Default distance for D3 Force simulations
@@ -37,7 +38,7 @@ export default class ForceLayout extends React.PureComponent<IProps> {
     // TODO: look into doing this in a web worker
     this.forceLink = d3force
       .forceLink<ViewNode, Connection>(this.props.connections)
-      .id((node: ViewNode, i: number, nodesData: ViewNode[]) => node.id)
+      .id((node: ViewNode, _i: number, _nodesData: ViewNode[]) => node.id)
       .distance(this.adjustLinkDistance);
     this.simulation = d3force
       .forceSimulation(this.props.nodes)
@@ -51,7 +52,7 @@ export default class ForceLayout extends React.PureComponent<IProps> {
       .on("tick", this.ticked);
   }
 
-  public componentDidUpdate(prevProps: IProps) {
+  public componentDidUpdate(_prevProps: IProps) {
     if (!this.props.autoLayout) {
       if (this.simulation) {
         this.simulation.stop();

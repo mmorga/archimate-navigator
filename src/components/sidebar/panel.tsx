@@ -1,8 +1,9 @@
 import * as React from "react";
 
 interface IProps {
-  header?: string | React.ReactFragment;
+  header?: React.ReactNode;
   initiallyCollapsed?: boolean;
+  children?: React.ReactNode;
 }
 
 interface IState {

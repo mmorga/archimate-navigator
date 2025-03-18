@@ -178,7 +178,7 @@ export default class DefaultViewNode extends React.PureComponent<
     );
   }
 
-  protected selectedHighlight(): React.ReactFragment | undefined {
+  protected selectedHighlight(): JSX.Element | undefined {
     if (this.props.selected) {
       return (
         <SelectedViewNode bounds={this.props.viewNode.absolutePosition()} />

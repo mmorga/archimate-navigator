@@ -184,7 +184,7 @@ export class Query {
   private connectionFor(
     relationship: Relationship,
     elementViewNodeMap: Map<string, ViewNode>,
-    diagram: Diagram
+    _diagram: Diagram
   ): Connection {
     const sourceViewNode = elementViewNodeMap.get(relationship.source);
     const targetViewNode = elementViewNodeMap.get(relationship.target);

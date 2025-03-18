@@ -222,8 +222,8 @@ export interface IModel extends IEntity, IHasOrganizations {
 export function inodeKeyFunc(
   this: SVGGElement,
   datum: IViewNode,
-  index: number,
-  groups: SVGGElement[]
+  _index: number,
+  _groups: SVGGElement[]
 ) {
   return datum.id;
 }

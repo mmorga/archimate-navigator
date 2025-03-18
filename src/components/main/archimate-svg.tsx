@@ -4,6 +4,7 @@ import "./archimate-svg.css";
 interface IProps {
   diagramName: string | undefined;
   viewBox: SVGRect | undefined;
+  children?: React.ReactNode;
 }
 
 export default class ArchimateSvg extends React.PureComponent<IProps> {

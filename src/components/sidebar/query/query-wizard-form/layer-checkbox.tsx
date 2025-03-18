@@ -20,7 +20,7 @@ export default class LayerCheckbox extends React.PureComponent<IProps> {
     );
   }
 
-  private onChange = (event: React.FormEvent<Checkbox>) => {
+  private onChange = (_event: React.FormEvent<Checkbox>) => {
     this.props.onChange(this.props.layer, !this.props.checked);
   };
 }

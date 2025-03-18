@@ -1,4 +1,3 @@
-import * as React from "react";
 import { IViewNodeProps } from "./default-element";
 import GroupViewNode from "./group-view-node";
 

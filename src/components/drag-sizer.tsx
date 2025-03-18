@@ -55,7 +55,7 @@ export default class DragSizer extends React.PureComponent<IProps, IState> {
   };
 
   private onDragStart: React.DragEventHandler<HTMLDivElement> = (
-    ev: React.DragEvent<HTMLDivElement>
+    _ev: React.DragEvent<HTMLDivElement>
   ) => {
     // this.setState({
     //   clientX: ev.clientX,
@@ -74,7 +74,7 @@ export default class DragSizer extends React.PureComponent<IProps, IState> {
     this.props.onChange(ev.clientX);
   };
 
-  private onDragExit: React.DragEventHandler<HTMLDivElement> = ev => {
+  private onDragExit: React.DragEventHandler<HTMLDivElement> = _ev => {
     this.setState({
       color: "gray",
       dragState: "Exit"

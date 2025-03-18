@@ -53,7 +53,9 @@ export default class PropertiesPanel extends React.PureComponent<IProps> {
 
   private value(v: string | undefined) {
     if (v) {
-      return <ReactMarkdown className="markdown-body" source={v} />;
+      return <ReactMarkdown>
+        {v}
+      </ReactMarkdown>;
     }
 
     return <i>undefined</i>;

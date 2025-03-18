@@ -11,6 +11,7 @@ interface IProps {
   scale: number;
   svgPanZoomRef: React.RefObject<SVGGElement>;
   zoomMode: ZoomMode;
+  children?: React.ReactNode;
 }
 
 enum ZoomMode {
@@ -268,7 +269,7 @@ export default class SvgPanZoom extends React.PureComponent<IProps, IState> {
     this.moveTo(this.state.tx + dx, this.state.ty + dy);
   }
 
-  private internalMoveBy(dx: number, dy: number, smooth?: boolean) {
+  private internalMoveBy(dx: number, dy: number, _smooth?: boolean) {
     return this.moveBy(dx, dy);
   }
 

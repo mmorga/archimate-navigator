@@ -31,7 +31,7 @@ export default class QuerySettings extends React.PureComponent<IProps> {
     );
   }
 
-  private autoLayoutToggled = (event: React.FormEvent<Checkbox>) => {
+  private autoLayoutToggled = (_event: React.FormEvent<Checkbox>) => {
     this.props.onAutoLayoutToggled(!this.props.autoLayout);
   };
 }

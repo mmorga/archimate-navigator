@@ -131,7 +131,7 @@ export default class RelationshipTypeFilterPanel extends React.PureComponent<
     );
   };
 
-  private onAddClick = (relationshipType: RelationshipType, event: any) => {
+  private onAddClick = (relationshipType: RelationshipType, _event: any) => {
     this.props.onQueryChanged(
       this.props.query.updateQuery({
         relationshipTypes: this.props.query.relationshipTypes.add(
@@ -141,7 +141,7 @@ export default class RelationshipTypeFilterPanel extends React.PureComponent<
     );
   };
 
-  private onRemoveClick = (relationshipType: RelationshipType, event: any) => {
+  private onRemoveClick = (relationshipType: RelationshipType, _event: any) => {
     this.props.onQueryChanged(
       this.props.query.updateQuery({
         relationshipTypes: this.props.query.relationshipTypes.remove(
@@ -151,7 +151,7 @@ export default class RelationshipTypeFilterPanel extends React.PureComponent<
     );
   };
 
-  private onDerivedRelationsToggle = (event: any) => {
+  private onDerivedRelationsToggle = (_event: any) => {
     this.props.onQueryChanged(
       this.props.query.updateQuery({
         includeDerivedRelations: !this.props.query.includeDerivedRelations

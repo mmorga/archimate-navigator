@@ -98,7 +98,7 @@ export default class ElementPicker extends React.PureComponent<IProps, IState> {
                 defaultValue={this.state.elementTypeFilter}
                 onChange={this.onElementTypeFilterChanged}
               >
-                {this.state.elementTypesFilterElements.map(v => (
+                {this.state.elementTypesFilterElements.toArray().map(v => (
                   <option key={v} value={v}>
                     {v}
                   </option>
@@ -124,6 +124,7 @@ export default class ElementPicker extends React.PureComponent<IProps, IState> {
               </ControlLabel>
               <ListGroup>
                 {this.state.results
+                  .toArray()
                   .slice(0, Math.min(20, this.state.results.size))
                   .map(
                     el =>
@@ -134,7 +135,9 @@ export default class ElementPicker extends React.PureComponent<IProps, IState> {
                           </div>
                           <span className="text-info">{el.type}</span>
                           {": "}
-                          {<span className="text-primary">{el.name}</span> || (
+                          {el.name ? (
+                            <span className="text-primary">{el.name}</span>
+                          ) : (
                             <span className="text-muted">unnamed</span>
                           )}
                         </ListGroupItem>
@@ -159,7 +162,7 @@ export default class ElementPicker extends React.PureComponent<IProps, IState> {
     this.calculateResults();
   };
 
-  private onAddClick = (element: Element, event: any) => {
+  private onAddClick = (element: Element, _ievent: any) => {
     this.props.onChange(
       this.props.query.updateQuery({
         elements: this.props.query.elements.add(element)
@@ -167,7 +170,7 @@ export default class ElementPicker extends React.PureComponent<IProps, IState> {
     );
   };
 
-  private onRemoveClick = (element: Element, event: any) => {
+  private onRemoveClick = (element: Element, _event: any) => {
     this.props.onChange(
       this.props.query.updateQuery({
         elements: this.props.query.elements.remove(element)
@@ -175,7 +178,7 @@ export default class ElementPicker extends React.PureComponent<IProps, IState> {
     );
   };
 
-  private onClose = (event: any) => {
+  private onClose = (_event: any) => {
     this.props.onClose();
   };
 

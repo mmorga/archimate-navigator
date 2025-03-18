@@ -1,4 +1,3 @@
-import * as React from "react";
 import DataObjectViewNode from "./data-object-view-node";
 import { IViewNodeProps } from "./default-element";
 

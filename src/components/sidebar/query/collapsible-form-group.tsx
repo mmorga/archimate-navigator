@@ -15,6 +15,7 @@ interface IProps {
   defaultExpanded?: boolean;
   title: string | JSX.Element;
   validationState?: ValidationState;
+  children?: React.ReactNode;
 }
 
 export default class CollapsibleFormGroup extends React.PureComponent<IProps> {

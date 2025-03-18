@@ -7,6 +7,7 @@ interface IProps {
   entityClicked: entityClickedFunc;
   text?: string;
   textClass?: string;
+  children?: React.ReactNode;
 }
 
 export default class EntityLink extends React.PureComponent<IProps> {

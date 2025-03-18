@@ -153,6 +153,7 @@ export default class QueryWizard extends React.PureComponent<IProps, IState> {
                 </ControlLabel>
                 <ListGroup>
                   {this.state.results
+                    .toArray()
                     .slice(0, Math.min(20, this.state.results.size))
                     .map(
                       el =>
@@ -163,7 +164,9 @@ export default class QueryWizard extends React.PureComponent<IProps, IState> {
                             </div>
                             <span className="text-info">{el.type}</span>
                             {": "}
-                            {<span className="text-primary">{el.name}</span> || (
+                            {el.name ? (
+                              <span className="text-primary">{el.name}</span>
+                            ) : (
                               <span className="text-muted">unnamed</span>
                             )}
                           </ListGroupItem>
@@ -218,7 +221,7 @@ export default class QueryWizard extends React.PureComponent<IProps, IState> {
     return this.props.query.layerFilter.includes(layer);
   }
 
-  private onAddClick = (element: Element, event: any) => {
+  private onAddClick = (element: Element, _event: any) => {
     this.props.onQueryChanged(
       this.props.query.updateQuery({
         elements: this.props.query.elements.add(element)
@@ -226,7 +229,7 @@ export default class QueryWizard extends React.PureComponent<IProps, IState> {
     );
   }
 
-  private onRemoveClick = (element: Element, event: any) => {
+  private onRemoveClick = (element: Element, _event: any) => {
     this.props.onQueryChanged(
       this.props.query.updateQuery({
         elements: this.props.query.elements.remove(element)

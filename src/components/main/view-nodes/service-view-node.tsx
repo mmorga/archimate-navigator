@@ -1,4 +1,3 @@
-import * as React from "react";
 import { Bounds, zeroBounds } from "../../../archimate-model";
 import BadgedRoundedRectViewNode from "./badged-rounded-rect";
 import { IViewNodeProps } from "./default-element";

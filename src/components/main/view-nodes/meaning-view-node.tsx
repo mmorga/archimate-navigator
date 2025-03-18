@@ -1,4 +1,3 @@
-import * as React from "react";
 import { Point } from "../../../archimate-model";
 import DefaultViewNode, { IViewNodeProps } from "./default-element";
 

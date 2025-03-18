@@ -38,7 +38,7 @@ export default class QueryTab extends React.PureComponent<IProps> {
                     defaultValue={this.props.selectedQuery.name}
                     onChange={this.onQuerySelected}
                   >
-                    {this.props.queries.map(
+                    {this.props.queries.toArray().map(
                       q =>
                         q ? (
                           <option key={q.id} value={q.id}>

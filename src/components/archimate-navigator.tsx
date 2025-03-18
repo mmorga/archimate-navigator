@@ -229,7 +229,7 @@ export default class ArchimateNavigator extends React.Component<
 
   private onDiagramLinkClick = (
     entity: IEntity | undefined,
-    event?: React.MouseEvent<Element>
+    _event?: React.MouseEvent<Element>
   ) => {
     if (!entity) {
       this.setState({ selectedDiagram: undefined });
@@ -247,7 +247,7 @@ export default class ArchimateNavigator extends React.Component<
 
   private onEntityClick = (
     entity: IEntity | undefined,
-    event?: React.MouseEvent<Element>
+    _event?: React.MouseEvent<Element>
   ) => {
     if (!entity) {
       this.setState({ selectedEntity: undefined });

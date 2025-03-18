@@ -21,10 +21,9 @@ export default class DocumentationPanel extends React.PureComponent<IProps> {
     );
     return (
       <Panel header={header} initiallyCollapsed={!hasContent}>
-        <ReactMarkdown
-          className="markdown-body"
-          source={this.props.str || "No Documentation"}
-        />
+        <ReactMarkdown>
+          {this.props.str || "No Documentation"}
+        </ReactMarkdown>
       </Panel>
     );
   }

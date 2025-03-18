@@ -37,7 +37,7 @@ export default class EntityIdPanel extends React.PureComponent<IProps> {
     );
   }
 
-  private entityContent(): React.ReactFragment {
+  private entityContent(): JSX.Element | JSX.Element[] {
     const entity = this.props.entity;
     if (entity instanceof Diagram) {
       return this.diagramContent();
@@ -50,7 +50,7 @@ export default class EntityIdPanel extends React.PureComponent<IProps> {
     }
   }
 
-  private diagramContent(): React.ReactFragment {
+  private diagramContent(): JSX.Element {
     const diagram = this.props.entity as Diagram;
     return (
       <tr key="entity-type">
@@ -74,7 +74,7 @@ export default class EntityIdPanel extends React.PureComponent<IProps> {
     );
   }
 
-  private relationshipContent(): React.ReactFragment {
+  private relationshipContent(): JSX.Element {
     const relationship = this.props.entity as Relationship;
     return (
       <>
@@ -94,7 +94,7 @@ export default class EntityIdPanel extends React.PureComponent<IProps> {
     );
   }
 
-  private elementContent(): React.ReactFragment {
+  private elementContent(): JSX.Element {
     const entity = this.props.entity as Element;
     return (
       <tr key="entity-type">

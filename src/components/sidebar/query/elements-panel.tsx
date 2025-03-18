@@ -63,7 +63,7 @@ export default class ElementsPanel extends React.PureComponent<IProps, IState> {
           </OverlayTrigger>
           {this.props.query.elements.size > 0 ? (
             <ListGroup>
-              {this.props.query.elements.map(
+              {this.props.query.elements.toArray().map(
                 el =>
                   el ? (
                     <ListGroupItem key={el.id}>
@@ -78,7 +78,9 @@ export default class ElementsPanel extends React.PureComponent<IProps, IState> {
                       </div>
                       <span className="text-info">{el.type}</span>
                       {": "}
-                      {<span className="text-primary">{el.name}</span> || (
+                      {el.name ? (
+                        <span className="text-primary">{el.name}</span>
+                      ) : (
                         <span className="text-muted">unnamed</span>
                       )}
                     </ListGroupItem>
@@ -102,11 +104,11 @@ export default class ElementsPanel extends React.PureComponent<IProps, IState> {
     );
   }
 
-  private onShowElementPicker = (event: any) => {
+  private onShowElementPicker = (_event: any) => {
     this.setState({ showElementPicker: true });
   };
 
-  private onRemoveElement = (element: Element, event: any) => {
+  private onRemoveElement = (element: Element, _event: any) => {
     this.props.onQueryChanged(
       this.props.query.updateQuery({
         elements: this.props.query.elements.remove(element)
