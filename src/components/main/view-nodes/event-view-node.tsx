@@ -1,7 +1,7 @@
 import { Bounds } from "../../../archimate-model";
 import BadgedRoundedRectViewNode from "./badged-rounded-rect";
 import { IViewNodeProps } from "./default-element";
-
+import { JSX } from "react";
 export default class EventViewNode extends BadgedRoundedRectViewNode {
   constructor(props: IViewNodeProps) {
     super(props);

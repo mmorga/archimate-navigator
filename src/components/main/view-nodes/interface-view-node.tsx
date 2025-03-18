@@ -1,3 +1,4 @@
+import { JSX } from "react";
 import BadgedRectViewNode from "./badged-rect";
 import { IViewNodeProps } from "./default-element";
 

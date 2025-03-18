@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Checkbox, Form, Panel } from "react-bootstrap";
+import { Accordion, Form } from "react-bootstrap";
 
 interface IProps {
   autoLayout: boolean;
@@ -9,29 +9,25 @@ interface IProps {
 export default class QuerySettings extends React.PureComponent<IProps> {
   public render() {
     return (
-      <Panel defaultExpanded={false}>
-        <Panel.Heading>
-          <Panel.Title componentClass="h3" toggle={true}>
-            Query Settings
-          </Panel.Title>
-        </Panel.Heading>
-        <Panel.Collapse>
-          <Panel.Body>
+      <Accordion defaultActiveKey="">
+        <Accordion.Item eventKey="0">
+          <Accordion.Header>Query Settings</Accordion.Header>
+          <Accordion.Body>
             <Form>
-              <Checkbox
+              <Form.Check
+                type="checkbox"
                 defaultChecked={this.props.autoLayout}
                 onChange={this.autoLayoutToggled}
-              >
-                {" Auto Layout "}
-              </Checkbox>
+                label="Auto Layout"
+              />
             </Form>
-          </Panel.Body>
-        </Panel.Collapse>
-      </Panel>
+          </Accordion.Body>
+        </Accordion.Item>
+      </Accordion>
     );
   }
 
-  private autoLayoutToggled = (_event: React.FormEvent<Checkbox>) => {
+  private autoLayoutToggled = () => {
     this.props.onAutoLayoutToggled(!this.props.autoLayout);
   };
 }

@@ -1,10 +1,10 @@
-import { TextAlignProperty } from "csstype";
+import type * as CSS from 'csstype';
 import { Color } from "./color";
 import { Font } from "./font";
 
 export class Style {
   // @todo make this an enum
-  public textAlignment?: TextAlignProperty;
+  public textAlignment?: CSS.Property.TextAlign;
   // @return [Color, NilClass]
   public fillColor?: Color;
   // @return [Color, NilClass]

@@ -14,7 +14,7 @@ import EntityIdPanel from "./entity-id-panel";
 import PropertiesPanel from "./properties-panel";
 import RelationshipsTable from "./relationships-table";
 import ViewsTable from "./views-table";
-
+import { JSX } from "react";
 interface IProps {
   entity?: IEntity;
   entityClicked: entityClickedFunc;

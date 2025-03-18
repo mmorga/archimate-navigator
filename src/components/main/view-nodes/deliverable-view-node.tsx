@@ -1,3 +1,4 @@
+import { JSX } from "react";
 import DefaultViewNode, { IViewNodeProps } from "./default-element";
 
 export default class DeliverableViewNode extends DefaultViewNode {

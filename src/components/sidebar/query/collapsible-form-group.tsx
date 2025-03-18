@@ -1,17 +1,12 @@
 import * as React from "react";
-import { Label, Panel } from "react-bootstrap";
+import { JSX } from "react";
+import { Accordion, Badge } from "react-bootstrap";
 
 export type ValidationState = "success" | "warning" | "error" | null;
 
 interface IProps {
-  label?: React.ReactText | JSX.Element;
-  labelStyle?:
-    | "default"
-    | "primary"
-    | "success"
-    | "info"
-    | "warning"
-    | "danger";
+  label?: string | JSX.Element;
+  labelStyle?: "primary" | "secondary" | "success" | "info" | "warning" | "danger";
   defaultExpanded?: boolean;
   title: string | JSX.Element;
   validationState?: ValidationState;
@@ -26,22 +21,21 @@ export default class CollapsibleFormGroup extends React.PureComponent<IProps> {
 
   public render() {
     return (
-      <Panel
-        defaultExpanded={this.props.defaultExpanded}
-        style={{ margin: "0 -13px -1.1em -13px" }}
-      >
-        <Panel.Heading>
-          <Panel.Title toggle={true}>
+      <Accordion defaultActiveKey={this.props.defaultExpanded ? "0" : undefined}>
+        <Accordion.Item eventKey="0">
+          <Accordion.Header>
             <span className={this.titleClass()}>{this.props.title}</span>
             {this.props.label ? (
-              <Label bsStyle={this.props.labelStyle} className="pull-right">
+              <Badge bg={this.props.labelStyle}>
                 {this.props.label}
-              </Label>
+              </Badge>
             ) : null}
-          </Panel.Title>
-        </Panel.Heading>
-        <Panel.Body collapsible={true}>{this.props.children}</Panel.Body>
-      </Panel>
+          </Accordion.Header>
+          <Accordion.Body>
+            {this.props.children}
+          </Accordion.Body>
+        </Accordion.Item>
+      </Accordion>
     );
   }
 

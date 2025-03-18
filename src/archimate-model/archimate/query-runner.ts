@@ -22,8 +22,8 @@ export class QueryRunner {
   // Changes from a visit pattern to something that generates query results
   public run(): [Element[], Relationship[]] {
     const visited = Set<Element>(this.query.elements);
-    const queue: ISearchQueueItem[] = Array.from<Element>(
-      this.query.elements.toJS()
+    const queue: ISearchQueueItem[] = Array.from(
+      this.query.elements
     ).map(el => ({ element: el, depth: 1 }));
 
     const resultElements: Element[] = [];

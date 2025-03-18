@@ -1,4 +1,5 @@
 import * as React from "react";
+import { JSX } from "react";
 import { Connection, Path, ViewNode } from "../../archimate-model";
 import { entityClickedFunc } from "../common";
 import "./archimate-svg.css";

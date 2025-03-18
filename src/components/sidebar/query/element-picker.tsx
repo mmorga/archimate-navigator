@@ -1,18 +1,18 @@
 import Fuse from "fuse.js";
 import { List } from "immutable";
 import * as React from "react";
+import { JSX } from "react";
 import {
   Badge,
   Button,
-  ControlLabel,
   Form,
   FormControl,
   FormGroup,
-  Glyphicon,
   ListGroup,
   ListGroupItem,
   Modal
 } from "react-bootstrap";
+import { Plus, Trash } from "react-bootstrap-icons";
 import {
   Element,
   ElementType,
@@ -34,12 +34,19 @@ interface IProps {
 interface IState {
   elementTypeFilter: ElementTypeFilterType;
   elementTypesFilterElements: List<ElementTypeFilterType>;
-  fuse?: Fuse<Element, Fuse.FuseOptions<any>>;
+  fuse?: Fuse<FuseElement>;
   fuseElementTypes?: List<ElementType>;
   fuseFilteredElements?: List<Element>;
   layerFilter: Layer | string;
   results: List<Element>;
   search: string;
+}
+
+interface FuseElement {
+  id: string;
+  type: ElementType;
+  name: string;
+  documentation?: string;
 }
 
 export default class ElementPicker extends React.PureComponent<IProps, IState> {
@@ -77,9 +84,9 @@ export default class ElementPicker extends React.PureComponent<IProps, IState> {
         <Modal.Body>
           <Form>
             <FormGroup controlId="layerFilter">
-              <ControlLabel>Layer Filter</ControlLabel>
+              <Form.Label>Layer Filter</Form.Label>
               <FormControl
-                componentClass="select"
+                as="select"
                 defaultValue={this.state.layerFilter}
                 onChange={this.onLayerFilterChanged}
               >
@@ -92,9 +99,9 @@ export default class ElementPicker extends React.PureComponent<IProps, IState> {
               <FormControl.Feedback />
             </FormGroup>
             <FormGroup controlId="elementTypeFilter">
-              <ControlLabel>Element Type Filter</ControlLabel>
+              <Form.Label>Element Type Filter</Form.Label>
               <FormControl
-                componentClass="select"
+                as="select"
                 defaultValue={this.state.elementTypeFilter}
                 onChange={this.onElementTypeFilterChanged}
               >
@@ -107,7 +114,7 @@ export default class ElementPicker extends React.PureComponent<IProps, IState> {
               <FormControl.Feedback />
             </FormGroup>
             <FormGroup controlId="search">
-              <ControlLabel>Search</ControlLabel>
+              <Form.Label>Search</Form.Label>
               <input
                 type="text"
                 value={this.state.search}
@@ -119,9 +126,9 @@ export default class ElementPicker extends React.PureComponent<IProps, IState> {
               <FormControl.Feedback />
             </FormGroup>
             <FormGroup controlId="results">
-              <ControlLabel>
+              <Form.Label>
                 Results <Badge>{this.state.results.size}</Badge>
-              </ControlLabel>
+              </Form.Label>
               <ListGroup>
                 {this.state.results
                   .toArray()
@@ -178,7 +185,7 @@ export default class ElementPicker extends React.PureComponent<IProps, IState> {
     );
   };
 
-  private onClose = (_event: any) => {
+  private onClose = () => {
     this.props.onClose();
   };
 
@@ -216,12 +223,25 @@ export default class ElementPicker extends React.PureComponent<IProps, IState> {
         fuseElementTypes,
         fuseFilteredElements
       });
-      const fuse = new Fuse<Element, Fuse.FuseOptions<any>>(fuseFilteredElements.toJS(), this.fuseOptions);
+      const fuse = new Fuse<FuseElement>(
+        fuseFilteredElements.toJS().map(el => ({
+          id: el.id,
+          type: el.type,
+          name: el.name,
+          documentation: el.documentation
+        })),
+        this.fuseOptions
+      );
       this.setState({ fuse });
     }
     const results: List<Element> =
       this.state.search.length > 0
-        ? List<Element>((this.state.fuse as Fuse<Element, Fuse.FuseOptions<any>>).search(this.state.search))
+        ? List<Element>(
+            (this.state.fuse as Fuse<FuseElement>)
+              .search(this.state.search)
+              .map(result => this.props.query.model.elements.find(el => el.id === result.item.id))
+              .filter((el): el is Element => el !== undefined)
+          )
         : List<Element>();
     this.setState({ results });
   }
@@ -252,14 +272,14 @@ export default class ElementPicker extends React.PureComponent<IProps, IState> {
     const isSelected = this.props.query.elements.some(
       e => (e ? e.id === el.id : false)
     );
-    const glyph = isSelected ? "remove" : "plus";
+    const bsStyle = isSelected ? "danger" : "primary";
     const onClick = isSelected
       ? this.onRemoveClick.bind(this, el)
       : this.onAddClick.bind(this, el);
-    const bsStyle = isSelected ? "danger" : "primary";
+    const icon = isSelected ? <Trash /> : <Plus />;
     return (
-      <Button bsSize="xsmall" bsStyle={bsStyle} onClick={onClick}>
-        <Glyphicon glyph={glyph} />
+      <Button size="sm" variant={bsStyle} onClick={onClick}>
+        {icon}
       </Button>
     );
   }

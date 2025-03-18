@@ -8,7 +8,7 @@ import {
 import { entityClickedFunc } from "../../common";
 import EntityLink from "../entity-link";
 import Panel from "../panel";
-
+import { JSX } from "react";
 interface IProps {
   entity: IEntity | undefined;
   entityClicked: entityClickedFunc;

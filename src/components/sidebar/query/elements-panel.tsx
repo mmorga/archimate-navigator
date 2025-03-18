@@ -1,13 +1,13 @@
 import * as React from "react";
 import {
   Button,
-  Glyphicon,
-  HelpBlock,
+  Form,
   ListGroup,
   ListGroupItem,
   OverlayTrigger,
   Tooltip
 } from "react-bootstrap";
+import { PlusCircle, Trash } from "react-bootstrap-icons";
 import { Element, Query } from "../../../archimate-model";
 import CollapsibleFormGroup from "./collapsible-form-group";
 import ElementPicker from "./element-picker";
@@ -49,7 +49,7 @@ export default class ElementsPanel extends React.PureComponent<IProps, IState> {
         <CollapsibleFormGroup
           label={this.label()}
           labelStyle={
-            this.props.query.elements.size === 0 ? "danger" : "default"
+            this.props.query.elements.size === 0 ? "danger" : "info"
           }
           defaultExpanded={true}
           title="Elements"
@@ -57,8 +57,7 @@ export default class ElementsPanel extends React.PureComponent<IProps, IState> {
         >
           <OverlayTrigger placement="right" overlay={tooltip}>
             <Button onClick={this.onShowElementPicker}>
-              {" "}
-              <Glyphicon glyph="plus-sign" /> Add...{" "}
+              <PlusCircle /> Add...
             </Button>
           </OverlayTrigger>
           {this.props.query.elements.size > 0 ? (
@@ -69,11 +68,11 @@ export default class ElementsPanel extends React.PureComponent<IProps, IState> {
                     <ListGroupItem key={el.id}>
                       <div className="pull-right">
                         <Button
-                          bsSize="xsmall"
-                          bsStyle="danger"
+                          size="sm"
+                          variant="danger"
                           onClick={this.onRemoveElement.bind(this, el)}
                         >
-                          <Glyphicon glyph="remove" />
+                          <Trash />
                         </Button>
                       </div>
                       <span className="text-info">{el.type}</span>
@@ -90,9 +89,9 @@ export default class ElementsPanel extends React.PureComponent<IProps, IState> {
               )}
             </ListGroup>
           ) : null}
-          <HelpBlock>
+          <Form.Text muted>
             Elements to begin query with. Pick at least one.
-          </HelpBlock>
+          </Form.Text>
         </CollapsibleFormGroup>
         <ElementPicker
           query={this.props.query}

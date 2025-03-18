@@ -1,4 +1,4 @@
-import { TextAlignProperty, TextAnchorProperty } from "csstype";
+import type * as CSS from 'csstype';
 import * as React from "react";
 import { Bounds, ViewNode } from "../../archimate-model";
 import TextFlow from "./text-flow";
@@ -7,12 +7,12 @@ interface IProps {
   child: ViewNode;
   label: string;
   textBounds: Bounds;
-  textAlign?: TextAlignProperty;
+  textAlign?: CSS.Property.TextAlign;
   badgeBounds: Bounds;
 }
 
 interface IState {
-  textAnchor?: TextAnchorProperty;
+  textAnchor?: CSS.Property.TextAnchor;
   lineHeight: number;
   bbox?: number;
   width?: number;
@@ -40,7 +40,7 @@ interface IState {
 export default class EntityLabel extends React.PureComponent<IProps, IState> {
   constructor(props: IProps) {
     super(props);
-    let textAnchor: TextAnchorProperty = "middle";
+    let textAnchor: CSS.Property.TextAnchor = "middle";
     switch (this.props.textAlign) {
       case "left":
         textAnchor = "start";
@@ -149,7 +149,7 @@ export default class EntityLabel extends React.PureComponent<IProps, IState> {
     }
   }
 
-  private textStyle(textAnchor?: TextAnchorProperty): React.CSSProperties {
+  private textStyle(textAnchor?: CSS.Property.TextAnchor): React.CSSProperties {
     const style = this.props.child.style;
     if (style === undefined) {
       return {

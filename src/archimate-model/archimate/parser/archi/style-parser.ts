@@ -1,4 +1,4 @@
-import { TextAlignProperty } from "csstype";
+import type * as CSS from 'csstype';
 import { Color } from "../../color";
 import { Font } from "../../font";
 import { Style } from "../../style";
@@ -15,7 +15,7 @@ export class StyleParser {
     const lineWidth = getIntAttribute(element, "lineWidth");
     const textPosition = getIntAttribute(element, "textPosition");
     if (textAlignment) {
-      s.textAlignment = textAlignment as TextAlignProperty;
+      s.textAlignment = textAlignment as CSS.Property.TextAlign;
     }
     if (fillColor) {
       s.fillColor = fillColor;

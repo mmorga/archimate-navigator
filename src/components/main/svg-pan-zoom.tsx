@@ -9,7 +9,7 @@ interface IProps {
   minY: number;
   onZoom: (scale: number) => void;
   scale: number;
-  svgPanZoomRef: React.RefObject<SVGGElement>;
+  svgPanZoomRef: React.RefObject<SVGGElement | null>;
   zoomMode: ZoomMode;
   children?: React.ReactNode;
 }

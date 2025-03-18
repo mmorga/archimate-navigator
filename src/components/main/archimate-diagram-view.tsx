@@ -1,5 +1,6 @@
 import * as React from "react";
-import { Button, Glyphicon } from "react-bootstrap";
+import { Button } from "react-bootstrap";
+import { ArrowsFullscreen, ArrowsExpand, ZoomIn, ZoomOut, ArrowLeft } from "react-bootstrap-icons";
 import {
   Connection,
   Diagram,
@@ -51,7 +52,7 @@ export default class ArchimateDiagramView extends React.PureComponent<
       : { maxX: 0, maxY: 0, minX: 0, minY: 0 };
   }
 
-  private svgTopGroup: React.RefObject<SVGGElement>;
+  private svgTopGroup: React.RefObject<SVGGElement | null>;
 
   constructor(props: IProps) {
     super(props);
@@ -64,7 +65,7 @@ export default class ArchimateDiagramView extends React.PureComponent<
       scale: 1,
       zoomMode: ZoomMode.FitToWindow
     };
-    this.svgTopGroup = React.createRef();
+    this.svgTopGroup = React.createRef<SVGGElement | null>();
   }
 
   public render() {
@@ -79,16 +80,16 @@ export default class ArchimateDiagramView extends React.PureComponent<
               <small>1:1</small>
             </Button>
             <Button onClick={this.onFitToWindow}>
-              <Glyphicon glyph="resize-full" />
+              <ArrowsFullscreen />
             </Button>
             <Button onClick={this.onFitToWidth}>
-              <Glyphicon glyph="resize-horizontal" />
+              <ArrowsExpand />
             </Button>
             <Button onClick={this.onZoomIn}>
-              <Glyphicon glyph="zoom-in" />
+              <ZoomIn />
             </Button>
             <Button onClick={this.onZoomOut}>
-              <Glyphicon glyph="zoom-out" />
+              <ZoomOut />
             </Button>
             <small>
               {"  "}
@@ -156,7 +157,7 @@ export default class ArchimateDiagramView extends React.PureComponent<
         >
           <h1>ArchiMate Navigator</h1>
           <p>
-            <Glyphicon glyph="arrow-left" />
+            <ArrowLeft />
             &nbsp; Select a diagram on the left to view.
           </p>
         </div>

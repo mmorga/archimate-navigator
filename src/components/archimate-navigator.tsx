@@ -182,7 +182,7 @@ export default class ArchimateNavigator extends React.Component<
     const errorMessage = `${err.name}: ${err.message}`;
 
     return (
-      <Alert bsStyle="danger" onDismiss={this.onCloseException}>
+      <Alert variant="danger" onClose={this.onCloseException}>
         <h4>An Exception Occurred</h4>
         <p> {errorMessage} </p>
         <p>

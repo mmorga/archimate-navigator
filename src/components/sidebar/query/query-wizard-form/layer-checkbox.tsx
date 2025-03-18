@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Checkbox } from "react-bootstrap";
+import { Form } from "react-bootstrap";
 import { Layer } from "../../../../archimate-model";
 
 interface IProps {
@@ -11,16 +11,16 @@ interface IProps {
 export default class LayerCheckbox extends React.PureComponent<IProps> {
   public render() {
     return (
-      <Checkbox
+      <Form.Check
+        type="checkbox"
         checked={this.props.checked}
-        onClick={this.onChange}
-      >
-        {this.props.layer}
-      </Checkbox>
+        onChange={this.onChange}
+        label={this.props.layer}
+      />
     );
   }
 
-  private onChange = (_event: React.FormEvent<Checkbox>) => {
+  private onChange = () => {
     this.props.onChange(this.props.layer, !this.props.checked);
   };
 }

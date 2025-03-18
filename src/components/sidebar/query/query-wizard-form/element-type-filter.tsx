@@ -1,7 +1,6 @@
 import * as React from "react";
-import {
-  Checkbox, ControlLabel, FormGroup, Glyphicon
-} from "react-bootstrap";
+import { Form } from "react-bootstrap";
+import { CaretDownFill, CaretUpFill } from "react-bootstrap-icons";
 import { ElementType, Query, viewpointForElementTypes } from "../../../../archimate-model";
 
 interface IProps {
@@ -23,12 +22,12 @@ export default class ElementTypeFilter extends React.PureComponent<IProps, IStat
 
   public render() {
     return (
-      <FormGroup>
-        <ControlLabel>
+      <Form.Group>
+        <Form.Label>
           Element Type Filter
           {"  "}
-          <Glyphicon glyph={this.state.filterCollapsed ? "collapse-up" : "collapse-down"} onClick={this.onFilterCollapse}/>
-        </ControlLabel>
+          {this.state.filterCollapsed ? <CaretUpFill onClick={this.onFilterCollapse}/> : <CaretDownFill onClick={this.onFilterCollapse}/>}
+        </Form.Label>
         {this.state.filterCollapsed ? null : (
         <table style={{fontSize: "75%"}}>
           <thead>
@@ -187,11 +186,11 @@ export default class ElementTypeFilter extends React.PureComponent<IProps, IStat
             </tr>
           </tbody>
         </table>)}
-      </FormGroup>
+      </Form.Group>
     );
   }
 
-  private onToggle = (elementType: ElementType, _event: React.FormEvent<Checkbox>) => {
+  private onToggle = (elementType: ElementType) => {
     const elementTypes = this.props.query.elementTypes.includes(elementType) ?
       this.props.query.elementTypes.delete(elementType) : this.props.query.elementTypes.add(elementType);
     this.props.onQueryChanged(
@@ -202,13 +201,13 @@ export default class ElementTypeFilter extends React.PureComponent<IProps, IStat
   private checkboxes(...elementTypes: ElementType[]) {
     return elementTypes.map(elementType => {
       return (
-        <Checkbox 
+        <Form.Check 
             key={elementType}
+            type="checkbox"
             checked={this.props.query.elementTypes.includes(elementType)}
             onChange={this.onToggle.bind(this, elementType)}
-        >
-          {elementType}
-        </Checkbox>
+            label={elementType}
+        />
       );
     });
   }

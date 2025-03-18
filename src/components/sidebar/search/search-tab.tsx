@@ -2,11 +2,11 @@ import Fuse from "fuse.js";
 import React from "react";
 import {
   Button,
+  Card,
   Form,
   FormControl,
   FormGroup,
   InputGroup,
-  Panel
 } from "react-bootstrap";
 import { IEntity, Model } from "../../../archimate-model";
 import { entityClickedFunc } from "../../common";
@@ -19,7 +19,7 @@ interface IProps {
 }
 
 interface IState {
-  fuse: Fuse<IEntity, Fuse.FuseOptions<any>>;
+  fuse: Fuse<IEntity>;
   results: any[];
   search: string;
 }
@@ -38,7 +38,7 @@ export default class SearchTab extends React.PureComponent<IProps, IState> {
     super(props);
 
     this.state = {
-      fuse: new Fuse<IEntity, Fuse.FuseOptions<any>>(this.props.model.entities(), this.fuseOptions),
+      fuse: new Fuse<IEntity>(this.props.model.entities(), this.fuseOptions),
       results: [],
       search: this.props.searchText || ""
     };
@@ -47,7 +47,7 @@ export default class SearchTab extends React.PureComponent<IProps, IState> {
   public componentWillReceiveProps(nextProps: IProps) {
     if (this.props.model !== nextProps.model) {
       this.setState({
-        fuse: new Fuse<IEntity, Fuse.FuseOptions<any>>(nextProps.model.entities(), this.fuseOptions)
+        fuse: new Fuse<IEntity>(nextProps.model.entities(), this.fuseOptions)
       });
     }
   }
@@ -71,8 +71,8 @@ export default class SearchTab extends React.PureComponent<IProps, IState> {
         />
       ));
     return (
-      <Panel>
-        <Panel.Body>
+      <Card>
+        <Card.Body>
           <Form>
             <FormGroup>
               <InputGroup>
@@ -82,17 +82,15 @@ export default class SearchTab extends React.PureComponent<IProps, IState> {
                   defaultValue={this.state.search}
                   onChange={this.handleChange}
                 />
-                <InputGroup.Button>
-                  <Button onClick={this.handleClick} {...opts}>
-                    {searchTitle}
-                  </Button>
-                </InputGroup.Button>
+                <Button onClick={this.handleClick} {...opts}>
+                  {searchTitle}
+                </Button>
               </InputGroup>
             </FormGroup>
             <ol>{resultItems}</ol>
           </Form>
-        </Panel.Body>
-      </Panel>
+        </Card.Body>
+      </Card>
     );
   }
 

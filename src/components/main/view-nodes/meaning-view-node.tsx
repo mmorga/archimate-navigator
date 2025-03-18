@@ -1,6 +1,6 @@
 import { Point } from "../../../archimate-model";
 import DefaultViewNode, { IViewNodeProps } from "./default-element";
-
+import { JSX } from "react";
 export default class MeaningViewNode extends DefaultViewNode {
   constructor(props: IViewNodeProps) {
     super(props);

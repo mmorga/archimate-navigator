@@ -1,5 +1,5 @@
 import DefaultViewNode, { IViewNodeProps } from "./default-element";
-
+import { JSX } from "react";
 export default class NoteViewNode extends DefaultViewNode {
   constructor(props: IViewNodeProps) {
     super(props);

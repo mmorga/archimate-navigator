@@ -1,4 +1,5 @@
 import { Bounds } from "../../../archimate-model";
+import { JSX } from "react";
 import DefaultViewNode, { IViewNodeProps } from "./default-element";
 
 export default class BadgedNodeViewNode extends DefaultViewNode {

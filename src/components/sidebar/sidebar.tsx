@@ -1,5 +1,6 @@
 import * as React from "react";
-import { Button, ButtonGroup, Glyphicon, Tab, Tabs } from "react-bootstrap";
+import { Button, ButtonGroup, Tab, Tabs } from "react-bootstrap";
+import { ArrowsAngleContract, Window, ArrowsAngleExpand } from "react-bootstrap-icons";
 import { Diagram, IEntity, Model } from "../../archimate-model";
 import "../archimate-navigator.css";
 import { entityClickedFunc } from "../common";
@@ -55,10 +56,10 @@ export default class Sidebar extends React.Component<IProps, IState> {
           flexBasis: `${this.state.sidebarWidth}px`
         }}
       >
-        <ButtonGroup bsSize="xsmall">
-          <Button onClick={this.onSizeButtonClick.bind(this, SidebarWidth.Collapsed)} bsStyle={this.widthStyle(SidebarWidth.Collapsed)}><Glyphicon glyph="resize-small" /></Button>
-          <Button onClick={this.onSizeButtonClick.bind(this, SidebarWidth.Normal)} bsStyle={this.widthStyle(SidebarWidth.Normal)}><Glyphicon glyph="modal-window" /></Button>
-          <Button onClick={this.onSizeButtonClick.bind(this, SidebarWidth.Wide)} bsStyle={this.widthStyle(SidebarWidth.Wide)}><Glyphicon glyph="resize-full" /></Button>
+        <ButtonGroup size="sm">
+          <Button onClick={this.onSizeButtonClick.bind(this, SidebarWidth.Collapsed)} variant={this.widthStyle(SidebarWidth.Collapsed)}><ArrowsAngleContract /></Button>
+          <Button onClick={this.onSizeButtonClick.bind(this, SidebarWidth.Normal)} variant={this.widthStyle(SidebarWidth.Normal)}><Window /></Button>
+          <Button onClick={this.onSizeButtonClick.bind(this, SidebarWidth.Wide)} variant={this.widthStyle(SidebarWidth.Wide)}><ArrowsAngleExpand /></Button>
         </ButtonGroup>
         <ModelInfo
           modelName={this.props.model.name}
@@ -75,7 +76,6 @@ export default class Sidebar extends React.Component<IProps, IState> {
         />
         <Tabs
           id="archimate-sidebar-tabs"
-          animation={false}
           defaultActiveKey={SidebarTab.DiagramTreeTab}
           activeKey={this.props.sidebarTabKey}
           onSelect={this.props.onTabSelected}
@@ -112,8 +112,8 @@ export default class Sidebar extends React.Component<IProps, IState> {
     );
   }
 
-  private widthStyle(width: SidebarWidth): string | null {
-    return (this.state.sidebarWidth === width ? "primary" : null);
+  private widthStyle(width: SidebarWidth): string | undefined {
+    return (this.state.sidebarWidth === width ? "primary" : undefined);
   }
 
   private onSizeButtonClick(width: SidebarWidth) {

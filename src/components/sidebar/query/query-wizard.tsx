@@ -2,19 +2,17 @@ import Fuse from "fuse.js";
 import { List, Set } from "immutable";
 import * as React from "react";
 import {
+  Accordion,
   Badge,
   Button,
-  ControlLabel,
+  Card,
   Form,
   FormControl,
   FormGroup,
-  Glyphicon,
-  HelpBlock,
   ListGroup,
-  ListGroupItem,
-  Panel,
-  Well
+  ListGroupItem
 } from "react-bootstrap";
+import { CaretUpFill, CaretDownFill, Plus, Trash } from "react-bootstrap-icons";
 import {
   Diagram,
   DisplayLayers,
@@ -28,8 +26,16 @@ import {
 } from "../../../archimate-model";
 import ElementTypeFilter from "./query-wizard-form/element-type-filter";
 import LayerCheckbox from "./query-wizard-form/layer-checkbox";
+import { JSX } from "react";
 
 type ElementTypeFilterType = ElementType | string;
+
+interface FuseElement {
+  id: string;
+  type: ElementType;
+  name: string;
+  documentation?: string;
+}
 
 interface IProps {
   model: Model;
@@ -41,7 +47,7 @@ interface IProps {
 interface IState {
   elementTypeFilter: ElementTypeFilterType;
   elementTypeFilterCollapsed: boolean;
-  fuse?: Fuse<Element, Fuse.FuseOptions<any>>;
+  fuse?: Fuse<FuseElement>;
   fuseElementTypes?: Set<ElementType>;
   fuseFilteredElements?: Set<Element>;
   layerFilterCollapsed: boolean;
@@ -72,17 +78,15 @@ export default class QueryWizard extends React.PureComponent<IProps, IState> {
 
   public render() {
     return (
-      <Panel defaultExpanded={true}>
-        <Panel.Heading>
-          <Panel.Title componentClass="h3" toggle={true}>
+      <Accordion defaultActiveKey="0">
+        <Accordion.Item eventKey="0">
+          <Accordion.Header>
             Query Wizard
-          </Panel.Title>
-        </Panel.Heading>
-        <Panel.Collapse>
-          <Panel.Body>
+          </Accordion.Header>
+          <Accordion.Body>
             <Form>
               <FormGroup controlId="queryName">
-                <ControlLabel>Name</ControlLabel>
+                <Form.Label>Name</Form.Label>
                 <FormControl
                   type="text"
                   value={this.props.query.name}
@@ -91,9 +95,9 @@ export default class QueryWizard extends React.PureComponent<IProps, IState> {
                 />
               </FormGroup>
               <FormGroup controlId="viewpointType">
-                <ControlLabel>Viewpoint</ControlLabel>
+                <Form.Label>Viewpoint</Form.Label>
                 <FormControl
-                  componentClass="select"
+                  as="select"
                   onChange={this.onViewpointChanged}
                   value={this.props.query.viewpointType}
                 >
@@ -105,19 +109,19 @@ export default class QueryWizard extends React.PureComponent<IProps, IState> {
                 </FormControl>
               </FormGroup>
               <FormGroup controlId="layerFilter">
-                <ControlLabel>
+                <Form.Label>
                   Layer Filter
                   {"  "}
-                  <Glyphicon glyph={this.state.layerFilterCollapsed ? "collapse-up" : "collapse-down"} onClick={this.onLayerFilterCollapse}/>
-                </ControlLabel>
+                  {this.state.layerFilterCollapsed ? <CaretUpFill onClick={this.onLayerFilterCollapse}/> : <CaretDownFill onClick={this.onLayerFilterCollapse}/>}
+                </Form.Label>
                 {this.state.layerFilterCollapsed ? null : (
-                  <Well bsSize="small">
+                  <Card body className="small">
                     <div style={{columns: 2}}>
                       {DisplayLayers.map(layer => 
                         (<LayerCheckbox layer={layer} checked={this.layerChecked(layer)} onChange={this.onLayerFilterChanged}/>))
                       }
                     </div>
-                  </Well>
+                  </Card>
                 ) }
               </FormGroup>
               <ElementTypeFilter
@@ -125,7 +129,7 @@ export default class QueryWizard extends React.PureComponent<IProps, IState> {
                 onQueryChanged={this.props.onQueryChanged}
               />
               <FormGroup>
-                <ControlLabel>Max Path Depth</ControlLabel>
+                <Form.Label>Max Path Depth</Form.Label>
                 <FormControl
                   type="number"
                   min="0"
@@ -134,10 +138,10 @@ export default class QueryWizard extends React.PureComponent<IProps, IState> {
                   value={this.props.query.pathDepth}
                   onChange={this.onPathDepthChanged}
                 />
-                <HelpBlock>Maximum number of connections to include</HelpBlock>
+                <Form.Text muted>Maximum number of connections to include</Form.Text>
               </FormGroup>
               <FormGroup controlId="search">
-                <ControlLabel>Search</ControlLabel>
+                <Form.Label>Search</Form.Label>
                 <input
                   type="text"
                   value={this.state.search}
@@ -148,9 +152,9 @@ export default class QueryWizard extends React.PureComponent<IProps, IState> {
                 />
               </FormGroup>
               <FormGroup controlId="results">
-                <ControlLabel>
+                <Form.Label>
                   Results <Badge>{this.state.results.size}</Badge>
-                </ControlLabel>
+                </Form.Label>
                 <ListGroup>
                   {this.state.results
                     .toArray()
@@ -177,9 +181,9 @@ export default class QueryWizard extends React.PureComponent<IProps, IState> {
                 </ListGroup>
               </FormGroup>
             </Form>
-          </Panel.Body>
-        </Panel.Collapse>
-      </Panel>
+          </Accordion.Body>
+        </Accordion.Item>
+      </Accordion>
     );
   }
 
@@ -243,14 +247,13 @@ export default class QueryWizard extends React.PureComponent<IProps, IState> {
     const isSelected = this.props.query.elements.some(
       e => (e ? e.id === el.id : false)
     );
-    const glyph = isSelected ? "remove" : "plus";
     const onClick = isSelected
       ? this.onRemoveClick.bind(this, el)
       : this.onAddClick.bind(this, el);
     const bsStyle = isSelected ? "danger" : "primary";
     return (
-      <Button bsSize="xsmall" bsStyle={bsStyle} onClick={onClick}>
-        <Glyphicon glyph={glyph} />
+      <Button size="sm" variant={bsStyle} onClick={onClick}>
+        {isSelected ? <Trash /> : <Plus />}
       </Button>
     );
   }
@@ -272,12 +275,25 @@ export default class QueryWizard extends React.PureComponent<IProps, IState> {
         fuseElementTypes,
         fuseFilteredElements
       });
-      const fuse = new Fuse<Element, Fuse.FuseOptions<any>>(fuseFilteredElements.toJS(), this.fuseOptions);
+      const fuse = new Fuse<FuseElement>(
+        fuseFilteredElements.toJS().map(el => ({
+          id: el.id,
+          type: el.type,
+          name: el.name,
+          documentation: el.documentation
+        })),
+        this.fuseOptions
+      );
       this.setState({ fuse });
     }
     const results: List<Element> =
       this.state.search.length > 0
-        ? List<Element>((this.state.fuse as Fuse<Element, Fuse.FuseOptions<any>>).search(this.state.search))
+        ? List<Element>(
+            (this.state.fuse as Fuse<FuseElement>)
+              .search(this.state.search)
+              .map(result => this.props.query.model.elements.find(el => el.id === result.item.id))
+              .filter((el): el is Element => el !== undefined)
+          )
         : List<Element>();
     this.setState({ results });
   }

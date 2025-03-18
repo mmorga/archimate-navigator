@@ -1,5 +1,5 @@
-import { TextAlignProperty } from "csstype";
-import * as React from "react";
+import type * as CSS from 'csstype';
+import { JSX } from "react";
 import {
   Bounds,
   IEntity,
@@ -11,6 +11,7 @@ import {
 import { entityClickedFunc } from "../../common";
 import EntityLabel from "../entity-label";
 import SelectedViewNode from "../selected-view-node";
+import React from 'react';
 
 export interface IViewNodeProps {
   viewNode: ViewNode;
@@ -26,7 +27,7 @@ export interface IViewNodeState {
   backgroundClass?: string;
   bounds: Bounds;
   entity?: IEntity | undefined;
-  textAlign?: TextAlignProperty;
+  textAlign?: CSS.Property.TextAlign;
   textBounds: Bounds;
   margin?: number;
 }

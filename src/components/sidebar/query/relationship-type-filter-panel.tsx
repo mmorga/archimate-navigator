@@ -1,17 +1,7 @@
 import { Set } from "immutable";
 import * as React from "react";
-import {
-  Button,
-  ButtonGroup,
-  Checkbox,
-  FormGroup,
-  Glyphicon,
-  HelpBlock,
-  ListGroup,
-  ListGroupItem,
-  OverlayTrigger,
-  Tooltip
-} from "react-bootstrap";
+import { Button, ButtonGroup, Form, FormGroup, ListGroup, ListGroupItem, OverlayTrigger, Tooltip } from "react-bootstrap";
+import { Plus, Trash } from "react-bootstrap-icons";
 import {
   Query,
   RelationshipType,
@@ -20,6 +10,7 @@ import {
 import CollapsibleFormGroup, {
   ValidationState
 } from "./collapsible-form-group";
+import { JSX } from "react";
 
 interface IProps {
   query: Query;
@@ -56,16 +47,18 @@ export default class RelationshipTypeFilterPanel extends React.PureComponent<
       <CollapsibleFormGroup
         label={this.label()}
         labelStyle={
-          this.props.query.relationshipTypes.size === 0 ? "danger" : "default"
+          this.props.query.relationshipTypes.size === 0 ? "danger" : "info"
         }
         defaultExpanded={false}
         title="Relationship Types Filter"
         validationState={this.state.validationState}
       >
         <FormGroup>
-          <Checkbox onClick={this.onDerivedRelationsToggle}>
-            Include Derived Relations
-          </Checkbox>
+          <Form.Check
+            type="checkbox"
+            onChange={this.onDerivedRelationsToggle}
+            label="Include Derived Relations"
+          />
         </FormGroup>
 
         <ButtonGroup>
@@ -91,7 +84,7 @@ export default class RelationshipTypeFilterPanel extends React.PureComponent<
               )
           )}
         </ListGroup>
-        <HelpBlock>Relationship Types to include in the query</HelpBlock>
+        <Form.Text muted>Relationship Types to include in the query</Form.Text>
       </CollapsibleFormGroup>
     );
   }
@@ -165,14 +158,13 @@ export default class RelationshipTypeFilterPanel extends React.PureComponent<
     const isSelected = this.props.query.relationshipTypes.some(
       e => (e ? e === el : false)
     );
-    const glyph = isSelected ? "remove" : "plus";
     const onClick = isSelected
       ? this.onRemoveClick.bind(this, el)
       : this.onAddClick.bind(this, el);
     const bsStyle = isSelected ? "danger" : "primary";
     return (
-      <Button bsSize="xsmall" bsStyle={bsStyle} onClick={onClick}>
-        <Glyphicon glyph={glyph} />
+      <Button size="sm" variant={bsStyle} onClick={onClick}>
+        {isSelected ? <Trash /> : <Plus />}
       </Button>
     );
   }

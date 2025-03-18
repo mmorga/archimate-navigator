@@ -1,13 +1,12 @@
 import { List } from "immutable";
 import * as React from "react";
 import {
+  Accordion,
   Button,
   Form,
   FormControl,
   FormGroup,
-  HelpBlock,
-  InputGroup,
-  Panel
+  InputGroup
 } from "react-bootstrap";
 import { Query } from "../../../archimate-model";
 
@@ -21,19 +20,15 @@ interface IProps {
 export default class QueryTab extends React.PureComponent<IProps> {
   public render() {
     return (
-      <Panel defaultExpanded={false}>
-        <Panel.Heading>
-          <Panel.Title componentClass="h3" toggle={true}>
-            Queries
-          </Panel.Title>
-        </Panel.Heading>
-        <Panel.Collapse>
-          <Panel.Body>
+      <Accordion defaultActiveKey="">
+        <Accordion.Item eventKey="0">
+          <Accordion.Header>Queries</Accordion.Header>
+          <Accordion.Body>
             <Form>
               <FormGroup controlId="queryDiagramSelector">
                 <InputGroup>
                   <FormControl
-                    componentClass="select"
+                    as="select"
                     placeholder="Select Query"
                     defaultValue={this.props.selectedQuery.name}
                     onChange={this.onQuerySelected}
@@ -50,24 +45,27 @@ export default class QueryTab extends React.PureComponent<IProps> {
                     )}
                   </FormControl>
                   <FormControl.Feedback />
-                  <InputGroup.Button onClick={this.props.onNewQuery}>
-                    <Button>New</Button>
-                  </InputGroup.Button>
+                  <Button onClick={this.props.onNewQuery}>
+                    New
+                  </Button>
                 </InputGroup>
-                <HelpBlock>
+                <Form.Text muted>
                   Select an existing query, or create a new one.
-                </HelpBlock>
+                </Form.Text>
               </FormGroup>
             </Form>
-          </Panel.Body>
-        </Panel.Collapse>
-      </Panel>
+          </Accordion.Body>
+        </Accordion.Item>
+      </Accordion>
     );
   }
 
   private onQuerySelected = (event: any) => {
     const queryId = event.target.value;
     const query = this.props.queries.find(q => (q ? q.id === queryId : false));
+    if (!query) {
+      return; // Early return if query not found to avoid passing undefined
+    }
     this.props.onQuerySelected(query);
   };
 }

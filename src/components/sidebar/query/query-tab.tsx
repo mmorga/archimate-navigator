@@ -1,13 +1,12 @@
 import { List } from "immutable";
 import * as React from "react";
-import { Checkbox } from "react-bootstrap";
 import { Diagram, Model, Query } from "../../../archimate-model";
 import QueryPicker from "./query-picker";
 import QueryWizard from "./query-wizard";
 
 export type autoLayoutToggledFunc = (
   autoLayout: boolean,
-  event?: React.FormEvent<Checkbox>
+  event?: React.ChangeEvent<HTMLInputElement>
 ) => void;
 
 interface IProps {

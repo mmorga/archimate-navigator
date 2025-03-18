@@ -1,11 +1,5 @@
 import * as React from "react";
-import {
-  Col,
-  ControlLabel,
-  Form,
-  FormControl,
-  FormGroup
-} from "react-bootstrap";
+import { Col, Form } from "react-bootstrap";
 import "../archimate-navigator.css";
 
 interface IProps {
@@ -17,17 +11,17 @@ interface IProps {
 export default class ModelInfo extends React.Component<IProps> {
   public render() {
     return (
-      <Form horizontal={true}>
-        <FormGroup>
-          <Col componentClass={ControlLabel} sm={2}>
-            <small className="text-muted">Model</small>
+      <Form>
+        <Form.Group>
+          <Col sm={2}>
+            <Form.Label className="text-muted"><small>Model</small></Form.Label>
           </Col>
           <Col sm={10}>
-            <FormControl.Static>
+            <Form.Text>
               <strong>{this.props.modelName}</strong>
-            </FormControl.Static>
+            </Form.Text>
           </Col>
-        </FormGroup>
+        </Form.Group>
         {this.diagramRow()}
       </Form>
     );
@@ -36,21 +30,21 @@ export default class ModelInfo extends React.Component<IProps> {
   protected diagramRow() {
     if (this.props.diagramName) {
       return (
-        <FormGroup>
-          <Col componentClass={ControlLabel} sm={2}>
-            <small className="text-muted">Diagram</small>
+        <Form.Group>
+          <Col sm={2}>
+            <Form.Label className="text-muted"><small>Diagram</small></Form.Label>
           </Col>
           <Col sm={10}>
-            <FormControl.Static>
+            <Form.Text>
               <strong>{this.props.diagramName}</strong>{" "}
               <small>
                 &lt;
                 {this.props.diagramViewpoint}
                 &nbsp;Viewpoint&gt;
               </small>
-            </FormControl.Static>
+            </Form.Text>
           </Col>
-        </FormGroup>
+        </Form.Group>
       );
     } else {
       return null;

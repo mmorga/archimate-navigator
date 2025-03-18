@@ -1,4 +1,4 @@
-import * as React from "react";
+import { JSX } from "react";
 import { Bounds } from "../../../archimate-model";
 import DefaultViewNode, { IViewNodeProps } from "./default-element";
 
