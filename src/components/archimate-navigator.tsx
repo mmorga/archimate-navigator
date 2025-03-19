@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useState, useEffect } from "react";
 import { Alert, Button, Modal } from "react-bootstrap";
 import {
   Diagram,
@@ -18,190 +19,139 @@ interface IProps {
   selectedEntityId?: string; // entity id to select
 }
 
-interface IState {
-  error?: any; // Any error loading the model
-  loadStart?: number; // Timestamp when started loading the model
-  loadTime?: number; // Time spent loading the model
-  model: Model; // Currently loaded model
-  parseDone?: number; // Timestamp when parse complete
-  parseTime?: number; // Time spent parsing the model
-  parseStart?: number; // Timestamp when parse started
-  selectedDiagram?: Diagram; // Currently selected diagram
-  selectedEntity?: IEntity; // Currently selected entity (model, element, relationship, diagram)
-  sidebarTabKey: SidebarTab; // Currently selected sidebar tab
-  sidebarWidth: number; // Current pixel width of the sidebar
-  working?: string; // Progress bar message while loading/parsing
-}
+export default function ArchimateNavigator({ modelUrl, selectedDiagramId, selectedEntityId }: IProps) {
+  const initialModel = new Model();
+  const initialDiagramId = selectedDiagramId || window.location.hash.replace(/^#/, "");
+  const initialDiagram = initialModel.lookupDiagram(initialDiagramId);
+  const initialEntity = initialModel.lookup(selectedEntityId) || initialDiagram;
 
-export default class ArchimateNavigator extends React.Component<
-  IProps,
-  IState
-> {
-  constructor(props: IProps) {
-    super(props);
-    const model = new Model();
-    const selectedDiagramId =
-      props.selectedDiagramId || window.location.hash.replace(/^#/, "");
-    const selectedDiagram = model.lookupDiagram(selectedDiagramId);
-    const selectedEntity =
-      model.lookup(props.selectedEntityId) || selectedDiagram;
-    this.state = {
-      model,
-      selectedDiagram,
-      selectedEntity,
-      sidebarTabKey: SidebarTab.DiagramTreeTab,
-      sidebarWidth: 385
-    };
-  }
+  const [error, setError] = useState<any>();
+  // const [loadStart, setLoadStart] = useState<number>();
+  // const [loadTime, setLoadTime] = useState<number>();
+  const [model, setModel] = useState<Model>(initialModel);
+  // const [parseDone, setParseDone] = useState<number>();
+  // const [parseTime, setParseTime] = useState<number>();
+  // const [parseStart, setParseStart] = useState<number>();
+  const [selectedDiagram, setSelectedDiagram] = useState<Diagram | undefined>(initialDiagram);
+  const [selectedEntity, setSelectedEntity] = useState<IEntity | undefined>(initialEntity);
+  const [sidebarTabKey, setSidebarTabKey] = useState<SidebarTab>(SidebarTab.DiagramTreeTab);
+  // const [sidebarWidth] = useState<number>(385);
+  const [working, setWorking] = useState<string>();
 
-  public render() {
-    return (
-      <>
-        {this.exceptionView()}
-        {this.workingView()}
-        <div className="archimate-row">
-          <Sidebar
-            diagramLinkClicked={this.onDiagramLinkClick}
-            entityClicked={this.onEntityClick}
-            model={this.state.model}
-            onDiagramUpdated={this.onDiagramLinkClick}
-            onTabSelected={this.onSidebarTabSelected}
-            selectedDiagram={this.state.selectedDiagram}
-            selectedEntity={this.state.selectedEntity}
-            sidebarTabKey={this.state.sidebarTabKey}
-          />
-          <div className="archimate-diagram-view">
-            <div className="archimate-svg-container">
-              <ArchimateDiagramView
-                key={
-                  this.state.selectedDiagram
-                    ? this.state.selectedDiagram.id
-                    : "archimate-no-diagram"
-                }
-                selectedEntity={this.state.selectedEntity}
-                selectedDiagram={this.state.selectedDiagram}
-                nodes={
-                  this.state.selectedDiagram
-                    ? this.state.selectedDiagram.nodes
-                    : []
-                }
-                // TODO: Needs to be a way to handle edges that connect to other edges
-                //       current solution is to remove the edge from the selected set.
-                connections={
-                  this.state.selectedDiagram
-                    ? this.state.selectedDiagram.connections.filter(
-                        c => c.targetViewNode() instanceof ViewNode
-                      )
-                    : []
-                }
-                entityClicked={this.onEntityClick}
-                diagramClicked={this.onDiagramLinkClick}
-              />
-            </div>
-          </div>
-        </div>
-      </>
-    );
-  }
-
-  public componentDidMount() {
+  useEffect(() => {
     const parser = new DOMParser();
-    this.setState({
-      loadStart: Date.now(),
-      loadTime: undefined,
-      parseDone: undefined,
-      parseStart: undefined,
-      parseTime: undefined,
-      working: "Loading ArchiMate Model"
-    });
-    fetch(this.props.modelUrl)
+    // setLoadStart(Date.now());
+    // setLoadTime(undefined);
+    // setParseDone(undefined);
+    // setParseStart(undefined);
+    // setParseTime(undefined);
+    setWorking("Loading ArchiMate Model");
+
+    fetch(modelUrl)
       .then((response: Response) => response.text())
       .then(
         (str: string) => {
-          this.setState({
-            loadTime: (Date.now() - (this.state.loadStart as number)) / 1000.0,
-            parseStart: Date.now(),
-            working: "Parsing ArchiMate Model"
-          });
+          // setLoadTime((Date.now() - (loadStart as number)) / 1000.0);
+          // setParseStart(Date.now());
+          setWorking("Parsing ArchiMate Model");
+
           const xmlDocument = parser.parseFromString(str, "application/xml");
           let parsedModel;
           try {
             if (xmlDocument.children[0].ownerDocument) {
               parsedModel = parse(xmlDocument.children[0].ownerDocument);
             } else {
-              this.setState({
-                error: "ArchiMate Model Document was null"
-              });
+              setError("ArchiMate Model Document was null");
             }
           } catch (err) {
-            this.setState({
-              error: err
-            });
+            setError(err);
           }
-          this.setState({
-            parseDone: Date.now(),
-            parseTime:
-              (Date.now() - (this.state.parseStart as number)) / 1000.0,
-            working: undefined
-          });
-          const curModel: Model = parsedModel || this.state.model;
-          const selectedDiagram = curModel.lookupDiagram(
-            this.props.selectedDiagramId ||
-              window.location.hash.replace(/^#/, "")
+
+          // setParseDone(Date.now());
+          // setParseTime((Date.now() - (parseStart as number)) / 1000.0);
+          setWorking(undefined);
+
+          const curModel: Model = parsedModel || model;
+          const newSelectedDiagram = curModel.lookupDiagram(
+            selectedDiagramId || window.location.hash.replace(/^#/, "")
           );
-          const selectedEntity =
-            curModel.lookup(this.props.selectedEntityId) ||
-            selectedDiagram ||
-            curModel;
-          this.setState({
-            model: parsedModel || this.state.model,
-            selectedDiagram,
-            selectedEntity
-          });
+          const newSelectedEntity =
+            curModel.lookup(selectedEntityId) || newSelectedDiagram || curModel;
+
+          setModel(parsedModel || model);
+          setSelectedDiagram(newSelectedDiagram);
+          setSelectedEntity(newSelectedEntity);
         },
-        // Note: it's important to handle errors here
-        // instead of a catch() block so that we don't swallow
-        // exceptions from actual bugs in components.
         error => {
-          this.setState({
-            error,
-            working: undefined
-          });
+          setError(error);
+          setWorking(undefined);
         }
       );
-  }
+  }, [modelUrl]);
 
-  private exceptionView() {
-    if (this.state.error === undefined) {
+  const onCloseException = () => setError(undefined);
+
+  const onWorkingViewHide = () => setWorking(undefined);
+
+  const onDiagramLinkClick = (
+    entity: IEntity | undefined,
+    _event?: React.MouseEvent<Element>
+  ) => {
+    if (!entity) {
+      setSelectedDiagram(undefined);
+      throw new LogicError("diagram wasn't passed");
+    }
+    const diagram = entity as Diagram;
+    setSelectedDiagram(diagram);
+    setSelectedEntity(diagram);
+    if (diagram && diagram.id && diagram.id.length > 0) {
+      window.location.hash = `#${diagram.id}`;
+    }
+  };
+
+  const onEntityClick = (
+    entity: IEntity | undefined,
+    _event?: React.MouseEvent<Element>
+  ) => {
+    if (!entity) {
+      setSelectedEntity(undefined);
+      return;
+    }
+    setSelectedEntity(entity);
+    setSidebarTabKey(SidebarTab.InfoTab);
+    if (entity instanceof Diagram) {
+      onDiagramLinkClick(entity as Diagram);
+    }
+  };
+
+  const onSidebarTabSelected = (eventKey: any) => {
+    setSidebarTabKey(eventKey);
+  };
+
+  const exceptionView = () => {
+    if (error === undefined) {
       return undefined;
     }
-    if (this.state.error instanceof String) {
-      return this.state.error;
+    if (error instanceof String) {
+      return error;
     }
-    const err = this.state.error as Error;
+    const err = error as Error;
     const errorMessage = `${err.name}: ${err.message}`;
 
     return (
-      <Alert variant="danger" onClose={this.onCloseException}>
+      <Alert variant="danger" onClose={onCloseException}>
         <h4>An Exception Occurred</h4>
         <p> {errorMessage} </p>
         <p>
-          <Button onClick={this.onCloseException}>Close</Button>
+          <Button onClick={onCloseException}>Close</Button>
         </p>
       </Alert>
     );
-  }
-
-  private onCloseException = () => {
-    this.setState({ error: undefined });
   };
 
-  private workingView() {
+  const workingView = () => {
     return (
-      <Modal
-        show={this.state.working ? true : false}
-        onHide={this.onWorkingViewHide}
-      >
+      <Modal show={working ? true : false} onHide={onWorkingViewHide}>
         <Modal.Header>
           <Modal.Title>Loading...</Modal.Title>
         </Modal.Header>
@@ -214,56 +164,54 @@ export default class ArchimateNavigator extends React.Component<
               aria-valuemin={0}
               aria-valuemax={100}
             >
-              {this.state.working}
+              {working}
             </div>
           </div>
-          <p>{this.state.working}</p>
+          <p>{working}</p>
         </Modal.Body>
       </Modal>
     );
-  }
-
-  private onWorkingViewHide = () => {
-    this.setState({ working: undefined });
   };
 
-  private onDiagramLinkClick = (
-    entity: IEntity | undefined,
-    _event?: React.MouseEvent<Element>
-  ) => {
-    if (!entity) {
-      this.setState({ selectedDiagram: undefined });
-      throw new LogicError("diagram wasn't passed");
-    }
-    const diagram = entity as Diagram;
-    this.setState({
-      selectedDiagram: diagram,
-      selectedEntity: diagram
-    });
-    if (diagram && diagram.id && diagram.id.length > 0) {
-      window.location.hash = `#${diagram.id}`;
-    }
-  };
-
-  private onEntityClick = (
-    entity: IEntity | undefined,
-    _event?: React.MouseEvent<Element>
-  ) => {
-    if (!entity) {
-      this.setState({ selectedEntity: undefined });
-      return;
-    }
-    this.setState({
-      selectedEntity: entity,
-      sidebarTabKey: SidebarTab.InfoTab
-    });
-    if (entity instanceof Diagram) {
-      this.onDiagramLinkClick(entity as Diagram);
-    }
-  };
-
-  // Called when a sidebar tab is clicked.
-  private onSidebarTabSelected = (eventKey: any) => {
-    this.setState({ sidebarTabKey: eventKey });
-  };
+  return (
+    <>
+      {exceptionView()}
+      {workingView()}
+      <div className="archimate-row">
+        <Sidebar
+          diagramLinkClicked={onDiagramLinkClick}
+          entityClicked={onEntityClick}
+          model={model}
+          onDiagramUpdated={onDiagramLinkClick}
+          onTabSelected={onSidebarTabSelected}
+          selectedDiagram={selectedDiagram}
+          selectedEntity={selectedEntity}
+          sidebarTabKey={sidebarTabKey}
+        />
+        <div className="archimate-diagram-view">
+          <div className="archimate-svg-container">
+            <ArchimateDiagramView
+              key={
+                selectedDiagram
+                  ? selectedDiagram.id
+                  : "archimate-no-diagram"
+              }
+              selectedEntity={selectedEntity}
+              selectedDiagram={selectedDiagram}
+              nodes={selectedDiagram ? selectedDiagram.nodes : []}
+              connections={
+                selectedDiagram
+                  ? selectedDiagram.connections.filter(
+                      c => c.targetViewNode() instanceof ViewNode
+                    )
+                  : []
+              }
+              entityClicked={onEntityClick}
+              diagramClicked={onDiagramLinkClick}
+            />
+          </div>
+        </div>
+      </div>
+    </>
+  );
 }

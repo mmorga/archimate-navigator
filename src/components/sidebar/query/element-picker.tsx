@@ -169,7 +169,7 @@ export default class ElementPicker extends React.PureComponent<IProps, IState> {
     this.calculateResults();
   };
 
-  private onAddClick = (element: Element, _ievent: any) => {
+  private onAddClick = (element: Element) => {
     this.props.onChange(
       this.props.query.updateQuery({
         elements: this.props.query.elements.add(element)
@@ -177,7 +177,7 @@ export default class ElementPicker extends React.PureComponent<IProps, IState> {
     );
   };
 
-  private onRemoveClick = (element: Element, _event: any) => {
+  private onRemoveClick = (element: Element) => {
     this.props.onChange(
       this.props.query.updateQuery({
         elements: this.props.query.elements.remove(element)
