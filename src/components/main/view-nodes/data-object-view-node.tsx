@@ -3,7 +3,7 @@ import { JSX } from "react";
 import * as BaseViewNode from "./base-view-node";
 import React, { useEffect, useState } from "react";
 
-export const DataObjectViewNode: React.FC<BaseViewNode.IViewNodeProps> = React.memo((props) => {
+const DataObjectViewNode: React.FC<BaseViewNode.IViewNodeProps> = React.memo((props) => {
 
   const [state, setState] = useState<BaseViewNode.IViewNodeState>(
     BaseViewNode.initialState(props.viewNode, {

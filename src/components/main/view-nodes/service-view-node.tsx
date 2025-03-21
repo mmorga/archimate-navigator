@@ -1,55 +1,77 @@
-import { Bounds, zeroBounds } from "../../../archimate-model";
-import BadgedRoundedRectViewNode from "./badged-rounded-rect";
-import { IViewNodeProps } from "./default-element";
-import { JSX } from "react";        
-export default class ServiceViewNode extends BadgedRoundedRectViewNode {
-  constructor(props: IViewNodeProps) {
-    super(props);
-    if (this.props.viewNode.childType === "1") {
-      this.state = {
-        ...this.state,
+import { Bounds, zeroBounds } from "@/archimate-model";
+import { ViewNode } from "@/archimate-model";
+import * as BadgedRoundedRectViewNode from "./badged-rounded-rect";
+import * as BaseViewNode from "./base-view-node";
+import React, { useEffect, useState } from "react";
+import { JSX } from "react";
+
+export const ServiceViewNode: React.FC<BaseViewNode.IViewNodeProps> = React.memo((props) => {
+
+  function calcStateChanges(props: BaseViewNode.IViewNodeProps) {
+    if (props.viewNode.childType === "1") {
+      return {
         badgeBounds: zeroBounds(),
-        textBounds: this.textBounds()
+        textBounds: textBounds(props.viewNode)
       };
     } else {
-      this.state = {
-        ...this.state,
-        badge: "#archimate-service-badge"
+      return {
+        badge: "#archimate-service-badge",
+        badgeBounds: BadgedRoundedRectViewNode.badgeBounds(props.viewNode),
+        textBounds: BaseViewNode.textBounds(props.viewNode)
       };
     }
   }
 
-  protected entityShape(): JSX.Element {
-    if (this.props.viewNode.childType === "1") {
-      return this.servicePath();
-    } else {
-      return super.entityShape();
+  const [state, setState] = useState<BaseViewNode.IViewNodeState>(
+    BaseViewNode.initialState(props.viewNode, {
+      ...calcStateChanges(props),
+      entityShape: entityShape
+    }));
+
+  useEffect(() => {
+    if (props.x !== undefined || props.y !== undefined) {
+      setState(prevState => ({
+        ...prevState,
+        ...calcStateChanges(props)
+      }));
     }
-  }
+  }, [props.x, props.y, props.viewNode]);
 
-  protected textBounds(): Bounds {
-    const bounds = this.props.viewNode.absolutePosition();
-    return new Bounds(
-      bounds.left + 7,
-      bounds.top + 5,
-      bounds.width - 14,
-      bounds.height - 10
+  return BaseViewNode.render(props, state);
+});
+
+export default ServiceViewNode;
+
+function entityShape(viewNode: ViewNode, backgroundClass: string | undefined, shapeStyle: React.CSSProperties | undefined): JSX.Element {
+  if (viewNode.childType === "1") {
+    return servicePath(viewNode, backgroundClass, shapeStyle);
+  } else {
+    return BadgedRoundedRectViewNode.entityShape(viewNode, backgroundClass, shapeStyle);
+  }
+}
+
+function textBounds(viewNode: ViewNode): Bounds {
+  const bounds = viewNode.absolutePosition();
+  return new Bounds(
+    bounds.left + 7,
+    bounds.top + 5,
+    bounds.width - 14,
+    bounds.height - 10
     );
   }
 
-  private servicePath(): JSX.Element {
-    const bounds = this.props.viewNode.absolutePosition();
-    return (
-      <rect
-        x={bounds.left}
-        y={bounds.top}
-        width={bounds.width}
-        height={bounds.height}
-        rx={bounds.height / 2.0}
-        ry={bounds.height / 2.0}
-        className={this.state.backgroundClass}
-        style={this.shapeStyle()}
-      />
-    );
-  }
+function servicePath(viewNode: ViewNode, backgroundClass: string | undefined, shapeStyle: React.CSSProperties | undefined): JSX.Element {
+  const bounds = viewNode.absolutePosition();
+  return (
+    <rect
+      x={bounds.left}
+      y={bounds.top}
+      width={bounds.width}
+      height={bounds.height}
+      rx={bounds.height / 2.0}
+      ry={bounds.height / 2.0}
+      className={backgroundClass}
+      style={shapeStyle}
+    />
+  );
 }

@@ -1,86 +1,108 @@
-import { Bounds, zeroBounds } from "../../../archimate-model";
-import BadgedRoundedRectViewNode from "./badged-rounded-rect";
-import { IViewNodeProps } from "./default-element";
+import { Bounds, zeroBounds } from "@/archimate-model";
+import { ViewNode } from "@/archimate-model";
+import * as BadgedRoundedRectViewNode from "./badged-rounded-rect";
+import * as BaseViewNode from "./base-view-node";
+import React, { useEffect, useState } from "react";
 import { JSX } from "react";
-export default class ProcessViewNode extends BadgedRoundedRectViewNode {
-  constructor(props: IViewNodeProps) {
-    super(props);
-    if (this.props.viewNode.childType === "1") {
-      this.state = {
-        ...this.state,
+
+export const ProcessViewNode: React.FC<BaseViewNode.IViewNodeProps> = React.memo((props) => {
+
+  function calcStateChanges(props: BaseViewNode.IViewNodeProps) {
+    if (props.viewNode.childType === "1") {
+      return {
         badgeBounds: zeroBounds(),
-        textBounds: this.textBounds()
+        textBounds: textBounds(props.viewNode)
       };
     } else {
-      this.state = {
-        ...this.state,
-        badge: "#archimate-process-badge"
+      return {
+        badge: "#archimate-process-badge",
+        badgeBounds: BadgedRoundedRectViewNode.badgeBounds(props.viewNode),
+        textBounds: BaseViewNode.textBounds(props.viewNode)
       };
     }
   }
 
-  protected entityShape(): JSX.Element {
-    if (this.props.viewNode.childType === "1") {
-      return this.processPath();
-    } else {
-      return super.entityShape();
+  const [state, setState] = useState<BaseViewNode.IViewNodeState>(
+    BaseViewNode.initialState(props.viewNode, {
+      ...calcStateChanges(props),
+      entityShape: entityShape
+    }));
+
+  useEffect(() => {
+    if (props.x !== undefined || props.y !== undefined) {
+      setState(prevState => ({
+        ...prevState,
+        ...calcStateChanges(props)
+      }));
     }
-  }
+  }, [props.x, props.y, props.viewNode]);
 
-  protected textBounds(): Bounds {
-    const bounds = this.props.viewNode.absolutePosition();
-    const shaftTop = bounds.top + bounds.height * 0.15;
-    const shaftBottom = bounds.bottom - bounds.height * 0.15;
-    const left = bounds.left;
-    const textBounds = new Bounds(
-      left,
-      shaftTop,
-      bounds.width - bounds.height * 0.25,
-      shaftBottom - shaftTop
-    );
-    return textBounds.reducedBy(2);
-  }
+  return BaseViewNode.render(props, state);
+});
 
-  private processPath(): JSX.Element {
-    const bounds = this.props.viewNode.absolutePosition();
-    const top = bounds.top;
-    const shaftTop = bounds.top + bounds.height * 0.15;
-    const middle = bounds.top + bounds.height * 0.5;
-    const shaftBottom = bounds.bottom - bounds.height * 0.15;
-    const bottom = bounds.bottom;
+export default ProcessViewNode;
 
-    const left = bounds.left;
-    const arrowBack = bounds.right - bounds.height * 0.5;
-    const right = bounds.right;
-    return (
-      <path
-        d={[
-          "M",
-          left,
-          shaftTop,
-          "L",
-          arrowBack,
-          shaftTop,
-          "L",
-          arrowBack,
-          top,
-          "L",
-          right,
-          middle,
-          "L",
-          arrowBack,
-          bottom,
-          "L",
-          arrowBack,
-          shaftBottom,
-          "L",
-          left,
-          shaftBottom,
-          "z"
-        ].join(" ")}
-        className={this.state.backgroundClass}
-        style={this.shapeStyle()}
-      />
-    );
+function entityShape(viewNode: ViewNode, backgroundClass: string | undefined, shapeStyle: React.CSSProperties | undefined): JSX.Element {
+  if (viewNode.childType === "1") {
+    return processPath(viewNode, backgroundClass, shapeStyle);
+  } else {
+    return BadgedRoundedRectViewNode.entityShape(viewNode, backgroundClass, shapeStyle);
   }
+}
+
+function textBounds(viewNode: ViewNode): Bounds {
+  const bounds = viewNode.absolutePosition();
+  const shaftTop = bounds.top + bounds.height * 0.15;
+  const shaftBottom = bounds.bottom - bounds.height * 0.15;
+  const left = bounds.left;
+  const textBounds = new Bounds(
+    left,
+    shaftTop,
+    bounds.width - bounds.height * 0.25,
+    shaftBottom - shaftTop
+  );
+  return textBounds.reducedBy(2);
+}
+
+function processPath(viewNode: ViewNode, backgroundClass: string | undefined, shapeStyle: React.CSSProperties | undefined): JSX.Element {
+  const bounds = viewNode.absolutePosition();
+  const top = bounds.top;
+  const shaftTop = bounds.top + bounds.height * 0.15;
+  const middle = bounds.top + bounds.height * 0.5;
+  const shaftBottom = bounds.bottom - bounds.height * 0.15;
+  const bottom = bounds.bottom;
+
+  const left = bounds.left;
+  const arrowBack = bounds.right - bounds.height * 0.5;
+  const right = bounds.right;
+  return (
+    <path
+      d={[
+        "M",
+        left,
+        shaftTop,
+        "L",
+        arrowBack,
+        shaftTop,
+        "L",
+        arrowBack,
+        top,
+        "L",
+        right,
+        middle,
+        "L",
+        arrowBack,
+        bottom,
+        "L",
+        arrowBack,
+        shaftBottom,
+        "L",
+        left,
+        shaftBottom,
+        "z"
+      ].join(" ")}
+      className={backgroundClass}
+      style={shapeStyle}
+    />
+  );
 }

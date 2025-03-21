@@ -88,14 +88,14 @@ export function badgeBounds(viewNode: ViewNode): Bounds {
   );
 }
 
-export function textBounds(viewNode: ViewNode): Bounds {
+export function textBounds(viewNode: ViewNode, x?: number, y?: number): Bounds {
   const bounds = viewNode.absolutePosition();
   const margin = 14;
   const nodeBoxHeight = bounds.height - margin;
   const nodeBoxWidth = bounds.width - margin;
   return new Bounds(
-    bounds.left + 1,
-    bounds.top + margin + 1,
+    x || bounds.left + 1,
+    y || bounds.top + margin + 1,
     nodeBoxWidth - 2,
     nodeBoxHeight - 2
   );

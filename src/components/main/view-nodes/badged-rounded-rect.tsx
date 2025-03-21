@@ -1,33 +1,23 @@
-import { Bounds } from "../../../archimate-model";
-import DefaultViewNode, { IViewNodeProps } from "./default-element";
+import { Bounds, ViewNode } from "../../../archimate-model";
+import { JSX } from "react";
 
-export default class BadgedRoundedRectViewNode extends DefaultViewNode {
-  constructor(props: IViewNodeProps) {
-    super(props);
-    this.state = {
-      ...this.state,
-      badgeBounds: this.badgeBounds()
-    };
-  }
+export function entityShape(viewNode: ViewNode, backgroundClass: string | undefined, shapeStyle: React.CSSProperties | undefined): JSX.Element {
+  const bounds = viewNode.absolutePosition();
+  return (
+    <rect
+      x={bounds.left}
+      y={bounds.top}
+      width={bounds.width}
+      height={bounds.height}
+      rx={"5"}
+      ry={"5"}
+      className={backgroundClass}
+      style={shapeStyle}
+    />
+  );
+}
 
-  protected entityShape() {
-    const bounds = this.props.viewNode.absolutePosition();
-    return (
-      <rect
-        x={bounds.left}
-        y={bounds.top}
-        width={bounds.width}
-        height={bounds.height}
-        rx={"5"}
-        ry={"5"}
-        className={this.state.backgroundClass}
-        style={this.shapeStyle()}
-      />
-    );
-  }
-
-  protected badgeBounds(): Bounds | undefined {
-    const bounds = this.props.viewNode.absolutePosition();
-    return new Bounds(bounds.right - 25, bounds.top + 5, 20, 20);
-  }
+export function badgeBounds(viewNode: ViewNode): Bounds | undefined {
+  const bounds = viewNode.absolutePosition();
+  return new Bounds(bounds.right - 25, bounds.top + 5, 20, 20);
 }

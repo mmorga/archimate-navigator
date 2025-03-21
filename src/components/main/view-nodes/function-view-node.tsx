@@ -1,12 +1,33 @@
-import BadgedRoundedRectViewNode from "./badged-rounded-rect";
-import { IViewNodeProps } from "./default-element";
+import * as BadgedRoundedRectViewNode from "./badged-rounded-rect";
+import * as BaseViewNode from "./base-view-node";
+import React, { useEffect, useState } from "react";
 
-export default class FunctionViewNode extends BadgedRoundedRectViewNode {
-  constructor(props: IViewNodeProps) {
-    super(props);
-    this.state = {
-      ...this.state,
-      badge: "#archimate-function-badge"
+export const FunctionViewNode: React.FC<BaseViewNode.IViewNodeProps> = React.memo((props) => {
+
+  function calcStateChanges(props: BaseViewNode.IViewNodeProps) {
+    return {
+      badge: "#archimate-function-badge",
+      badgeBounds: BadgedRoundedRectViewNode.badgeBounds(props.viewNode),
+      textBounds: BaseViewNode.textBounds(props.viewNode)
     };
   }
-}
+
+  const [state, setState] = useState<BaseViewNode.IViewNodeState>(
+    BaseViewNode.initialState(props.viewNode, {
+      ...calcStateChanges(props),
+      entityShape: BadgedRoundedRectViewNode.entityShape
+    }));
+
+  useEffect(() => {
+    if (props.x !== undefined || props.y !== undefined) {
+      setState(prevState => ({
+        ...prevState,
+        ...calcStateChanges(props)
+      }));
+    }
+  }, [props.x, props.y, props.viewNode]);
+
+  return BaseViewNode.render(props, state);
+});
+
+export default FunctionViewNode;

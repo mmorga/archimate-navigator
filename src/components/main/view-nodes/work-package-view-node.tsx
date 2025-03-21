@@ -1,13 +1,33 @@
-import BadgedRoundedRectViewNode from "./badged-rounded-rect";
-import { IViewNodeProps } from "./default-element";
+import { zeroBounds } from "@/archimate-model";
+import * as BadgedRoundedRectViewNode from "./badged-rounded-rect";
+import * as BaseViewNode from "./base-view-node";
+import React, { useEffect, useState } from "react";
 
-export default class WorkPackageViewNode extends BadgedRoundedRectViewNode {
-  constructor(props: IViewNodeProps) {
-    super(props);
-    this.state = {
-      ...this.state,
-      badge: undefined,
-      badgeBounds: undefined
+export const WorkPackageViewNode: React.FC<BaseViewNode.IViewNodeProps> = React.memo((props) => {
+
+  function calcStateChanges(props: BaseViewNode.IViewNodeProps) {
+    return {
+      badgeBounds: zeroBounds(),
+      textBounds: BaseViewNode.textBounds(props.viewNode)
     };
   }
-}
+
+  const [state, setState] = useState<BaseViewNode.IViewNodeState>(
+    BaseViewNode.initialState(props.viewNode, {
+      ...calcStateChanges(props),
+      entityShape: BadgedRoundedRectViewNode.entityShape
+    }));
+
+  useEffect(() => {
+    if (props.x !== undefined || props.y !== undefined) {
+      setState(prevState => ({
+        ...prevState,
+        ...calcStateChanges(props)
+      }));
+    }
+  }, [props.x, props.y, props.viewNode]);
+
+  return BaseViewNode.render(props, state);
+});
+
+export default WorkPackageViewNode;
