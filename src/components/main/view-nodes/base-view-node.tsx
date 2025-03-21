@@ -127,10 +127,10 @@ export function render(props: IViewNodeProps, state: IViewNodeState) {
   );
 }
 
-export function textBounds(viewNode: ViewNode, x: number, y: number): Bounds {
+export function textBounds(viewNode: ViewNode, x?: number, y?: number): Bounds {
   return new Bounds(
-    x,
-    y,
+    x || viewNode.bounds.left,
+    y || viewNode.bounds.top,
     viewNode.bounds.width,
     viewNode.bounds.height
   ).reducedBy(2);

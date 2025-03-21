@@ -1,56 +1,70 @@
+import { Bounds, ViewNode } from "../../../archimate-model";
 import { JSX } from "react";
-import { Bounds } from "../../../archimate-model";
-import DefaultViewNode, { IViewNodeProps } from "./default-element";
+import * as BaseViewNode from "./base-view-node";
+import React, { useEffect, useState } from "react";
 
-export default class DataObjectViewNode extends DefaultViewNode {
-  constructor(props: IViewNodeProps) {
-    super(props);
-    this.state = {
-      ...this.state,
+export const DataObjectViewNode: React.FC<BaseViewNode.IViewNodeProps> = React.memo((props) => {
+
+  const [state, setState] = useState<BaseViewNode.IViewNodeState>(
+    BaseViewNode.initialState(props.viewNode, {
       margin: 8,
-      textBounds: this.textBounds()
-    };
-  }
+      textBounds: textBounds(props.viewNode, props.x, props.y),
+      entityShape: entityShape
+    }));
 
-  public entityShape(): JSX.Element {
-    const bounds = this.props.viewNode.absolutePosition();
-    const style = this.shapeStyle();
-    const decorStyle: React.CSSProperties = {
-      stroke: style.stroke,
-      strokeWidth: style.strokeWidth
-    };
-    return (
-      <g className={this.state.backgroundClass}>
-        <rect
-          key="data-background"
-          x={bounds.left}
-          y={bounds.top}
-          width={bounds.width}
-          height={bounds.height}
-          className={this.state.backgroundClass}
-          style={style}
-        />
-        <rect
-          key="data-decoration"
-          x={bounds.left}
-          y={bounds.top}
-          width={bounds.width}
-          height={this.state.margin}
-          className="archimate-decoration"
-          style={decorStyle}
-        />
-      </g>
-    );
-  }
+  useEffect(() => {
+    if (props.x !== undefined || props.y !== undefined) {
+      setState(prevState => ({
+        ...prevState,
+        textBounds: textBounds(props.viewNode, props.x, props.y)
+      }));
+    }
+  }, [props.x, props.y, props.viewNode]);
 
-  protected textBounds() {
-    const textBounds = super.textBounds();
-    const margin: number = 8;
-    return new Bounds(
-      textBounds.left,
-      textBounds.top + margin,
-      textBounds.width,
-      textBounds.height - margin
-    );
-  }
+  return BaseViewNode.render(props, state);
+});
+
+function entityShape(viewNode: ViewNode, backgroundClass: string | undefined, shapeStyle: React.CSSProperties | undefined): JSX.Element {
+  const bounds = viewNode.absolutePosition();
+  const style = shapeStyle;
+  const margin = 8;
+  const decorStyle: React.CSSProperties = {
+    stroke: style?.stroke,
+    strokeWidth: style?.strokeWidth
+  };
+  return (
+    <g className={backgroundClass}>
+      <rect
+        key="data-background"
+        x={bounds.left}
+        y={bounds.top}
+        width={bounds.width}
+        height={bounds.height}
+        className={backgroundClass}
+        style={style}
+      />
+      <rect
+        key="data-decoration"
+        x={bounds.left}
+        y={bounds.top}
+        width={bounds.width}
+        height={margin}
+        className="archimate-decoration"
+        style={decorStyle}
+      />
+    </g>
+  );
 }
+
+export function textBounds(viewNode: ViewNode, x?: number, y?: number): Bounds {
+  const textBounds = BaseViewNode.textBounds(viewNode, x, y);
+  const margin: number = 8;
+  return new Bounds(
+    textBounds.left,
+    textBounds.top + margin,
+    textBounds.width,
+    textBounds.height - margin
+  );
+}
+
+export default DataObjectViewNode;
