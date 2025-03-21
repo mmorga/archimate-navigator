@@ -1,54 +1,30 @@
-import React from "react";
-import { Bounds, Point, ViewNode } from "../../../archimate-model";
 import { IViewNodeProps, IViewNodeState } from "./base-view-node";
-import * as BaseViewNode from "./base-view-node";
 import { JSX } from "react";
+import { Point, ViewNode } from "../../../archimate-model";
+import * as BaseViewNode from "./base-view-node";
+import React, { useEffect, useState } from "react";
 
-export default class MeaningViewNode extends React.PureComponent<IViewNodeProps, IViewNodeState> {
-  constructor(props: IViewNodeProps) {
-    super(props);
-    const bounds = new Bounds(
-      this.props.x || this.props.viewNode.bounds.left,
-      this.props.y || this.props.viewNode.bounds.top,
-      this.props.viewNode.bounds.width,
-      this.props.viewNode.bounds.height
-    );
-    this.state = {
-      backgroundClass: BaseViewNode.defaultBackgroundClass(this.props.viewNode),
-      badge: undefined,
-      badgeBounds: undefined,
-      bounds,
-      entity: this.props.viewNode.entityInstance(),
-      margin: 8,
-      textAlign: "center",
-      textBounds: bounds.reducedBy(2)
-    };
-  }
+const MeaningViewNode: React.FC<IViewNodeProps> = React.memo((props) => {
 
-  public componentDidUpdate(prevProps: IViewNodeProps) {
-    if (this.props.x !== prevProps.x || this.props.y !== prevProps.y) {
-      this.setState({
-        badgeBounds: BaseViewNode.badgeBounds(this.props.viewNode),
-        textBounds: BaseViewNode.textBounds(this.props.viewNode, this.props.x, this.props.y)
-      });
+  const [state, setState] = useState<IViewNodeState>(
+    BaseViewNode.initialState(props.viewNode, {
+      entityShape: meaningEntityShape
+    }));
+
+  useEffect(() => {
+    if (props.x !== undefined || props.y !== undefined) {
+      setState(prevState => ({
+        ...prevState,
+        badgeBounds: BaseViewNode.badgeBounds(props.viewNode),
+        textBounds: BaseViewNode.textBounds(props.viewNode, props.x, props.y)
+      }));
     }
-  }
+  }, [props.x, props.y, props.viewNode]);
 
-  public render() {
-    return (
-      <g {...BaseViewNode.groupAttrs(this.props.viewNode, this.props.onClicked)}>
-        {BaseViewNode.title(this.props.viewNode)}
-        {BaseViewNode.desc(this.props.viewNode)}
-        {entityShape(this.props.viewNode, this.state.backgroundClass, BaseViewNode.shapeStyle(this.props.viewNode))}
-        {BaseViewNode.entityBadge(this.state.badgeBounds, this.state.badge)}
-        {BaseViewNode.entityLabel(this.props.viewNode, this.state.textBounds, this.state.textAlign || "center", this.state.badgeBounds)}
-        {BaseViewNode.selectedHighlight(this.props.viewNode, this.props.selected)}
-      </g>
-    );
-  }
-}
+  return BaseViewNode.render(props, state);
+});
 
-function entityShape(viewNode: ViewNode, backgroundClass: string | undefined, shapeStyle: React.CSSProperties): JSX.Element {
+function meaningEntityShape(viewNode: ViewNode, backgroundClass: string | undefined, shapeStyle: React.CSSProperties | undefined): JSX.Element {
   const bounds = viewNode.absolutePosition();
   const pts = [
     new Point(
@@ -109,3 +85,4 @@ function entityShape(viewNode: ViewNode, backgroundClass: string | undefined, sh
   );
 }
 
+export default MeaningViewNode;

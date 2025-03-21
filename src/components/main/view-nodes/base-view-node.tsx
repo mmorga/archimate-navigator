@@ -21,6 +21,38 @@ export interface IViewNodeProps {
   y: number;
 }
 
+export interface IGroupAttrs {
+  (viewNode: ViewNode, onClicked: entityClickedFunc | undefined): React.SVGProps<SVGGElement>;
+}
+
+export interface ITitle {
+  (viewNode: ViewNode): JSX.Element | undefined;
+}
+
+export interface IDesc {
+  (viewNode: ViewNode): JSX.Element | undefined;
+}
+
+export interface IEntityShape {
+  (viewNode: ViewNode, backgroundClass: string | undefined, shapeStyle: React.CSSProperties | undefined): JSX.Element;
+}
+
+export interface IShapeStyle {
+  (viewNode: ViewNode): React.CSSProperties;
+}
+
+export interface IEntityBadge {
+  (badgeBounds: Bounds | undefined, badge: string | undefined): JSX.Element | undefined;
+}
+
+export interface IEntityLabel {
+  (viewNode: ViewNode, textBounds: Bounds, textAlign: CSS.Property.TextAlign, badgeBounds: Bounds | undefined): JSX.Element | undefined;
+}
+
+export interface ISelectedHighlight {
+  (viewNode: ViewNode, selected: boolean): JSX.Element | undefined;
+}
+
 export interface IViewNodeState {
   badge?: string;
   badgeBounds?: Bounds;
@@ -30,9 +62,17 @@ export interface IViewNodeState {
   textAlign?: CSS.Property.TextAlign;
   textBounds: Bounds;
   margin?: number;
+  groupAttrs: IGroupAttrs,
+  title: ITitle,
+  desc: IDesc,
+  entityShape: IEntityShape,
+  shapeStyle: IShapeStyle,
+  entityBadge: IEntityBadge,
+  entityLabel: IEntityLabel,
+  selectedHighlight: ISelectedHighlight
 }
 
-export function initialBounds(viewNode: ViewNode, x: number, y: number): Bounds {
+export function initialBounds(viewNode: ViewNode, x?: number, y?: number): Bounds {
   return new Bounds(
     x || viewNode.bounds.left,
     y || viewNode.bounds.top,
@@ -41,8 +81,8 @@ export function initialBounds(viewNode: ViewNode, x: number, y: number): Bounds 
   );
 }
 
-export function initialState(viewNode: ViewNode, x: number, y: number): IViewNodeState {
-  const bounds = initialBounds(viewNode, x, y);
+export function initialState(viewNode: ViewNode, customState?: Partial<IViewNodeState>): IViewNodeState {
+  const bounds = initialBounds(viewNode);
   return {
     backgroundClass: defaultBackgroundClass(viewNode),
     badge: undefined,
@@ -51,13 +91,18 @@ export function initialState(viewNode: ViewNode, x: number, y: number): IViewNod
     entity: viewNode.entityInstance(),
     margin: 8,
     textAlign: "center",
-    textBounds: bounds.reducedBy(2)
+    textBounds: bounds.reducedBy(2),
+    groupAttrs: groupAttrs,
+    title: title,
+    desc: desc,
+    entityShape: entityShape,
+    shapeStyle: shapeStyle,
+    entityBadge: entityBadge,
+    entityLabel: entityLabel,
+    selectedHighlight: selectedHighlight,
+    ...customState
   };
 }
-
-// export default function DefaultViewNode(props: IViewNodeProps) {
-
-//   const [state, setState] = useState<IViewNodeState>(initialState(props.viewNode, props.x, props.y));
 
 //   useEffect(() => {
 //     if (props.x !== undefined || props.y !== undefined) {
@@ -69,15 +114,15 @@ export function initialState(viewNode: ViewNode, x: number, y: number): IViewNod
 //     }
 //   }, [props.x, props.y]);
 
-export function render(props: IViewNodeProps, state: IViewNodeState, badgeBounds: Bounds | undefined) {
+export function render(props: IViewNodeProps, state: IViewNodeState) {
   return (
-    <g {...groupAttrs(props.viewNode, props.onClicked)}>
-      {title(props.viewNode)}
-      {desc(props.viewNode)}
-      {entityShape(props.viewNode, state.backgroundClass)}
-      {entityBadge(badgeBounds, state.badge)}
-      {entityLabel(props.viewNode, state.textBounds, state.textAlign || "center", state.badgeBounds)}
-      {selectedHighlight(props.viewNode, props.selected)}
+    <g {...state.groupAttrs(props.viewNode, props.onClicked)}>
+      {state.title(props.viewNode)}
+      {state.desc(props.viewNode)}
+      {state.entityShape(props.viewNode, state.backgroundClass, state.shapeStyle(props.viewNode))}
+      {state.entityBadge(state.badgeBounds, state.badge)}
+      {state.entityLabel(props.viewNode, state.textBounds, state.textAlign || "center", state.badgeBounds)}
+      {state.selectedHighlight(props.viewNode, props.selected)}
     </g>
   );
 }
@@ -120,7 +165,7 @@ export function desc(viewNode: ViewNode) {
   return undefined;
 }
 
-export function entityShape(viewNode: ViewNode, backgroundClass: string | undefined) {
+export function entityShape(viewNode: ViewNode, backgroundClass: string | undefined, shapeStyle: React.CSSProperties | undefined) {
   const bounds = viewNode.absolutePosition();
   return (
     <rect
@@ -129,7 +174,7 @@ export function entityShape(viewNode: ViewNode, backgroundClass: string | undefi
       width={bounds.width}
       height={bounds.height}
       className={backgroundClass}
-      style={shapeStyle(viewNode)}
+      style={shapeStyle}
     />
   );
 }
