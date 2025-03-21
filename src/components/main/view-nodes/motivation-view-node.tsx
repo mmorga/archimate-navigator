@@ -1,53 +1,70 @@
 import { Bounds } from "../../../archimate-model";
-import DefaultViewNode, { IViewNodeProps } from "./default-element";
+import { JSX } from "react";
+import { ViewNode } from "@/archimate-model";
+import * as BaseViewNode from "./base-view-node";
+import React, { useEffect, useState } from "react";
 
-export default class MotivationViewNode extends DefaultViewNode {
-  constructor(props: IViewNodeProps) {
-    super(props);
-    this.state = {
-      ...this.state,
-      badgeBounds: this.badgeBounds()
-    };
-  }
+export const MotivationViewNode: React.FC<BaseViewNode.IViewNodeProps> = React.memo((props) => {
 
-  protected entityShape() {
-    const bounds = this.props.viewNode.absolutePosition();
-    const margin = 10;
-    const width = bounds.width - margin * 2;
-    const height = bounds.height - margin * 2;
-    return (
-      <path
-        d={[
-          "M",
-          bounds.left + margin,
-          bounds.top,
-          "h",
-          width,
-          "l",
-          margin,
-          margin,
-          "v",
-          height,
-          "l",
-          -margin,
-          margin,
-          "h",
-          -width,
-          "l",
-          -margin,
-          -margin,
-          "v",
-          -height,
-          "z"
-        ].join(" ")}
-        className={this.state.backgroundClass}
-        style={this.shapeStyle()}
-      />
-    );
-  }
+  const [state, setState] = useState<BaseViewNode.IViewNodeState>(
+    BaseViewNode.initialState(props.viewNode, {
+      badgeBounds: badgeBounds(props.viewNode),
+      textBounds: BaseViewNode.textBounds(props.viewNode),
+      entityShape: entityShape
+    }));
 
-  protected badgeBounds(): Bounds {
-    const bounds = this.props.viewNode.absolutePosition();
-    return new Bounds(bounds.right - 25, bounds.top + 5, 20, 20);
-  }
+  useEffect(() => {
+    if (props.x !== undefined || props.y !== undefined) {
+      setState(prevState => ({
+        ...prevState,
+        badgeBounds: badgeBounds(props.viewNode),
+        textBounds: BaseViewNode.textBounds(props.viewNode)
+      }));
+    }
+  }, [props.x, props.y, props.viewNode]);
+
+  return BaseViewNode.render(props, state);
+});
+
+export function entityShape(viewNode: ViewNode, backgroundClass: string | undefined, shapeStyle: React.CSSProperties | undefined): JSX.Element {
+  const bounds = viewNode.absolutePosition();
+  const margin = 10;
+  const width = bounds.width - margin * 2;
+  const height = bounds.height - margin * 2;
+  return (
+    <path
+      d={[
+        "M",
+        bounds.left + margin,
+        bounds.top,
+        "h",
+        width,
+        "l",
+        margin,
+        margin,
+        "v",
+        height,
+        "l",
+        -margin,
+        margin,
+        "h",
+        -width,
+        "l",
+        -margin,
+        -margin,
+        "v",
+        -height,
+        "z"
+      ].join(" ")}
+      className={backgroundClass}
+      style={shapeStyle}
+    />
+  );
 }
+
+export function badgeBounds(viewNode: ViewNode): Bounds {
+  const bounds = viewNode.absolutePosition();
+  return new Bounds(bounds.right - 25, bounds.top + 5, 20, 20);
+}
+
+export default MotivationViewNode;
