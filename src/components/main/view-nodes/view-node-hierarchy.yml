@@ -2,6 +2,7 @@
 React.PureComponent:
 - DefaultViewNode:
   - BadgedNodeViewNode:
+    - DeviceViewNode
     - NodeViewNode
     - PlateauViewNode
   - BadgedRectViewNode:
