@@ -11,41 +11,39 @@ interface IProps {
 }
 
 // Displays the list of organizations and entities that belong to the given organization
-export default class OrganizationItem extends React.PureComponent<IProps> {
-  public render() {
-    return (
-      <li
-        key={this.props.entity.id}
-        className={this.selectedItemClass(this.props.entity)}
-      >
-        <EntityLink
-          entity={this.props.entity}
-          entityClicked={this.props.entityClicked}
-          textClass={this.selectedItemClass(this.props.entity)}
-        >
-          <span
-            className="glyphicon glyphicon-picture"
-            style={this.selectedItemIconStyle(this.props.entity)}
-          />
-          &nbsp;
-        </EntityLink>
-      </li>
-    );
-  }
-
-  private selectedItemIconStyle(item: IEntity): React.CSSProperties {
-    if (this.props.selectedEntity && this.props.selectedEntity.id === item.id) {
+const OrganizationItem: React.FC<IProps> = React.memo(({ entity, entityClicked, selectedEntity }) => {
+  const selectedItemIconStyle = (item: IEntity): React.CSSProperties => {
+    if (selectedEntity && selectedEntity.id === item.id) {
       return { color: "white" };
-    } else {
-      return {};
     }
-  }
+    return {};
+  };
 
-  private selectedItemClass(item: IEntity): string {
-    if (this.props.selectedEntity && this.props.selectedEntity.id === item.id) {
+  const selectedItemClass = (item: IEntity): string => {
+    if (selectedEntity && selectedEntity.id === item.id) {
       return "bg-primary";
-    } else {
-      return "";
     }
-  }
-}
+    return "";
+  };
+
+  return (
+    <li
+      key={entity.id}
+      className={selectedItemClass(entity)}
+    >
+      <EntityLink
+        entity={entity}
+        entityClicked={entityClicked}
+        textClass={selectedItemClass(entity)}
+      >
+        <span
+          className="glyphicon glyphicon-picture"
+          style={selectedItemIconStyle(entity)}
+        />
+        &nbsp;
+      </EntityLink>
+    </li>
+  );
+});
+
+export default OrganizationItem;

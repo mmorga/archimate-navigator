@@ -12,25 +12,23 @@ interface IProps {
   selectedEntity: IEntity | undefined;
 }
 
-export default class ViewsTab extends React.PureComponent<IProps> {
-  public render() {
-    return (
-      <Accordion defaultActiveKey="0">
-        <Accordion.Item eventKey="0">
-          <Accordion.Body>
-            {this.props.organizations ? (
-              <OrganizationContent
-                organizations={this.props.organizations}
-                items={this.props.items}
-                entityClicked={this.props.entityClicked}
-                selectedEntity={this.props.selectedEntity}
-              />
-            ) : (
-              undefined
-            )}
-          </Accordion.Body>
-        </Accordion.Item>
-      </Accordion>
-    );
-  }
-}
+const ViewsTab: React.FC<IProps> = React.memo(({ organizations, items, entityClicked, selectedEntity }) => {
+  return (
+    <Accordion defaultActiveKey="0">
+      <Accordion.Item eventKey="0">
+        <Accordion.Body>
+          {organizations ? (
+            <OrganizationContent
+              organizations={organizations}
+              items={items}
+              entityClicked={entityClicked}
+              selectedEntity={selectedEntity}
+            />
+          ) : null}
+        </Accordion.Body>
+      </Accordion.Item>
+    </Accordion>
+  );
+});
+
+export default ViewsTab;

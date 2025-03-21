@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useState, useEffect } from "react";
 
 interface IProps {
   header?: React.ReactNode;
@@ -6,61 +7,33 @@ interface IProps {
   children?: React.ReactNode;
 }
 
-interface IState {
-  collapse: boolean;
-}
+const Panel: React.FC<IProps> = React.memo(({ header, initiallyCollapsed, children }) => {
+  const [collapse, setCollapse] = useState<boolean>(initiallyCollapsed ?? false);
 
-export default class Panel extends React.PureComponent<IProps, IState> {
-  constructor(props: IProps) {
-    super(props);
-    this.state = {
-      collapse:
-        this.props.initiallyCollapsed === undefined
-          ? false
-          : this.props.initiallyCollapsed
-    };
-  }
-
-  public render() {
-    const panelClsName = this.state.collapse
-      ? "panel-body collapse"
-      : "panel-body collapse in";
-    return (
-      <div className="panel panel-default">
-        {this.header()}
-        <div id="archimate-view-props" className={panelClsName}>
-          {this.props.children}
-        </div>
-      </div>
-    );
-  }
-
-  public componentDidUpdate(prevProps: IProps) {
-    if (this.props.initiallyCollapsed !== prevProps.initiallyCollapsed) {
-      this.setState({
-        collapse: this.props.initiallyCollapsed ? true : false
-      });
+  useEffect(() => {
+    if (initiallyCollapsed !== undefined) {
+      setCollapse(initiallyCollapsed);
     }
-  }
+  }, [initiallyCollapsed]);
 
-  private handleCollapseExpand = () => {
-    this.setState({ collapse: !this.state.collapse });
+  const handleCollapseExpand = () => {
+    setCollapse(!collapse);
   };
 
-  private header() {
-    if (this.props.header) {
-      const iconClsName = this.state.collapse
+  const renderHeader = () => {
+    if (header) {
+      const iconClsName = collapse
         ? "glyphicon glyphicon-collapse-up"
         : "glyphicon glyphicon-collapse-down";
       return (
         <div className="panel-heading">
           <h3 className="panel-title">
-            {this.props.header}
+            {header}
             <button
               className="btn btn-primary btn-xs pull-right"
               type="button"
-              aria-expanded={!this.state.collapse}
-              onClick={this.handleCollapseExpand}
+              aria-expanded={!collapse}
+              onClick={handleCollapseExpand}
             >
               <span className={iconClsName} aria-hidden="true" />
             </button>
@@ -69,5 +42,20 @@ export default class Panel extends React.PureComponent<IProps, IState> {
       );
     }
     return null;
-  }
-}
+  };
+
+  const panelClsName = collapse
+    ? "panel-body collapse"
+    : "panel-body collapse in";
+
+  return (
+    <div className="panel panel-default">
+      {renderHeader()}
+      <div id="archimate-view-props" className={panelClsName}>
+        {children}
+      </div>
+    </div>
+  );
+});
+
+export default Panel;

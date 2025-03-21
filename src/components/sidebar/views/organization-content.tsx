@@ -1,6 +1,7 @@
 import { isEqual } from "lodash-es";
 import memoizeOne from 'memoize-one';
 import * as React from "react";
+import { useMemo, useState, useEffect } from "react";
 import { IEntity, Organization } from "../../../archimate-model";
 import "../../archimate-navigator.css";
 import { entityClickedFunc } from "../../common";
@@ -16,96 +17,68 @@ interface IProps {
   selectedEntity: IEntity | undefined;
 }
 
-interface IState {
-  itemEntities: string[];
-}
-
 // Displays the list of organizations and entities that belong to the given organization
-export default class OrganizationContent extends React.Component<
-  IProps,
-  IState
-> {
-  public static getDerivedStateFromProps(
-    props: Readonly<IProps>,
-    state: Readonly<IState>
-  ): IState | null {
-    const itemEntities = props.items.map(i => i.id);
-    if (state && isEqual(itemEntities, state.itemEntities)) {
-      return null;
-    } else {
-      return { itemEntities };
-    }
-  }
+const OrganizationContent: React.FC<IProps> = React.memo(
+  ({ organizations, items, entityClicked, selectedEntity }) => {
+    const [itemEntities, setItemEntities] = useState<string[]>([]);
 
-  private sortedOrganizations = memoizeOne<
-    (organizations: Organization[]) => Organization[]
-  >(organizations => organizations.sort(entitySortFunc));
+    // Replicate getDerivedStateFromProps using useEffect
+    useEffect(() => {
+      const newItemEntities = items.map(i => i.id);
+      if (!isEqual(newItemEntities, itemEntities)) {
+        setItemEntities(newItemEntities);
+      }
+    }, [items]);
 
-  // private sortedItems = memoize<(items: string[]) => IEntity[]>(
-  //   items => items
-  //       .map(id => this.props.model.lookup(id))
-  //       .filter(e => e !== undefined)
-  //       .map(e => e as IEntity)
-  //       .sort(entitySortFunc)
-  // );
+    // Memoize sorted organizations
+    const sortedOrganizations = useMemo(() => {
+      const memoizedSort = memoizeOne<(organizations: Organization[]) => Organization[]>(
+        (orgs) => orgs.sort(entitySortFunc)
+      );
+      return memoizedSort(organizations);
+    }, [organizations]);
 
-  constructor(props: IProps) {
-    super(props);
-    this.state = {
-      itemEntities: []
-    };
-  }
+    // Memoize sorted items
+    const sortedItems = useMemo(() => {
+      return items.sort(entitySortFunc);
+    }, [items]);
 
-  public shouldComponentUpdate(
-    nextProps: Readonly<IProps>,
-    nextState: Readonly<IState>
-  ): boolean {
-    if (
-      this.props.organizations !== nextProps.organizations ||
-      this.props.items !== nextProps.items ||
-      this.props.selectedEntity !== nextProps.selectedEntity
-    ) {
-      return true;
-    }
-
-    if (this.state.itemEntities.length !== nextState.itemEntities.length) {
-      return true;
-    }
-
-    return !isEqual(this.state.itemEntities, nextState.itemEntities);
-  }
-
-  // public componentDidUpdate(prevProps: IProps) {
-  // }
-
-  public render() {
     return (
       <ul className="archimate-organization-list">
-        {this.sortedOrganizations(this.props.organizations).map(
-          organization => (
-            <OrganizationTree
-              key={organization.id}
-              organizationName={organization.name}
-              organizationId={organization.id}
-              organizations={organization.organizations}
-              items={organization.itemEntities()}
-              entityClicked={this.props.entityClicked}
-              selectedEntity={this.props.selectedEntity}
-            />
-          )
-        )}
-        {this.props.items.sort(entitySortFunc).map(entity => (
+        {sortedOrganizations.map(organization => (
+          <OrganizationTree
+            key={organization.id}
+            organizationName={organization.name}
+            organizationId={organization.id}
+            organizations={organization.organizations}
+            items={organization.itemEntities()}
+            entityClicked={entityClicked}
+            selectedEntity={selectedEntity}
+          />
+        ))}
+        {sortedItems.map(entity => (
           <OrganizationItem
             key={entity.id}
             entity={entity}
-            entityClicked={this.props.entityClicked}
-            selectedEntity={this.props.selectedEntity}
+            entityClicked={entityClicked}
+            selectedEntity={selectedEntity}
           />
         ))}
       </ul>
     );
+  },
+  // Custom comparison function to replicate shouldComponentUpdate
+  (prevProps, nextProps) => {
+    if (
+      prevProps.organizations !== nextProps.organizations ||
+      prevProps.items !== nextProps.items ||
+      prevProps.selectedEntity !== nextProps.selectedEntity
+    ) {
+      return false;
+    }
+    return true;
   }
-}
+);
 
 function entitySortFunc(a: IEntity, b: IEntity): number {
   if (a.name === undefined && b.name === undefined) {
@@ -128,3 +101,5 @@ function entitySortFunc(a: IEntity, b: IEntity): number {
   // names must be equal
   return 0;
 }
+
+export default OrganizationContent;

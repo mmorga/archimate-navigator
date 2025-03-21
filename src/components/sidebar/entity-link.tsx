@@ -10,23 +10,23 @@ interface IProps {
   children?: React.ReactNode;
 }
 
-export default class EntityLink extends React.PureComponent<IProps> {
-  public render() {
-    const text = this.props.text ? this.props.text : this.props.entity!.name;
-    if (this.props.entity) {
-      return (
-        <a
-          href={this.props.entity!.href}
-          onClick={this.entityClicked}
-        >
-          {this.props.children}
-          <span className={this.props.textClass}>{text}</span>
-        </a>
-      );
-    } else {
-      return undefined;
-    }
+const EntityLink: React.FC<IProps> = React.memo(({ entity, entityClicked, text, textClass, children }) => {
+  const handleClick = () => entityClicked(entity);
+  
+  if (!entity) {
+    return null;
   }
 
-  private entityClicked = () => this.props.entityClicked(this.props.entity);
-}
+  const displayText = text || entity.name;
+  return (
+    <a
+      href={entity.href}
+      onClick={handleClick}
+    >
+      {children}
+      <span className={textClass}>{displayText}</span>
+    </a>
+  );
+});
+
+export default EntityLink;

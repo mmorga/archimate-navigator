@@ -8,46 +8,45 @@ interface IProps {
   diagramViewpoint: string | undefined;
 }
 
-export default class ModelInfo extends React.Component<IProps> {
-  public render() {
-    return (
-      <Form>
+const ModelInfo: React.FC<IProps> = React.memo(({ modelName, diagramName, diagramViewpoint }) => {
+  const diagramRow = () => {
+    if (diagramName) {
+      return (
         <Form.Group>
           <Col sm={2}>
             <Form.Label className="text-muted"><small>Model</small></Form.Label>
           </Col>
           <Col sm={10}>
             <Form.Text>
-              <strong>{this.props.modelName}</strong>
-            </Form.Text>
-          </Col>
-        </Form.Group>
-        {this.diagramRow()}
-      </Form>
-    );
-  }
-
-  protected diagramRow() {
-    if (this.props.diagramName) {
-      return (
-        <Form.Group>
-          <Col sm={2}>
-            <Form.Label className="text-muted"><small>Diagram</small></Form.Label>
-          </Col>
-          <Col sm={10}>
-            <Form.Text>
-              <strong>{this.props.diagramName}</strong>{" "}
+              <strong>{diagramName}</strong>{" "}
               <small>
                 &lt;
-                {this.props.diagramViewpoint}
+                {diagramViewpoint}
                 &nbsp;Viewpoint&gt;
               </small>
             </Form.Text>
           </Col>
         </Form.Group>
       );
-    } else {
-      return null;
     }
-  }
-}
+    return null;
+  };
+
+  return (
+    <Form>
+      <Form.Group>
+        <Col sm={2}>
+          <Form.Label className="text-muted"><small>Model</small></Form.Label>
+        </Col>
+        <Col sm={10}>
+          <Form.Text>
+            <strong>{modelName}</strong>
+          </Form.Text>
+        </Col>
+      </Form.Group>
+      {diagramRow()}
+    </Form>
+  );
+});
+
+export default ModelInfo;

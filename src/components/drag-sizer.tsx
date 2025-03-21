@@ -1,84 +1,76 @@
 import * as React from "react";
+import { useState } from "react";
 import "./archimate-navigator.css";
 
 interface IProps {
-  id: string;
   initialX: number;
   onChange: (position: number) => void;
 }
 
-interface IState {
-  clientX: number;
-  color: string;
-  dragCount: number;
-  dragState: string;
-}
+const DragSizer: React.FC<IProps> = React.memo(({ initialX, onChange }) => {
+  const [state, setState] = useState({
+    clientX: initialX,
+    color: "gray",
+    dragCount: 0,
+    dragState: ""
+  });
 
-export default class DragSizer extends React.PureComponent<IProps, IState> {
-  constructor(props: IProps) {
-    super(props);
-    this.state = {
-      clientX: this.props.initialX,
-      color: "gray",
-      dragCount: 0,
-      dragState: ""
-    };
-  }
-
-  public render() {
-    return (
-      <div
-        className="archimate-sidebar-sizer"
-        draggable={true}
-        style={{
-          backgroundColor: this.state.color,
-          cursor: "grab",
-          flex: "0 0 3px"
-        }}
-        onDrag={this.onDrag}
-        onDragStart={this.onDragStart}
-        onDragEnd={this.onDragEnd}
-        onDragExit={this.onDragExit}
-      />
-    );
-  }
-
-  private onDrag: React.DragEventHandler<HTMLDivElement> = (
-    ev: React.DragEvent<HTMLDivElement>
-  ) => {
-    this.setState({
+  const onDrag: React.DragEventHandler<HTMLDivElement> = (ev) => {
+    setState(prev => ({
+      ...prev,
       clientX: ev.clientX,
-      dragCount: this.state.dragCount + 1,
+      dragCount: prev.dragCount + 1,
       dragState: "Drag"
-    });
-    this.props.onChange(ev.clientX);
+    }));
+    onChange(ev.clientX);
   };
 
-  private onDragStart: React.DragEventHandler<HTMLDivElement> = (
-    _ev: React.DragEvent<HTMLDivElement>
-  ) => {
-    // this.setState({
+  const onDragStart: React.DragEventHandler<HTMLDivElement> = (_ev) => {
+    // Commented out as in original
+    // setState(prev => ({
+    //   ...prev,
     //   clientX: ev.clientX,
     //   color: "blue",
-    //   dragState: "Start",
-    // });
+    //   dragState: "Start"
+    // }));
     // ev.dataTransfer.setData('text/plain', ev.clientX.toString());
   };
 
-  private onDragEnd: React.DragEventHandler<HTMLDivElement> = ev => {
-    this.setState({
+  const onDragEnd: React.DragEventHandler<HTMLDivElement> = (ev) => {
+    setState(prev => ({
+      ...prev,
       clientX: ev.clientX,
       color: "gray",
       dragState: "End"
-    });
-    this.props.onChange(ev.clientX);
+    }));
+    onChange(ev.clientX);
   };
 
-  private onDragExit: React.DragEventHandler<HTMLDivElement> = _ev => {
-    this.setState({
+  const onDragExit: React.DragEventHandler<HTMLDivElement> = (_ev) => {
+    setState(prev => ({
+      ...prev,
       color: "gray",
       dragState: "Exit"
-    });
-    // this.props.onChange(this.props.initialX);
+    }));
+    // Commented out as in original
+    // onChange(initialX);
   };
-}
+
+  return (
+    <div
+      className="archimate-sidebar-sizer"
+      draggable={true}
+      style={{
+        backgroundColor: state.color,
+        cursor: "grab",
+        flex: "0 0 3px"
+      }}
+      onDrag={onDrag}
+      onDragStart={onDragStart}
+      onDragEnd={onDragEnd}
+      onDragExit={onDragExit}
+    />
+  );
+});
+
+export default DragSizer;
