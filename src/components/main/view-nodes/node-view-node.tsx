@@ -2,8 +2,8 @@ import { IViewNodeProps, IViewNodeState } from "./base-view-node";
 import { JSX } from "react";
 import { ViewNode, Bounds } from "../../../archimate-model";
 import * as BadgedNodeViewNode from "./badged-node-view-node";
+import * as BadgedRect from "./badged-rect";
 import * as BaseViewNode from "./base-view-node";
-import BadgedRectViewNode from "./badged-rect";
 import React, { useEffect, useState } from "react";
 
 const NodeViewNode: React.FC<IViewNodeProps> = React.memo((props) => {
@@ -39,7 +39,7 @@ const NodeViewNode: React.FC<IViewNodeProps> = React.memo((props) => {
 
 function entityShape(viewNode: ViewNode, backgroundClass: string | undefined, shapeStyle: React.CSSProperties | undefined): JSX.Element {
   if (viewNode.childType === "1") {
-    return BadgedRectViewNode.path(
+    return BadgedRect.path(
       viewNode.absolutePosition(),
       backgroundClass,
       shapeStyle

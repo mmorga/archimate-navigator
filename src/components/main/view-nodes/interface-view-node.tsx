@@ -1,43 +1,43 @@
-import { JSX } from "react";
-import BadgedRectViewNode from "./badged-rect";
+import React from 'react';
 import { IViewNodeProps } from "./default-element";
+import * as BaseViewNode from "./base-view-node";
+import * as BadgedRect from "./badged-rect";
+import { JSX } from "react";
+import { ViewNode } from "../../../archimate-model";
 
-export default class InterfaceViewNode extends BadgedRectViewNode {
-  constructor(props: IViewNodeProps) {
-    super(props);
-    if (this.props.viewNode.childType === "1") {
-      this.state = {
-        ...this.state,
-        badge: undefined,
-        badgeBounds: undefined
-      };
-    } else {
-      this.state = {
-        ...this.state,
-        badge: "#archimate-interface-badge"
-      };
-    }
-  }
+function elipsePath(viewNode: ViewNode, backgroundClass: string | undefined, shapeStyle: React.CSSProperties | undefined): JSX.Element {
+  const bounds = viewNode.absolutePosition();
+  return (
+    <ellipse
+      cx={bounds.left + bounds.width / 2.0}
+      cy={bounds.top + bounds.height / 2.0}
+      rx={bounds.width / 2.0}
+      ry={bounds.height / 2.0}
+      className={backgroundClass}
+      style={shapeStyle}
+    />
+  );
+}
 
-  protected entityShape(): JSX.Element {
-    if (this.props.viewNode.childType === "1") {
-      return this.elipsePath();
-    } else {
-      return super.entityShape();
-    }
-  }
-
-  private elipsePath(): JSX.Element {
-    const bounds = this.props.viewNode.absolutePosition();
-    return (
-      <ellipse
-        cx={bounds.left + bounds.width / 2.0}
-        cy={bounds.top + bounds.height / 2.0}
-        rx={bounds.width / 2.0}
-        ry={bounds.height / 2.0}
-        className={this.state.backgroundClass}
-        style={this.shapeStyle()}
-      />
-    );
+function interfaceEntityShape(viewNode: ViewNode, backgroundClass: string | undefined, shapeStyle: React.CSSProperties | undefined): JSX.Element {
+  if (viewNode.childType === "1") {
+    return elipsePath(viewNode, backgroundClass, shapeStyle);
+  } else {
+    return BadgedRect.entityShape(viewNode, backgroundClass, shapeStyle);
   }
 }
+
+const InterfaceViewNode: React.FC<IViewNodeProps> = React.memo((props) => {
+  const badge = props.viewNode.childType === "1" ? undefined : "#archimate-interface-badge";
+  const badgeBounds = props.viewNode.childType === "1" ? undefined : BadgedRect.badgeBounds(props.viewNode);
+
+  const state = BaseViewNode.initialState(props.viewNode, {
+    badge,
+    badgeBounds,
+    entityShape: interfaceEntityShape
+  });
+
+  return BaseViewNode.render(props, state);
+});
+
+export default InterfaceViewNode;

@@ -1,12 +1,16 @@
-import BadgedRectViewNode from "./badged-rect";
+import React from 'react';
 import { IViewNodeProps } from "./default-element";
+import * as BaseViewNode from "./base-view-node";
+import * as BadgedRect from "./badged-rect";
 
-export default class SystemSoftwareViewNode extends BadgedRectViewNode {
-  constructor(props: IViewNodeProps) {
-    super(props);
-    this.state = {
-      ...this.state,
-      badge: "#archimate-system-software-badge"
-    };
-  }
-}
+const SystemSoftwareViewNode: React.FC<IViewNodeProps> = React.memo((props) => {
+  const state = BaseViewNode.initialState(props.viewNode, {
+    badge: "#archimate-system-software-badge",
+    badgeBounds: BadgedRect.badgeBounds(props.viewNode),
+    entityShape: BadgedRect.entityShape
+  });
+
+  return BaseViewNode.render(props, state);
+});
+
+export default SystemSoftwareViewNode;

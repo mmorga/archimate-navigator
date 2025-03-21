@@ -1,89 +1,98 @@
-import { Bounds } from "../../../archimate-model";
-import BadgedRectViewNode from "./badged-rect";
-import { IViewNodeProps } from "./default-element";
+import { Bounds, ViewNode } from "../../../archimate-model";
+import { JSX } from "react";
+import React, { useState } from "react";
+import * as BadgedRect from "./badged-rect";
+import * as BaseViewNode from "./base-view-node";
 
-export default class ApplicationComponentViewNode extends BadgedRectViewNode {
-  constructor(props: IViewNodeProps) {
-    super(props);
+export const ApplicationComponentViewNode: React.FC<BaseViewNode.IViewNodeProps> = React.memo((props) => {
 
-    const badge =
-      this.props.viewNode.childType === "1"
-        ? "#archimate-app-component-badge"
-        : undefined;
-    this.state = {
-      ...this.state,
+  function calcStateChanges(props: BaseViewNode.IViewNodeProps) {
+    const badge = props.viewNode.childType === "1" ? "#archimate-app-component-badge" : undefined;
+    const badgeBounds = props.viewNode.childType === "1" ? BadgedRect.badgeBounds(props.viewNode) : undefined;
+    return {
       badge,
-      badgeBounds: undefined,
-      textBounds: this.textBounds()
+      badgeBounds,
+      textBounds: textBounds(props.viewNode)
     };
   }
 
-  protected badgeBounds(): Bounds | undefined {
-    if (this.props.viewNode.childType === "1") {
-      return super.badgeBounds();
-    } else {
-      return undefined;
-    }
-  }
+  const [state, setState] = useState<BaseViewNode.IViewNodeState>(
+    BaseViewNode.initialState(props.viewNode, {
+      ...calcStateChanges(props),
+      entityShape: entityShape
+    }));
 
-  protected textBounds(): Bounds {
-    if (this.props.viewNode.childType === "1") {
-      return super.textBounds();
-    } else {
-      const bounds = this.props.viewNode.absolutePosition();
-      const mainBoxX = bounds.left + 21.0 / 2;
-      return new Bounds(
-        mainBoxX + 21 / 2,
-        bounds.top + 1,
-        bounds.width - 22,
-        bounds.height - 2
-      );
+  React.useEffect(() => {
+    if (props.x !== undefined || props.y !== undefined) {
+      setState(prevState => ({
+        ...prevState,
+        ...calcStateChanges(props)
+      }));
     }
-  }
+  }, [props.x, props.y, props.viewNode]);
 
-  protected entityShape() {
-    if (this.props.viewNode.childType === "1") {
-      return super.entityShape();
-    } else {
-      const bounds = this.props.viewNode.absolutePosition();
-      const mainBoxX = bounds.left + 21.0 / 2;
-      const mainBoxWidth = bounds.width - 21 / 2;
-      return (
-        <>
-          <rect
-            x={mainBoxX}
-            y={bounds.top}
-            width={mainBoxWidth}
-            height={bounds.height}
-            className={this.state.backgroundClass}
-            style={this.shapeStyle()}
-          />
-          {this.componentDecoration(bounds.left, bounds.top + 10)}
-          {this.componentDecoration(bounds.left, bounds.top + 30)}
-        </>
-      );
-    }
-  }
+  return BaseViewNode.render(props, state);
+});
 
-  private componentDecoration(left: number, top: number) {
+export default ApplicationComponentViewNode;
+
+function textBounds(viewNode: ViewNode): Bounds {
+  if (viewNode.childType === "1") {
+    return BaseViewNode.textBounds(viewNode);
+  } else {
+    const bounds = viewNode.absolutePosition();
+    const mainBoxX = bounds.left + 21.0 / 2;
+    return new Bounds(
+      mainBoxX + 21 / 2,
+      bounds.top + 1,
+      bounds.width - 22,
+      bounds.height - 2
+    );
+  }
+}
+
+function entityShape(viewNode: ViewNode, backgroundClass: string | undefined, shapeStyle: React.CSSProperties | undefined): JSX.Element {
+  if (viewNode.childType === "1") {
+    return BadgedRect.entityShape(viewNode, backgroundClass, shapeStyle);
+  } else {
+    const bounds = viewNode.absolutePosition();
+    const mainBoxX = bounds.left + 21.0 / 2;
+    const mainBoxWidth = bounds.width - 21 / 2;
     return (
       <>
         <rect
-          x={left}
-          y={top}
-          width="21"
-          height="13"
-          className={this.state.backgroundClass}
-          style={this.shapeStyle()}
+          x={mainBoxX}
+          y={bounds.top}
+          width={mainBoxWidth}
+          height={bounds.height}
+          className={backgroundClass}
+          style={shapeStyle}
         />
-        <rect
-          x={left}
-          y={top}
-          width="21"
-          height="13"
-          className="archimate-decoration"
-        />
+        {componentDecoration(bounds.left, bounds.top + 10, backgroundClass, shapeStyle)}
+        {componentDecoration(bounds.left, bounds.top + 30, backgroundClass, shapeStyle)}
       </>
     );
   }
+}
+
+function componentDecoration(left: number, top: number, backgroundClass: string | undefined, shapeStyle: React.CSSProperties | undefined) {
+  return (
+    <>
+      <rect
+        x={left}
+        y={top}
+        width="21"
+        height="13"
+        className={backgroundClass}
+        style={shapeStyle}
+      />
+      <rect
+        x={left}
+        y={top}
+        width="21"
+        height="13"
+        className="archimate-decoration"
+      />
+    </>
+  );
 }
