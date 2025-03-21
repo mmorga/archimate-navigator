@@ -1,59 +1,73 @@
 import { Bounds } from "../../../archimate-model";
 import { JSX } from "react";
-import DefaultViewNode, { IViewNodeProps } from "./default-element";
+import { ViewNode } from "../../../archimate-model";
+import * as BaseViewNode from "./base-view-node";
+import React, { useEffect, useState } from "react";
 
-export default class GroupViewNode extends DefaultViewNode {
-  private groupHeaderHeight = 21;
+export const GroupViewNode: React.FC<BaseViewNode.IViewNodeProps> = React.memo((props) => {
 
-  constructor(props: IViewNodeProps) {
-    super(props);
-    this.state = {
-      ...this.state,
+  const [state, setState] = useState<BaseViewNode.IViewNodeState>(
+    BaseViewNode.initialState(props.viewNode, {
       backgroundClass: "archimate-group-background",
       textAlign: "left",
-      textBounds: this.textBounds()
-    };
-  }
+      textBounds: textBounds(props.viewNode),
+      entityShape: entityShape
+    }));
 
-  public entityShape(): JSX.Element {
-    const bounds = this.props.viewNode.absolutePosition();
-    return (
-      <>
-        <rect
-          x={bounds.left}
-          y={bounds.top + this.groupHeaderHeight}
-          width={bounds.width}
-          height={bounds.height - this.groupHeaderHeight}
-          className={this.state.backgroundClass}
-          style={this.shapeStyle()}
-        />
-        <rect
-          x={bounds.left}
-          y={bounds.top}
-          width={bounds.width / 2.0}
-          height={this.groupHeaderHeight}
-          className={this.state.backgroundClass}
-          style={this.shapeStyle()}
-        />
-        <rect
-          x={bounds.left}
-          y={bounds.top}
-          width={bounds.width / 2.0}
-          height={this.groupHeaderHeight}
-          className={"archimate-decoration"}
-        />
-        )
-      </>
-    );
-  }
+  useEffect(() => {
+    if (props.x !== undefined || props.y !== undefined) {
+      setState(prevState => ({
+        ...prevState,
+        textBounds: textBounds(props.viewNode)
+      }));
+    }
+  }, [props.x, props.y, props.viewNode]);
 
-  protected textBounds(): Bounds {
-    const bounds = this.props.viewNode.absolutePosition();
-    return new Bounds(
-      bounds.left + 3,
-      bounds.top,
-      bounds.width / 2.0 - 6,
-      this.groupHeaderHeight
-    );
-  }
+  return BaseViewNode.render(props, state);
+});
+
+const groupHeaderHeight = 21;
+
+function entityShape(viewNode: ViewNode, backgroundClass: string | undefined, shapeStyle: React.CSSProperties | undefined): JSX.Element {
+  const bounds = viewNode.absolutePosition();
+  return (
+    <>
+      <rect
+        x={bounds.left}
+        y={bounds.top + groupHeaderHeight}
+        width={bounds.width}
+        height={bounds.height - groupHeaderHeight}
+        className={backgroundClass}
+        style={shapeStyle}
+      />
+      <rect
+        x={bounds.left}
+        y={bounds.top}
+        width={bounds.width / 2.0}
+        height={groupHeaderHeight}
+        className={backgroundClass}
+        style={shapeStyle}
+      />
+      <rect
+        x={bounds.left}
+        y={bounds.top}
+        width={bounds.width / 2.0}
+        height={groupHeaderHeight}
+        className={"archimate-decoration"}
+      />
+      )
+    </>
+  );
 }
+
+export function textBounds(viewNode: ViewNode): Bounds {
+  const bounds = viewNode.absolutePosition();
+  return new Bounds(
+    bounds.left + 3,
+    bounds.top,
+    bounds.width / 2.0 - 6,
+    groupHeaderHeight
+  );
+}
+
+export default GroupViewNode;
