@@ -1,5 +1,5 @@
 import Fuse, { FuseResult } from "fuse.js";
-import React from "react";
+import * as React from "react";
 import {
   Button,
   Card,

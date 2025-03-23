@@ -3,7 +3,7 @@ import { JSX } from "react";
 import { ViewNode } from "../../../archimate-model";
 import * as BadgedRect from "./badged-rect";
 import * as BaseViewNode from "./base-view-node";
-import React from "react";
+import * as React from "react";
 
 function artifactEntityShape(
   viewNode: ViewNode,

@@ -1,5 +1,5 @@
 import "github-markdown-css/github-markdown.css";
-import * as React from "react";
+import { PureComponent } from "react";
 import ReactMarkdown from "react-markdown";
 import Panel from "../panel";
 
@@ -8,7 +8,7 @@ interface IProps {
   header?: string;
 }
 
-export default class DocumentationPanel extends React.PureComponent<IProps> {
+export default class DocumentationPanel extends PureComponent<IProps> {
   public render() {
     const hasContent = this.props.str && this.props.str.trim().length > 0;
     const title = this.props.header || "Documentation";

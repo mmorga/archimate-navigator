@@ -1,4 +1,4 @@
-import * as React from "react";
+import { PureComponent } from "react";
 import {
   Diagram,
   Element,
@@ -13,7 +13,7 @@ interface IProps {
   resultClicked: entityClickedFunc;
 }
 
-export default class SearchResult extends React.PureComponent<IProps> {
+export default class SearchResult extends PureComponent<IProps> {
   public render() {
     return (
       <li>

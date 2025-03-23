@@ -1,4 +1,4 @@
-import * as React from "react";
+import { PureComponent } from "react";
 import { IDiagram, IEntity } from "../../../archimate-model";
 import { entityClickedFunc } from "../../common";
 import EntityLink from "../entity-link";
@@ -9,7 +9,7 @@ interface IProps {
   entityClicked: entityClickedFunc;
 }
 
-export default class ViewsTable extends React.PureComponent<IProps> {
+export default class ViewsTable extends PureComponent<IProps> {
   public render() {
     const views = this.props.views ? this.props.views : [];
     let tableRows = null;

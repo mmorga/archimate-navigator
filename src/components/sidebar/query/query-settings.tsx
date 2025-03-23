@@ -1,4 +1,4 @@
-import * as React from "react";
+import { PureComponent } from "react";
 import { Accordion, Form } from "react-bootstrap";
 
 interface IProps {
@@ -6,7 +6,7 @@ interface IProps {
   onAutoLayoutToggled: (autoLayout: boolean) => void;
 }
 
-export default class QuerySettings extends React.PureComponent<IProps> {
+export default class QuerySettings extends PureComponent<IProps> {
   public render() {
     return (
       <Accordion defaultActiveKey="">

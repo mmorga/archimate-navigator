@@ -1,11 +1,11 @@
-import * as React from "react";
+import { PureComponent } from "react";
 import { Bounds } from "../../archimate-model";
 
 interface IProps {
   bounds: Bounds;
 }
 
-export default class SelectedViewNode extends React.PureComponent<IProps> {
+export default class SelectedViewNode extends PureComponent<IProps> {
   public render() {
     const b = this.props.bounds;
     return (

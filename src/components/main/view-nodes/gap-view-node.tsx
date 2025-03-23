@@ -2,7 +2,8 @@ import { Bounds } from "../../../archimate-model";
 import * as DeliverableViewNode from "./deliverable-view-node";
 import { ViewNode } from "../../../archimate-model";
 import * as BaseViewNode from "./base-view-node";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import * as React from "react";
 
 export const GapViewNode: React.FC<BaseViewNode.IViewNodeProps> = React.memo(
   (props) => {

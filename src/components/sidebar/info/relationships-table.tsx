@@ -1,4 +1,4 @@
-import * as React from "react";
+import { PureComponent } from "react";
 import { IEntity, IRelationship, Relationship } from "../../../archimate-model";
 import { entityClickedFunc } from "../../common";
 import EntityLink from "../entity-link";
@@ -9,7 +9,7 @@ interface IProps {
   entityClicked: entityClickedFunc;
 }
 
-export default class RelationshipsTable extends React.PureComponent<IProps> {
+export default class RelationshipsTable extends PureComponent<IProps> {
   public render() {
     const relationships = this.props.relationships
       ? this.props.relationships

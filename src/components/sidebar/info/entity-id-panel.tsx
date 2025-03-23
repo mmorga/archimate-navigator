@@ -1,4 +1,4 @@
-import * as React from "react";
+import { PureComponent, JSX } from "react";
 import {
   Diagram,
   Element,
@@ -8,13 +8,12 @@ import {
 import { entityClickedFunc } from "../../common";
 import EntityLink from "../entity-link";
 import Panel from "../panel";
-import { JSX } from "react";
 interface IProps {
   entity: IEntity | undefined;
   entityClicked: entityClickedFunc;
 }
 
-export default class EntityIdPanel extends React.PureComponent<IProps> {
+export default class EntityIdPanel extends PureComponent<IProps> {
   public render() {
     const entity = this.props.entity;
     const name = entity ? (

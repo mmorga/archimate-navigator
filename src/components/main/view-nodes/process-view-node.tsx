@@ -2,7 +2,8 @@ import { Bounds, zeroBounds } from "@/archimate-model";
 import { ViewNode } from "@/archimate-model";
 import * as BadgedRoundedRectViewNode from "./badged-rounded-rect";
 import * as BaseViewNode from "./base-view-node";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import * as React from "react";
 import { JSX } from "react";
 
 export const ProcessViewNode: React.FC<BaseViewNode.IViewNodeProps> =

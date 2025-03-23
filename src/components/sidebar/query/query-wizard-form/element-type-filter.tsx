@@ -1,4 +1,4 @@
-import * as React from "react";
+import { PureComponent } from "react";
 import { Form } from "react-bootstrap";
 import { CaretDownFill, CaretUpFill } from "react-bootstrap-icons";
 import {
@@ -16,10 +16,7 @@ interface IState {
   filterCollapsed: boolean;
 }
 
-export default class ElementTypeFilter extends React.PureComponent<
-  IProps,
-  IState
-> {
+export default class ElementTypeFilter extends PureComponent<IProps, IState> {
   constructor(props: IProps) {
     super(props);
     this.state = {

@@ -1,4 +1,4 @@
-import * as React from "react";
+import { PureComponent } from "react";
 import { Form } from "react-bootstrap";
 import { Layer } from "../../../../archimate-model";
 
@@ -8,7 +8,7 @@ interface IProps {
   onChange: (layer: Layer, checked: boolean) => void;
 }
 
-export default class LayerCheckbox extends React.PureComponent<IProps> {
+export default class LayerCheckbox extends PureComponent<IProps> {
   public render() {
     return (
       <Form.Check

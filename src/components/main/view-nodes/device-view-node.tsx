@@ -3,7 +3,8 @@ import { IViewNodeProps, IViewNodeState } from "./base-view-node";
 import { JSX } from "react";
 import * as BadgedNodeViewNode from "./badged-node-view-node";
 import * as BaseViewNode from "./base-view-node";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import * as React from "react";
 
 const DeviceViewNode: React.FC<IViewNodeProps> = React.memo((props) => {
   function badgeTextBounds(props: IViewNodeProps): Partial<IViewNodeState> {

@@ -3,7 +3,8 @@ import { JSX } from "react";
 import { ViewNode } from "@/archimate-model";
 import * as BadgedRoundedRectViewNode from "./badged-rounded-rect";
 import * as BaseViewNode from "./base-view-node";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import * as React from "react";
 
 export const EventViewNode: React.FC<BaseViewNode.IViewNodeProps> = React.memo(
   (props) => {

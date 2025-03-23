@@ -1,5 +1,5 @@
 import { List } from "immutable";
-import * as React from "react";
+import { PureComponent, ChangeEvent } from "react";
 import {
   Accordion,
   Button,
@@ -9,7 +9,6 @@ import {
   InputGroup,
 } from "react-bootstrap";
 import { Query } from "../../../archimate-model";
-import { ChangeEvent } from "react";
 
 interface IProps {
   onNewQuery: () => void;
@@ -18,7 +17,7 @@ interface IProps {
   selectedQuery: Query;
 }
 
-export default class QueryTab extends React.PureComponent<IProps> {
+export default class QueryTab extends PureComponent<IProps> {
   public render() {
     return (
       <Accordion defaultActiveKey="">

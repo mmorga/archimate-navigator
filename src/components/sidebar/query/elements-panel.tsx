@@ -1,4 +1,4 @@
-import * as React from "react";
+import { PureComponent } from "react";
 import {
   Button,
   Form,
@@ -22,7 +22,7 @@ interface IState {
   valid: "success" | "warning" | "error";
 }
 
-export default class ElementsPanel extends React.PureComponent<IProps, IState> {
+export default class ElementsPanel extends PureComponent<IProps, IState> {
   constructor(props: IProps) {
     super(props);
     this.state = {

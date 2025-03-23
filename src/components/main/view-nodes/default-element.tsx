@@ -11,7 +11,7 @@ import {
 import { entityClickedFunc } from "../../common";
 import EntityLabel from "../entity-label";
 import SelectedViewNode from "../selected-view-node";
-import React from "react";
+import * as React from "react";
 
 export interface IViewNodeProps {
   viewNode: ViewNode;

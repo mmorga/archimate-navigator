@@ -1,7 +1,8 @@
 import { ViewNode } from "@/archimate-model";
 import { JSX } from "react";
 import * as BaseViewNode from "./base-view-node";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import * as React from "react";
 
 export const JunctionViewNode: React.FC<BaseViewNode.IViewNodeProps> =
   React.memo((props) => {

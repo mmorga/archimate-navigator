@@ -1,5 +1,5 @@
 import { Set } from "immutable";
-import * as React from "react";
+import { PureComponent, JSX } from "react";
 import {
   Button,
   ButtonGroup,
@@ -19,7 +19,6 @@ import {
 import CollapsibleFormGroup, {
   ValidationState,
 } from "./collapsible-form-group";
-import { JSX } from "react";
 
 interface IProps {
   query: Query;
@@ -30,7 +29,7 @@ interface IState {
   validationState: ValidationState;
 }
 
-export default class RelationshipTypeFilterPanel extends React.PureComponent<
+export default class RelationshipTypeFilterPanel extends PureComponent<
   IProps,
   IState
 > {

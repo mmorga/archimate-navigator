@@ -2,7 +2,8 @@ import { IViewNodeProps, IViewNodeState } from "./base-view-node";
 import { JSX } from "react";
 import { Point, ViewNode } from "../../../archimate-model";
 import * as BaseViewNode from "./base-view-node";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import * as React from "react";
 
 const MeaningViewNode: React.FC<IViewNodeProps> = React.memo((props) => {
   const [state, setState] = useState<IViewNodeState>(

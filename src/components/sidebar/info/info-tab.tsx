@@ -1,4 +1,4 @@
-import * as React from "react";
+import { PureComponent, JSX } from "react";
 import {
   Diagram,
   Element,
@@ -14,13 +14,12 @@ import EntityIdPanel from "./entity-id-panel";
 import PropertiesPanel from "./properties-panel";
 import RelationshipsTable from "./relationships-table";
 import ViewsTable from "./views-table";
-import { JSX } from "react";
 interface IProps {
   entity?: IEntity;
   entityClicked: entityClickedFunc;
 }
 
-export default class InfoTab extends React.PureComponent<IProps> {
+export default class InfoTab extends PureComponent<IProps> {
   public render() {
     return (
       <>

@@ -4,7 +4,8 @@ import { ViewNode, Bounds } from "../../../archimate-model";
 import * as BadgedNodeViewNode from "./badged-node-view-node";
 import * as BadgedRect from "./badged-rect";
 import * as BaseViewNode from "./base-view-node";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import * as React from "react";
 
 const NodeViewNode: React.FC<IViewNodeProps> = React.memo((props) => {
   let badge: string | undefined;

@@ -1,4 +1,4 @@
-import * as React from "react";
+import { PureComponent } from "react";
 import { Element } from "../../../archimate-model";
 import { entityClickedFunc } from "../../common";
 import EntityLink from "../entity-link";
@@ -9,7 +9,7 @@ interface IProps {
   elementClicked: entityClickedFunc;
 }
 
-export default class ElementsTable extends React.PureComponent<IProps> {
+export default class ElementsTable extends PureComponent<IProps> {
   public render() {
     let elementRows = [
       <tr key="no-elements">

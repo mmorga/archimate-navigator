@@ -1,6 +1,7 @@
 import { Bounds, ViewNode } from "../../../archimate-model";
 import { JSX } from "react";
-import React, { useState } from "react";
+import { useState } from "react";
+import * as React from "react";
 import * as BadgedRect from "./badged-rect";
 import * as BaseViewNode from "./base-view-node";
 

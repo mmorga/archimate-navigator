@@ -1,5 +1,5 @@
 import "github-markdown-css/github-markdown.css";
-import * as React from "react";
+import { PureComponent } from "react";
 import ReactMarkdown from "react-markdown";
 import { Property } from "../../../archimate-model";
 import Panel from "../panel";
@@ -9,7 +9,7 @@ interface IProps {
   properties: Property[];
 }
 
-export default class PropertiesPanel extends React.PureComponent<IProps> {
+export default class PropertiesPanel extends PureComponent<IProps> {
   public render() {
     const properties = this.props.properties ? this.props.properties : [];
     let tableRows = null;
