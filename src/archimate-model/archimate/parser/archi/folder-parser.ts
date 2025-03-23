@@ -11,7 +11,7 @@ export class FolderParser {
 
   public organizations(parent: Element): Organization[] {
     const children: Element[] = Array.from(parent.children).filter(
-      node => node.nodeName === "folder"
+      (node) => node.nodeName === "folder",
     );
     if (children === undefined) {
       return [];
@@ -25,9 +25,9 @@ export class FolderParser {
     organization.name = getStringAttribute(child, "name");
     organization.type = getStringAttribute(child, "type") || "";
     organization.items = Array.from(child.children)
-      .filter(node => node.nodeName === "element")
-      .map(el => el.attributes.getNamedItem("id")!.value);
+      .filter((node) => node.nodeName === "element")
+      .map((el) => el.attributes.getNamedItem("id")!.value);
     organization.organizations = this.organizations(child);
     return organization;
-  }
+  };
 }

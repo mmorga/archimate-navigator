@@ -1,4 +1,4 @@
-import type * as CSS from 'csstype';
+import type * as CSS from "csstype";
 import * as React from "react";
 import { Bounds, ViewNode } from "../../archimate-model";
 import TextFlow from "./text-flow";
@@ -51,7 +51,7 @@ export default class EntityLabel extends React.PureComponent<IProps, IState> {
     }
     this.state = {
       lineHeight: 12, // TODO: This needs to be calculated
-      textAnchor
+      textAnchor,
     };
   }
 
@@ -105,9 +105,9 @@ export default class EntityLabel extends React.PureComponent<IProps, IState> {
         tb.height - badgeNotchHeight,
         "h",
         -tb.width,
-        "z"
+        "z",
       ]
-        .map(i => i.toString())
+        .map((i) => i.toString())
         .join(" ");
     } else {
       return [
@@ -120,9 +120,9 @@ export default class EntityLabel extends React.PureComponent<IProps, IState> {
         tb.height,
         "h",
         -tb.width,
-        "z"
+        "z",
       ]
-        .map(i => i.toString())
+        .map((i) => i.toString())
         .join(" ");
     }
   }
@@ -154,7 +154,7 @@ export default class EntityLabel extends React.PureComponent<IProps, IState> {
     if (style === undefined) {
       return {
         textAlign: "center",
-        textAnchor: "middle"
+        textAnchor: "middle",
       };
     }
     const cssStyle: React.CSSProperties = {};

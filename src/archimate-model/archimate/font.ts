@@ -14,7 +14,7 @@ export class Font {
       fontParts[1],
       Number.parseFloat(fontParts[2]),
       Number.parseInt(fontParts[3], 10),
-      str
+      str,
     );
   }
 
@@ -66,9 +66,9 @@ export class Font {
         0,
         0,
         0,
-        this.name
+        this.name,
       ]
-        .map(v => `${v}`)
+        .map((v) => `${v}`)
         .join("|")
     );
   }

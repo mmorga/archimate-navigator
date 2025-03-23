@@ -1,6 +1,12 @@
 import * as React from "react";
 import { Button } from "react-bootstrap";
-import { ArrowsFullscreen, ArrowsExpand, ZoomIn, ZoomOut, ArrowLeft } from "react-bootstrap-icons";
+import {
+  ArrowsFullscreen,
+  ArrowsExpand,
+  ZoomIn,
+  ZoomOut,
+  ArrowLeft,
+} from "react-bootstrap-icons";
 import {
   Connection,
   Diagram,
@@ -8,7 +14,7 @@ import {
   IEntity,
   IEntityRef,
   IExtents,
-  ViewNode
+  ViewNode,
 } from "../../archimate-model";
 import { entityClickedFunc } from "../common";
 import ArchimateConnection from "./archimate-connection";
@@ -30,7 +36,7 @@ enum ZoomMode {
   OneToOne,
   FitToWindow,
   FitToWindowWidth,
-  UserZoom
+  UserZoom,
 }
 
 interface IState {
@@ -63,7 +69,7 @@ export default class ArchimateDiagramView extends React.PureComponent<
       minX: ext.minX,
       minY: ext.minY,
       scale: 1,
-      zoomMode: ZoomMode.FitToWindow
+      zoomMode: ZoomMode.FitToWindow,
     };
     this.svgTopGroup = React.createRef<SVGGElement | null>();
   }
@@ -121,17 +127,17 @@ export default class ArchimateDiagramView extends React.PureComponent<
                 scale={this.state.scale}
                 zoomMode={this.state.zoomMode}
               >
-                {this.props.nodes.map(node =>
+                {this.props.nodes.map((node) =>
                   React.createElement(archimateViewNode(node), {
                     key: node.id,
                     onClicked: this.props.entityClicked,
                     selected: this.nodeIsSelected(node),
                     viewNode: node,
                     x: node.x || node.bounds.left,
-                    y: node.y || node.bounds.top
-                  })
+                    y: node.y || node.bounds.top,
+                  }),
                 )}
-                {this.props.connections.map(conn => (
+                {this.props.connections.map((conn) => (
                   <ArchimateConnection
                     autoLayout={this.isAutoLayout()}
                     key={conn.id}
@@ -177,7 +183,7 @@ export default class ArchimateDiagramView extends React.PureComponent<
         maxX: ext.maxX,
         maxY: ext.maxY,
         minX: ext.minX,
-        minY: ext.minY
+        minY: ext.minY,
       });
     }
   }
@@ -217,7 +223,7 @@ export default class ArchimateDiagramView extends React.PureComponent<
   private onZoomIn = () => {
     this.setState({
       scale: zoomIn(this.state.scale),
-      zoomMode: ZoomMode.UserZoom
+      zoomMode: ZoomMode.UserZoom,
     });
   };
 
@@ -225,7 +231,7 @@ export default class ArchimateDiagramView extends React.PureComponent<
   private onZoomOut = () => {
     this.setState({
       scale: zoomOut(this.state.scale),
-      zoomMode: ZoomMode.UserZoom
+      zoomMode: ZoomMode.UserZoom,
     });
   };
 
@@ -249,7 +255,7 @@ export default class ArchimateDiagramView extends React.PureComponent<
       this.state.minX,
       this.state.minY,
       this.state.maxY - this.state.minY,
-      this.state.maxX - this.state.minX
+      this.state.maxX - this.state.minX,
     );
   }
 }

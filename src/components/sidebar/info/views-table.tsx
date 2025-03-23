@@ -17,10 +17,10 @@ export default class ViewsTable extends React.PureComponent<IProps> {
       tableRows = [
         <tr key={"views-table-no-views"}>
           <td colSpan={2}>No Views</td>
-        </tr>
+        </tr>,
       ];
     } else {
-      tableRows = views.sort(byName).map(view => (
+      tableRows = views.sort(byName).map((view) => (
         <tr key={view.path}>
           <td>
             <EntityLink
@@ -66,7 +66,7 @@ export function byName(a: IEntity, b: IEntity): number {
 
 export function byOptionalString(
   a: string | undefined,
-  b: string | undefined
+  b: string | undefined,
 ): number {
   if (a === b) {
     return 0;

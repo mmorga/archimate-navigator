@@ -16,13 +16,13 @@ function createTestElement(model: Model): Element {
 function createTestRelationship(
   model: Model,
   source: Element,
-  target: Element
+  target: Element,
 ): Relationship {
   const relationship = new Relationship(
     model,
     RelationshipType.Serving,
     source.id,
-    target.id
+    target.id,
   );
   relationship.source = source.id;
   relationship.target = target.id;
@@ -53,12 +53,12 @@ test("diagram", () => {
   expect(result.viewpoint).toBe(ViewpointType.Application_cooperation);
   expect(
     result.nodes
-      .map(n => n.entityInstance())
-      .every(e => model.elements.some(el => el === e))
+      .map((n) => n.entityInstance())
+      .every((e) => model.elements.some((el) => el === e)),
   ).toBeTruthy();
   expect(
     result.connections
-      .map(c => c.entityInstance())
-      .every(r => model.relationships.some(rel => rel === r))
+      .map((c) => c.entityInstance())
+      .every((r) => model.relationships.some((rel) => rel === r)),
   ).toBeTruthy();
 });

@@ -1,16 +1,18 @@
-import React from 'react';
+import React from "react";
 import { IViewNodeProps } from "./default-element";
 import * as BaseViewNode from "./base-view-node";
 import * as BadgedRect from "./badged-rect";
 
-const DistributionNetworkViewNode: React.FC<IViewNodeProps> = React.memo((props) => {
-  const state = BaseViewNode.initialState(props.viewNode, {
-    badge: "#archimate-distribution-network-badge",
-    badgeBounds: BadgedRect.badgeBounds(props.viewNode),
-    entityShape: BadgedRect.entityShape
-  });
+const DistributionNetworkViewNode: React.FC<IViewNodeProps> = React.memo(
+  (props) => {
+    const state = BaseViewNode.initialState(props.viewNode, {
+      badge: "#archimate-distribution-network-badge",
+      badgeBounds: BadgedRect.badgeBounds(props.viewNode),
+      entityShape: BadgedRect.entityShape,
+    });
 
-  return BaseViewNode.render(props, state);
-});
+    return BaseViewNode.render(props, state);
+  },
+);
 
 export default DistributionNetworkViewNode;

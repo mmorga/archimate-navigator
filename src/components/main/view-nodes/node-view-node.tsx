@@ -7,29 +7,29 @@ import * as BaseViewNode from "./base-view-node";
 import React, { useEffect, useState } from "react";
 
 const NodeViewNode: React.FC<IViewNodeProps> = React.memo((props) => {
-
   let badge: string | undefined;
   let badgeBounds: Bounds | undefined;
   if (props.viewNode.childType === "1") {
     badge = "#archimate-node-badge";
     badgeBounds = BadgedNodeViewNode.badgeBounds(props.viewNode);
   }
- 
+
   const [state, setState] = useState<IViewNodeState>(
     BaseViewNode.initialState(props.viewNode, {
       badge: badge,
       badgeBounds: badgeBounds,
       margin: 14,
       textBounds: BadgedNodeViewNode.textBounds(props.viewNode),
-      entityShape: entityShape
-    }));
+      entityShape: entityShape,
+    }),
+  );
 
   useEffect(() => {
     if (props.x !== undefined || props.y !== undefined) {
-      setState(prevState => ({
+      setState((prevState) => ({
         ...prevState,
         badgeBounds: BadgedNodeViewNode.badgeBounds(props.viewNode),
-        textBounds: BadgedNodeViewNode.textBounds(props.viewNode)
+        textBounds: BadgedNodeViewNode.textBounds(props.viewNode),
       }));
     }
   }, [props.x, props.y, props.viewNode]);
@@ -37,15 +37,23 @@ const NodeViewNode: React.FC<IViewNodeProps> = React.memo((props) => {
   return BaseViewNode.render(props, state);
 });
 
-function entityShape(viewNode: ViewNode, backgroundClass: string | undefined, shapeStyle: React.CSSProperties | undefined): JSX.Element {
+function entityShape(
+  viewNode: ViewNode,
+  backgroundClass: string | undefined,
+  shapeStyle: React.CSSProperties | undefined,
+): JSX.Element {
   if (viewNode.childType === "1") {
     return BadgedRect.path(
       viewNode.absolutePosition(),
       backgroundClass,
-      shapeStyle
+      shapeStyle,
     );
   } else {
-    return BadgedNodeViewNode.entityShape(viewNode, backgroundClass, shapeStyle);
+    return BadgedNodeViewNode.entityShape(
+      viewNode,
+      backgroundClass,
+      shapeStyle,
+    );
   }
 }
 

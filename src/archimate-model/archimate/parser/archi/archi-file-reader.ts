@@ -16,7 +16,7 @@ export class ArchiFileReader {
     const model = new Model();
     const modelNodes = doc.getElementsByTagNameNS(
       "http://www.archimatetool.com/archimate",
-      "model"
+      "model",
     );
     if (modelNodes.length === 0) {
       throw new ParserError("Couldn't find a Model in the XMLDocument");
@@ -33,10 +33,10 @@ export class ArchiFileReader {
   }
 
   private fixBendpoints(model: Model) {
-    const dConns = model.diagrams.map(d => d.connections);
+    const dConns = model.diagrams.map((d) => d.connections);
     const connections: Connection[] = new Array<Connection>().concat(...dConns);
-    connections.forEach(connection => {
-      connection.bendpoints.forEach(bendpoint => {
+    connections.forEach((connection) => {
+      connection.bendpoints.forEach((bendpoint) => {
         bendpoint.x += connection.startLocation().x;
         bendpoint.y += connection.startLocation().y;
       });

@@ -7,7 +7,7 @@ import {
   LogicError,
   Model,
   parse,
-  ViewNode
+  ViewNode,
 } from "../archimate-model";
 import "./archimate-navigator.css";
 import ArchimateDiagramView from "./main/archimate-diagram-view";
@@ -19,9 +19,14 @@ interface IProps {
   selectedEntityId?: string; // entity id to select
 }
 
-export default function ArchimateNavigator({ modelUrl, selectedDiagramId, selectedEntityId }: IProps) {
+export default function ArchimateNavigator({
+  modelUrl,
+  selectedDiagramId,
+  selectedEntityId,
+}: IProps) {
   const initialModel = new Model();
-  const initialDiagramId = selectedDiagramId || window.location.hash.replace(/^#/, "");
+  const initialDiagramId =
+    selectedDiagramId || window.location.hash.replace(/^#/, "");
   const initialDiagram = initialModel.lookupDiagram(initialDiagramId);
   const initialEntity = initialModel.lookup(selectedEntityId) || initialDiagram;
 
@@ -32,9 +37,15 @@ export default function ArchimateNavigator({ modelUrl, selectedDiagramId, select
   // const [parseDone, setParseDone] = useState<number>();
   // const [parseTime, setParseTime] = useState<number>();
   // const [parseStart, setParseStart] = useState<number>();
-  const [selectedDiagram, setSelectedDiagram] = useState<Diagram | undefined>(initialDiagram);
-  const [selectedEntity, setSelectedEntity] = useState<IEntity | undefined>(initialEntity);
-  const [sidebarTabKey, setSidebarTabKey] = useState<SidebarTab>(SidebarTab.DiagramTreeTab);
+  const [selectedDiagram, setSelectedDiagram] = useState<Diagram | undefined>(
+    initialDiagram,
+  );
+  const [selectedEntity, setSelectedEntity] = useState<IEntity | undefined>(
+    initialEntity,
+  );
+  const [sidebarTabKey, setSidebarTabKey] = useState<SidebarTab>(
+    SidebarTab.DiagramTreeTab,
+  );
   // const [sidebarWidth] = useState<number>(385);
   const [working, setWorking] = useState<string>();
 
@@ -73,7 +84,7 @@ export default function ArchimateNavigator({ modelUrl, selectedDiagramId, select
 
           const curModel: Model = parsedModel || model;
           const newSelectedDiagram = curModel.lookupDiagram(
-            selectedDiagramId || window.location.hash.replace(/^#/, "")
+            selectedDiagramId || window.location.hash.replace(/^#/, ""),
           );
           const newSelectedEntity =
             curModel.lookup(selectedEntityId) || newSelectedDiagram || curModel;
@@ -82,10 +93,10 @@ export default function ArchimateNavigator({ modelUrl, selectedDiagramId, select
           setSelectedDiagram(newSelectedDiagram);
           setSelectedEntity(newSelectedEntity);
         },
-        error => {
+        (error) => {
           setError(error);
           setWorking(undefined);
-        }
+        },
       );
   }, [modelUrl]);
 
@@ -95,7 +106,7 @@ export default function ArchimateNavigator({ modelUrl, selectedDiagramId, select
 
   const onDiagramLinkClick = (
     entity: IEntity | undefined,
-    _event?: React.MouseEvent<Element>
+    _event?: React.MouseEvent<Element>,
   ) => {
     if (!entity) {
       setSelectedDiagram(undefined);
@@ -111,7 +122,7 @@ export default function ArchimateNavigator({ modelUrl, selectedDiagramId, select
 
   const onEntityClick = (
     entity: IEntity | undefined,
-    _event?: React.MouseEvent<Element>
+    _event?: React.MouseEvent<Element>,
   ) => {
     if (!entity) {
       setSelectedEntity(undefined);
@@ -192,9 +203,7 @@ export default function ArchimateNavigator({ modelUrl, selectedDiagramId, select
           <div className="archimate-svg-container">
             <ArchimateDiagramView
               key={
-                selectedDiagram
-                  ? selectedDiagram.id
-                  : "archimate-no-diagram"
+                selectedDiagram ? selectedDiagram.id : "archimate-no-diagram"
               }
               selectedEntity={selectedEntity}
               selectedDiagram={selectedDiagram}
@@ -202,7 +211,7 @@ export default function ArchimateNavigator({ modelUrl, selectedDiagramId, select
               connections={
                 selectedDiagram
                   ? selectedDiagram.connections.filter(
-                      c => c.targetViewNode() instanceof ViewNode
+                      (c) => c.targetViewNode() instanceof ViewNode,
                     )
                   : []
               }

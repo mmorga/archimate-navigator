@@ -1,4 +1,4 @@
-import type * as CSS from 'csstype';
+import type * as CSS from "csstype";
 import { JSX } from "react";
 import {
   Bounds,
@@ -6,7 +6,7 @@ import {
   Layer,
   layerClassName,
   ViewNode,
-  zeroBounds
+  zeroBounds,
 } from "../../../archimate-model";
 import { entityClickedFunc } from "../../common";
 import EntityLabel from "../entity-label";
@@ -22,7 +22,10 @@ export interface IViewNodeProps {
 }
 
 export interface IGroupAttrs {
-  (viewNode: ViewNode, onClicked: entityClickedFunc | undefined): React.SVGProps<SVGGElement>;
+  (
+    viewNode: ViewNode,
+    onClicked: entityClickedFunc | undefined,
+  ): React.SVGProps<SVGGElement>;
 }
 
 export interface ITitle {
@@ -34,7 +37,11 @@ export interface IDesc {
 }
 
 export interface IEntityShape {
-  (viewNode: ViewNode, backgroundClass: string | undefined, shapeStyle: React.CSSProperties | undefined): JSX.Element;
+  (
+    viewNode: ViewNode,
+    backgroundClass: string | undefined,
+    shapeStyle: React.CSSProperties | undefined,
+  ): JSX.Element;
 }
 
 export interface IShapeStyle {
@@ -42,11 +49,19 @@ export interface IShapeStyle {
 }
 
 export interface IEntityBadge {
-  (badgeBounds: Bounds | undefined, badge: string | undefined): JSX.Element | undefined;
+  (
+    badgeBounds: Bounds | undefined,
+    badge: string | undefined,
+  ): JSX.Element | undefined;
 }
 
 export interface IEntityLabel {
-  (viewNode: ViewNode, textBounds: Bounds, textAlign: CSS.Property.TextAlign, badgeBounds: Bounds | undefined): JSX.Element | undefined;
+  (
+    viewNode: ViewNode,
+    textBounds: Bounds,
+    textAlign: CSS.Property.TextAlign,
+    badgeBounds: Bounds | undefined,
+  ): JSX.Element | undefined;
 }
 
 export interface ISelectedHighlight {
@@ -62,26 +77,33 @@ export interface IViewNodeState {
   textAlign?: CSS.Property.TextAlign;
   textBounds: Bounds;
   margin?: number;
-  groupAttrs: IGroupAttrs,
-  title: ITitle,
-  desc: IDesc,
-  entityShape: IEntityShape,
-  shapeStyle: IShapeStyle,
-  entityBadge: IEntityBadge,
-  entityLabel: IEntityLabel,
-  selectedHighlight: ISelectedHighlight
+  groupAttrs: IGroupAttrs;
+  title: ITitle;
+  desc: IDesc;
+  entityShape: IEntityShape;
+  shapeStyle: IShapeStyle;
+  entityBadge: IEntityBadge;
+  entityLabel: IEntityLabel;
+  selectedHighlight: ISelectedHighlight;
 }
 
-export function initialBounds(viewNode: ViewNode, x?: number, y?: number): Bounds {
+export function initialBounds(
+  viewNode: ViewNode,
+  x?: number,
+  y?: number,
+): Bounds {
   return new Bounds(
     x || viewNode.bounds.left,
     y || viewNode.bounds.top,
     viewNode.bounds.width,
-    viewNode.bounds.height
+    viewNode.bounds.height,
   );
 }
 
-export function initialState(viewNode: ViewNode, customState?: Partial<IViewNodeState>): IViewNodeState {
+export function initialState(
+  viewNode: ViewNode,
+  customState?: Partial<IViewNodeState>,
+): IViewNodeState {
   const bounds = initialBounds(viewNode);
   return {
     backgroundClass: defaultBackgroundClass(viewNode),
@@ -100,7 +122,7 @@ export function initialState(viewNode: ViewNode, customState?: Partial<IViewNode
     entityBadge: entityBadge,
     entityLabel: entityLabel,
     selectedHighlight: selectedHighlight,
-    ...customState
+    ...customState,
   };
 }
 
@@ -119,9 +141,18 @@ export function render(props: IViewNodeProps, state: IViewNodeState) {
     <g {...state.groupAttrs(props.viewNode, props.onClicked)}>
       {state.title(props.viewNode)}
       {state.desc(props.viewNode)}
-      {state.entityShape(props.viewNode, state.backgroundClass, state.shapeStyle(props.viewNode))}
+      {state.entityShape(
+        props.viewNode,
+        state.backgroundClass,
+        state.shapeStyle(props.viewNode),
+      )}
       {state.entityBadge(state.badgeBounds, state.badge)}
-      {state.entityLabel(props.viewNode, state.textBounds, state.textAlign || "center", state.badgeBounds)}
+      {state.entityLabel(
+        props.viewNode,
+        state.textBounds,
+        state.textAlign || "center",
+        state.badgeBounds,
+      )}
       {state.selectedHighlight(props.viewNode, props.selected)}
     </g>
   );
@@ -132,7 +163,7 @@ export function textBounds(viewNode: ViewNode, x?: number, y?: number): Bounds {
     x || viewNode.bounds.left,
     y || viewNode.bounds.top,
     viewNode.bounds.width,
-    viewNode.bounds.height
+    viewNode.bounds.height,
   ).reducedBy(2);
 }
 
@@ -140,7 +171,10 @@ export function badgeBounds(_viewNode: ViewNode): Bounds | undefined {
   return undefined;
 }
 
-export function groupAttrs(viewNode: ViewNode, onClicked: entityClickedFunc | undefined): React.SVGProps<SVGGElement> {
+export function groupAttrs(
+  viewNode: ViewNode,
+  onClicked: entityClickedFunc | undefined,
+): React.SVGProps<SVGGElement> {
   const attrs: React.SVGProps<SVGGElement> = { id: viewNode.id };
   if (viewNode.type && viewNode.type.length > 0) {
     attrs.className = `archimate-${elementType(viewNode)}`;
@@ -165,7 +199,11 @@ export function desc(viewNode: ViewNode) {
   return undefined;
 }
 
-export function entityShape(viewNode: ViewNode, backgroundClass: string | undefined, shapeStyle: React.CSSProperties | undefined) {
+export function entityShape(
+  viewNode: ViewNode,
+  backgroundClass: string | undefined,
+  shapeStyle: React.CSSProperties | undefined,
+) {
   const bounds = viewNode.absolutePosition();
   return (
     <rect
@@ -197,7 +235,10 @@ export function shapeStyle(viewNode: ViewNode): React.CSSProperties {
   return cssStyle;
 }
 
-export function entityBadge(badgeBounds: Bounds | undefined, badge: string | undefined) {
+export function entityBadge(
+  badgeBounds: Bounds | undefined,
+  badge: string | undefined,
+) {
   if (badge === undefined) {
     return undefined;
   }
@@ -218,7 +259,12 @@ export function label(viewNode: ViewNode): string | undefined {
   return el.name;
 }
 
-export function entityLabel(viewNode: ViewNode, textBounds: Bounds, textAlign: CSS.Property.TextAlign, badgeBounds: Bounds | undefined) {
+export function entityLabel(
+  viewNode: ViewNode,
+  textBounds: Bounds,
+  textAlign: CSS.Property.TextAlign,
+  badgeBounds: Bounds | undefined,
+) {
   const optLabel = label(viewNode);
   if (optLabel === undefined) {
     return undefined;
@@ -227,21 +273,19 @@ export function entityLabel(viewNode: ViewNode, textBounds: Bounds, textAlign: C
     <EntityLabel
       child={viewNode}
       label={optLabel}
-      textBounds={
-        textBounds ||
-        viewNode.absolutePosition().reducedBy(2)
-      }
+      textBounds={textBounds || viewNode.absolutePosition().reducedBy(2)}
       textAlign={textAlign}
       badgeBounds={badgeBounds || zeroBounds()}
     />
   );
 }
 
-export function selectedHighlight(viewNode: ViewNode, selected: boolean): JSX.Element | undefined {
+export function selectedHighlight(
+  viewNode: ViewNode,
+  selected: boolean,
+): JSX.Element | undefined {
   if (selected) {
-    return (
-      <SelectedViewNode bounds={viewNode.absolutePosition()} />
-    );
+    return <SelectedViewNode bounds={viewNode.absolutePosition()} />;
   }
   return undefined;
 }

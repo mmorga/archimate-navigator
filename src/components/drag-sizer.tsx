@@ -12,15 +12,15 @@ const DragSizer: React.FC<IProps> = React.memo(({ initialX, onChange }) => {
     clientX: initialX,
     color: "gray",
     dragCount: 0,
-    dragState: ""
+    dragState: "",
   });
 
   const onDrag: React.DragEventHandler<HTMLDivElement> = (ev) => {
-    setState(prev => ({
+    setState((prev) => ({
       ...prev,
       clientX: ev.clientX,
       dragCount: prev.dragCount + 1,
-      dragState: "Drag"
+      dragState: "Drag",
     }));
     onChange(ev.clientX);
   };
@@ -37,20 +37,20 @@ const DragSizer: React.FC<IProps> = React.memo(({ initialX, onChange }) => {
   };
 
   const onDragEnd: React.DragEventHandler<HTMLDivElement> = (ev) => {
-    setState(prev => ({
+    setState((prev) => ({
       ...prev,
       clientX: ev.clientX,
       color: "gray",
-      dragState: "End"
+      dragState: "End",
     }));
     onChange(ev.clientX);
   };
 
   const onDragExit: React.DragEventHandler<HTMLDivElement> = (_ev) => {
-    setState(prev => ({
+    setState((prev) => ({
       ...prev,
       color: "gray",
-      dragState: "Exit"
+      dragState: "Exit",
     }));
     // Commented out as in original
     // onChange(initialX);
@@ -63,7 +63,7 @@ const DragSizer: React.FC<IProps> = React.memo(({ initialX, onChange }) => {
       style={{
         backgroundColor: state.color,
         cursor: "grab",
-        flex: "0 0 3px"
+        flex: "0 0 3px",
       }}
       onDrag={onDrag}
       onDragStart={onDragStart}

@@ -89,7 +89,7 @@ export class ElementTagParser {
   private handleElement = (el: Element) => {
     const t = el.attributes.getNamedItemNS(
       "http://www.w3.org/2001/XMLSchema-instance",
-      "type"
+      "type",
     );
     if (t === null) {
       throw new Error("Couldn't find element type");
@@ -355,5 +355,5 @@ export class ElementTagParser {
       default:
         throw new Error(`Unexpected Element Type ${typeStr}`);
     }
-  }
+  };
 }

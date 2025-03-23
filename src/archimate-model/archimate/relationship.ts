@@ -26,7 +26,7 @@ export class Relationship implements IRelationship {
     model: IModel,
     type: RelationshipType,
     source: string,
-    target: string
+    target: string,
   ) {
     this.model = model;
     this.type = type;
@@ -68,8 +68,8 @@ export class Relationship implements IRelationship {
 
   // Diagrams that this entity is referenced in.
   public diagrams() {
-    return this.model.diagrams.filter(dia =>
-      dia.relationships().find(rel => rel.id === this.id)
+    return this.model.diagrams.filter((dia) =>
+      dia.relationships().find((rel) => rel.id === this.id),
     );
   }
 

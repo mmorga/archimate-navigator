@@ -5,18 +5,18 @@ import * as BaseViewNode from "./base-view-node";
 import React, { useEffect, useState } from "react";
 
 const MeaningViewNode: React.FC<IViewNodeProps> = React.memo((props) => {
-
   const [state, setState] = useState<IViewNodeState>(
     BaseViewNode.initialState(props.viewNode, {
-      entityShape: meaningEntityShape
-    }));
+      entityShape: meaningEntityShape,
+    }),
+  );
 
   useEffect(() => {
     if (props.x !== undefined || props.y !== undefined) {
-      setState(prevState => ({
+      setState((prevState) => ({
         ...prevState,
         badgeBounds: BaseViewNode.badgeBounds(props.viewNode),
-        textBounds: BaseViewNode.textBounds(props.viewNode, props.x, props.y)
+        textBounds: BaseViewNode.textBounds(props.viewNode, props.x, props.y),
       }));
     }
   }, [props.x, props.y, props.viewNode]);
@@ -24,25 +24,29 @@ const MeaningViewNode: React.FC<IViewNodeProps> = React.memo((props) => {
   return BaseViewNode.render(props, state);
 });
 
-function meaningEntityShape(viewNode: ViewNode, backgroundClass: string | undefined, shapeStyle: React.CSSProperties | undefined): JSX.Element {
+function meaningEntityShape(
+  viewNode: ViewNode,
+  backgroundClass: string | undefined,
+  shapeStyle: React.CSSProperties | undefined,
+): JSX.Element {
   const bounds = viewNode.absolutePosition();
   const pts = [
     new Point(
       bounds.left + bounds.width * 0.04,
-      bounds.top + bounds.height * 0.5
+      bounds.top + bounds.height * 0.5,
     ),
     new Point(
       bounds.left + bounds.width * 0.5,
-      bounds.top + bounds.height * 0.12
+      bounds.top + bounds.height * 0.12,
     ),
     new Point(
       bounds.left + bounds.width * 0.94,
-      bounds.top + bounds.height * 0.55
+      bounds.top + bounds.height * 0.55,
     ),
     new Point(
       bounds.left + bounds.width * 0.53,
-      bounds.top + bounds.height * 0.87
-    )
+      bounds.top + bounds.height * 0.87,
+    ),
   ];
   return (
     <path
@@ -77,7 +81,7 @@ function meaningEntityShape(viewNode: ViewNode, backgroundClass: string | undefi
         pts[0].x - bounds.width * 0.164,
         pts[0].y + bounds.height * 0.314,
         pts[0].x,
-        pts[0].y
+        pts[0].y,
       ].join(" ")}
       className={backgroundClass}
       style={shapeStyle}

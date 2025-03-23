@@ -16,7 +16,7 @@ export function getNSStringAttribute(node: Element, name: string, ns?: string) {
 
 export function getIntAttribute(
   node: Element,
-  name: string
+  name: string,
 ): number | undefined {
   const strVal = getStringAttribute(node, name);
   if (strVal === undefined) {

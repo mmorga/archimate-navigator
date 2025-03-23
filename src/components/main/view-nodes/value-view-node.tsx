@@ -6,7 +6,7 @@ export default class ValueViewNode extends DefaultViewNode {
     super(props);
     this.state = {
       ...this.state,
-      textBounds: this.textBounds()
+      textBounds: this.textBounds(),
     };
   }
 
@@ -34,7 +34,7 @@ export default class ValueViewNode extends DefaultViewNode {
       textBounds.left + 10,
       textBounds.top + 10,
       textBounds.width - 20,
-      textBounds.height - 20
+      textBounds.height - 20,
     );
   }
 }

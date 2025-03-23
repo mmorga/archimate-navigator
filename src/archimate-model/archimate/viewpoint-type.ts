@@ -3,7 +3,7 @@ import {
   ConnectorElementTypes,
   CoreElementTypes,
   ElementType,
-  ElementTypes
+  ElementTypes,
 } from "./element-type";
 
 export enum ViewpointType {
@@ -43,7 +43,7 @@ export enum ViewpointType {
   Infrastructure = "Infrastructure",
   Infrastructure_usage = "Infrastructure usage",
   Landscape_map = "Landscape map",
-  Custom = "Custom"
+  Custom = "Custom",
 }
 
 export const Viewpoints: Readonly<ViewpointType[]> = [
@@ -83,7 +83,7 @@ export const Viewpoints: Readonly<ViewpointType[]> = [
   ViewpointType.Infrastructure,
   ViewpointType.Infrastructure_usage,
   ViewpointType.Landscape_map,
-  ViewpointType.Custom
+  ViewpointType.Custom,
 ];
 
 export const ViewpointTypeElementTypes = new Map<
@@ -100,8 +100,8 @@ export const ViewpointTypeElementTypes = new Map<
       ElementType.BusinessCollaboration,
       ElementType.BusinessInterface,
       ElementType.BusinessRole,
-      ElementType.BusinessService
-    )
+      ElementType.BusinessService,
+    ),
   ],
   [
     ViewpointType.Application_behavior,
@@ -112,8 +112,8 @@ export const ViewpointTypeElementTypes = new Map<
       ElementType.ApplicationInteraction,
       ElementType.ApplicationInterface,
       ElementType.ApplicationService,
-      ElementType.DataObject
-    )
+      ElementType.DataObject,
+    ),
   ],
   [
     ViewpointType.Application_cooperation,
@@ -125,8 +125,8 @@ export const ViewpointTypeElementTypes = new Map<
       ElementType.ApplicationInterface,
       ElementType.ApplicationService,
       ElementType.DataObject,
-      ElementType.Location
-    )
+      ElementType.Location,
+    ),
   ],
   [ViewpointType.Application_platform, CoreElementTypes],
   [
@@ -135,8 +135,8 @@ export const ViewpointTypeElementTypes = new Map<
       ElementType.ApplicationCollaboration,
       ElementType.ApplicationComponent,
       ElementType.ApplicationInterface,
-      ElementType.DataObject
-    )
+      ElementType.DataObject,
+    ),
   ],
   [
     ViewpointType.Application_usage,
@@ -151,16 +151,16 @@ export const ViewpointTypeElementTypes = new Map<
       ElementType.BusinessObject,
       ElementType.BusinessProcess,
       ElementType.BusinessRole,
-      ElementType.DataObject
-    )
+      ElementType.DataObject,
+    ),
   ],
   [
     ViewpointType.Business_function,
     ConnectorElementTypes.concat(
       ElementType.BusinessActor,
       ElementType.BusinessFunction,
-      ElementType.BusinessRole
-    )
+      ElementType.BusinessRole,
+    ),
   ],
   [
     ViewpointType.Business_process,
@@ -176,8 +176,8 @@ export const ViewpointTypeElementTypes = new Map<
       ElementType.BusinessRole,
       ElementType.BusinessService,
       ElementType.Location,
-      ElementType.Representation
-    )
+      ElementType.Representation,
+    ),
   ],
   [
     ViewpointType.Business_process_cooperation,
@@ -202,8 +202,8 @@ export const ViewpointTypeElementTypes = new Map<
       ElementType.BusinessService,
       ElementType.DataObject,
       ElementType.Location,
-      ElementType.Representation
-    )
+      ElementType.Representation,
+    ),
   ],
   [ViewpointType.Capability_map, CoreElementTypes],
   [
@@ -212,8 +212,8 @@ export const ViewpointTypeElementTypes = new Map<
       ElementType.Constraint,
       ElementType.Goal,
       ElementType.Principle,
-      ElementType.Requirement
-    ]
+      ElementType.Requirement,
+    ],
   ],
   [
     ViewpointType.Goal_realization,
@@ -221,8 +221,8 @@ export const ViewpointTypeElementTypes = new Map<
       ElementType.Constraint,
       ElementType.Goal,
       ElementType.Principle,
-      ElementType.Requirement
-    ]
+      ElementType.Requirement,
+    ],
   ],
   [
     ViewpointType.Implementation_and_deployment,
@@ -236,8 +236,8 @@ export const ViewpointTypeElementTypes = new Map<
       ElementType.InfrastructureService,
       ElementType.Network,
       ElementType.Node,
-      ElementType.SystemSoftware
-    )
+      ElementType.SystemSoftware,
+    ),
   ],
   [
     ViewpointType.Implementation_and_migration,
@@ -252,8 +252,8 @@ export const ViewpointTypeElementTypes = new Map<
       ElementType.Deliverable,
       ElementType.BusinessActor,
       ElementType.Plateau,
-      ElementType.Gap
-    )
+      ElementType.Gap,
+    ),
   ],
   [
     ViewpointType.Information_structure,
@@ -262,8 +262,8 @@ export const ViewpointTypeElementTypes = new Map<
       ElementType.BusinessObject,
       ElementType.DataObject,
       ElementType.Meaning,
-      ElementType.Representation
-    )
+      ElementType.Representation,
+    ),
   ],
   [
     ViewpointType.Infrastructure_usage,
@@ -277,8 +277,8 @@ export const ViewpointTypeElementTypes = new Map<
       ElementType.InfrastructureService,
       ElementType.Network,
       ElementType.Node,
-      ElementType.SystemSoftware
-    )
+      ElementType.SystemSoftware,
+    ),
   ],
   [
     ViewpointType.Infrastructure,
@@ -292,15 +292,15 @@ export const ViewpointTypeElementTypes = new Map<
       ElementType.Location,
       ElementType.Network,
       ElementType.Node,
-      ElementType.SystemSoftware
-    )
+      ElementType.SystemSoftware,
+    ),
   ],
   [ViewpointType.Introductory, CoreElementTypes],
   [ViewpointType.Landscape_map, ElementTypes.concat(ConnectorElementTypes)],
   [ViewpointType.Layered, ElementTypes.concat(ConnectorElementTypes)],
   [
     ViewpointType.Migration,
-    ConnectorElementTypes.concat(ElementType.Gap, ElementType.Plateau)
+    ConnectorElementTypes.concat(ElementType.Gap, ElementType.Plateau),
   ],
   [
     ViewpointType.Motivation,
@@ -311,8 +311,8 @@ export const ViewpointTypeElementTypes = new Map<
       ElementType.Goal,
       ElementType.Principle,
       ElementType.Requirement,
-      ElementType.Stakeholder
-    ]
+      ElementType.Stakeholder,
+    ],
   ],
   [
     ViewpointType.Organization,
@@ -321,8 +321,8 @@ export const ViewpointTypeElementTypes = new Map<
       ElementType.BusinessCollaboration,
       ElementType.BusinessInterface,
       ElementType.BusinessRole,
-      ElementType.Location
-    )
+      ElementType.Location,
+    ),
   ],
   [ViewpointType.Outcome_realization, CoreElementTypes],
   [ViewpointType.Physical, CoreElementTypes],
@@ -343,8 +343,8 @@ export const ViewpointTypeElementTypes = new Map<
       ElementType.BusinessService,
       ElementType.Contract,
       ElementType.Product,
-      ElementType.Value
-    )
+      ElementType.Value,
+    ),
   ],
   [
     ViewpointType.Project,
@@ -353,8 +353,8 @@ export const ViewpointTypeElementTypes = new Map<
       ElementType.BusinessRole,
       ElementType.Deliverable,
       ElementType.Goal,
-      ElementType.WorkPackage
-    )
+      ElementType.WorkPackage,
+    ),
   ],
   [
     ViewpointType.Requirements_realization,
@@ -362,8 +362,8 @@ export const ViewpointTypeElementTypes = new Map<
       ConnectorElementTypes,
       ElementType.Constraint,
       ElementType.Goal,
-      ElementType.Requirement
-    )
+      ElementType.Requirement,
+    ),
   ],
   [ViewpointType.Resource_map, CoreElementTypes],
   [
@@ -381,8 +381,8 @@ export const ViewpointTypeElementTypes = new Map<
       ElementType.BusinessProcess,
       ElementType.BusinessRole,
       ElementType.BusinessService,
-      ElementType.DataObject
-    )
+      ElementType.DataObject,
+    ),
   ],
   [
     ViewpointType.Stakeholder,
@@ -390,17 +390,17 @@ export const ViewpointTypeElementTypes = new Map<
       ElementType.Assessment,
       ElementType.Driver,
       ElementType.Goal,
-      ElementType.Stakeholder
-    ]
+      ElementType.Stakeholder,
+    ],
   ],
   [ViewpointType.Strategy, CoreElementTypes],
   [ViewpointType.Technology_usage, CoreElementTypes],
   [ViewpointType.Technology, CoreElementTypes],
-  [ViewpointType.Total, ElementTypes]
+  [ViewpointType.Total, ElementTypes],
 ]);
 
 export function viewpointForElementTypes(
-  elementTypes: Set<ElementType>
+  elementTypes: Set<ElementType>,
 ): ViewpointType {
   let viewpoint = ViewpointType.Custom;
   ViewpointTypeElementTypes.forEach(
@@ -408,14 +408,14 @@ export function viewpointForElementTypes(
       if (is(elementTypes, Set<ElementType>(value))) {
         viewpoint = key;
       }
-    }
+    },
   );
   return viewpoint;
 }
 
 export function elementTypesForViewpoint(
   viewpointType: ViewpointType,
-  currentElementTypes: Set<ElementType>
+  currentElementTypes: Set<ElementType>,
 ): Set<ElementType> {
   if (viewpointType === ViewpointType.Custom) {
     return currentElementTypes;

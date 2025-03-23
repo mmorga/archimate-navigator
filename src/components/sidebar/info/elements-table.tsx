@@ -16,11 +16,11 @@ export default class ElementsTable extends React.PureComponent<IProps> {
         <td colSpan={4}>
           <p className="text-info">No elements</p>
         </td>
-      </tr>
+      </tr>,
     ];
 
     if (this.props.elements.length > 0) {
-      elementRows = this.props.elements.sort(byTypeAndName).map(element => {
+      elementRows = this.props.elements.sort(byTypeAndName).map((element) => {
         return (
           <tr key={element.id}>
             <td>

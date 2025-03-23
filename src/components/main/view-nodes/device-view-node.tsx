@@ -6,36 +6,36 @@ import * as BaseViewNode from "./base-view-node";
 import React, { useEffect, useState } from "react";
 
 const DeviceViewNode: React.FC<IViewNodeProps> = React.memo((props) => {
-
   function badgeTextBounds(props: IViewNodeProps): Partial<IViewNodeState> {
     let badge: string | undefined;
     let badgeBounds: Bounds | undefined;
     let textBounds: Bounds | undefined;
     if (props.viewNode.childType === "1") {
-      badge = "#archimate-device-badge"
-      badgeBounds = BadgedNodeViewNode.badgeBounds(props.viewNode)
-      textBounds = BadgedNodeViewNode.textBounds(props.viewNode)
+      badge = "#archimate-device-badge";
+      badgeBounds = BadgedNodeViewNode.badgeBounds(props.viewNode);
+      textBounds = BadgedNodeViewNode.textBounds(props.viewNode);
     } else {
-      badge = undefined
-      badgeBounds = undefined
-      textBounds = props.viewNode.absolutePosition().reducedBy(2)
+      badge = undefined;
+      badgeBounds = undefined;
+      textBounds = props.viewNode.absolutePosition().reducedBy(2);
     }
     return {
       badge: badge,
       badgeBounds: badgeBounds,
       textBounds: textBounds,
-      entityShape: entityShape
-    }
+      entityShape: entityShape,
+    };
   }
 
   const [state, setState] = useState<IViewNodeState>(
-    BaseViewNode.initialState(props.viewNode, badgeTextBounds(props)));
+    BaseViewNode.initialState(props.viewNode, badgeTextBounds(props)),
+  );
 
   useEffect(() => {
     if (props.x !== undefined || props.y !== undefined) {
-      setState(prevState => ({
+      setState((prevState) => ({
         ...prevState,
-        ...badgeTextBounds(props)
+        ...badgeTextBounds(props),
       }));
     }
   }, [props.x, props.y, props.viewNode]);
@@ -49,7 +49,7 @@ export default DeviceViewNode;
 function path(
   viewNodeBounds: Bounds,
   backgroundClass: string | undefined,
-  style: React.CSSProperties | undefined
+  style: React.CSSProperties | undefined,
 ): JSX.Element {
   const bounds = viewNodeBounds;
   const margin = 10;
@@ -65,7 +65,7 @@ function path(
     "l",
     -margin,
     -margin,
-    "z"
+    "z",
   ].join(" ");
 
   return (
@@ -81,23 +81,23 @@ function path(
         style={style}
       />
       <path d={decorationPath} className={backgroundClass} style={style} />
-      <path
-        d={decorationPath}
-        className="archimate-decoration"
-        style={style}
-      />
+      <path d={decorationPath} className="archimate-decoration" style={style} />
     </>
   );
 }
 
-function entityShape(viewNode: ViewNode, backgroundClass: string | undefined, shapeStyle: React.CSSProperties | undefined): JSX.Element {
+function entityShape(
+  viewNode: ViewNode,
+  backgroundClass: string | undefined,
+  shapeStyle: React.CSSProperties | undefined,
+): JSX.Element {
   if (viewNode.childType === "1") {
-    return BadgedNodeViewNode.entityShape(viewNode, backgroundClass, shapeStyle);
-  } else {
-    return path(
-      viewNode.absolutePosition(),
+    return BadgedNodeViewNode.entityShape(
+      viewNode,
       backgroundClass,
-      shapeStyle
+      shapeStyle,
     );
+  } else {
+    return path(viewNode.absolutePosition(), backgroundClass, shapeStyle);
   }
 }

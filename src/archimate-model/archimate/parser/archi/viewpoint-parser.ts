@@ -49,7 +49,7 @@ const archiViewpointMap = new Map<string, ViewpointType | undefined>([
   ["resource", undefined], // ViewpointType.Resource,
   ["strategy", ViewpointType.Strategy],
   ["technology", ViewpointType.Technology],
-  ["technology_usage", ViewpointType.Technology_usage]
+  ["technology_usage", ViewpointType.Technology_usage],
 ]);
 
 export class ViewpointParser {

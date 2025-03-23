@@ -7,7 +7,7 @@ import {
   IModel,
   InitExtents,
   IProperty,
-  LogicError
+  LogicError,
 } from "./interfaces";
 import { Path } from "./path";
 import { Point } from "./point";
@@ -60,8 +60,9 @@ export class Connection implements IConnection, IEntityRef {
   }
 
   public toString() {
-    return `${this.typeName} ${this.source || "nothing"} -> ${this.target ||
-      "nothing"}`;
+    return `${this.typeName} ${this.source || "nothing"} -> ${
+      this.target || "nothing"
+    }`;
   }
 
   public startLocation(): Point {
@@ -117,7 +118,7 @@ export class Connection implements IConnection, IEntityRef {
         maxX: Math.max(point.x, extents.maxX),
         maxY: Math.max(point.y, extents.maxY),
         minX: Math.min(point.x, extents.minX),
-        minY: Math.min(point.y, extents.minY)
+        minY: Math.min(point.y, extents.minY),
       };
     }, InitExtents);
   }

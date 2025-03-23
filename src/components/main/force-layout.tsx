@@ -44,7 +44,7 @@ export default class ForceLayout extends React.PureComponent<IProps> {
       .forceSimulation(this.props.nodes)
       .force(
         "center",
-        d3force.forceCenter(this.props.centerX, this.props.centerY)
+        d3force.forceCenter(this.props.centerX, this.props.centerY),
       )
       .force("collide", d3force.forceCollide(VIEW_NODE_WIDTH))
       .force("link", this.forceLink)
@@ -62,9 +62,9 @@ export default class ForceLayout extends React.PureComponent<IProps> {
 
     // If our set of nodes and connections haven't changed, then nothing to do here.
     const nextConnections = Set.of<string>(
-      ...this.props.connections.map(c => c.id)
+      ...this.props.connections.map((c) => c.id),
     );
-    const nextNodes = Set.of<string>(...this.props.nodes.map(n => n.id));
+    const nextNodes = Set.of<string>(...this.props.nodes.map((n) => n.id));
     if (
       is(this.prevConnections, nextConnections) &&
       is(this.prevNodes, nextNodes)
@@ -129,7 +129,7 @@ export default class ForceLayout extends React.PureComponent<IProps> {
     if (this.simulation) {
       this.simulation.force(
         "center",
-        d3force.forceCenter(this.props.centerX, this.props.centerY)
+        d3force.forceCenter(this.props.centerX, this.props.centerY),
       );
       if (this.props.onForceLayoutTick) {
         this.props.onForceLayoutTick();

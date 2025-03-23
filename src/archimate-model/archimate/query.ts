@@ -69,16 +69,16 @@ export class Query {
   public availableElementTypes(): Set<ElementType> {
     return Set<ElementType>(
       ViewpointTypeElementTypes.get(
-        this.viewpointType || ViewpointType.Total
-      ) || ElementTypes
+        this.viewpointType || ViewpointType.Total,
+      ) || ElementTypes,
     );
   }
 
   public unselectedElementTypes(): Set<ElementType> {
     return Set<ElementType>(
       this.availableElementTypes().filter(
-        et => this.elementTypes.find(vet => vet === et) === undefined
-      )
+        (et) => this.elementTypes.find((vet) => vet === et) === undefined,
+      ),
     );
   }
 
@@ -105,7 +105,7 @@ export class Query {
     const diagram = this.findOrCreateDiagram();
     const nodesConns = this.diagramNodesAndConnections(
       diagram,
-      queryResult.run()
+      queryResult.run(),
     );
     diagram.name = this.name;
     // diagram.properties = TODO: convert this query into properties so queries can be saved in the standard file format
@@ -132,7 +132,7 @@ export class Query {
 
   private diagramNodesAndConnections(
     diagram: Diagram,
-    elementsRelationships: [Element[], Relationship[]]
+    elementsRelationships: [Element[], Relationship[]],
   ): [ViewNode[], Connection[]] {
     const elements = elementsRelationships[0];
     const relationships = elementsRelationships[1];
@@ -142,17 +142,17 @@ export class Query {
         const target = rel.targetElement();
         if (source === undefined) {
           throw new LogicError(
-            `Relationship ${rel.id} source ${rel.source} Element not found`
+            `Relationship ${rel.id} source ${rel.source} Element not found`,
           );
         }
         if (target === undefined) {
           throw new LogicError(
-            `Relationship ${rel.id} target ${rel.target} Element not found`
+            `Relationship ${rel.id} target ${rel.target} Element not found`,
           );
         }
         return acc.concat([source as Element, target as Element]);
       },
-      []
+      [],
     );
 
     const elementViewNodeMap: Map<string, ViewNode> = elements
@@ -160,11 +160,11 @@ export class Query {
       .reduce(
         (acc: Map<string, ViewNode>, el: Element) =>
           acc.set(el.id, this.viewNodeFor(el, diagram)),
-        new Map<string, ViewNode>()
+        new Map<string, ViewNode>(),
       );
 
-    const connections: Connection[] = relationships.map(rel =>
-      this.connectionFor(rel, elementViewNodeMap, diagram)
+    const connections: Connection[] = relationships.map((rel) =>
+      this.connectionFor(rel, elementViewNodeMap, diagram),
     );
 
     return [Array.from(elementViewNodeMap.values()), connections];
@@ -184,25 +184,25 @@ export class Query {
   private connectionFor(
     relationship: Relationship,
     elementViewNodeMap: Map<string, ViewNode>,
-    _diagram: Diagram
+    _diagram: Diagram,
   ): Connection {
     const sourceViewNode = elementViewNodeMap.get(relationship.source);
     const targetViewNode = elementViewNodeMap.get(relationship.target);
     if (sourceViewNode === undefined) {
       throw new LogicError(
-        `Source ViewNode id: ${relationship.source} not found`
+        `Source ViewNode id: ${relationship.source} not found`,
       );
     }
     if (targetViewNode === undefined) {
       throw new LogicError(
-        `Target ViewNode id: ${relationship.target} not found`
+        `Target ViewNode id: ${relationship.target} not found`,
       );
     }
     const conn = new Connection(
       this.model,
       "archimate:Connection",
       sourceViewNode.id,
-      targetViewNode.id
+      targetViewNode.id,
     );
     conn.relationship = relationship.id;
     return conn;

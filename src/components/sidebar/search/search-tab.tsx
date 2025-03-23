@@ -31,7 +31,7 @@ export default class SearchTab extends React.PureComponent<IProps, IState> {
     location: 0,
     maxPatternLength: 32,
     shouldSort: true,
-    threshold: 0.6
+    threshold: 0.6,
   };
 
   constructor(props: IProps) {
@@ -40,14 +40,14 @@ export default class SearchTab extends React.PureComponent<IProps, IState> {
     this.state = {
       fuse: new Fuse<IEntity>(this.props.model.entities(), this.fuseOptions),
       results: [],
-      search: this.props.searchText || ""
+      search: this.props.searchText || "",
     };
   }
 
   public componentWillReceiveProps(nextProps: IProps) {
     if (this.props.model !== nextProps.model) {
       this.setState({
-        fuse: new Fuse<IEntity>(nextProps.model.entities(), this.fuseOptions)
+        fuse: new Fuse<IEntity>(nextProps.model.entities(), this.fuseOptions),
       });
     }
   }
@@ -63,7 +63,7 @@ export default class SearchTab extends React.PureComponent<IProps, IState> {
     }
     const resultItems = this.state.results
       .slice(0, maxResultIdx)
-      .map(result => (
+      .map((result) => (
         <SearchResult
           key={result.id}
           entity={result}
@@ -98,7 +98,7 @@ export default class SearchTab extends React.PureComponent<IProps, IState> {
     event.preventDefault();
     if (this.state.search.length > 0) {
       this.setState({
-        results: this.state.fuse.search(this.state.search)
+        results: this.state.fuse.search(this.state.search),
       });
     }
   };
@@ -107,7 +107,7 @@ export default class SearchTab extends React.PureComponent<IProps, IState> {
     this.setState({ search: event.currentTarget.value });
     if (this.state.search.length > 0) {
       this.setState({
-        results: this.state.fuse.search(this.state.search)
+        results: this.state.fuse.search(this.state.search),
       });
     }
   };

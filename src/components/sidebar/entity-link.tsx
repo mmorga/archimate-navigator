@@ -10,23 +10,22 @@ interface IProps {
   children?: React.ReactNode;
 }
 
-const EntityLink: React.FC<IProps> = React.memo(({ entity, entityClicked, text, textClass, children }) => {
-  const handleClick = () => entityClicked(entity);
-  
-  if (!entity) {
-    return null;
-  }
+const EntityLink: React.FC<IProps> = React.memo(
+  ({ entity, entityClicked, text, textClass, children }) => {
+    const handleClick = () => entityClicked(entity);
 
-  const displayText = text || entity.name;
-  return (
-    <a
-      href={entity.href}
-      onClick={handleClick}
-    >
-      {children}
-      <span className={textClass}>{displayText}</span>
-    </a>
-  );
-});
+    if (!entity) {
+      return null;
+    }
+
+    const displayText = text || entity.name;
+    return (
+      <a href={entity.href} onClick={handleClick}>
+        {children}
+        <span className={textClass}>{displayText}</span>
+      </a>
+    );
+  },
+);
 
 export default EntityLink;

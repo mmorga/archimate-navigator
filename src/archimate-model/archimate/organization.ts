@@ -27,9 +27,9 @@ export class Organization implements IOrganization {
 
   public itemEntities(): IEntity[] {
     return this.items
-      .map(itemId => this.item(itemId))
-      .filter(maybeItem => maybeItem !== undefined)
-      .map(item => item as IEntity);
+      .map((itemId) => this.item(itemId))
+      .filter((maybeItem) => maybeItem !== undefined)
+      .map((item) => item as IEntity);
   }
 
   // public normalize(model: IModel): Folder {

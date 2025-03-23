@@ -6,7 +6,7 @@ import QueryWizard from "./query-wizard";
 
 export type autoLayoutToggledFunc = (
   autoLayout: boolean,
-  event?: React.ChangeEvent<HTMLInputElement>
+  event?: React.ChangeEvent<HTMLInputElement>,
 ) => void;
 
 interface IProps {
@@ -28,7 +28,7 @@ export default class QueryTab extends React.PureComponent<IProps, IState> {
     this.state = {
       autoLayout: true,
       queries: List([query]),
-      selectedQuery: query
+      selectedQuery: query,
     };
   }
 
@@ -37,7 +37,7 @@ export default class QueryTab extends React.PureComponent<IProps, IState> {
       const query = new Query(this.props.model);
       this.setState({
         queries: List([query]),
-        selectedQuery: query
+        selectedQuery: query,
       });
     }
   }
@@ -70,14 +70,14 @@ export default class QueryTab extends React.PureComponent<IProps, IState> {
     const newQuery = new Query(this.props.model);
     this.setState({
       queries: this.state.queries.push(newQuery),
-      selectedQuery: newQuery
+      selectedQuery: newQuery,
     });
   };
 
   private onQueryChanged = (query: Query) => {
     const diagram = query.run();
     this.setState({
-      selectedQuery: query
+      selectedQuery: query,
     });
     this.props.onDiagramUpdated(diagram);
   };

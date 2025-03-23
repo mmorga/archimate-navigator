@@ -1,14 +1,23 @@
 import { Set } from "immutable";
 import * as React from "react";
-import { Button, ButtonGroup, Form, FormGroup, ListGroup, ListGroupItem, OverlayTrigger, Tooltip } from "react-bootstrap";
+import {
+  Button,
+  ButtonGroup,
+  Form,
+  FormGroup,
+  ListGroup,
+  ListGroupItem,
+  OverlayTrigger,
+  Tooltip,
+} from "react-bootstrap";
 import { Plus, Trash } from "react-bootstrap-icons";
 import {
   Query,
   RelationshipType,
-  RelationshipTypes
+  RelationshipTypes,
 } from "../../../archimate-model";
 import CollapsibleFormGroup, {
-  ValidationState
+  ValidationState,
 } from "./collapsible-form-group";
 import { JSX } from "react";
 
@@ -28,7 +37,7 @@ export default class RelationshipTypeFilterPanel extends React.PureComponent<
   constructor(props: IProps) {
     super(props);
     this.state = {
-      validationState: this.validationState()
+      validationState: this.validationState(),
     };
   }
 
@@ -70,18 +79,15 @@ export default class RelationshipTypeFilterPanel extends React.PureComponent<
           </OverlayTrigger>
         </ButtonGroup>
         <ListGroup>
-          {RelationshipTypes.sort().map(
-            el =>
-              el ? (
-                <ListGroupItem key={el}>
-                  <div className="pull-right">
-                    {this.addRemoveRelationshipType(el)}
-                  </div>
-                  {<span className="text-primary">{el}</span>}
-                </ListGroupItem>
-              ) : (
-                undefined
-              )
+          {RelationshipTypes.sort().map((el) =>
+            el ? (
+              <ListGroupItem key={el}>
+                <div className="pull-right">
+                  {this.addRemoveRelationshipType(el)}
+                </div>
+                {<span className="text-primary">{el}</span>}
+              </ListGroupItem>
+            ) : undefined,
           )}
         </ListGroup>
         <Form.Text muted>Relationship Types to include in the query</Form.Text>
@@ -111,52 +117,50 @@ export default class RelationshipTypeFilterPanel extends React.PureComponent<
   private onSelectAll = () => {
     this.props.onQueryChanged(
       this.props.query.updateQuery({
-        relationshipTypes: Set<RelationshipType>(RelationshipTypes)
-      })
+        relationshipTypes: Set<RelationshipType>(RelationshipTypes),
+      }),
     );
   };
 
   private onSelectNone = () => {
     this.props.onQueryChanged(
       this.props.query.updateQuery({
-        relationshipTypes: Set<RelationshipType>()
-      })
+        relationshipTypes: Set<RelationshipType>(),
+      }),
     );
   };
 
   private onAddClick = (relationshipType: RelationshipType, _event: any) => {
     this.props.onQueryChanged(
       this.props.query.updateQuery({
-        relationshipTypes: this.props.query.relationshipTypes.add(
-          relationshipType
-        )
-      })
+        relationshipTypes:
+          this.props.query.relationshipTypes.add(relationshipType),
+      }),
     );
   };
 
   private onRemoveClick = (relationshipType: RelationshipType, _event: any) => {
     this.props.onQueryChanged(
       this.props.query.updateQuery({
-        relationshipTypes: this.props.query.relationshipTypes.remove(
-          relationshipType
-        )
-      })
+        relationshipTypes:
+          this.props.query.relationshipTypes.remove(relationshipType),
+      }),
     );
   };
 
   private onDerivedRelationsToggle = (_event: any) => {
     this.props.onQueryChanged(
       this.props.query.updateQuery({
-        includeDerivedRelations: !this.props.query.includeDerivedRelations
-      })
+        includeDerivedRelations: !this.props.query.includeDerivedRelations,
+      }),
     );
   };
 
   private addRemoveRelationshipType(el: RelationshipType): JSX.Element {
     // TODO: should be working with Immutable v4
     // const isSelected = this.props.query.relationshipTypes.includes(el);
-    const isSelected = this.props.query.relationshipTypes.some(
-      e => (e ? e === el : false)
+    const isSelected = this.props.query.relationshipTypes.some((e) =>
+      e ? e === el : false,
     );
     const onClick = isSelected
       ? this.onRemoveClick.bind(this, el)

@@ -18,60 +18,62 @@ interface IProps {
 
 // TODO: save the open closed state to localStorage
 // (https://developer.mozilla.org/en-US/docs/Web/API/Web_Storage_API/Using_the_Web_Storage_API)
-const OrganizationTree: React.FC<IProps> = React.memo(({
-  organizationName,
-  organizationId,
-  organizations,
-  items,
-  entityClicked,
-  selectedEntity
-}) => {
-  const [collapse, setCollapse] = useState(true);
+const OrganizationTree: React.FC<IProps> = React.memo(
+  ({
+    organizationName,
+    organizationId,
+    organizations,
+    items,
+    entityClicked,
+    selectedEntity,
+  }) => {
+    const [collapse, setCollapse] = useState(true);
 
-  const handleClick = (event: React.MouseEvent<Element>) => {
-    event.preventDefault();
-    setCollapse(!collapse);
-  };
+    const handleClick = (event: React.MouseEvent<Element>) => {
+      event.preventDefault();
+      setCollapse(!collapse);
+    };
 
-  const ulId = organizationId;
-  const linkHref = `#${ulId}`;
+    const ulId = organizationId;
+    const linkHref = `#${ulId}`;
 
-  return (
-    <li key={organizationId} id={organizationId}>
-      <a
-        className="archimate-folder text-muted"
-        role="button"
-        data-toggle="collapse"
-        href={linkHref}
-        onClick={handleClick}
-      >
-        <span
+    return (
+      <li key={organizationId} id={organizationId}>
+        <a
+          className="archimate-folder text-muted"
+          role="button"
+          data-toggle="collapse"
+          href={linkHref}
+          onClick={handleClick}
+        >
+          <span
+            className={
+              collapse
+                ? "glyphicon glyphicon-folder-close"
+                : "glyphicon glyphicon-folder-open"
+            }
+          />
+          &nbsp;
+          {organizationName}
+        </a>
+        <ul
+          id={ulId}
           className={
             collapse
-              ? "glyphicon glyphicon-folder-close"
-              : "glyphicon glyphicon-folder-open"
+              ? "archimate-organization-list collapse"
+              : "archimate-organization-list"
           }
-        />
-        &nbsp;
-        {organizationName}
-      </a>
-      <ul
-        id={ulId}
-        className={
-          collapse
-            ? "archimate-organization-list collapse"
-            : "archimate-organization-list"
-        }
-      >
-        <OrganizationContent
-          organizations={organizations}
-          items={items}
-          entityClicked={entityClicked}
-          selectedEntity={selectedEntity}
-        />
-      </ul>
-    </li>
-  );
-});
+        >
+          <OrganizationContent
+            organizations={organizations}
+            items={items}
+            entityClicked={entityClicked}
+            selectedEntity={selectedEntity}
+          />
+        </ul>
+      </li>
+    );
+  },
+);
 
 export default OrganizationTree;

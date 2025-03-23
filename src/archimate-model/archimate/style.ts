@@ -1,4 +1,4 @@
-import type * as CSS from 'csstype';
+import type * as CSS from "csstype";
 import { Color } from "./color";
 import { Font } from "./font";
 

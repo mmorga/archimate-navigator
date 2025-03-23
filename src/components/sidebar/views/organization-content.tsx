@@ -1,5 +1,5 @@
 import { isEqual } from "lodash-es";
-import memoizeOne from 'memoize-one';
+import memoizeOne from "memoize-one";
 import * as React from "react";
 import { useMemo, useState, useEffect } from "react";
 import { IEntity, Organization } from "../../../archimate-model";
@@ -24,7 +24,7 @@ const OrganizationContent: React.FC<IProps> = React.memo(
 
     // Replicate getDerivedStateFromProps using useEffect
     useEffect(() => {
-      const newItemEntities = items.map(i => i.id);
+      const newItemEntities = items.map((i) => i.id);
       if (!isEqual(newItemEntities, itemEntities)) {
         setItemEntities(newItemEntities);
       }
@@ -32,9 +32,9 @@ const OrganizationContent: React.FC<IProps> = React.memo(
 
     // Memoize sorted organizations
     const sortedOrganizations = useMemo(() => {
-      const memoizedSort = memoizeOne<(organizations: Organization[]) => Organization[]>(
-        (orgs) => orgs.sort(entitySortFunc)
-      );
+      const memoizedSort = memoizeOne<
+        (organizations: Organization[]) => Organization[]
+      >((orgs) => orgs.sort(entitySortFunc));
       return memoizedSort(organizations);
     }, [organizations]);
 
@@ -45,7 +45,7 @@ const OrganizationContent: React.FC<IProps> = React.memo(
 
     return (
       <ul className="archimate-organization-list">
-        {sortedOrganizations.map(organization => (
+        {sortedOrganizations.map((organization) => (
           <OrganizationTree
             key={organization.id}
             organizationName={organization.name}
@@ -56,7 +56,7 @@ const OrganizationContent: React.FC<IProps> = React.memo(
             selectedEntity={selectedEntity}
           />
         ))}
-        {sortedItems.map(entity => (
+        {sortedItems.map((entity) => (
           <OrganizationItem
             key={entity.id}
             entity={entity}
@@ -77,7 +77,7 @@ const OrganizationContent: React.FC<IProps> = React.memo(
       return false;
     }
     return true;
-  }
+  },
 );
 
 function entitySortFunc(a: IEntity, b: IEntity): number {

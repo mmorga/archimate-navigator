@@ -18,7 +18,7 @@ enum ZoomMode {
   OneToOne,
   FitToWindow,
   FitToWindowWidth,
-  UserZoom
+  UserZoom,
 }
 
 interface IState {
@@ -49,7 +49,7 @@ export default class SvgPanZoom extends React.PureComponent<IProps, IState> {
       clientWidth: 0,
       scale: props.scale,
       tx: 0,
-      ty: 0
+      ty: 0,
     };
   }
 
@@ -251,7 +251,7 @@ export default class SvgPanZoom extends React.PureComponent<IProps, IState> {
       this.publicZoomTo(
         ownerRect.width / 2,
         ownerRect.height / 2,
-        scaleMultiplier
+        scaleMultiplier,
       );
     }
   };
@@ -259,7 +259,7 @@ export default class SvgPanZoom extends React.PureComponent<IProps, IState> {
   private moveTo(x: number, y: number) {
     this.setState({
       tx: x,
-      ty: y
+      ty: y,
     });
 
     this.keepTransformInsideBounds();
@@ -303,7 +303,7 @@ export default class SvgPanZoom extends React.PureComponent<IProps, IState> {
 
     this.setState({
       tx: size.x - ratio * (size.x - this.state.tx),
-      ty: size.y - ratio * (size.y - this.state.ty)
+      ty: size.y - ratio * (size.y - this.state.ty),
     });
 
     this.keepTransformInsideBounds();
@@ -360,14 +360,14 @@ export default class SvgPanZoom extends React.PureComponent<IProps, IState> {
       bottom: bbox.height * this.state.scale + leftTop.y,
       left: leftTop.x,
       right: bbox.width * this.state.scale + leftTop.x,
-      top: leftTop.y
+      top: leftTop.y,
     };
   }
 
   private client(x: number, y: number) {
     return {
       x: x * this.state.scale + this.state.tx,
-      y: y * this.state.scale + this.state.ty
+      y: y * this.state.scale + this.state.ty,
     };
   }
 
@@ -383,7 +383,7 @@ export default class SvgPanZoom extends React.PureComponent<IProps, IState> {
       bottom: sceneHeight * (1 - BOUNDS_PADDING),
       left: sceneWidth * BOUNDS_PADDING,
       right: sceneWidth * (1 - BOUNDS_PADDING),
-      top: sceneHeight * BOUNDS_PADDING
+      top: sceneHeight * BOUNDS_PADDING,
     };
   }
 
@@ -396,7 +396,7 @@ export default class SvgPanZoom extends React.PureComponent<IProps, IState> {
       const parentOffsetY = parentCTM.f;
       this.storedCTMResult = new Point(
         x * parentScaleX - parentOffsetX,
-        y * parentScaleY - parentOffsetY
+        y * parentScaleY - parentOffsetY,
       );
     } else {
       this.storedCTMResult = new Point(x, y);
@@ -423,7 +423,7 @@ export default class SvgPanZoom extends React.PureComponent<IProps, IState> {
       return this.props.svgPanZoomRef.current.ownerSVGElement;
     } else {
       throw new LogicError(
-        "Shouldn't have called owner when this element isn't mounted"
+        "Shouldn't have called owner when this element isn't mounted",
       );
     }
   }
@@ -438,8 +438,8 @@ export default class SvgPanZoom extends React.PureComponent<IProps, IState> {
       this.props.svgPanZoomRef.current &&
       this.props.svgPanZoomRef.current.ownerSVGElement
     ) {
-      const svg: SVGSVGElement = this.props.svgPanZoomRef.current
-        .ownerSVGElement;
+      const svg: SVGSVGElement =
+        this.props.svgPanZoomRef.current.ownerSVGElement;
       const rect = svg.getClientRects()[0];
       const clientHeight = rect.height;
       const clientWidth = rect.width;

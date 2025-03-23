@@ -5,7 +5,7 @@ import {
   IEntity,
   IHasRelationships,
   IHasViews,
-  Relationship
+  Relationship,
 } from "../../../archimate-model";
 import { entityClickedFunc } from "../../common";
 import DocumentationPanel from "./documentation-panel";
@@ -59,8 +59,9 @@ export default class InfoTab extends React.PureComponent<IProps> {
     ) {
       return (
         <RelationshipsTable
-          relationships={(this.props
-            .entity as IHasRelationships).relationships()}
+          relationships={(
+            this.props.entity as IHasRelationships
+          ).relationships()}
           entityClicked={this.props.entityClicked}
         />
       );

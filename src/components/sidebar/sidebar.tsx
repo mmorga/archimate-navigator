@@ -1,6 +1,10 @@
 import { useState } from "react";
 import { Button, ButtonGroup, Tab, Tabs } from "react-bootstrap";
-import { ArrowsAngleContract, Window, ArrowsAngleExpand } from "react-bootstrap-icons";
+import {
+  ArrowsAngleContract,
+  Window,
+  ArrowsAngleExpand,
+} from "react-bootstrap-icons";
 import { Diagram, IEntity, Model } from "../../archimate-model";
 import "../archimate-navigator.css";
 import { entityClickedFunc } from "../common";
@@ -14,7 +18,7 @@ export enum SidebarTab {
   DiagramTreeTab = 1,
   InfoTab,
   SearchTab,
-  GraphTab
+  GraphTab,
 }
 
 export enum SidebarWidth {
@@ -42,7 +46,7 @@ export default function Sidebar({
   onTabSelected,
   selectedDiagram,
   selectedEntity,
-  sidebarTabKey
+  sidebarTabKey,
 }: IProps) {
   const [sidebarWidth, setSidebarWidth] = useState<number>(SidebarWidth.Normal);
 
@@ -60,13 +64,28 @@ export default function Sidebar({
     <div
       className="archimate-view-nav"
       style={{
-        flexBasis: `${sidebarWidth}px`
+        flexBasis: `${sidebarWidth}px`,
       }}
     >
       <ButtonGroup size="sm">
-        <Button onClick={() => onSizeButtonClick(SidebarWidth.Collapsed)} variant={widthStyle(SidebarWidth.Collapsed)}><ArrowsAngleContract /></Button>
-        <Button onClick={() => onSizeButtonClick(SidebarWidth.Normal)} variant={widthStyle(SidebarWidth.Normal)}><Window /></Button>
-        <Button onClick={() => onSizeButtonClick(SidebarWidth.Wide)} variant={widthStyle(SidebarWidth.Wide)}><ArrowsAngleExpand /></Button>
+        <Button
+          onClick={() => onSizeButtonClick(SidebarWidth.Collapsed)}
+          variant={widthStyle(SidebarWidth.Collapsed)}
+        >
+          <ArrowsAngleContract />
+        </Button>
+        <Button
+          onClick={() => onSizeButtonClick(SidebarWidth.Normal)}
+          variant={widthStyle(SidebarWidth.Normal)}
+        >
+          <Window />
+        </Button>
+        <Button
+          onClick={() => onSizeButtonClick(SidebarWidth.Wide)}
+          variant={widthStyle(SidebarWidth.Wide)}
+        >
+          <ArrowsAngleExpand />
+        </Button>
       </ButtonGroup>
       <ModelInfo
         modelName={model.name}
@@ -88,16 +107,10 @@ export default function Sidebar({
           />
         </Tab>
         <Tab eventKey={SidebarTab.InfoTab} title="Info">
-          <InfoTab
-            entity={selectedEntity}
-            entityClicked={entityClicked}
-          />
+          <InfoTab entity={selectedEntity} entityClicked={entityClicked} />
         </Tab>
         <Tab eventKey={SidebarTab.SearchTab} title="Search">
-          <SearchTab
-            model={model}
-            resultClicked={entityClicked}
-          />
+          <SearchTab model={model} resultClicked={entityClicked} />
         </Tab>
         <Tab eventKey={SidebarTab.GraphTab} title="Query">
           <QueryTab

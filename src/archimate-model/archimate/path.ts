@@ -52,14 +52,14 @@ export class Path {
     }
     let bendpoints: string[][] = [];
     if (!this.autoLayout) {
-      bendpoints = this.eachCons(this.points, 3).map(pts =>
-        this.curve_segment(pts[0], pts[1], pts[2])
+      bendpoints = this.eachCons(this.points, 3).map((pts) =>
+        this.curve_segment(pts[0], pts[1], pts[2]),
       );
     }
     const dCmds: string[] = ([] as string[]).concat(
       this.move_to(this.points[0]), // Starting point (Source)
       ...bendpoints,
-      this.line_to(this.points[this.points.length - 1]) // Ending point (Target)
+      this.line_to(this.points[this.points.length - 1]), // Ending point (Target)
     );
     this.dCmds = dCmds;
 
@@ -78,7 +78,7 @@ export class Path {
         lengthFromStart -= segment.length();
         return acc;
       },
-      undefined
+      undefined,
     );
     return pt ? (pt as Point) : new Point(0.0, 0.0);
   }
@@ -138,7 +138,7 @@ export class Path {
         // .filter(bendpoint => {
         //   return ![this.sourceBounds, this.targetBounds].some(bounds => bendpoint.inside(bounds));
         // })
-        .map(bendpoint => Bounds.fromPoint(bendpoint))
+        .map((bendpoint) => Bounds.fromPoint(bendpoint))
     );
   }
 
@@ -154,7 +154,7 @@ export class Path {
   private calcPoints(): Point[] {
     const boundsAry = new Array<Bounds>()
       .concat(this.sourceBounds, this.normalizedBendPoints(), this.targetBounds)
-      .filter(b => b !== undefined);
+      .filter((b) => b !== undefined);
 
     // const points = this.boundsToPoints(bounds[0], bounds[1]);
     let points: Point[] = [];
@@ -167,13 +167,13 @@ export class Path {
     // JS doesn't do objects justice!!!
     // This section just uses a Map to make sure the list of points is unique
     const ptHash = new Map<string, Point>();
-    points.forEach(pt => ptHash.set(pt.toString(), pt));
+    points.forEach((pt) => ptHash.set(pt.toString(), pt));
     return Array.from(ptHash.values());
   }
 
   // Returns the lengths of each segment of the line
   private segmentLengths(): number[] {
-    return this.segments.map(s => s.length());
+    return this.segments.map((s) => s.length());
   }
 
   // this.return Float length of this path
@@ -183,7 +183,7 @@ export class Path {
     }
     this.pathLength = this.segmentLengths().reduce(
       (total, length) => total + length,
-      0
+      0,
     );
     return this.pathLength;
   }
@@ -215,6 +215,6 @@ export class Path {
     for (let i = 0; i < len; ++i) {
       mappedAry[i] = i;
     }
-    return mappedAry.map(i => [ary[i], ary[i + 1], ary[i + 2]]);
+    return mappedAry.map((i) => [ary[i], ary[i + 1], ary[i + 2]]);
   }
 }

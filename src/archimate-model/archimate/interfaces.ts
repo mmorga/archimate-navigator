@@ -25,7 +25,7 @@ export const InitExtents: IExtents = {
   maxX: Number.MIN_SAFE_INTEGER,
   maxY: Number.MIN_SAFE_INTEGER,
   minX: Number.MAX_SAFE_INTEGER,
-  minY: Number.MAX_SAFE_INTEGER
+  minY: Number.MAX_SAFE_INTEGER,
 };
 
 export interface IRange {
@@ -223,7 +223,7 @@ export function inodeKeyFunc(
   this: SVGGElement,
   datum: IViewNode,
   _index: number,
-  _groups: SVGGElement[]
+  _groups: SVGGElement[],
 ) {
   return datum.id;
 }

@@ -15,7 +15,7 @@ export enum RelationshipType {
   Association = "AssociationRelationship",
   Junction = "JunctionRelationship",
   AndJunction = "AndJunctionRelationship",
-  OrJunction = "OrJunctionRelationship"
+  OrJunction = "OrJunctionRelationship",
 }
 
 export const RelationshipTypes = [
@@ -35,5 +35,5 @@ export const RelationshipTypes = [
   RelationshipType.Association,
   RelationshipType.Junction,
   RelationshipType.AndJunction,
-  RelationshipType.OrJunction
+  RelationshipType.OrJunction,
 ];

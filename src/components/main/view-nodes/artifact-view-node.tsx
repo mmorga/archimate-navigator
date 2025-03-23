@@ -3,9 +3,13 @@ import { JSX } from "react";
 import { ViewNode } from "../../../archimate-model";
 import * as BadgedRect from "./badged-rect";
 import * as BaseViewNode from "./base-view-node";
-import React from 'react';
+import React from "react";
 
-function artifactEntityShape(viewNode: ViewNode, backgroundClass: string | undefined, shapeStyle: React.CSSProperties | undefined): JSX.Element {
+function artifactEntityShape(
+  viewNode: ViewNode,
+  backgroundClass: string | undefined,
+  shapeStyle: React.CSSProperties | undefined,
+): JSX.Element {
   const bounds = viewNode.absolutePosition();
   const margin = 18;
   return (
@@ -24,7 +28,7 @@ function artifactEntityShape(viewNode: ViewNode, backgroundClass: string | undef
           bounds.height - margin,
           "h",
           -bounds.width,
-          "z"
+          "z",
         ].join(" ")}
       />
       <path
@@ -36,7 +40,7 @@ function artifactEntityShape(viewNode: ViewNode, backgroundClass: string | undef
           margin,
           "h",
           margin,
-          "z"
+          "z",
         ].join(" ")}
         className="archimate-decoration"
       />
@@ -48,7 +52,7 @@ const ArtifactViewNode: React.FC<IViewNodeProps> = React.memo((props) => {
   const state = BaseViewNode.initialState(props.viewNode, {
     badge: "archimate-artifact-badge",
     badgeBounds: BadgedRect.badgeBounds(props.viewNode),
-    entityShape: artifactEntityShape
+    entityShape: artifactEntityShape,
   });
 
   return BaseViewNode.render(props, state);

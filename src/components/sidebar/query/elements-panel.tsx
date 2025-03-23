@@ -5,7 +5,7 @@ import {
   ListGroup,
   ListGroupItem,
   OverlayTrigger,
-  Tooltip
+  Tooltip,
 } from "react-bootstrap";
 import { PlusCircle, Trash } from "react-bootstrap-icons";
 import { Element, Query } from "../../../archimate-model";
@@ -27,7 +27,7 @@ export default class ElementsPanel extends React.PureComponent<IProps, IState> {
     super(props);
     this.state = {
       showElementPicker: false,
-      valid: this.props.query.elements.size > 0 ? "success" : "error"
+      valid: this.props.query.elements.size > 0 ? "success" : "error",
     };
   }
 
@@ -48,9 +48,7 @@ export default class ElementsPanel extends React.PureComponent<IProps, IState> {
       <>
         <CollapsibleFormGroup
           label={this.label()}
-          labelStyle={
-            this.props.query.elements.size === 0 ? "danger" : "info"
-          }
+          labelStyle={this.props.query.elements.size === 0 ? "danger" : "info"}
           defaultExpanded={true}
           title="Elements"
           validationState={this.state.valid}
@@ -62,30 +60,27 @@ export default class ElementsPanel extends React.PureComponent<IProps, IState> {
           </OverlayTrigger>
           {this.props.query.elements.size > 0 ? (
             <ListGroup>
-              {this.props.query.elements.toArray().map(
-                el =>
-                  el ? (
-                    <ListGroupItem key={el.id}>
-                      <div className="pull-right">
-                        <Button
-                          size="sm"
-                          variant="danger"
-                          onClick={this.onRemoveElement.bind(this, el)}
-                        >
-                          <Trash />
-                        </Button>
-                      </div>
-                      <span className="text-info">{el.type}</span>
-                      {": "}
-                      {el.name ? (
-                        <span className="text-primary">{el.name}</span>
-                      ) : (
-                        <span className="text-muted">unnamed</span>
-                      )}
-                    </ListGroupItem>
-                  ) : (
-                    undefined
-                  )
+              {this.props.query.elements.toArray().map((el) =>
+                el ? (
+                  <ListGroupItem key={el.id}>
+                    <div className="pull-right">
+                      <Button
+                        size="sm"
+                        variant="danger"
+                        onClick={this.onRemoveElement.bind(this, el)}
+                      >
+                        <Trash />
+                      </Button>
+                    </div>
+                    <span className="text-info">{el.type}</span>
+                    {": "}
+                    {el.name ? (
+                      <span className="text-primary">{el.name}</span>
+                    ) : (
+                      <span className="text-muted">unnamed</span>
+                    )}
+                  </ListGroupItem>
+                ) : undefined,
               )}
             </ListGroup>
           ) : null}
@@ -110,8 +105,8 @@ export default class ElementsPanel extends React.PureComponent<IProps, IState> {
   private onRemoveElement = (element: Element, _event: any) => {
     this.props.onQueryChanged(
       this.props.query.updateQuery({
-        elements: this.props.query.elements.remove(element)
-      })
+        elements: this.props.query.elements.remove(element),
+      }),
     );
   };
 

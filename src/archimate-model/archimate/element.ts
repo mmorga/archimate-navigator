@@ -5,7 +5,7 @@ import {
   IHasRelationships,
   IModel,
   IProperty,
-  IRelationship
+  IRelationship,
 } from "./interfaces";
 
 // A base element type that can be extended by concrete ArchiMate types.
@@ -50,17 +50,17 @@ export class Element implements IEntity, IHasRelationships {
       return this.relationshipCache;
     }
     this.relationshipCache = this.model.relationships.filter(
-      rel => rel.source === this.id || rel.target === this.id
+      (rel) => rel.source === this.id || rel.target === this.id,
     );
     return this.relationshipCache;
   }
 
   public sourceRelationships(): IRelationship[] {
-    return this.model.relationships.filter(rel => rel.source === this.id);
+    return this.model.relationships.filter((rel) => rel.source === this.id);
   }
 
   public targetRelationships(): IRelationship[] {
-    return this.model.relationships.filter(rel => rel.target === this.id);
+    return this.model.relationships.filter((rel) => rel.target === this.id);
   }
 
   // Diagrams that this entity is referenced in.
@@ -68,8 +68,8 @@ export class Element implements IEntity, IHasRelationships {
     if (this.diagramCache) {
       return this.diagramCache;
     }
-    this.diagramCache = this.model.diagrams.filter(dia =>
-      dia.elements().find(el => el.id === this.id)
+    this.diagramCache = this.model.diagrams.filter((dia) =>
+      dia.elements().find((el) => el.id === this.id),
     );
     return this.diagramCache;
   }

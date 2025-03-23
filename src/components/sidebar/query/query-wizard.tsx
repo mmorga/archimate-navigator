@@ -11,7 +11,7 @@ import {
   FormControl,
   FormGroup,
   ListGroup,
-  ListGroupItem
+  ListGroupItem,
 } from "react-bootstrap";
 import { CaretUpFill, CaretDownFill, Plus, Trash } from "react-bootstrap-icons";
 import {
@@ -24,7 +24,7 @@ import {
   Model,
   Query,
   Viewpoints,
-  ViewpointType
+  ViewpointType,
 } from "../../../archimate-model";
 import ElementTypeFilter from "./query-wizard-form/element-type-filter";
 import LayerCheckbox from "./query-wizard-form/layer-checkbox";
@@ -61,30 +61,30 @@ export default function QueryWizard({ query, onQueryChanged }: IProps) {
     location: 0,
     maxPatternLength: 32,
     shouldSort: true,
-    threshold: 0.6
+    threshold: 0.6,
   };
 
   const onQueryNameChanged = (event: React.ChangeEvent<HTMLInputElement>) => {
-    onQueryChanged(
-      query.updateQuery({ name: event.target.value })
-    );
+    onQueryChanged(query.updateQuery({ name: event.target.value }));
   };
 
   const onViewpointChanged = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const viewpointType = event.target.value as ViewpointType;
     onQueryChanged(
-      query.updateQuery({ 
-        elementTypes: Set<ElementType>(elementTypesForViewpoint(viewpointType, query.elementTypes)),
+      query.updateQuery({
+        elementTypes: Set<ElementType>(
+          elementTypesForViewpoint(viewpointType, query.elementTypes),
+        ),
         viewpointType,
-      })
+      }),
     );
   };
 
   const onPathDepthChanged = (event: React.ChangeEvent<HTMLInputElement>) => {
     onQueryChanged(
       query.updateQuery({
-        pathDepth: Number.parseInt(event.target.value, 10)
-      })
+        pathDepth: Number.parseInt(event.target.value, 10),
+      }),
     );
   };
 
@@ -105,26 +105,22 @@ export default function QueryWizard({ query, onQueryChanged }: IProps) {
   const onAddClick = (element: Element) => {
     onQueryChanged(
       query.updateQuery({
-        elements: query.elements.add(element)
-      })
+        elements: query.elements.add(element),
+      }),
     );
   };
 
   const onRemoveClick = (element: Element) => {
     onQueryChanged(
       query.updateQuery({
-        elements: query.elements.remove(element)
-      })
+        elements: query.elements.remove(element),
+      }),
     );
   };
 
   const addRemoveElement = (el: Element) => {
-    const isSelected = query.elements.some(
-      e => (e ? e.id === el.id : false)
-    );
-    const onClick = isSelected
-      ? () => onRemoveClick(el)
-      : () => onAddClick(el);
+    const isSelected = query.elements.some((e) => (e ? e.id === el.id : false));
+    const onClick = isSelected ? () => onRemoveClick(el) : () => onAddClick(el);
     const variant = isSelected ? "danger" : "primary";
     return (
       <Button size="sm" variant={variant} onClick={onClick}>
@@ -142,21 +138,21 @@ export default function QueryWizard({ query, onQueryChanged }: IProps) {
     if (fuse === undefined) {
       const newFuseElementTypes = query.elementTypes;
       const newFuseFilteredElements = Set<Element>(
-        allElements().filter(
-          e => (e ? newFuseElementTypes.some(et => et === e.type) : false)
-        )
+        allElements().filter((e) =>
+          e ? newFuseElementTypes.some((et) => et === e.type) : false,
+        ),
       );
       // setFuseElementTypes(newFuseElementTypes);
       // setFuseFilteredElements(newFuseFilteredElements);
 
       const newFuse = new Fuse<FuseElement>(
-        newFuseFilteredElements.toJS().map(el => ({
+        newFuseFilteredElements.toJS().map((el) => ({
           id: el.id,
           type: el.type,
           name: el.name,
-          documentation: el.documentation
+          documentation: el.documentation,
         })),
-        fuseOptions
+        fuseOptions,
       );
       setFuse(newFuse);
     }
@@ -166,8 +162,10 @@ export default function QueryWizard({ query, onQueryChanged }: IProps) {
         ? List<Element>(
             (fuse as Fuse<FuseElement>)
               .search(searchValue)
-              .map(result => query.model.elements.find(el => el.id === result.item.id))
-              .filter((el): el is Element => el !== undefined)
+              .map((result) =>
+                query.model.elements.find((el) => el.id === result.item.id),
+              )
+              .filter((el): el is Element => el !== undefined),
           )
         : List<Element>();
     setResults(newResults);
@@ -184,9 +182,7 @@ export default function QueryWizard({ query, onQueryChanged }: IProps) {
   return (
     <Accordion defaultActiveKey="0">
       <Accordion.Item eventKey="0">
-        <Accordion.Header>
-          Query Wizard
-        </Accordion.Header>
+        <Accordion.Header>Query Wizard</Accordion.Header>
         <Accordion.Body>
           <Form>
             <FormGroup controlId="queryName">
@@ -204,33 +200,41 @@ export default function QueryWizard({ query, onQueryChanged }: IProps) {
                 onChange={onViewpointChanged}
                 value={query.viewpointType}
               >
-                {Viewpoints.map(v => v).sort().map(v => (
-                  <option key={v} value={v}>
-                    {v}
-                  </option>
-                ))}
+                {Viewpoints.map((v) => v)
+                  .sort()
+                  .map((v) => (
+                    <option key={v} value={v}>
+                      {v}
+                    </option>
+                  ))}
               </Form.Select>
             </FormGroup>
             <FormGroup controlId="layerFilter">
               <Form.Label>
                 Layer Filter
                 {"  "}
-                {layerFilterCollapsed ? <CaretUpFill onClick={onLayerFilterCollapse}/> : <CaretDownFill onClick={onLayerFilterCollapse}/>}
+                {layerFilterCollapsed ? (
+                  <CaretUpFill onClick={onLayerFilterCollapse} />
+                ) : (
+                  <CaretDownFill onClick={onLayerFilterCollapse} />
+                )}
               </Form.Label>
               {layerFilterCollapsed ? null : (
                 <Card body className="small">
-                  <div style={{columns: 2}}>
-                    {DisplayLayers.map(layer => 
-                      (<LayerCheckbox key={layer} layer={layer} checked={layerChecked(layer)} onChange={onLayerFilterChanged}/>))
-                    }
+                  <div style={{ columns: 2 }}>
+                    {DisplayLayers.map((layer) => (
+                      <LayerCheckbox
+                        key={layer}
+                        layer={layer}
+                        checked={layerChecked(layer)}
+                        onChange={onLayerFilterChanged}
+                      />
+                    ))}
                   </div>
                 </Card>
-              ) }
+              )}
             </FormGroup>
-            <ElementTypeFilter
-              query={query}
-              onQueryChanged={onQueryChanged}
-            />
+            <ElementTypeFilter query={query} onQueryChanged={onQueryChanged} />
             <FormGroup>
               <Form.Label>Max Path Depth</Form.Label>
               <FormControl
@@ -241,7 +245,9 @@ export default function QueryWizard({ query, onQueryChanged }: IProps) {
                 value={query.pathDepth}
                 onChange={onPathDepthChanged}
               />
-              <Form.Text muted>Maximum number of connections to include</Form.Text>
+              <Form.Text muted>
+                Maximum number of connections to include
+              </Form.Text>
             </FormGroup>
             <FormGroup controlId="search">
               <Form.Label>Search</Form.Label>
@@ -262,24 +268,19 @@ export default function QueryWizard({ query, onQueryChanged }: IProps) {
                 {results
                   .toArray()
                   .slice(0, Math.min(20, results.size))
-                  .map(
-                    el =>
-                      el ? (
-                        <ListGroupItem key={el.id}>
-                          <div className="pull-right">
-                            {addRemoveElement(el)}
-                          </div>
-                          <span className="text-info">{el.type}</span>
-                          {": "}
-                          {el.name ? (
-                            <span className="text-primary">{el.name}</span>
-                          ) : (
-                            <span className="text-muted">unnamed</span>
-                          )}
-                        </ListGroupItem>
-                      ) : (
-                        undefined
-                      )
+                  .map((el) =>
+                    el ? (
+                      <ListGroupItem key={el.id}>
+                        <div className="pull-right">{addRemoveElement(el)}</div>
+                        <span className="text-info">{el.type}</span>
+                        {": "}
+                        {el.name ? (
+                          <span className="text-primary">{el.name}</span>
+                        ) : (
+                          <span className="text-muted">unnamed</span>
+                        )}
+                      </ListGroupItem>
+                    ) : undefined,
                   )}
               </ListGroup>
             </FormGroup>

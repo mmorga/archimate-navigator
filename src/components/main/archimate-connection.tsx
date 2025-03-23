@@ -23,9 +23,11 @@ const ArchimateConnection: React.FC<IProps> = ({
   fromX,
   fromY,
   toX,
-  toY
+  toY,
 }) => {
-  const [path, setPath] = React.useState(() => new Path(connection, autoLayout));
+  const [path, setPath] = React.useState(
+    () => new Path(connection, autoLayout),
+  );
   const sourceEntity = connection.sourceViewNode();
   const targetEntity = connection.targetViewNode();
 
@@ -139,7 +141,7 @@ const ArchimateConnection: React.FC<IProps> = ({
       className: pathClass(),
       d: path.d(),
       id: getId(),
-      style: lineStyle()
+      style: lineStyle(),
     };
   };
 
@@ -155,8 +157,7 @@ const ArchimateConnection: React.FC<IProps> = ({
     const rel = connection.entityInstance();
     const type = rel ? rel.type : "default";
     return (
-      ["archimate", cssClassify(type)].join("-") +
-      " archimate-relationship"
+      ["archimate", cssClassify(type)].join("-") + " archimate-relationship"
     );
   };
 

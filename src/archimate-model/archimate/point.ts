@@ -18,7 +18,7 @@ export class Point {
   }
 
   public toString(): string {
-    return [this.x, this.y].map(v => v.toString()).join(" ");
+    return [this.x, this.y].map((v) => v.toString()).join(" ");
   }
 
   // Returns true if this location is inside the bounds argument

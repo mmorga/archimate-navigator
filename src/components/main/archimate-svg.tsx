@@ -26,7 +26,7 @@ export default class ArchimateSvg extends React.PureComponent<IProps> {
     const style4: React.CSSProperties = {
       fill: "none",
       stroke: "inherent",
-      strokeWidth: 0.7
+      strokeWidth: 0.7,
     };
     // const vb: SVGRect = this.props.viewBox || {x: 0, y: 0, width: 800, height: 800};
     return (

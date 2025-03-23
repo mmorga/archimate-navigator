@@ -1,4 +1,4 @@
-import type * as CSS from 'csstype';
+import type * as CSS from "csstype";
 import { JSX } from "react";
 import {
   Bounds,
@@ -6,12 +6,12 @@ import {
   Layer,
   layerClassName,
   ViewNode,
-  zeroBounds
+  zeroBounds,
 } from "../../../archimate-model";
 import { entityClickedFunc } from "../../common";
 import EntityLabel from "../entity-label";
 import SelectedViewNode from "../selected-view-node";
-import React from 'react';
+import React from "react";
 
 export interface IViewNodeProps {
   viewNode: ViewNode;
@@ -42,7 +42,7 @@ export default class DefaultViewNode extends React.PureComponent<
       this.props.x || this.props.viewNode.bounds.left,
       this.props.y || this.props.viewNode.bounds.top,
       this.props.viewNode.bounds.width,
-      this.props.viewNode.bounds.height
+      this.props.viewNode.bounds.height,
     );
     this.state = {
       backgroundClass: this.defaultBackgroundClass(),
@@ -52,7 +52,7 @@ export default class DefaultViewNode extends React.PureComponent<
       entity: this.props.viewNode.entityInstance(),
       margin: 8,
       textAlign: "center",
-      textBounds: bounds.reducedBy(2)
+      textBounds: bounds.reducedBy(2),
     };
   }
 
@@ -60,7 +60,7 @@ export default class DefaultViewNode extends React.PureComponent<
     if (this.props.x !== prevProps.x || this.props.y !== prevProps.y) {
       this.setState({
         badgeBounds: this.badgeBounds(),
-        textBounds: this.textBounds()
+        textBounds: this.textBounds(),
       });
     }
   }
@@ -83,7 +83,7 @@ export default class DefaultViewNode extends React.PureComponent<
       this.props.x,
       this.props.y,
       this.props.viewNode.bounds.width,
-      this.props.viewNode.bounds.height
+      this.props.viewNode.bounds.height,
     ).reducedBy(2);
   }
 
@@ -98,7 +98,7 @@ export default class DefaultViewNode extends React.PureComponent<
     if (this.props.onClicked) {
       attrs.onClick = this.props.onClicked.bind(
         this,
-        this.props.viewNode.entityInstance()
+        this.props.viewNode.entityInstance(),
       );
     }
     return attrs;

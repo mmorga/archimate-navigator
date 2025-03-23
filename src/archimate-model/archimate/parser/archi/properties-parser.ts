@@ -11,7 +11,7 @@ export class PropertiesParser {
 
   public properties(parent: Element) {
     const els = Array.from(parent.children).filter(
-      node => node.nodeName === "property"
+      (node) => node.nodeName === "property",
     );
     if (els === null) {
       return [];
@@ -26,5 +26,5 @@ export class PropertiesParser {
       throw new ParserError("Property is missing key");
     }
     return new Property(key as string, value);
-  }
+  };
 }

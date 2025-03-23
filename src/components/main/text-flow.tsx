@@ -23,7 +23,7 @@ export default class TextFlow extends React.PureComponent<IProps, IState> {
   constructor(props: IProps) {
     super(props);
     this.state = {
-      lines: this.lines()
+      lines: this.lines(),
     };
   }
 
@@ -36,7 +36,7 @@ export default class TextFlow extends React.PureComponent<IProps, IState> {
     const maxLineWidth = this.maxLineWidth();
     if (width <= maxLineWidth) {
       return [
-        { text: this.props.text, maxWidth: maxLineWidth, calcWidth: width }
+        { text: this.props.text, maxWidth: maxLineWidth, calcWidth: width },
       ];
     }
     const words = this.props.text.split(" ");
@@ -58,7 +58,7 @@ export default class TextFlow extends React.PureComponent<IProps, IState> {
         lines.push({
           calcWidth: calcLineWidth,
           maxWidth: maxLineWidth,
-          text: line
+          text: line,
         });
         line = "";
       }
@@ -74,7 +74,7 @@ export default class TextFlow extends React.PureComponent<IProps, IState> {
     }
     const text: SVGTextElement = svgDoc.createElementNS(
       "http://www.w3.org/2000/svg",
-      "text"
+      "text",
     );
     text.setAttribute("x", "0");
     text.setAttribute("y", "0");
@@ -124,7 +124,7 @@ export default class TextFlow extends React.PureComponent<IProps, IState> {
 
   private tspans() {
     let idx = 0;
-    return this.state.lines.map(line => (
+    return this.state.lines.map((line) => (
       <tspan
         x={this.lineX(idx)}
         dy="1.1em"

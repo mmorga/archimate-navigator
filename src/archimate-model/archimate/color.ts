@@ -18,7 +18,7 @@ export class Color {
       Number.parseInt(md[1], 16),
       Number.parseInt(md[2], 16),
       Number.parseInt(md[3], 16),
-      md[4] ? (Number.parseInt(md[4], 16) / 256.0) * 100.0 : 100
+      md[4] ? (Number.parseInt(md[4], 16) / 256.0) * 100.0 : 100,
     );
   }
 
@@ -50,11 +50,11 @@ export class Color {
       vals.push(this.scaledAlpha());
     }
     const vs = vals
-      .filter(v => v !== undefined)
-      .map<number>(v => v as number)
-      .map(v => v.toString(16))
-      .map(s => s.trim())
-      .map(s => (s.length === 1 ? `0${s}` : s))
+      .filter((v) => v !== undefined)
+      .map<number>((v) => v as number)
+      .map((v) => v.toString(16))
+      .map((s) => s.trim())
+      .map((s) => (s.length === 1 ? `0${s}` : s))
       .join("");
 
     return `#${vs}`;

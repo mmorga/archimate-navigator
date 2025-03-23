@@ -5,7 +5,7 @@ export default class StickyViewNode extends DefaultViewNode {
     super(props);
     this.state = {
       ...this.state,
-      backgroundClass: "archimate-sticky-background"
+      backgroundClass: "archimate-sticky-background",
     };
   }
 }

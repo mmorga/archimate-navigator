@@ -19,14 +19,14 @@ export default class RelationshipsTable extends React.PureComponent<IProps> {
       tableRows = [
         <tr key="no-relationships">
           <td colSpan={3}>No Relationships</td>
-        </tr>
+        </tr>,
       ];
     } else {
       tableRows = relationships
-        .filter(r => r !== undefined)
-        .filter(r => r instanceof Relationship)
+        .filter((r) => r !== undefined)
+        .filter((r) => r instanceof Relationship)
         .sort(byType)
-        .map(relationship => (
+        .map((relationship) => (
           <tr key={relationship.id}>
             <td>
               <EntityLink

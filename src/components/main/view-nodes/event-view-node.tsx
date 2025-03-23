@@ -5,42 +5,53 @@ import * as BadgedRoundedRectViewNode from "./badged-rounded-rect";
 import * as BaseViewNode from "./base-view-node";
 import React, { useEffect, useState } from "react";
 
-export const EventViewNode: React.FC<BaseViewNode.IViewNodeProps> = React.memo((props) => {
-
-  function calcStateChanges(props: BaseViewNode.IViewNodeProps) {
-    const badge = props.viewNode.childType === "1" ? undefined : "#archimate-event-badge";
-    return {
-      badge: badge,
-      badgeBounds: badgeBounds(props.viewNode),
-      textBounds: textBounds(props.viewNode)
-    };
-  }
-
-  const [state, setState] = useState<BaseViewNode.IViewNodeState>(
-    BaseViewNode.initialState(props.viewNode, {
-      ...calcStateChanges(props),
-      entityShape: entityShape
-    }));
-
-  useEffect(() => {
-    if (props.x !== undefined || props.y !== undefined) {
-      setState(prevState => ({
-        ...prevState,
-        ...calcStateChanges(props)
-      }));
+export const EventViewNode: React.FC<BaseViewNode.IViewNodeProps> = React.memo(
+  (props) => {
+    function calcStateChanges(props: BaseViewNode.IViewNodeProps) {
+      const badge =
+        props.viewNode.childType === "1" ? undefined : "#archimate-event-badge";
+      return {
+        badge: badge,
+        badgeBounds: badgeBounds(props.viewNode),
+        textBounds: textBounds(props.viewNode),
+      };
     }
-  }, [props.x, props.y, props.viewNode]);
 
-  return BaseViewNode.render(props, state);
-});
+    const [state, setState] = useState<BaseViewNode.IViewNodeState>(
+      BaseViewNode.initialState(props.viewNode, {
+        ...calcStateChanges(props),
+        entityShape: entityShape,
+      }),
+    );
+
+    useEffect(() => {
+      if (props.x !== undefined || props.y !== undefined) {
+        setState((prevState) => ({
+          ...prevState,
+          ...calcStateChanges(props),
+        }));
+      }
+    }, [props.x, props.y, props.viewNode]);
+
+    return BaseViewNode.render(props, state);
+  },
+);
 
 export default EventViewNode;
 
-function entityShape(viewNode: ViewNode, backgroundClass: string | undefined, shapeStyle: React.CSSProperties | undefined): JSX.Element {
+function entityShape(
+  viewNode: ViewNode,
+  backgroundClass: string | undefined,
+  shapeStyle: React.CSSProperties | undefined,
+): JSX.Element {
   if (viewNode.childType === "1") {
     return eventPath(viewNode, backgroundClass, shapeStyle);
   } else {
-    return BadgedRoundedRectViewNode.entityShape(viewNode, backgroundClass, shapeStyle);
+    return BadgedRoundedRectViewNode.entityShape(
+      viewNode,
+      backgroundClass,
+      shapeStyle,
+    );
   }
 }
 
@@ -60,14 +71,18 @@ function textBounds(viewNode: ViewNode): Bounds {
       textBounds.left + notchX * 0.8,
       textBounds.top,
       textBounds.width - notchX,
-      textBounds.height
+      textBounds.height,
     );
   } else {
     return BaseViewNode.textBounds(viewNode);
   }
 }
 
-function eventPath(viewNode: ViewNode, backgroundClass: string | undefined, shapeStyle: React.CSSProperties | undefined): JSX.Element {
+function eventPath(
+  viewNode: ViewNode,
+  backgroundClass: string | undefined,
+  shapeStyle: React.CSSProperties | undefined,
+): JSX.Element {
   const bounds = viewNode.absolutePosition();
   const notchX = 18;
   const notchHeight = bounds.height / 2.0;
@@ -93,13 +108,7 @@ function eventPath(viewNode: ViewNode, backgroundClass: string | undefined, shap
     0,
     0,
     -bounds.height,
-    "z"
+    "z",
   ].join(" ");
-  return (
-    <path
-      d={d}
-      className={backgroundClass}
-      style={shapeStyle}
-    />
-  );
+  return <path d={d} className={backgroundClass} style={shapeStyle} />;
 }

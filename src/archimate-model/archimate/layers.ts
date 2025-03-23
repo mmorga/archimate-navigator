@@ -10,7 +10,7 @@ export enum Layer {
   ImplementationAndMigration = "Implementation And Migration",
   Connectors = "Connectors",
   Other = "Other",
-  None = "None"
+  None = "None",
 }
 
 export const Layers: Layer[] = [
@@ -23,7 +23,7 @@ export const Layers: Layer[] = [
   Layer.ImplementationAndMigration,
   Layer.Connectors,
   Layer.Other,
-  Layer.None
+  Layer.None,
 ];
 
 export const DisplayLayers: Layer[] = [
@@ -33,7 +33,7 @@ export const DisplayLayers: Layer[] = [
   Layer.Technology,
   Layer.Physical,
   Layer.Motivation,
-  Layer.ImplementationAndMigration
+  Layer.ImplementationAndMigration,
 ];
 
 export function layerClassName(layer: Layer) {
@@ -68,7 +68,7 @@ export function layerElements(layer: Layer) {
       return [
         ElementType.Capability,
         ElementType.CourseOfAction,
-        ElementType.Resource
+        ElementType.Resource,
       ];
     case Layer.Business:
       return [
@@ -84,7 +84,7 @@ export function layerElements(layer: Layer) {
         ElementType.BusinessService,
         ElementType.Contract,
         ElementType.Product,
-        ElementType.Representation
+        ElementType.Representation,
       ];
     case Layer.Application:
       return [
@@ -96,7 +96,7 @@ export function layerElements(layer: Layer) {
         ElementType.ApplicationInterface,
         ElementType.ApplicationProcess,
         ElementType.ApplicationService,
-        ElementType.DataObject
+        ElementType.DataObject,
       ];
     case Layer.Technology:
       return [
@@ -118,14 +118,14 @@ export function layerElements(layer: Layer) {
         ElementType.TechnologyInterface,
         ElementType.TechnologyObject,
         ElementType.TechnologyProcess,
-        ElementType.TechnologyService
+        ElementType.TechnologyService,
       ];
     case Layer.Physical:
       return [
         ElementType.DistributionNetwork,
         ElementType.Equipment,
         ElementType.Facility,
-        ElementType.Material
+        ElementType.Material,
       ];
     case Layer.Motivation:
       return [
@@ -138,7 +138,7 @@ export function layerElements(layer: Layer) {
         ElementType.Principle,
         ElementType.Requirement,
         ElementType.Stakeholder,
-        ElementType.Value
+        ElementType.Value,
       ];
     case Layer.ImplementationAndMigration:
       return [
@@ -146,13 +146,13 @@ export function layerElements(layer: Layer) {
         ElementType.Gap,
         ElementType.ImplementationEvent,
         ElementType.Plateau,
-        ElementType.WorkPackage
+        ElementType.WorkPackage,
       ];
     case Layer.Connectors:
       return [
         ElementType.AndJunction,
         ElementType.Junction,
-        ElementType.OrJunction
+        ElementType.OrJunction,
       ];
     case Layer.Other:
       return [ElementType.Location, ElementType.Grouping];

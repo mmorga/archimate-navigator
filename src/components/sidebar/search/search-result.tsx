@@ -3,7 +3,7 @@ import {
   Diagram,
   Element,
   IEntity,
-  Relationship
+  Relationship,
 } from "../../../archimate-model";
 import { entityClickedFunc } from "../../common";
 import EntityLink from "../entity-link";

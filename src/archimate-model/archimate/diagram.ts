@@ -6,7 +6,7 @@ import {
   IExtents,
   IModel,
   InitExtents,
-  IViewConceptType
+  IViewConceptType,
 } from "./interfaces";
 import { Property } from "./property";
 import { Relationship } from "./relationship";
@@ -48,9 +48,9 @@ export class Diagram implements IDiagram {
     // }
     this.relationshipsCache = new Set<Relationship>(
       this.connections
-        .map(conn => conn.entityInstance())
-        .filter(el => el !== undefined)
-        .map(rel => rel as Relationship)
+        .map((conn) => conn.entityInstance())
+        .filter((el) => el !== undefined)
+        .map((rel) => rel as Relationship),
     );
     return Array.from(this.relationshipsCache);
   }
@@ -62,9 +62,9 @@ export class Diagram implements IDiagram {
     // }
     this.elementsCache = new Set<Element>(
       this.nodes
-        .map(viewNode => viewNode.entityInstance())
-        .filter(entity => entity instanceof Element)
-        .map(el => el as Element)
+        .map((viewNode) => viewNode.entityInstance())
+        .filter((entity) => entity instanceof Element)
+        .map((el) => el as Element),
     );
     return Array.from(this.elementsCache.values());
   }
@@ -75,9 +75,9 @@ export class Diagram implements IDiagram {
       return this.diagramsCache;
     }
     this.diagramsCache = this.nodes
-      .map(viewNode => viewNode.entityInstance())
-      .filter(entity => entity instanceof Diagram)
-      .map(el => el as Diagram);
+      .map((viewNode) => viewNode.entityInstance())
+      .filter((entity) => entity instanceof Diagram)
+      .map((el) => el as Diagram);
     return this.diagramsCache;
   }
 
@@ -104,26 +104,27 @@ export class Diagram implements IDiagram {
   }
 
   public calculateMaxExtents(): IExtents {
-    const viewConcepts: IViewConceptType[] = (this
-      .nodes as IViewConceptType[]).concat(this.connections);
+    const viewConcepts: IViewConceptType[] = (
+      this.nodes as IViewConceptType[]
+    ).concat(this.connections);
 
     if (viewConcepts.length < 1) {
       return {
         maxX: 0,
         maxY: 0,
         minX: 0,
-        minY: 0
+        minY: 0,
       };
     }
 
     const extents: IExtents = viewConcepts
-      .map(vc => vc.extents())
+      .map((vc) => vc.extents())
       .reduce((accExtents: IExtents, vcExtents: IExtents) => {
         return {
           maxX: Math.max(vcExtents.maxX, accExtents.maxX),
           maxY: Math.max(vcExtents.maxY, accExtents.maxY),
           minX: Math.min(vcExtents.minX, accExtents.minX),
-          minY: Math.min(vcExtents.minY, accExtents.minY)
+          minY: Math.min(vcExtents.minY, accExtents.minY),
         };
       }, InitExtents);
 
@@ -131,7 +132,7 @@ export class Diagram implements IDiagram {
       maxX: extents.maxX + DIAGRAM_MARGIN * 2,
       maxY: extents.maxY + DIAGRAM_MARGIN * 2,
       minX: extents.minX - DIAGRAM_MARGIN,
-      minY: extents.minY - DIAGRAM_MARGIN
+      minY: extents.minY - DIAGRAM_MARGIN,
     };
   }
 }

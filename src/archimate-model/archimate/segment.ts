@@ -32,7 +32,7 @@ export class Segment {
   public pointAtPercent(pct: number): Point {
     return new Point(
       this.a.x + (this.b.x - this.a.x) * pct,
-      this.a.y + (this.b.y - this.a.y) * pct
+      this.a.y + (this.b.y - this.a.y) * pct,
     );
   }
 }

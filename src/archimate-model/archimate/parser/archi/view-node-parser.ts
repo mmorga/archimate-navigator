@@ -31,7 +31,7 @@ export class ViewNodeParser {
 
   public viewNodes(parent: Element): ViewNode[] {
     const children = Array.from(parent.children).filter(
-      node => node.nodeName === "child"
+      (node) => node.nodeName === "child",
     );
     if (children.length === 0) {
       return [];
@@ -50,7 +50,7 @@ export class ViewNodeParser {
       getNSStringAttribute(
         child,
         "type",
-        "http://www.w3.org/2001/XMLSchema-instance"
+        "http://www.w3.org/2001/XMLSchema-instance",
       ) || ""
     ).replace("archimate:", "");
 
@@ -69,14 +69,14 @@ export class ViewNodeParser {
     const connectionParser = new ConnectionParser(
       this.model,
       this.diagram,
-      viewNode.bounds
+      viewNode.bounds,
     );
     connectionParser.connections(child);
     const viewNodeParser = new ViewNodeParser(
       this.model,
       this.diagram,
-      viewNode.bounds
+      viewNode.bounds,
     );
     return [viewNode].concat(viewNodeParser.viewNodes(child));
-  }
+  };
 }

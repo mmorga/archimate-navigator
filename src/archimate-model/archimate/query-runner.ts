@@ -22,9 +22,9 @@ export class QueryRunner {
   // Changes from a visit pattern to something that generates query results
   public run(): [Element[], Relationship[]] {
     const visited = Set<Element>(this.query.elements);
-    const queue: ISearchQueueItem[] = Array.from(
-      this.query.elements
-    ).map(el => ({ element: el, depth: 1 }));
+    const queue: ISearchQueueItem[] = Array.from(this.query.elements).map(
+      (el) => ({ element: el, depth: 1 }),
+    );
 
     const resultElements: Element[] = [];
     const resultRelationships: Relationship[] = [];
@@ -37,7 +37,7 @@ export class QueryRunner {
       resultElements.push(item.element);
       item.element
         .relationships()
-        .filter(rel => rel.source && rel.target)
+        .filter((rel) => rel.source && rel.target)
         .filter(relationshipTypesFilter(this.query.relationshipTypes))
         .filter(relationshipElementTypesFilter(this.query.elementTypes))
         .reduce(spiderRelationships, {
@@ -45,7 +45,7 @@ export class QueryRunner {
           queue,
           relationships: resultRelationships,
           searchQueueItem: item,
-          visited
+          visited,
         });
     }
     return [resultElements, resultRelationships];
@@ -62,7 +62,7 @@ interface ISpiderAccumulator {
 
 export function spiderRelationships(
   acc: ISpiderAccumulator,
-  relationship: IRelationship
+  relationship: IRelationship,
 ): ISpiderAccumulator {
   const otherElement =
     relationship.sourceElement() === acc.searchQueueItem.element
@@ -79,7 +79,7 @@ export function spiderRelationships(
     if (acc.searchQueueItem.depth < acc.maxPathDepth) {
       acc.queue.push({
         depth: acc.searchQueueItem.depth + 1,
-        element: otherElement
+        element: otherElement,
       });
     }
   }
@@ -87,7 +87,7 @@ export function spiderRelationships(
 }
 
 export function relationshipTypesFilter(
-  relationshipTypes: Set<RelationshipType>
+  relationshipTypes: Set<RelationshipType>,
 ): (relationship: IRelationship) => boolean {
   return (relationship: IRelationship) =>
     relationshipTypes.includes(relationship.type);
@@ -96,18 +96,18 @@ export function relationshipTypesFilter(
 }
 
 export function relationshipElementTypesFilter(
-  elementTypes: Set<ElementType>
-): ((relationship: IRelationship) => boolean) {
+  elementTypes: Set<ElementType>,
+): (relationship: IRelationship) => boolean {
   return (relationship: IRelationship) => {
     return [relationship.sourceElement(), relationship.targetElement()].every(
-      elementTypeFilter(elementTypes)
+      elementTypeFilter(elementTypes),
     );
   };
 }
 
 export function elementTypeFilter(
-  elementTypes: Set<ElementType>
-): ((e: IEntity | undefined) => boolean) {
+  elementTypes: Set<ElementType>,
+): (e: IEntity | undefined) => boolean {
   return (e: IEntity | undefined): boolean => {
     return (
       (e && e instanceof Element && elementTypes.includes(e.type)) || false

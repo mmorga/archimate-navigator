@@ -17,10 +17,10 @@ export default class PropertiesPanel extends React.PureComponent<IProps> {
       tableRows = [
         <tr key={"no-properties"}>
           <td colSpan={2}>No Properties</td>
-        </tr>
+        </tr>,
       ];
     } else {
-      tableRows = properties.sort(byKeyAndValue).map(property => (
+      tableRows = properties.sort(byKeyAndValue).map((property) => (
         <tr key={property.key}>
           <td>{property.key}</td>
           <td>{this.value(property.value)}</td>
@@ -53,9 +53,7 @@ export default class PropertiesPanel extends React.PureComponent<IProps> {
 
   private value(v: string | undefined) {
     if (v) {
-      return <ReactMarkdown>
-        {v}
-      </ReactMarkdown>;
+      return <ReactMarkdown>{v}</ReactMarkdown>;
     }
 
     return <i>undefined</i>;

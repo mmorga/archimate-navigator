@@ -68,7 +68,7 @@ export enum ElementType {
   Capability = "Capability",
   CourseOfAction = "CourseOfAction",
   Resource = "Resource",
-  Grouping = "Grouping"
+  Grouping = "Grouping",
 }
 
 export const ElementTypes: Readonly<ElementType[]> = [
@@ -139,12 +139,12 @@ export const ElementTypes: Readonly<ElementType[]> = [
   ElementType.Capability,
   ElementType.CourseOfAction,
   ElementType.Resource,
-  ElementType.Grouping
+  ElementType.Grouping,
 ];
 
 export const CoreElementTypes: Readonly<ElementType[]> = layerElements(
-  Layer.Business
+  Layer.Business,
 ).concat(layerElements(Layer.Application), layerElements(Layer.Technology));
 export const ConnectorElementTypes: Readonly<ElementType[]> = layerElements(
-  Layer.Connectors
+  Layer.Connectors,
 );

@@ -4,7 +4,7 @@ import {
   IEntity,
   IHasOrganizations,
   IIdentifiable,
-  IModel
+  IModel,
 } from "./interfaces";
 import { Organization } from "./organization";
 import { Property } from "./property";
@@ -72,8 +72,8 @@ export class Model implements IModel {
   }
 
   public viewOrganization(): Organization {
-    const viewOrg = this.organizations.find(
-      o => (o && o.type === "diagrams" ? true : false)
+    const viewOrg = this.organizations.find((o) =>
+      o && o.type === "diagrams" ? true : false,
     );
     if (viewOrg) {
       return viewOrg;
@@ -133,10 +133,10 @@ export class Model implements IModel {
     this.elements.forEach((ref: IEntity) => {
       this.indexHash.set(ref.id, ref);
     });
-    this.relationships.forEach(ref => {
+    this.relationships.forEach((ref) => {
       this.indexHash.set(ref.id, ref);
     });
-    this.diagrams.forEach(dia => {
+    this.diagrams.forEach((dia) => {
       this.indexHash.set(dia.id, this.indexViewNodes(dia));
     });
     // this.propertyDefs.forEach((ref) => { this.indexHash.set(ref.id, ref); });
@@ -145,16 +145,16 @@ export class Model implements IModel {
   }
 
   private indexViewNodes(ref: Diagram): Diagram {
-    ref.nodes.forEach(node => this.indexHash.set(node.id, node));
-    ref.connections.forEach(con => this.indexHash.set(con.id, con));
+    ref.nodes.forEach((node) => this.indexHash.set(node.id, node));
+    ref.connections.forEach((con) => this.indexHash.set(con.id, con));
     return ref;
   }
 
   private indexOrganizations(ref: IHasOrganizations) {
-    ref.organizations.forEach(org => {
+    ref.organizations.forEach((org) => {
       this.indexOrganizations(org);
       this.indexHash.set(org.id, org);
-      });
+    });
     return ref;
   }
 }
@@ -165,7 +165,7 @@ function emptyIndexHash() {
 
 function adjacencyListReducer(
   alMap: AdjacencyList,
-  cv: Element
+  cv: Element,
 ): AdjacencyList {
   return alMap.set(cv, cv.relationships() as Relationship[]);
 }

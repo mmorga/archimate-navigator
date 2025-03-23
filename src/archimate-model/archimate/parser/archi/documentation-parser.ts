@@ -1,7 +1,7 @@
 export class DocumentationParser {
   public value(parentElement: Element, docElementName?: string) {
     const docEl = parentElement.querySelector(
-      docElementName || "documentation"
+      docElementName || "documentation",
     );
     if (docEl === null) {
       return undefined;

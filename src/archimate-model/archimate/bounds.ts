@@ -24,7 +24,7 @@ export class Bounds implements IBounds {
     x: number | undefined,
     y: number | undefined,
     width: number,
-    height: number
+    height: number,
   ) {
     this.x = x;
     this.y = y;
@@ -41,7 +41,7 @@ export class Bounds implements IBounds {
       this.left + os.left,
       this.top + os.top,
       this.width,
-      this.height
+      this.height,
     );
   }
 
@@ -79,7 +79,7 @@ export class Bounds implements IBounds {
     // return new Bounds(this.left + this.width / 2.0, this.top + this.height / 2.0, 0, 0);
     return new Point(
       this.left + this.width / 2.0,
-      this.top + this.height / 2.0
+      this.top + this.height / 2.0,
     );
   }
 
@@ -104,7 +104,7 @@ export class Bounds implements IBounds {
       this.left + val,
       this.top + val,
       this.width - val * 2,
-      this.height - val * 2
+      this.height - val * 2,
     );
   }
 

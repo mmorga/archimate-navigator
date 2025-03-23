@@ -22,11 +22,11 @@ path {
   vertical-align: top;
 }
 
-.entity>.properties {
+.entity > .properties {
   visibility: hidden;
 }
 
-.entity:hover>.properties {
+.entity:hover > .properties {
   visibility: visible;
   z-index: 1000;
 }
@@ -36,7 +36,7 @@ table.properties {
   border: 2px solid gray;
 }
 
-table.properties>caption {
+table.properties > caption {
   background-color: gray;
   border: 2px solid gray;
   border-top-left-radius: 8px;
@@ -44,7 +44,7 @@ table.properties>caption {
 }
 
 .archimate-decoration {
-  fill:rgba(0,0,0,0.1);
+  fill: rgba(0, 0, 0, 0.1);
   stroke: inherit;
 }
 
@@ -153,7 +153,7 @@ table.properties>caption {
 .archimate-grouping-background {
   fill: #ffffff;
   stroke: #b2b2b2;
-  stroke-dasharray: 8,4;
+  stroke-dasharray: 8, 4;
 }
 
 .archimate-sticky-background {

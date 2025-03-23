@@ -7,7 +7,7 @@ import {
   IExtents,
   IModel,
   IProperty,
-  IViewNode
+  IViewNode,
 } from "./interfaces";
 import { Style } from "./style";
 
@@ -150,7 +150,7 @@ export class ViewNode implements IViewNode, IEntityRef {
       this.x || this.bounds.left,
       this.y || this.bounds.top,
       this.bounds.width,
-      this.bounds.height
+      this.bounds.height,
     );
   }
 
@@ -159,7 +159,7 @@ export class ViewNode implements IViewNode, IEntityRef {
       maxX: (this.x || this.bounds.left) + this.bounds.width,
       maxY: (this.y || this.bounds.top) + this.bounds.height,
       minX: this.x || this.bounds.left,
-      minY: this.y || this.bounds.top
+      minY: this.y || this.bounds.top,
     };
   }
 

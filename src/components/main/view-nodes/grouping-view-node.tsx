@@ -4,29 +4,34 @@ import { ViewNode } from "../../../archimate-model";
 import * as BaseViewNode from "./base-view-node";
 import React, { useEffect, useState } from "react";
 
-export const GroupingViewNode: React.FC<BaseViewNode.IViewNodeProps> = React.memo((props) => {
+export const GroupingViewNode: React.FC<BaseViewNode.IViewNodeProps> =
+  React.memo((props) => {
+    const [state, setState] = useState<BaseViewNode.IViewNodeState>(
+      BaseViewNode.initialState(props.viewNode, {
+        backgroundClass: "archimate-grouping-background",
+        textAlign: "left",
+        textBounds: GroupViewNode.textBounds(props.viewNode),
+        entityShape: entityShape,
+      }),
+    );
 
-  const [state, setState] = useState<BaseViewNode.IViewNodeState>(
-    BaseViewNode.initialState(props.viewNode, {
-      backgroundClass: "archimate-grouping-background",
-      textAlign: "left",
-      textBounds: GroupViewNode.textBounds(props.viewNode),
-      entityShape: entityShape
-    }));
+    useEffect(() => {
+      if (props.x !== undefined || props.y !== undefined) {
+        setState((prevState) => ({
+          ...prevState,
+          textBounds: GroupViewNode.textBounds(props.viewNode),
+        }));
+      }
+    }, [props.x, props.y, props.viewNode]);
 
-  useEffect(() => {
-    if (props.x !== undefined || props.y !== undefined) {
-      setState(prevState => ({
-        ...prevState,
-        textBounds: GroupViewNode.textBounds(props.viewNode)
-      }));
-    }
-  }, [props.x, props.y, props.viewNode]);
+    return BaseViewNode.render(props, state);
+  });
 
-  return BaseViewNode.render(props, state);
-});
-
-function entityShape(viewNode: ViewNode, backgroundClass: string | undefined, shapeStyle: React.CSSProperties | undefined): JSX.Element {
+function entityShape(
+  viewNode: ViewNode,
+  backgroundClass: string | undefined,
+  shapeStyle: React.CSSProperties | undefined,
+): JSX.Element {
   const bounds = viewNode.absolutePosition();
   const groupHeaderHeight = 21;
   return (
@@ -49,7 +54,7 @@ function entityShape(viewNode: ViewNode, backgroundClass: string | undefined, sh
           "h",
           bounds.width / 2,
           "v",
-          groupHeaderHeight - 1
+          groupHeaderHeight - 1,
         ].join(" ")}
         className={backgroundClass}
         style={shapeStyle}

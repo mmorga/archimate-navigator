@@ -5,7 +5,7 @@ import { Model } from "../model";
 import {
   elementTypeFilter,
   relationshipElementTypesFilter,
-  relationshipTypesFilter
+  relationshipTypesFilter,
 } from "../query-runner";
 import { Relationship } from "../relationship";
 
@@ -22,8 +22,8 @@ test("relationshipElementTypesFilter", () => {
   const filter = relationshipElementTypesFilter(
     Set<ElementType>([
       ElementType.ApplicationComponent,
-      ElementType.ApplicationInterface
-    ])
+      ElementType.ApplicationInterface,
+    ]),
   );
   const model = new Model();
 
@@ -39,9 +39,9 @@ test("relationshipElementTypesFilter", () => {
         model,
         RelationshipType.Composition,
         appComp.id,
-        appIfc.id
-      )
-    )
+        appIfc.id,
+      ),
+    ),
   ).toBe(true);
   expect(
     filter(
@@ -49,14 +49,14 @@ test("relationshipElementTypesFilter", () => {
         model,
         RelationshipType.Composition,
         appComp.id,
-        appSvc.id
-      )
-    )
+        appSvc.id,
+      ),
+    ),
   ).toBe(false);
   expect(
     filter(
-      new Relationship(model, RelationshipType.Serving, appSvc.id, appComp.id)
-    )
+      new Relationship(model, RelationshipType.Serving, appSvc.id, appComp.id),
+    ),
   ).toBe(false);
 });
 
@@ -64,8 +64,8 @@ test("relationshipTypesFilter", () => {
   const filter = relationshipTypesFilter(
     Set<RelationshipType>([
       RelationshipType.Composition,
-      RelationshipType.Serving
-    ])
+      RelationshipType.Serving,
+    ]),
   );
   const model = new Model();
 
@@ -81,18 +81,18 @@ test("relationshipTypesFilter", () => {
         model,
         RelationshipType.Composition,
         appComp.id,
-        appIfc.id
-      )
-    )
+        appIfc.id,
+      ),
+    ),
   ).toBe(true);
   expect(
     filter(
-      new Relationship(model, RelationshipType.Serving, appComp.id, appSvc.id)
-    )
+      new Relationship(model, RelationshipType.Serving, appComp.id, appSvc.id),
+    ),
   ).toBe(true);
   expect(
     filter(
-      new Relationship(model, RelationshipType.Access, appSvc.id, appComp.id)
-    )
+      new Relationship(model, RelationshipType.Access, appSvc.id, appComp.id),
+    ),
   ).toBe(false);
 });

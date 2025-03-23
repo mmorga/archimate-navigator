@@ -7,7 +7,7 @@ export default class NoteViewNode extends DefaultViewNode {
       ...this.state,
       backgroundClass: "archimate-note-background",
       textAlign: "left",
-      textBounds: this.props.viewNode.absolutePosition().reducedBy(3)
+      textBounds: this.props.viewNode.absolutePosition().reducedBy(3),
     };
   }
 
@@ -28,7 +28,7 @@ export default class NoteViewNode extends DefaultViewNode {
           8,
           "h",
           -(bounds.width - 8),
-          "z"
+          "z",
         ].join(" ")}
         className={this.state.backgroundClass}
         style={this.shapeStyle()}
