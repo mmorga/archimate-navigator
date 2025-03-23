@@ -1,6 +1,6 @@
 import * as React from "react";
 import { JSX } from "react";
-import { Connection, Path, ViewNode } from "../../archimate-model";
+import { Connection, Path } from "../../archimate-model";
 import { entityClickedFunc } from "../common";
 import "./archimate-svg.css";
 
@@ -15,102 +15,72 @@ interface IProps {
   toY: number;
 }
 
-interface IState {
-  path: Path;
-  sourceEntity: ViewNode | Connection;
-  targetEntity: ViewNode | Connection;
-}
+const ArchimateConnection: React.FC<IProps> = ({
+  connection,
+  onClicked,
+  selected,
+  autoLayout,
+  fromX,
+  fromY,
+  toX,
+  toY
+}) => {
+  const [path, setPath] = React.useState(() => new Path(connection, autoLayout));
+  const sourceEntity = connection.sourceViewNode();
+  const targetEntity = connection.targetViewNode();
 
-export default class ArchimateConnection extends React.PureComponent<
-  IProps,
-  IState
-> {
-  constructor(props: IProps) {
-    super(props);
-    this.state = {
-      path: new Path(this.props.connection, this.props.autoLayout),
-      sourceEntity: this.props.connection.sourceViewNode(),
-      targetEntity: this.props.connection.targetViewNode()
-    };
+  React.useEffect(() => {
+    setPath(new Path(connection, autoLayout));
+  }, [connection, autoLayout, fromX, fromY, toX, toY]);
+
+  // If the target is contained in the source, then don't render this connection
+  if (
+    sourceEntity === undefined ||
+    targetEntity === undefined ||
+    targetEntity.inside(sourceEntity)
+  ) {
+    return null;
   }
 
-  public render() {
-    // If the target is contained in the source, then don't render this connection
-    // return if connection.source.nodes.include?(connection.target)
-    if (
-      this.state.sourceEntity === undefined ||
-      this.state.targetEntity === undefined ||
-      this.state.targetEntity.inside(this.state.sourceEntity)
-    ) {
-      return null;
-    }
-    return (
-      <g {...this.groupAttrs()}>
-        <path {...this.pathAttrs()}>
-          <title>{this.props.connection.documentation}</title>
-        </path>
-        {this.selectedHighlight()}
-        {this.lineText()}
-      </g>
-    );
-  }
-
-  public componentDidUpdate(prevProps: IProps) {
-    if (
-      this.props.fromX !== prevProps.fromX ||
-      this.props.fromY !== prevProps.fromY ||
-      this.props.toX !== prevProps.toX ||
-      this.props.toY !== prevProps.toY ||
-      this.props.autoLayout !== prevProps.autoLayout
-    ) {
-      this.setState({
-        path: new Path(this.props.connection, this.props.autoLayout)
-      });
-    }
-  }
-
-  private selectedHighlight() {
-    if (!this.props.selected) {
+  const selectedHighlight = () => {
+    if (!selected) {
       return undefined;
     }
-    const attrs = this.pathAttrs();
+    const attrs = pathAttrs();
     attrs.className = "archimate-selected-element-highlight";
     return <path {...attrs} />;
-  }
+  };
 
-  private groupAttrs(): React.SVGProps<SVGGElement> {
-    const attrs: React.SVGProps<SVGGElement> = { id: this.props.connection.id };
-    if (this.props.onClicked) {
-      attrs.onClick = this.props.onClicked.bind(
-        this,
-        this.props.connection.entityInstance()
-      );
+  const groupAttrs = (): React.SVGProps<SVGGElement> => {
+    const attrs: React.SVGProps<SVGGElement> = { id: connection.id };
+    if (onClicked) {
+      attrs.onClick = onClicked.bind(null, connection.entityInstance());
     }
     return attrs;
-  }
+  };
 
-  private lineText(): JSX.Element | undefined {
-    const relationship = this.props.connection.entityInstance();
+  const lineText = (): JSX.Element | undefined => {
+    const relationship = connection.entityInstance();
     const name = relationship ? relationship.name : undefined;
     if (name === undefined || name.length === 0) {
       return undefined;
     }
-    const pt = this.state.path.point(this.text_position());
+    const pt = path.point(text_position());
     return (
       <text
         className="archimate-relationship-name"
         x={pt.x}
         y={pt.y}
         textAnchor="middle"
-        style={this.textStyle()}
+        style={textStyle()}
       >
         {name}
       </text>
     );
-  }
+  };
 
-  private lineStyle(): React.CSSProperties {
-    const style = this.props.connection.style;
+  const lineStyle = (): React.CSSProperties => {
+    const style = connection.style;
     if (style === undefined) {
       return {};
     }
@@ -122,10 +92,10 @@ export default class ArchimateConnection extends React.PureComponent<
       cssStyle.strokeWidth = style.lineWidth;
     }
     return cssStyle;
-  }
+  };
 
-  private textStyle(): React.CSSProperties {
-    const style = this.props.connection.style;
+  const textStyle = (): React.CSSProperties => {
+    const style = connection.style;
     if (style === undefined) {
       return {};
     }
@@ -146,9 +116,9 @@ export default class ArchimateConnection extends React.PureComponent<
       cssStyle.textAlign = style.textAlignment;
     }
     return cssStyle;
-  }
+  };
 
-  private text_position(): number {
+  const text_position = (): number => {
     const optTp: number | undefined = undefined;
     if (optTp === undefined) {
       return 0.5;
@@ -162,41 +132,52 @@ export default class ArchimateConnection extends React.PureComponent<
       default:
         return 0.5; // "50%"
     }
-  }
+  };
 
-  private pathAttrs(): React.SVGProps<SVGPathElement> {
+  const pathAttrs = (): React.SVGProps<SVGPathElement> => {
     return {
-      className: this.pathClass(),
-      d: this.state.path.d(),
-      id: this.id(),
-      style: this.lineStyle()
+      className: pathClass(),
+      d: path.d(),
+      id: getId(),
+      style: lineStyle()
     };
-  }
+  };
 
-  private id(): string {
-    const rel = this.props.connection.entityInstance();
+  const getId = (): string => {
+    const rel = connection.entityInstance();
     if (rel) {
       return rel.id;
     }
-    return this.props.connection.id;
-  }
+    return connection.id;
+  };
 
-  // Look at the type (if any of the path and set the class appropriately)
-  private pathClass(): string {
-    const rel = this.props.connection.entityInstance();
+  const pathClass = (): string => {
+    const rel = connection.entityInstance();
     const type = rel ? rel.type : "default";
     return (
-      ["archimate", this.cssClassify(type)].join("-") +
+      ["archimate", cssClassify(type)].join("-") +
       " archimate-relationship"
     );
-  }
+  };
 
-  private cssClassify(str: string): string {
+  const cssClassify = (str: string): string => {
     return str
       .replace(/::/, "/")
       .replace("Relationship", "")
       .replace(/([A-Z]+)([A-Z][a-z])/, "$1-$2")
       .replace(/([a-z\d])([A-Z])/, "$1-$2")
       .toLowerCase();
-  }
-}
+  };
+
+  return (
+    <g {...groupAttrs()}>
+      <path {...pathAttrs()}>
+        <title>{connection.documentation}</title>
+      </path>
+      {selectedHighlight()}
+      {lineText()}
+    </g>
+  );
+};
+
+export default ArchimateConnection;
