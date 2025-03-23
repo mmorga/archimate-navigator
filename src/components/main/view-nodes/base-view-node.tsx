@@ -167,7 +167,7 @@ export function textBounds(viewNode: ViewNode, x?: number, y?: number): Bounds {
   ).reducedBy(2);
 }
 
-export function badgeBounds(_viewNode: ViewNode): Bounds | undefined {
+export function badgeBounds(): Bounds | undefined {
   return undefined;
 }
 

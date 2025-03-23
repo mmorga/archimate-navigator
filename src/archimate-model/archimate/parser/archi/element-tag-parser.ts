@@ -95,6 +95,7 @@ export class ElementTagParser {
       throw new Error("Couldn't find element type");
     }
     const typeStr = (t as Attr).value.replace("archimate:", "");
+    const jTypeAttr = el.attributes.getNamedItem("type");
     switch (typeStr) {
       case ElementType.BusinessActor:
         this.parseArchimateElement(el, ElementType.BusinessActor);
@@ -282,7 +283,6 @@ export class ElementTagParser {
       case ElementType.AndJunction:
       case ElementType.Junction:
       case ElementType.OrJunction:
-        const jTypeAttr = el.attributes.getNamedItem("type");
         if (jTypeAttr && jTypeAttr.value === "or") {
           this.parseArchimateElement(el, ElementType.OrJunction);
         } else {

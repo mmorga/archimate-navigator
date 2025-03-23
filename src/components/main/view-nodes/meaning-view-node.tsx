@@ -15,7 +15,7 @@ const MeaningViewNode: React.FC<IViewNodeProps> = React.memo((props) => {
     if (props.x !== undefined || props.y !== undefined) {
       setState((prevState) => ({
         ...prevState,
-        badgeBounds: BaseViewNode.badgeBounds(props.viewNode),
+        badgeBounds: BaseViewNode.badgeBounds(),
         textBounds: BaseViewNode.textBounds(props.viewNode, props.x, props.y),
       }));
     }

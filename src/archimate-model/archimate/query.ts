@@ -164,7 +164,7 @@ export class Query {
       );
 
     const connections: Connection[] = relationships.map((rel) =>
-      this.connectionFor(rel, elementViewNodeMap, diagram),
+      this.connectionFor(rel, elementViewNodeMap),
     );
 
     return [Array.from(elementViewNodeMap.values()), connections];
@@ -184,7 +184,6 @@ export class Query {
   private connectionFor(
     relationship: Relationship,
     elementViewNodeMap: Map<string, ViewNode>,
-    _diagram: Diagram,
   ): Connection {
     const sourceViewNode = elementViewNodeMap.get(relationship.source);
     const targetViewNode = elementViewNodeMap.get(relationship.target);

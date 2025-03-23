@@ -32,7 +32,7 @@ interface IProps {
   entityClicked: entityClickedFunc;
   model: Model;
   onDiagramUpdated: (diagram: Diagram) => void;
-  onTabSelected: (eventKey: any) => void;
+  onTabSelected: (eventKey: string | null) => void;
   selectedDiagram?: Diagram;
   selectedEntity?: IEntity;
   sidebarTabKey: SidebarTab;

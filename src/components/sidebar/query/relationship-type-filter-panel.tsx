@@ -130,7 +130,7 @@ export default class RelationshipTypeFilterPanel extends React.PureComponent<
     );
   };
 
-  private onAddClick = (relationshipType: RelationshipType, _event: any) => {
+  private onAddClick = (relationshipType: RelationshipType) => {
     this.props.onQueryChanged(
       this.props.query.updateQuery({
         relationshipTypes:
@@ -139,7 +139,7 @@ export default class RelationshipTypeFilterPanel extends React.PureComponent<
     );
   };
 
-  private onRemoveClick = (relationshipType: RelationshipType, _event: any) => {
+  private onRemoveClick = (relationshipType: RelationshipType) => {
     this.props.onQueryChanged(
       this.props.query.updateQuery({
         relationshipTypes:
@@ -148,7 +148,7 @@ export default class RelationshipTypeFilterPanel extends React.PureComponent<
     );
   };
 
-  private onDerivedRelationsToggle = (_event: any) => {
+  private onDerivedRelationsToggle = () => {
     this.props.onQueryChanged(
       this.props.query.updateQuery({
         includeDerivedRelations: !this.props.query.includeDerivedRelations,

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Col, Form } from "react-bootstrap";
+import { Col, Container, Row } from "react-bootstrap";
 import "../archimate-navigator.css";
 
 interface IProps {
@@ -10,47 +10,40 @@ interface IProps {
 
 const ModelInfo: React.FC<IProps> = React.memo(
   ({ modelName, diagramName, diagramViewpoint }) => {
-    const diagramRow = () => {
+    const diagramCol = () => {
       if (diagramName) {
         return (
-          <Form.Group>
-            <Col sm={2}>
-              <Form.Label className="text-muted">
-                <small>Model</small>
-              </Form.Label>
-            </Col>
-            <Col sm={10}>
-              <Form.Text>
-                <strong>{diagramName}</strong>{" "}
-                <small>
-                  &lt;
-                  {diagramViewpoint}
-                  &nbsp;Viewpoint&gt;
-                </small>
-              </Form.Text>
-            </Col>
-          </Form.Group>
+          <Col>
+            <strong>{diagramName}</strong>{" "}
+            <small>
+              &lt;
+              {diagramViewpoint}
+              &nbsp;Viewpoint&gt;
+            </small>
+          </Col>
         );
       }
-      return null;
+
+      return <Col>Not Selected</Col>;
     };
 
     return (
-      <Form>
-        <Form.Group>
-          <Col sm={2}>
-            <Form.Label className="text-muted">
-              <small>Model</small>
-            </Form.Label>
+      <Container>
+        <Row>
+          <Col>
+            <small>ArchiMate Model:</small>
           </Col>
-          <Col sm={10}>
-            <Form.Text>
-              <strong>{modelName}</strong>
-            </Form.Text>
+          <Col>
+            <strong>{modelName || "Unknown"}</strong>
           </Col>
-        </Form.Group>
-        {diagramRow()}
-      </Form>
+        </Row>
+        <Row>
+          <Col>
+            <small>Diagram:</small>
+          </Col>
+          {diagramCol()}
+        </Row>
+      </Container>
     );
   },
 );

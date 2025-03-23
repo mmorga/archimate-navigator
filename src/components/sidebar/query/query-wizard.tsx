@@ -238,6 +238,7 @@ export default function QueryWizard({ query, onQueryChanged }: IProps) {
             <FormGroup>
               <Form.Label>Max Path Depth</Form.Label>
               <FormControl
+                id="max-path-depth"
                 type="number"
                 min="0"
                 max="100"
@@ -264,7 +265,7 @@ export default function QueryWizard({ query, onQueryChanged }: IProps) {
               <Form.Label>
                 Results <Badge>{results.size}</Badge>
               </Form.Label>
-              <ListGroup>
+              <ListGroup id="results">
                 {results
                   .toArray()
                   .slice(0, Math.min(20, results.size))

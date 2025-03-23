@@ -219,11 +219,6 @@ export interface IModel extends IEntity, IHasOrganizations {
   register(entity: IEntity): void;
 }
 
-export function inodeKeyFunc(
-  this: SVGGElement,
-  datum: IViewNode,
-  _index: number,
-  _groups: SVGGElement[],
-) {
+export function inodeKeyFunc(this: SVGGElement, datum: IViewNode) {
   return datum.id;
 }

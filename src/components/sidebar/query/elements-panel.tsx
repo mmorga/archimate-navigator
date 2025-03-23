@@ -98,11 +98,11 @@ export default class ElementsPanel extends React.PureComponent<IProps, IState> {
     );
   }
 
-  private onShowElementPicker = (_event: any) => {
+  private onShowElementPicker = () => {
     this.setState({ showElementPicker: true });
   };
 
-  private onRemoveElement = (element: Element, _event: any) => {
+  private onRemoveElement = (element: Element) => {
     this.props.onQueryChanged(
       this.props.query.updateQuery({
         elements: this.props.query.elements.remove(element),

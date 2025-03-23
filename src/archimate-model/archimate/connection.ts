@@ -97,7 +97,7 @@ export class Connection implements IConnection, IEntityRef {
     return this.targetViewNode().absolutePosition();
   }
 
-  public inside(_other: ViewNode | Connection): boolean {
+  public inside(): boolean {
     return false;
   }
 

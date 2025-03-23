@@ -12,7 +12,7 @@ export class Path {
   public sourceBounds: Bounds;
   public targetBounds: Bounds;
   public autoLayout: boolean;
-  private dCmds?: any[];
+  private dCmds?: string[];
   private pathLength?: number;
 
   constructor(connection: Connection, autoLayout?: boolean) {

@@ -1,4 +1,4 @@
-import Fuse from "fuse.js";
+import Fuse, { FuseResult } from "fuse.js";
 import React from "react";
 import {
   Button,
@@ -20,7 +20,7 @@ interface IProps {
 
 interface IState {
   fuse: Fuse<IEntity>;
-  results: any[];
+  results: FuseResult<IEntity>[];
   search: string;
 }
 
@@ -55,18 +55,18 @@ export default class SearchTab extends React.PureComponent<IProps, IState> {
   public render() {
     const maxResultIdx =
       this.state.results.length > 100 ? 100 : this.state.results.length;
-    const opts: any = {};
+    let disabled = false;
     let searchTitle = "Search";
     if (this.state.fuse === null) {
-      opts.disabled = "disabled";
+      disabled = true;
       searchTitle = "Loading";
     }
     const resultItems = this.state.results
       .slice(0, maxResultIdx)
       .map((result) => (
         <SearchResult
-          key={result.id}
-          entity={result}
+          key={result.item.id}
+          entity={result.item}
           resultClicked={this.props.resultClicked}
         />
       ));
@@ -77,12 +77,13 @@ export default class SearchTab extends React.PureComponent<IProps, IState> {
             <FormGroup>
               <InputGroup>
                 <FormControl
+                  id="search-input"
                   type="text"
                   placeholder="Search"
                   defaultValue={this.state.search}
                   onChange={this.handleChange}
                 />
-                <Button onClick={this.handleClick} {...opts}>
+                <Button onClick={this.handleClick} disabled={disabled}>
                   {searchTitle}
                 </Button>
               </InputGroup>
@@ -103,7 +104,7 @@ export default class SearchTab extends React.PureComponent<IProps, IState> {
     }
   };
 
-  private handleChange = (event: any) => {
+  private handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({ search: event.currentTarget.value });
     if (this.state.search.length > 0) {
       this.setState({

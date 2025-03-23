@@ -32,7 +32,7 @@ export default class QueryTab extends React.PureComponent<IProps, IState> {
     };
   }
 
-  public componentDidUpdate(prevProps: IProps, _prevState: IState) {
+  public componentDidUpdate(prevProps: IProps) {
     if (prevProps.model !== this.props.model) {
       const query = new Query(this.props.model);
       this.setState({
@@ -61,8 +61,7 @@ export default class QueryTab extends React.PureComponent<IProps, IState> {
     );
   }
 
-  private onQuerySelected = (event: any /*: React.FormEvent<FormControl>*/) => {
-    const query = event.target.value as Query;
+  private onQuerySelected = (query: Query) => {
     this.setState({ selectedQuery: query });
   };
 

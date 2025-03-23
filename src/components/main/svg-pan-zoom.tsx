@@ -269,7 +269,7 @@ export default class SvgPanZoom extends React.PureComponent<IProps, IState> {
     this.moveTo(this.state.tx + dx, this.state.ty + dy);
   }
 
-  private internalMoveBy(dx: number, dy: number, _smooth?: boolean) {
+  private internalMoveBy(dx: number, dy: number) {
     return this.moveBy(dx, dy);
   }
 
@@ -405,12 +405,9 @@ export default class SvgPanZoom extends React.PureComponent<IProps, IState> {
   }
 
   private getOffsetXY(e: MouseEvent | WheelEvent): Point {
-    let offsetX: number;
-    let offsetY: number;
-
     const ownerRect = this.owner().getBoundingClientRect();
-    offsetX = e.clientX - ownerRect.left;
-    offsetY = e.clientY - ownerRect.top;
+    const offsetX = e.clientX - ownerRect.left;
+    const offsetY = e.clientY - ownerRect.top;
 
     return new Point(offsetX, offsetY);
   }

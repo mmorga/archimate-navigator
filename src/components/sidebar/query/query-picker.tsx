@@ -9,6 +9,7 @@ import {
   InputGroup,
 } from "react-bootstrap";
 import { Query } from "../../../archimate-model";
+import { ChangeEvent } from "react";
 
 interface IProps {
   onNewQuery: () => void;
@@ -55,7 +56,7 @@ export default class QueryTab extends React.PureComponent<IProps> {
     );
   }
 
-  private onQuerySelected = (event: any) => {
+  private onQuerySelected = (event: ChangeEvent<HTMLInputElement>) => {
     const queryId = event.target.value;
     const query = this.props.queries.find((q) =>
       q ? q.id === queryId : false,

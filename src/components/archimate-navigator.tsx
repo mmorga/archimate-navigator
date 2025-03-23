@@ -1,4 +1,3 @@
-import * as React from "react";
 import { useState, useEffect } from "react";
 import { Alert, Button, Modal } from "react-bootstrap";
 import {
@@ -7,6 +6,8 @@ import {
   LogicError,
   Model,
   parse,
+  ParserError,
+  UnsupportedFormat,
   ViewNode,
 } from "../archimate-model";
 import "./archimate-navigator.css";
@@ -30,7 +31,7 @@ export default function ArchimateNavigator({
   const initialDiagram = initialModel.lookupDiagram(initialDiagramId);
   const initialEntity = initialModel.lookup(selectedEntityId) || initialDiagram;
 
-  const [error, setError] = useState<any>();
+  const [error, setError] = useState<string | Error>();
   // const [loadStart, setLoadStart] = useState<number>();
   // const [loadTime, setLoadTime] = useState<number>();
   const [model, setModel] = useState<Model>(initialModel);
@@ -75,7 +76,14 @@ export default function ArchimateNavigator({
               setError("ArchiMate Model Document was null");
             }
           } catch (err) {
-            setError(err);
+            if (
+              err instanceof UnsupportedFormat ||
+              err instanceof ParserError
+            ) {
+              setError(err);
+            } else {
+              throw err;
+            }
           }
 
           // setParseDone(Date.now());
@@ -104,10 +112,7 @@ export default function ArchimateNavigator({
 
   const onWorkingViewHide = () => setWorking(undefined);
 
-  const onDiagramLinkClick = (
-    entity: IEntity | undefined,
-    _event?: React.MouseEvent<Element>,
-  ) => {
+  const onDiagramLinkClick = (entity: IEntity | undefined) => {
     if (!entity) {
       setSelectedDiagram(undefined);
       throw new LogicError("diagram wasn't passed");
@@ -120,10 +125,7 @@ export default function ArchimateNavigator({
     }
   };
 
-  const onEntityClick = (
-    entity: IEntity | undefined,
-    _event?: React.MouseEvent<Element>,
-  ) => {
+  const onEntityClick = (entity: IEntity | undefined) => {
     if (!entity) {
       setSelectedEntity(undefined);
       return;
@@ -135,8 +137,14 @@ export default function ArchimateNavigator({
     }
   };
 
-  const onSidebarTabSelected = (eventKey: any) => {
-    setSidebarTabKey(eventKey);
+  const onSidebarTabSelected = (eventKey: string | null) => {
+    console.log("onSidebarTabSelected eventKey ", eventKey);
+    if (eventKey) {
+      const idx = parseInt(eventKey);
+      // const tab: SidebarTab = SidebarTab[idx]
+      console.log("onSidebarTabSelected idx ", idx);
+      setSidebarTabKey(idx);
+    }
   };
 
   const exceptionView = () => {

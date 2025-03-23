@@ -91,7 +91,7 @@ export default class TextFlow extends React.PureComponent<IProps, IState> {
     return 0;
   }
 
-  private maxLineWidth(_idx = 0): number {
+  private maxLineWidth(): number {
     if (this.props.badgeBounds && this.props.badgeBounds.width > 0) {
       return this.props.bounds.width - (this.props.badgeBounds.width + 2);
     } else {

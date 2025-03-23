@@ -186,7 +186,9 @@ export default class ElementPicker extends React.PureComponent<IProps, IState> {
     this.props.onClose();
   };
 
-  private onLayerFilterChanged = (event: any) => {
+  private onLayerFilterChanged = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     const layerFilter = event.target.value;
     const elementTypes = this.elementTypesForLayer(layerFilter);
     this.setState({
@@ -198,7 +200,9 @@ export default class ElementPicker extends React.PureComponent<IProps, IState> {
     this.calculateResults();
   };
 
-  private onElementTypeFilterChanged = (event: any) => {
+  private onElementTypeFilterChanged = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     const elementTypeFilter = event.target.value;
     this.setState({
       elementTypeFilter,
