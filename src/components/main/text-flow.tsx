@@ -15,34 +15,31 @@ interface IProps {
   style: React.CSSProperties;
 }
 
-interface IState {
-  lines: ILine[];
-}
+const TextFlow: React.FC<IProps> = (props) => {
+  const [lines, setLines] = React.useState<ILine[]>([]);
 
-export default class TextFlow extends React.PureComponent<IProps, IState> {
-  constructor(props: IProps) {
-    super(props);
-    this.state = {
-      lines: this.lines(),
-    };
-  }
-
-  public render() {
-    return <>{this.tspans()}</>;
-  }
-
-  private lines(): ILine[] {
-    const width = this.textWidth(this.props.text);
-    const maxLineWidth = this.maxLineWidth();
-    if (width <= maxLineWidth) {
-      return [
-        { text: this.props.text, maxWidth: maxLineWidth, calcWidth: width },
-      ];
+  const getMaxLineWidth = (): number => {
+    if (props.badgeBounds && props.badgeBounds.width > 0) {
+      return props.bounds.width - (props.badgeBounds.width + 2);
+    } else {
+      return props.bounds.width;
     }
-    const words = this.props.text.split(" ");
+  };
+
+  React.useEffect(() => {
+    setLines(calculateLines());
+  }, [props.text, props.bounds, props.badgeBounds]);
+
+  const calculateLines = (): ILine[] => {
+    const width = textWidth(props.text);
+    const maxWidth = getMaxLineWidth();
+    if (width <= maxWidth) {
+      return [{ text: props.text, maxWidth, calcWidth: width }];
+    }
+    const words = props.text.split(" ");
     if (words.length === 1) {
-      // TODO: split at maxLineWidth
-      return [{ text: words[0], maxWidth: maxLineWidth, calcWidth: width }];
+      // TODO: split at maxWidth
+      return [{ text: words[0], maxWidth, calcWidth: width }];
     } else {
       const lines: ILine[] = [];
       while (words.length > 0) {
@@ -50,23 +47,23 @@ export default class TextFlow extends React.PureComponent<IProps, IState> {
         let calcLineWidth = 0;
         while (
           words.length > 0 &&
-          this.textWidth(`${line} ${words[0]}`) < maxLineWidth
+          textWidth(`${line} ${words[0]}`) < maxWidth
         ) {
           line = `${line} ${words.shift()}`;
-          calcLineWidth = this.textWidth(line);
+          calcLineWidth = textWidth(line);
         }
         lines.push({
           calcWidth: calcLineWidth,
-          maxWidth: maxLineWidth,
+          maxWidth,
           text: line,
         });
         line = "";
       }
       return lines;
     }
-  }
+  };
 
-  private textWidth(str: string): number {
+  const textWidth = (str: string): number => {
     const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     const svgDoc = svg.ownerDocument;
     if (!svgDoc) {
@@ -89,51 +86,46 @@ export default class TextFlow extends React.PureComponent<IProps, IState> {
     }
 
     return 0;
-  }
+  };
 
-  private maxLineWidth(): number {
-    if (this.props.badgeBounds && this.props.badgeBounds.width > 0) {
-      return this.props.bounds.width - (this.props.badgeBounds.width + 2);
-    } else {
-      return this.props.bounds.width;
-    }
-  }
-
-  private lineX(idx = 0): number {
-    if (this.props.bounds === undefined) {
+  const lineX = (idx = 0): number => {
+    if (props.bounds === undefined) {
       return 0;
     }
-    const textBounds = this.props.bounds as Bounds;
-    switch (this.props.style.textAnchor) {
+    const textBounds = props.bounds as Bounds;
+    switch (props.style.textAnchor) {
       case "start":
         return textBounds.left;
       case "end":
         if (idx > 0) {
           return textBounds.right;
         } else {
-          return textBounds.right - this.props.badgeBounds.width;
+          return textBounds.right - props.badgeBounds.width;
         }
       default:
         if (idx > 0) {
           return textBounds.center().x;
         } else {
-          return textBounds.center().x - this.props.badgeBounds.width / 2.0;
+          return textBounds.center().x - props.badgeBounds.width / 2.0;
         }
     }
-  }
+  };
 
-  private tspans() {
-    let idx = 0;
-    return this.state.lines.map((line) => (
-      <tspan
-        x={this.lineX(idx)}
-        dy="1.1em"
-        className="entity-name"
-        style={this.props.style}
-        key={++idx}
-      >
-        {line.text}
-      </tspan>
-    ));
-  }
-}
+  return (
+    <>
+      {lines.map((line, idx) => (
+        <tspan
+          x={lineX(idx)}
+          dy="1.1em"
+          className="entity-name"
+          style={props.style}
+          key={idx}
+        >
+          {line.text}
+        </tspan>
+      ))}
+    </>
+  );
+};
+
+export default TextFlow;

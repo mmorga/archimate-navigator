@@ -11,85 +11,32 @@ interface IProps {
   badgeBounds: Bounds;
 }
 
-interface IState {
-  textAnchor?: CSS.Property.TextAnchor;
-  lineHeight: number;
-  bbox?: number;
-  width?: number;
-}
+const EntityLabel: React.FC<IProps> = (props) => {
+  const [textAnchor, setTextAnchor] =
+    React.useState<CSS.Property.TextAnchor>("middle");
+  // const lineHeight = 12; // TODO: This needs to be calculated
 
-// **StereotypeLabel** < **Label**
-//
-// Split out any stereotype portion to render separately
-//
-// * Replace angle bracket characters with &laquo; and &raquo;
-// * Apply stereotype styling
-// * Position stereotype line as below
-// * Adjust Label start position (move down line height for remaining label
-//
-// Take remaining text
-//
-// **Label**
-//
-// * ctor:
-//     - rect to contain label
-//     - text
-//     - style
-// * Figure out line breaks based on **Text** length
-// * Render each line (that fits in the rect) in an SVG `text` element
-export default class EntityLabel extends React.PureComponent<IProps, IState> {
-  constructor(props: IProps) {
-    super(props);
-    let textAnchor: CSS.Property.TextAnchor = "middle";
-    switch (this.props.textAlign) {
+  React.useEffect(() => {
+    switch (props.textAlign) {
       case "left":
-        textAnchor = "start";
+        setTextAnchor("start");
         break;
       case "right":
-        textAnchor = "end";
+        setTextAnchor("end");
         break;
+      default:
+        setTextAnchor("middle");
     }
-    this.state = {
-      lineHeight: 12, // TODO: This needs to be calculated
-      textAnchor,
-    };
+  }, [props.textAlign]);
+
+  if (!props.label || props.label.length === 0) {
+    return undefined;
   }
 
-  public render() {
-    if (!this.props.label || this.props.label.length === 0) {
-      return undefined;
-    }
-    const tb = this.props.textBounds;
-    const clipPathId = `${this.props.child.id}-clip-path`;
-    return (
-      <>
-        <clipPath id={clipPathId}>
-          <path d={this.clipPathD()} />
-        </clipPath>
-        <text
-          clipPath={`url(#${clipPathId})`}
-          x={this.lineX()}
-          y={tb.y}
-          style={this.textStyle()}
-        >
-          <TextFlow
-            text={this.props.label}
-            bounds={this.props.textBounds}
-            badgeBounds={this.props.badgeBounds}
-            style={this.textStyle(this.state.textAnchor)}
-          />
-        </text>
-      </>
-    );
-  }
-
-  private clipPathD() {
-    const tb = this.props.textBounds;
-    if (
-      this.props.badgeBounds &&
-      this.props.badgeBounds.height + 2 < tb.height
-    ) {
-      const bb = this.props.badgeBounds;
+  const clipPathD = () => {
+    const tb = props.textBounds;
+    if (props.badgeBounds && props.badgeBounds.height + 2 < tb.height) {
+      const bb = props.badgeBounds;
       const badgeNotchHeight = bb.height + 2;
       return [
         "M",
@@ -125,32 +72,35 @@ export default class EntityLabel extends React.PureComponent<IProps, IState> {
         .map((i) => i.toString())
         .join(" ");
     }
-  }
-  private lineX(idx = 0) {
-    if (this.props.textBounds === undefined) {
+  };
+
+  const lineX = (idx = 0) => {
+    if (props.textBounds === undefined) {
       return 0;
     }
-    const textBounds = this.props.textBounds as Bounds;
-    switch (this.state.textAnchor) {
+    const textBounds = props.textBounds as Bounds;
+    switch (textAnchor) {
       case "start":
         return textBounds.left;
       case "end":
         if (idx > 0) {
           return textBounds.right;
         } else {
-          return textBounds.right - this.props.badgeBounds.width;
+          return textBounds.right - props.badgeBounds.width;
         }
       default:
         if (idx > 0) {
           return textBounds.center().x;
         } else {
-          return textBounds.center().x - this.props.badgeBounds.width / 2.0;
+          return textBounds.center().x - props.badgeBounds.width / 2.0;
         }
     }
-  }
+  };
 
-  private textStyle(textAnchor?: CSS.Property.TextAnchor): React.CSSProperties {
-    const style = this.props.child.style;
+  const textStyle = (
+    textAnchor?: CSS.Property.TextAnchor,
+  ): React.CSSProperties => {
+    const style = props.child.style;
     if (style === undefined) {
       return {
         textAlign: "center",
@@ -167,14 +117,39 @@ export default class EntityLabel extends React.PureComponent<IProps, IState> {
     if (style.font && style.font.size) {
       cssStyle.fontSize = style.font.size;
     }
-    if (this.props.textAlign) {
-      cssStyle.textAlign = this.props.textAlign;
+    if (props.textAlign) {
+      cssStyle.textAlign = props.textAlign;
     }
     if (style.textAlignment) {
       cssStyle.textAlign = style.textAlignment;
     }
-    cssStyle.textAnchor =
-      textAnchor || (this.state ? this.state.textAnchor : "middle");
+    cssStyle.textAnchor = textAnchor || textAnchor;
     return cssStyle;
-  }
-}
+  };
+
+  const tb = props.textBounds;
+  const clipPathId = `${props.child.id}-clip-path`;
+
+  return (
+    <>
+      <clipPath id={clipPathId}>
+        <path d={clipPathD()} />
+      </clipPath>
+      <text
+        clipPath={`url(#${clipPathId})`}
+        x={lineX()}
+        y={tb.y}
+        style={textStyle()}
+      >
+        <TextFlow
+          text={props.label}
+          bounds={props.textBounds}
+          badgeBounds={props.badgeBounds}
+          style={textStyle(textAnchor)}
+        />
+      </text>
+    </>
+  );
+};
+
+export default EntityLabel;

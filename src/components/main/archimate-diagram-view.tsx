@@ -48,214 +48,200 @@ interface IState {
   zoomMode: ZoomMode;
 }
 
-export default class ArchimateDiagramView extends React.PureComponent<
-  IProps,
-  IState
-> {
-  public static diagramExtents(dia: Diagram | undefined): IExtents {
-    return dia
-      ? dia.calculateMaxExtents()
-      : { maxX: 0, maxY: 0, minX: 0, minY: 0 };
-  }
+const diagramExtents = (dia: Diagram | undefined): IExtents => {
+  return dia
+    ? dia.calculateMaxExtents()
+    : { maxX: 0, maxY: 0, minX: 0, minY: 0 };
+};
 
-  private svgTopGroup: React.RefObject<SVGGElement | null>;
+const ArchimateDiagramView: React.FC<IProps> = (props) => {
+  const svgTopGroup = React.useRef<SVGGElement | null>(null);
+  const ext = diagramExtents(props.selectedDiagram);
+  const [state, setState] = React.useState<IState>({
+    maxX: ext.maxX,
+    maxY: ext.maxY,
+    minX: ext.minX,
+    minY: ext.minY,
+    scale: 1,
+    zoomMode: ZoomMode.FitToWindow,
+  });
 
-  constructor(props: IProps) {
-    super(props);
-    const ext = ArchimateDiagramView.diagramExtents(this.props.selectedDiagram);
-    this.state = {
-      maxX: ext.maxX,
-      maxY: ext.maxY,
-      minX: ext.minX,
-      minY: ext.minY,
-      scale: 1,
-      zoomMode: ZoomMode.FitToWindow,
-    };
-    this.svgTopGroup = React.createRef<SVGGElement | null>();
-  }
-
-  public render() {
-    if (this.props.selectedDiagram) {
-      return (
-        <>
-          <div
-            className="archimate-zoombar"
-            style={{ position: "absolute", top: 0, right: 0 }}
-          >
-            <Button onClick={this.onOneHundredPercent}>
-              <small>1:1</small>
-            </Button>
-            <Button onClick={this.onFitToWindow}>
-              <ArrowsFullscreen />
-            </Button>
-            <Button onClick={this.onFitToWidth}>
-              <ArrowsExpand />
-            </Button>
-            <Button onClick={this.onZoomIn}>
-              <ZoomIn />
-            </Button>
-            <Button onClick={this.onZoomOut}>
-              <ZoomOut />
-            </Button>
-            <small>
-              {"  "}
-              {(this.state.scale * 100).toFixed(0)}%
-            </small>
-          </div>
-          <ArchimateSvg
-            key={this.props.selectedDiagram.id}
-            diagramName={
-              this.props.selectedDiagram ? this.props.selectedDiagram.name : ""
-            }
-            viewBox={this.viewBox()}
-          >
-            <ForceLayout
-              centerX={(this.state.maxX - this.state.minX) / 2}
-              centerY={(this.state.maxY - this.state.minY) / 2}
-              connections={this.props.connections}
-              autoLayout={this.isAutoLayout()}
-              nodes={this.props.nodes}
-              onForceLayoutTick={this.onForceLayoutTick}
-            >
-              <SvgPanZoom
-                maxX={this.state.maxX}
-                maxY={this.state.maxY}
-                minX={this.state.minX}
-                minY={this.state.minY}
-                onZoom={this.onZoom}
-                svgPanZoomRef={this.svgTopGroup}
-                scale={this.state.scale}
-                zoomMode={this.state.zoomMode}
-              >
-                {this.props.nodes.map((node) =>
-                  React.createElement(archimateViewNode(node), {
-                    key: node.id,
-                    onClicked: this.props.entityClicked,
-                    selected: this.nodeIsSelected(node),
-                    viewNode: node,
-                    x: node.x || node.bounds.left,
-                    y: node.y || node.bounds.top,
-                  }),
-                )}
-                {this.props.connections.map((conn) => (
-                  <ArchimateConnection
-                    autoLayout={this.isAutoLayout()}
-                    key={conn.id}
-                    connection={conn}
-                    onClicked={this.props.entityClicked}
-                    selected={this.nodeIsSelected(conn)}
-                    fromX={conn.sourceBounds().left}
-                    fromY={conn.sourceBounds().top}
-                    toX={conn.targetBounds().left}
-                    toY={conn.targetBounds().top}
-                  />
-                ))}
-              </SvgPanZoom>
-            </ForceLayout>
-          </ArchimateSvg>
-        </>
-      );
-    } else {
-      return (
-        <div
-          className="jumbotron"
-          style={{ paddingLeft: "2em", paddingRight: "2em" }}
-        >
-          <h1>ArchiMate Navigator</h1>
-          <p>
-            <ArrowLeft />
-            &nbsp; Select a diagram on the left to view.
-          </p>
-        </div>
-      );
-    }
-  }
-
-  public componentDidUpdate() {
-    const ext = ArchimateDiagramView.diagramExtents(this.props.selectedDiagram);
-    if (
-      numbersDiffer(this.state.maxX, ext.maxX) ||
-      numbersDiffer(this.state.maxY, ext.maxY) ||
-      numbersDiffer(this.state.minX, ext.minX) ||
-      numbersDiffer(this.state.minY, ext.minY)
-    ) {
-      this.setState({
-        maxX: ext.maxX,
-        maxY: ext.maxY,
-        minX: ext.minX,
-        minY: ext.minY,
-      });
-    }
-  }
-
-  private isAutoLayout() {
+  const isAutoLayout = () => {
     return (
-      (this.props.selectedDiagram &&
-        this.props.selectedDiagram.type === DiagramType.ModelQuery) ||
+      (props.selectedDiagram &&
+        props.selectedDiagram.type === DiagramType.ModelQuery) ||
       false
     );
-  }
+  };
 
-  private nodeIsSelected(node: IEntityRef): boolean {
-    if (this.props.selectedEntity === undefined) {
+  const nodeIsSelected = (node: IEntityRef): boolean => {
+    if (props.selectedEntity === undefined) {
       return false;
     }
     const nodeElement = node.entityInstance();
     if (nodeElement === undefined) {
       return false;
     }
-    return this.props.selectedEntity.id === nodeElement.id;
-  }
-
-  private onFitToWindow = () => {
-    this.setState({ zoomMode: ZoomMode.FitToWindow });
+    return props.selectedEntity.id === nodeElement.id;
   };
 
-  private onFitToWidth = () => {
-    this.setState({ zoomMode: ZoomMode.FitToWindowWidth });
+  const onFitToWindow = () => {
+    setState((prev) => ({ ...prev, zoomMode: ZoomMode.FitToWindow }));
   };
 
-  private onOneHundredPercent = () => {
-    this.setState({ zoomMode: ZoomMode.OneToOne });
+  const onFitToWidth = () => {
+    setState((prev) => ({ ...prev, zoomMode: ZoomMode.FitToWindowWidth }));
   };
 
-  // TODO: This needs to change
-  private onZoomIn = () => {
-    this.setState({
-      scale: zoomIn(this.state.scale),
+  const onOneHundredPercent = () => {
+    setState((prev) => ({ ...prev, zoomMode: ZoomMode.OneToOne }));
+  };
+
+  const onZoomIn = () => {
+    setState((prev) => ({
+      ...prev,
+      scale: zoomIn(prev.scale),
       zoomMode: ZoomMode.UserZoom,
-    });
+    }));
   };
 
-  // TODO: This needs to change
-  private onZoomOut = () => {
-    this.setState({
-      scale: zoomOut(this.state.scale),
+  const onZoomOut = () => {
+    setState((prev) => ({
+      ...prev,
+      scale: zoomOut(prev.scale),
       zoomMode: ZoomMode.UserZoom,
-    });
+    }));
   };
 
-  // Called when the Force Layout has updated node positions
-  private onForceLayoutTick = () => {
-    this.onFitToWindow();
+  const onForceLayoutTick = () => {
+    onFitToWindow();
   };
 
-  // Called when the PanZoom wheel event has initiated a zoom
-  private onZoom = (scale: number) => {
-    if (
-      this.state.scale !== scale ||
-      this.state.zoomMode !== ZoomMode.UserZoom
-    ) {
-      this.setState({ scale, zoomMode: ZoomMode.UserZoom });
+  const onZoom = (scale: number) => {
+    if (state.scale !== scale || state.zoomMode !== ZoomMode.UserZoom) {
+      setState((prev) => ({ ...prev, scale, zoomMode: ZoomMode.UserZoom }));
     }
   };
 
-  private viewBox(): SVGRect {
+  const viewBox = (): SVGRect => {
     return new DOMRect(
-      this.state.minX,
-      this.state.minY,
-      this.state.maxY - this.state.minY,
-      this.state.maxX - this.state.minX,
+      state.minX,
+      state.minY,
+      state.maxY - state.minY,
+      state.maxX - state.minX,
+    );
+  };
+
+  React.useEffect(() => {
+    const ext = diagramExtents(props.selectedDiagram);
+    if (
+      numbersDiffer(state.maxX, ext.maxX) ||
+      numbersDiffer(state.maxY, ext.maxY) ||
+      numbersDiffer(state.minX, ext.minX) ||
+      numbersDiffer(state.minY, ext.minY)
+    ) {
+      setState((prev) => ({
+        ...prev,
+        maxX: ext.maxX,
+        maxY: ext.maxY,
+        minX: ext.minX,
+        minY: ext.minY,
+      }));
+    }
+  }, [props.selectedDiagram]);
+
+  if (props.selectedDiagram) {
+    return (
+      <>
+        <div
+          className="archimate-zoombar"
+          style={{ position: "absolute", top: 0, right: 0 }}
+        >
+          <Button onClick={onOneHundredPercent}>
+            <small>1:1</small>
+          </Button>
+          <Button onClick={onFitToWindow}>
+            <ArrowsFullscreen />
+          </Button>
+          <Button onClick={onFitToWidth}>
+            <ArrowsExpand />
+          </Button>
+          <Button onClick={onZoomIn}>
+            <ZoomIn />
+          </Button>
+          <Button onClick={onZoomOut}>
+            <ZoomOut />
+          </Button>
+          <small>
+            {"  "}
+            {(state.scale * 100).toFixed(0)}%
+          </small>
+        </div>
+        <ArchimateSvg
+          key={props.selectedDiagram.id}
+          diagramName={props.selectedDiagram ? props.selectedDiagram.name : ""}
+          viewBox={viewBox()}
+        >
+          <ForceLayout
+            centerX={(state.maxX - state.minX) / 2}
+            centerY={(state.maxY - state.minY) / 2}
+            connections={props.connections}
+            autoLayout={isAutoLayout()}
+            nodes={props.nodes}
+            onForceLayoutTick={onForceLayoutTick}
+          >
+            <SvgPanZoom
+              maxX={state.maxX}
+              maxY={state.maxY}
+              minX={state.minX}
+              minY={state.minY}
+              onZoom={onZoom}
+              svgPanZoomRef={svgTopGroup}
+              scale={state.scale}
+              zoomMode={state.zoomMode}
+            >
+              {props.nodes.map((node) =>
+                React.createElement(archimateViewNode(node), {
+                  key: node.id,
+                  onClicked: props.entityClicked,
+                  selected: nodeIsSelected(node),
+                  viewNode: node,
+                  x: node.x || node.bounds.left,
+                  y: node.y || node.bounds.top,
+                }),
+              )}
+              {props.connections.map((conn) => (
+                <ArchimateConnection
+                  autoLayout={isAutoLayout()}
+                  key={conn.id}
+                  connection={conn}
+                  onClicked={props.entityClicked}
+                  selected={nodeIsSelected(conn)}
+                  fromX={conn.sourceBounds().left}
+                  fromY={conn.sourceBounds().top}
+                  toX={conn.targetBounds().left}
+                  toY={conn.targetBounds().top}
+                />
+              ))}
+            </SvgPanZoom>
+          </ForceLayout>
+        </ArchimateSvg>
+      </>
+    );
+  } else {
+    return (
+      <div
+        className="jumbotron"
+        style={{ paddingLeft: "2em", paddingRight: "2em" }}
+      >
+        <h1>ArchiMate Navigator</h1>
+        <p>
+          <ArrowLeft />
+          &nbsp; Select a diagram on the left to view.
+        </p>
+      </div>
     );
   }
-}
+};
+
+export default ArchimateDiagramView;

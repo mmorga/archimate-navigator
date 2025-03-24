@@ -19,32 +19,9 @@ interface IProps {
   children?: React.ReactNode;
 }
 
-export default class CollapsibleFormGroup extends React.PureComponent<IProps> {
-  constructor(props: IProps) {
-    super(props);
-    this.state = {};
-  }
-
-  public render() {
-    return (
-      <Accordion
-        defaultActiveKey={this.props.defaultExpanded ? "0" : undefined}
-      >
-        <Accordion.Item eventKey="0">
-          <Accordion.Header>
-            <span className={this.titleClass()}>{this.props.title}</span>
-            {this.props.label ? (
-              <Badge bg={this.props.labelStyle}>{this.props.label}</Badge>
-            ) : null}
-          </Accordion.Header>
-          <Accordion.Body>{this.props.children}</Accordion.Body>
-        </Accordion.Item>
-      </Accordion>
-    );
-  }
-
-  private titleClass(): string | undefined {
-    switch (this.props.validationState) {
+const CollapsibleFormGroup: React.FC<IProps> = (props) => {
+  const titleClass = (): string | undefined => {
+    switch (props.validationState) {
       case "success":
         return "text-success";
       case "warning":
@@ -54,5 +31,21 @@ export default class CollapsibleFormGroup extends React.PureComponent<IProps> {
       default:
         return undefined;
     }
-  }
-}
+  };
+
+  return (
+    <Accordion defaultActiveKey={props.defaultExpanded ? "0" : undefined}>
+      <Accordion.Item eventKey="0">
+        <Accordion.Header>
+          <span className={titleClass()}>{props.title}</span>
+          {props.label ? (
+            <Badge bg={props.labelStyle}>{props.label}</Badge>
+          ) : null}
+        </Accordion.Header>
+        <Accordion.Body>{props.children}</Accordion.Body>
+      </Accordion.Item>
+    </Accordion>
+  );
+};
+
+export default CollapsibleFormGroup;

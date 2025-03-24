@@ -18,14 +18,12 @@ interface IProps {
   searchText?: string;
 }
 
-interface IState {
-  fuse: Fuse<IEntity>;
-  results: FuseResult<IEntity>[];
-  search: string;
-}
+const SearchTab: React.FC<IProps> = (props) => {
+  const [fuse, setFuse] = React.useState<Fuse<IEntity> | null>(null);
+  const [results, setResults] = React.useState<FuseResult<IEntity>[]>([]);
+  const [search, setSearch] = React.useState(props.searchText || "");
 
-export default class SearchTab extends React.PureComponent<IProps, IState> {
-  private fuseOptions = {
+  const fuseOptions = {
     distance: 100,
     keys: ["name", "type", "documentation", "properties"],
     location: 0,
@@ -34,82 +32,62 @@ export default class SearchTab extends React.PureComponent<IProps, IState> {
     threshold: 0.6,
   };
 
-  constructor(props: IProps) {
-    super(props);
+  React.useEffect(() => {
+    setFuse(new Fuse<IEntity>(props.model.entities(), fuseOptions));
+  }, [props.model]);
 
-    this.state = {
-      fuse: new Fuse<IEntity>(this.props.model.entities(), this.fuseOptions),
-      results: [],
-      search: this.props.searchText || "",
-    };
-  }
-
-  public componentWillReceiveProps(nextProps: IProps) {
-    if (this.props.model !== nextProps.model) {
-      this.setState({
-        fuse: new Fuse<IEntity>(nextProps.model.entities(), this.fuseOptions),
-      });
-    }
-  }
-
-  public render() {
-    const maxResultIdx =
-      this.state.results.length > 100 ? 100 : this.state.results.length;
-    let disabled = false;
-    let searchTitle = "Search";
-    if (this.state.fuse === null) {
-      disabled = true;
-      searchTitle = "Loading";
-    }
-    const resultItems = this.state.results
-      .slice(0, maxResultIdx)
-      .map((result) => (
-        <SearchResult
-          key={result.item.id}
-          entity={result.item}
-          resultClicked={this.props.resultClicked}
-        />
-      ));
-    return (
-      <Card>
-        <Card.Body>
-          <Form>
-            <FormGroup>
-              <InputGroup>
-                <FormControl
-                  id="search-input"
-                  type="text"
-                  placeholder="Search"
-                  defaultValue={this.state.search}
-                  onChange={this.handleChange}
-                />
-                <Button onClick={this.handleClick} disabled={disabled}>
-                  {searchTitle}
-                </Button>
-              </InputGroup>
-            </FormGroup>
-            <ol>{resultItems}</ol>
-          </Form>
-        </Card.Body>
-      </Card>
-    );
-  }
-
-  private handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    if (this.state.search.length > 0) {
-      this.setState({
-        results: this.state.fuse.search(this.state.search),
-      });
+    if (search.length > 0 && fuse) {
+      setResults(fuse.search(search));
     }
   };
 
-  private handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({ search: event.currentTarget.value });
-    if (this.state.search.length > 0) {
-      this.setState({
-        results: this.state.fuse.search(this.state.search),
-      });
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newSearch = event.currentTarget.value;
+    setSearch(newSearch);
+    if (newSearch.length > 0 && fuse) {
+      setResults(fuse.search(newSearch));
     }
   };
-}
+
+  const maxResultIdx = results.length > 100 ? 100 : results.length;
+  const disabled = fuse === null;
+  const searchTitle = disabled ? "Loading" : "Search";
+
+  const resultItems = results
+    .slice(0, maxResultIdx)
+    .map((result) => (
+      <SearchResult
+        key={result.item.id}
+        entity={result.item}
+        resultClicked={props.resultClicked}
+      />
+    ));
+
+  return (
+    <Card>
+      <Card.Body>
+        <Form>
+          <FormGroup>
+            <InputGroup>
+              <FormControl
+                id="search-input"
+                type="text"
+                placeholder="Search"
+                defaultValue={search}
+                onChange={handleChange}
+              />
+              <Button onClick={handleClick} disabled={disabled}>
+                {searchTitle}
+              </Button>
+            </InputGroup>
+          </FormGroup>
+          <ol>{resultItems}</ol>
+        </Form>
+      </Card.Body>
+    </Card>
+  );
+};
+
+export default SearchTab;
