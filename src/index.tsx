@@ -9,7 +9,7 @@ if (!container) throw new Error("Failed to find the root element");
 const root = createRoot(container);
 
 root.render(
-  // <ArchimateNavigator modelUrl="./archimate/ArchiSurance V3.archimate" />
-  <ArchimateNavigator modelUrl="/archimate/everything.archimate" />,
+  <ArchimateNavigator modelUrl="./archimate/ArchiSurance V3.archimate" />,
+  // <ArchimateNavigator modelUrl="/archimate/everything.archimate" />,
   // <ArchimateNavigator modelUrl="/archimate/sample.archimate" />
 );

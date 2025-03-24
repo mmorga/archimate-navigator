@@ -1,4 +1,4 @@
-import { IViewNodeProps } from "./default-element";
+import { IViewNodeProps } from "./base-view-node";
 import { JSX } from "react";
 import { ViewNode } from "../../../archimate-model";
 import * as BadgedRect from "./badged-rect";

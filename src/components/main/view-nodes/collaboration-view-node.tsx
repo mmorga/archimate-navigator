@@ -1,5 +1,5 @@
 import * as React from "react";
-import { IViewNodeProps } from "./default-element";
+import { IViewNodeProps } from "./base-view-node";
 import * as BaseViewNode from "./base-view-node";
 import * as BadgedRect from "./badged-rect";
 
