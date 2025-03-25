@@ -30,37 +30,41 @@ export function archimateViewNodeProps(
   viewNode: ViewNode,
   props: Partial<React.Attributes & BaseViewNode.IViewNodeProps>,
 ): React.Attributes & BaseViewNode.IViewNodeProps {
-  const elType = elementType(viewNode);
-  switch (elType) {
+  return BaseViewNode.archimateProps(viewNode, {
+    ...props,
+    ...elementProps(viewNode),
+  });
+}
+
+function elementProps(
+  viewNode: ViewNode,
+): Partial<React.Attributes & BaseViewNode.IViewNodeProps> {
+  switch (elementType(viewNode)) {
     case "AndJunction":
     case "Junction":
-      return BaseViewNode.archimateProps(viewNode, {
-        ...props,
+      return {
         backgroundClass: "archimate-junction-background",
         textBounds: BaseViewNode.textBounds,
         entityShape: JunctionViewNode.entityShape,
         entityLabel: JunctionViewNode.entityLabel,
-      });
+      };
     case "OrJunction":
-      return BaseViewNode.archimateProps(viewNode, {
-        ...props,
+      return {
         backgroundClass: "archimate-or-junction-background",
         textBounds: BaseViewNode.textBounds,
         entityShape: JunctionViewNode.entityShape,
         entityLabel: JunctionViewNode.entityLabel,
-      });
+      };
     case "ApplicationCollaboration":
     case "BusinessCollaboration":
     case "TechnologyCollaboration":
-      return BaseViewNode.archimateProps(viewNode, {
-        ...props,
+      return {
         badge: "#archimate-collaboration-badge",
         badgeBounds: BadgedRect.badgeBounds,
         entityShape: BadgedRect.entityShape,
-      });
+      };
     case "ApplicationComponent":
-      return BaseViewNode.archimateProps(viewNode, {
-        ...props,
+      return {
         badge:
           viewNode.childType === "1"
             ? "#archimate-app-component-badge"
@@ -69,55 +73,50 @@ export function archimateViewNodeProps(
           viewNode.childType === "1" ? BadgedRect.badgeBounds : zeroBounds,
         textBounds: ApplicationConponentViewNode.textBounds,
         entityShape: ApplicationConponentViewNode.entityShape,
-      });
+      };
     case "ApplicationEvent":
     case "BusinessEvent":
     case "TechnologyEvent":
-      return BaseViewNode.archimateProps(viewNode, {
-        ...props,
+      return {
         entityShape: EventViewNode.entityShape,
         badge:
           viewNode.childType === "1" ? undefined : "#archimate-event-badge",
         badgeBounds: EventViewNode.badgeBounds,
         textBounds: EventViewNode.textBounds,
-      });
+      };
     case "ApplicationFunction":
     case "BusinessFunction":
     case "TechnologyFunction":
-      return BaseViewNode.archimateProps(viewNode, {
-        ...props,
+      return {
         badge: "#archimate-function-badge",
         badgeBounds: BadgedRoundedRectViewNode.badgeBounds,
         textBounds: BaseViewNode.textBounds,
         entityShape: BadgedRoundedRectViewNode.entityShape,
-      });
+      };
     case "ApplicationInteraction":
     case "BusinessInteraction":
     case "TechnologyInteraction":
-      return BaseViewNode.archimateProps(viewNode, {
-        ...props,
+      return {
         badge: "#archimate-interaction-badge",
         badgeBounds: BadgedRoundedRectViewNode.badgeBounds,
         textBounds: BaseViewNode.textBounds,
         entityShape: BadgedRoundedRectViewNode.entityShape,
-      });
+      };
     case "ApplicationInterface":
     case "BusinessInterface":
     case "TechnologyInterface":
-      return BaseViewNode.archimateProps(viewNode, {
-        ...props,
+      return {
         badge:
           viewNode.childType === "1" ? undefined : "#archimate-interface-badge",
         badgeBounds:
           viewNode.childType === "1" ? undefined : BadgedRect.badgeBounds,
         textBounds: BaseViewNode.textBounds,
         entityShape: InterfaceViewNode.interfaceEntityShape,
-      });
+      };
     case "ApplicationProcess":
     case "BusinessProcess":
     case "TechnologyProcess":
-      return BaseViewNode.archimateProps(viewNode, {
-        ...props,
+      return {
         badge:
           viewNode.childType === "1" ? undefined : "#archimate-process-badge",
         badgeBounds:
@@ -127,12 +126,11 @@ export function archimateViewNodeProps(
             ? ProcessViewNode.textBounds
             : BaseViewNode.textBounds,
         entityShape: ProcessViewNode.entityShape,
-      });
+      };
     case "ApplicationService":
     case "BusinessService":
     case "TechnologyService":
-      return BaseViewNode.archimateProps(viewNode, {
-        ...props,
+      return {
         badge:
           viewNode.childType === "1" ? undefined : "#archimate-service-badge",
         badgeBounds:
@@ -144,134 +142,117 @@ export function archimateViewNodeProps(
             ? ServiceViewNode.textBounds
             : BaseViewNode.textBounds,
         entityShape: ServiceViewNode.entityShape,
-      });
+      };
     case "BusinessActor":
-      return BaseViewNode.archimateProps(viewNode, {
-        ...props,
+      return {
         badge: "#archimate-actor-badge",
         badgeBounds: BadgedRect.badgeBounds,
         entityShape: BadgedRect.entityShape,
-      });
+      };
     case "Artifact":
-      return BaseViewNode.archimateProps(viewNode, {
-        ...props,
+      return {
         badge: "archimate-artifact-badge",
         badgeBounds: BadgedRect.badgeBounds,
         entityShape: ArtifactViewNode.artifactEntityShape,
-      });
+      };
     case "Assessment":
-      return BaseViewNode.archimateProps(viewNode, {
-        ...props,
+      return {
         badge: "#archimate-assessment-badge",
         badgeBounds: MotivationViewNode.badgeBounds,
         textBounds: BaseViewNode.textBounds,
         entityShape: MotivationViewNode.entityShape,
-      });
+      };
     case "Driver":
-      return BaseViewNode.archimateProps(viewNode, {
-        ...props,
+      return {
         badge: "#archimate-driver-badge",
         badgeBounds: MotivationViewNode.badgeBounds,
         textBounds: BaseViewNode.textBounds,
         entityShape: MotivationViewNode.entityShape,
-      });
+      };
     case "Constraint":
-      return BaseViewNode.archimateProps(viewNode, {
-        ...props,
+      return {
         badge: "#archimate-constraint-badge",
         badgeBounds: MotivationViewNode.badgeBounds,
         textBounds: BaseViewNode.textBounds,
         entityShape: MotivationViewNode.entityShape,
-      });
+      };
     case "Goal":
-      return BaseViewNode.archimateProps(viewNode, {
-        ...props,
+      return {
         badge: "#archimate-goal-badge",
         badgeBounds: MotivationViewNode.badgeBounds,
         textBounds: BaseViewNode.textBounds,
         entityShape: MotivationViewNode.entityShape,
-      });
+      };
     case "Outcome":
-      return BaseViewNode.archimateProps(viewNode, {
-        ...props,
+      return {
         badge: "#archimate-outcome-badge",
         badgeBounds: MotivationViewNode.badgeBounds,
         textBounds: BaseViewNode.textBounds,
         entityShape: MotivationViewNode.entityShape,
-      });
+      };
     case "Principle":
-      return BaseViewNode.archimateProps(viewNode, {
-        ...props,
+      return {
         badge: "#archimate-principle-badge",
         badgeBounds: MotivationViewNode.badgeBounds,
         textBounds: BaseViewNode.textBounds,
         entityShape: MotivationViewNode.entityShape,
-      });
+      };
     case "Requirement":
-      return BaseViewNode.archimateProps(viewNode, {
-        ...props,
+      return {
         badge: "#archimate-requirement-badge",
         badgeBounds: MotivationViewNode.badgeBounds,
         textBounds: BaseViewNode.textBounds,
         entityShape: MotivationViewNode.entityShape,
-      });
+      };
     case "Stakeholder":
-      return BaseViewNode.archimateProps(viewNode, {
-        ...props,
+      return {
         badge: "#archimate-stakeholder-badge",
         badgeBounds: MotivationViewNode.badgeBounds,
         textBounds: BaseViewNode.textBounds,
         entityShape: MotivationViewNode.entityShape,
-      });
+      };
     case "BusinessObject":
     case "DataObject":
-      return BaseViewNode.archimateProps(viewNode, {
-        ...props,
+      return {
         margin: 8,
         textBounds: DataObjectViewNode.textBounds,
         entityShape: DataObjectViewNode.entityShape,
-      });
+      };
     case "BusinessRole":
-      return BaseViewNode.archimateProps(viewNode, {
-        ...props,
+      return {
         badge: "#archimate-role-badge",
         badgeBounds: BadgedRect.badgeBounds,
         entityShape: BadgedRect.entityShape,
-      });
+      };
     case "Contract":
-      return BaseViewNode.archimateProps(viewNode, {
-        ...props,
+      return {
         textBounds: DataObjectViewNode.textBounds,
         entityShape: ContractViewNode.entityShape,
-      });
+      };
     case "Deliverable":
-      return BaseViewNode.archimateProps(viewNode, {
-        ...props,
+      return {
         badge: "archimate-artifact-badge",
         textBounds: BaseViewNode.textBounds,
         entityShape: DeliverableViewNode.entityShape,
-      });
+      };
     case "Gap":
-      return BaseViewNode.archimateProps(viewNode, {
-        ...props,
+      return {
         backgroundClass: "archimate-implementation2-background",
         badge: "#archimate-gap-badge",
         badgeBounds: GapViewNode.badgeBounds,
         textBounds: BaseViewNode.textBounds,
         entityShape: DeliverableViewNode.entityShape,
-      });
+      };
     case "DiagramModelReference":
     case "ArchimateDiagramModel":
     case "DiagramModel":
-      return BaseViewNode.archimateProps(viewNode, {
-        ...props,
+      return {
         backgroundClass: "archimate-diagram-model-reference-background",
         badgeBounds: BadgedRect.badgeBounds,
         entityShape: BadgedRect.entityShape,
-      });
+      };
     case "Device":
-      return BaseViewNode.archimateProps(viewNode, {
-        ...props,
+      return {
         badge:
           viewNode.childType === "1" ? "#archimate-device-badge" : undefined,
         badgeBounds:
@@ -283,19 +264,17 @@ export function archimateViewNodeProps(
             ? NodeViewNode.textBounds
             : BaseViewNode.textBounds,
         entityShape: DeviceViewNode.entityShape,
-      });
+      };
     case "Plateau":
-      return BaseViewNode.archimateProps(viewNode, {
-        ...props,
+      return {
         backgroundClass: "archimate-implementation2-background",
         badge: "#archimate-plateau-badge",
         entityShape: BadgedNodeViewNode.entityShape,
         badgeBounds: BadgedNodeViewNode.badgeBounds,
         textBounds: NodeViewNode.textBounds,
-      });
+      };
     case "Node":
-      return BaseViewNode.archimateProps(viewNode, {
-        ...props,
+      return {
         badge: viewNode.childType === "1" ? "#archimate-node-badge" : undefined,
         badgeBounds:
           viewNode.childType === "1" ? BadgedRect.badgeBounds : undefined,
@@ -305,123 +284,108 @@ export function archimateViewNodeProps(
             ? BadgedNodeViewNode.textBounds
             : NodeViewNode.textBounds,
         entityShape: NodeViewNode.entityShape,
-      });
+      };
     case "DistributionNetwork":
-      return BaseViewNode.archimateProps(viewNode, {
-        ...props,
+      return {
         badge: "#archimate-distribution-network-badge",
         badgeBounds: BadgedRect.badgeBounds,
         entityShape: BadgedRect.entityShape,
-      });
+      };
     case "Group":
-      return BaseViewNode.archimateProps(viewNode, {
-        ...props,
+      return {
         backgroundClass: "archimate-group-background",
         textAlign: "left",
         textBounds: GroupViewNode.textBounds,
         entityShape: GroupViewNode.entityShape,
-      });
+      };
     case "Grouping":
-      return BaseViewNode.archimateProps(viewNode, {
-        ...props,
+      return {
         backgroundClass: "archimate-grouping-background",
         textAlign: "left",
         textBounds: GroupViewNode.textBounds,
         entityShape: GroupingViewNode.entityShape,
-      });
+      };
     case "Location":
-      return BaseViewNode.archimateProps(viewNode, {
-        ...props,
+      return {
         backgroundClass: "archimate-location-background",
         badge: "#archimate-location-badge",
         badgeBounds: BadgedRect.badgeBounds,
         entityShape: BadgedRect.entityShape,
-      });
+      };
     case "Meaning":
-      return BaseViewNode.archimateProps(viewNode, {
-        ...props,
+      return {
         badgeBounds: BaseViewNode.badgeBounds,
         textBounds: BaseViewNode.textBounds,
         entityShape: MeaningViewNode.meaningEntityShape,
-      });
+      };
     case "CommunicationNetwork":
     case "Network":
-      return BaseViewNode.archimateProps(viewNode, {
-        ...props,
+      return {
         badge: "#archimate-network-badge",
         badgeBounds: BadgedRect.badgeBounds,
         entityShape: BadgedRect.entityShape,
-      });
+      };
     case "Path":
-      return BaseViewNode.archimateProps(viewNode, {
-        ...props,
+      return {
         badge: "#archimate-communication-path-badge",
         badgeBounds: BadgedRect.badgeBounds,
         entityShape: BadgedRect.entityShape,
-      });
+      };
     case "Resource":
-      return BaseViewNode.archimateProps(viewNode, {
-        ...props,
+      return {
         badge: "#archimate-resource-badge",
         badgeBounds: BadgedRect.badgeBounds,
         entityShape: BadgedRect.entityShape,
-      });
+      };
     case "SystemSoftware":
-      return BaseViewNode.archimateProps(viewNode, {
-        ...props,
+      return {
         badge: "#archimate-system-software-badge",
         badgeBounds: BadgedRect.badgeBounds,
         entityShape: BadgedRect.entityShape,
-      });
+      };
     case "DiagramObject":
     case "Note":
-      return BaseViewNode.archimateProps(viewNode, {
-        ...props,
+      return {
         textBounds: BaseViewNode.textBounds,
         bounds: BaseViewNode.initialBounds,
         backgroundClass: "archimate-note-background",
         textAlign: "left",
         entityShape: NoteViewNode.entityShape,
-      });
+      };
     case "Product":
-      return BaseViewNode.archimateProps(viewNode, {
-        ...props,
+      return {
         margin: 8,
         textBounds: DataObjectViewNode.textBounds,
         entityShape: ProductViewNode.entityShape,
-      });
+      };
     case "Representation":
-      return BaseViewNode.archimateProps(viewNode, {
-        ...props,
+      return {
         textBounds: DataObjectViewNode.textBounds,
         entityShape: RepresentationViewNode.entityShape,
-      });
+      };
     case "SketchModelSticky":
-      return BaseViewNode.archimateProps(viewNode, {
-        ...props,
+      return {
         bounds: BaseViewNode.initialBounds,
         textBounds: BaseViewNode.textBounds,
         backgroundClass: "archimate-sticky-background",
         entityShape: BaseViewNode.entityShape,
-      });
+      };
     case "Value":
-      return BaseViewNode.archimateProps(viewNode, {
-        ...props,
+      return {
         textBounds: ValueViewNode.textBounds,
         bounds: BaseViewNode.initialBounds,
         backgroundClass: "archimate-motivation-background",
         entityShape: ValueViewNode.entityShape,
-      });
+      };
     case "WorkPackage":
-      return BaseViewNode.archimateProps(viewNode, {
-        ...props,
+      return {
         badgeBounds: zeroBounds,
         textBounds: BaseViewNode.textBounds,
         entityShape: BadgedRoundedRectViewNode.entityShape,
-      });
-    // default:
+      };
+    default:
+      return {};
   }
-  return BaseViewNode.archimateProps(viewNode, props);
 }
 
 function elementType(viewNode: ViewNode): string {
