@@ -15,69 +15,58 @@ interface IProps {
   onDiagramUpdated: (diagram: Diagram) => void;
 }
 
-interface IState {
-  autoLayout: boolean;
-  queries: List<Query>;
-  selectedQuery: Query;
-}
+const QueryTab: React.FC<IProps> = (props) => {
+  const initialQuery = React.useMemo(
+    () => new Query(props.model),
+    [props.model],
+  );
 
-export default class QueryTab extends React.PureComponent<IProps, IState> {
-  constructor(props: IProps) {
-    super(props);
-    const query = new Query(this.props.model);
-    this.state = {
-      autoLayout: true,
-      queries: List([query]),
-      selectedQuery: query,
-    };
-  }
+  const [queries, setQueries] = React.useState<List<Query>>(
+    List([initialQuery]),
+  );
+  const [selectedQuery, setSelectedQuery] = React.useState<Query>(initialQuery);
 
-  public componentDidUpdate(prevProps: IProps) {
-    if (prevProps.model !== this.props.model) {
-      const query = new Query(this.props.model);
-      this.setState({
-        queries: List([query]),
-        selectedQuery: query,
-      });
-    }
-  }
+  React.useEffect(() => {
+    const query = new Query(props.model);
+    setQueries(List([query]));
+    setSelectedQuery(query);
+  }, [props.model]);
 
-  public render() {
-    return (
-      <>
-        <QueryPicker
-          onNewQuery={this.onNewQuery}
-          onQuerySelected={this.onQuerySelected}
-          queries={this.state.queries}
-          selectedQuery={this.state.selectedQuery}
-        />
-        <QueryWizard
-          model={this.props.model}
-          selectedDiagram={this.props.selectedDiagram}
-          query={this.state.selectedQuery}
-          onQueryChanged={this.onQueryChanged}
-        />
-      </>
-    );
-  }
+  const onQuerySelected = React.useCallback((query: Query) => {
+    setSelectedQuery(query);
+  }, []);
 
-  private onQuerySelected = (query: Query) => {
-    this.setState({ selectedQuery: query });
-  };
+  const onNewQuery = React.useCallback(() => {
+    const newQuery = new Query(props.model);
+    setQueries((prevQueries) => prevQueries.push(newQuery));
+    setSelectedQuery(newQuery);
+  }, [props.model]);
 
-  private onNewQuery = () => {
-    const newQuery = new Query(this.props.model);
-    this.setState({
-      queries: this.state.queries.push(newQuery),
-      selectedQuery: newQuery,
-    });
-  };
+  const onQueryChanged = React.useCallback(
+    (query: Query) => {
+      const diagram = query.run();
+      setSelectedQuery(query);
+      props.onDiagramUpdated(diagram);
+    },
+    [props.onDiagramUpdated],
+  );
 
-  private onQueryChanged = (query: Query) => {
-    const diagram = query.run();
-    this.setState({
-      selectedQuery: query,
-    });
-    this.props.onDiagramUpdated(diagram);
-  };
-}
+  return (
+    <>
+      <QueryPicker
+        onNewQuery={onNewQuery}
+        onQuerySelected={onQuerySelected}
+        queries={queries}
+        selectedQuery={selectedQuery}
+      />
+      <QueryWizard
+        model={props.model}
+        selectedDiagram={props.selectedDiagram}
+        query={selectedQuery}
+        onQueryChanged={onQueryChanged}
+      />
+    </>
+  );
+};
+
+export default QueryTab;

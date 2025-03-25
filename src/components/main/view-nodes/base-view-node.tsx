@@ -1,4 +1,5 @@
 import type * as CSS from "csstype";
+import * as React from "react";
 import { JSX } from "react";
 import {
   Bounds,
@@ -11,7 +12,6 @@ import {
 import { entityClickedFunc } from "../../common";
 import EntityLabel from "../entity-label";
 import SelectedViewNode from "../selected-view-node";
-// import React, { useState, useEffect } from 'react';
 
 export interface IViewNodeProps {
   viewNode: ViewNode;
@@ -19,24 +19,52 @@ export interface IViewNodeProps {
   selected: boolean;
   x: number;
   y: number;
+  badge?: string;
+  backgroundClass?: string;
+  entity?: IEntity | undefined;
+  textAlign?: CSS.Property.TextAlign;
+  margin?: number;
+  bounds: IBoundsFunc;
+  badgeBounds: IBadgeBoundsFunc;
+  textBounds: ITextBoundsFunc;
+  groupAttrs: IGroupAttrsFunc;
+  title: ITitleFunc;
+  desc: IDescFunc;
+  entityShape: IEntityShapeFunc;
+  shapeStyle: IShapeStyleFunc;
+  entityBadge: IEntityBadgeFunc;
+  entityLabel: IEntityLabelFunc;
+  selectedHighlight: ISelectedHighlightFunc;
 }
 
-export interface IGroupAttrs {
+export interface IBoundsFunc {
+  (viewNode: ViewNode, x?: number, y?: number): Bounds;
+}
+
+export interface IBadgeBoundsFunc {
+  (viewNode: ViewNode): Bounds | undefined;
+}
+
+export interface ITextBoundsFunc {
+  (viewNode: ViewNode, x?: number, y?: number): Bounds;
+}
+
+export interface IGroupAttrsFunc {
   (
     viewNode: ViewNode,
     onClicked: entityClickedFunc | undefined,
   ): React.SVGProps<SVGGElement>;
 }
 
-export interface ITitle {
+export interface ITitleFunc {
   (viewNode: ViewNode): JSX.Element | undefined;
 }
 
-export interface IDesc {
+export interface IDescFunc {
   (viewNode: ViewNode): JSX.Element | undefined;
 }
 
-export interface IEntityShape {
+export interface IEntityShapeFunc {
   (
     viewNode: ViewNode,
     backgroundClass: string | undefined,
@@ -44,18 +72,18 @@ export interface IEntityShape {
   ): JSX.Element;
 }
 
-export interface IShapeStyle {
+export interface IShapeStyleFunc {
   (viewNode: ViewNode): React.CSSProperties;
 }
 
-export interface IEntityBadge {
+export interface IEntityBadgeFunc {
   (
     badgeBounds: Bounds | undefined,
     badge: string | undefined,
   ): JSX.Element | undefined;
 }
 
-export interface IEntityLabel {
+export interface IEntityLabelFunc {
   (
     viewNode: ViewNode,
     textBounds: Bounds,
@@ -64,27 +92,8 @@ export interface IEntityLabel {
   ): JSX.Element | undefined;
 }
 
-export interface ISelectedHighlight {
+export interface ISelectedHighlightFunc {
   (viewNode: ViewNode, selected: boolean): JSX.Element | undefined;
-}
-
-export interface IViewNodeState {
-  badge?: string;
-  badgeBounds?: Bounds;
-  backgroundClass?: string;
-  bounds: Bounds;
-  entity?: IEntity | undefined;
-  textAlign?: CSS.Property.TextAlign;
-  textBounds: Bounds;
-  margin?: number;
-  groupAttrs: IGroupAttrs;
-  title: ITitle;
-  desc: IDesc;
-  entityShape: IEntityShape;
-  shapeStyle: IShapeStyle;
-  entityBadge: IEntityBadge;
-  entityLabel: IEntityLabel;
-  selectedHighlight: ISelectedHighlight;
 }
 
 export function initialBounds(
@@ -100,71 +109,63 @@ export function initialBounds(
   );
 }
 
-export function initialState(
+export function archimateProps(
   viewNode: ViewNode,
-  customState?: Partial<IViewNodeState>,
-): IViewNodeState {
-  const bounds = initialBounds(viewNode);
+  customState?: Partial<IViewNodeProps>,
+): IViewNodeProps {
   return {
-    backgroundClass: defaultBackgroundClass(viewNode),
-    badge: undefined,
-    badgeBounds: undefined,
-    bounds: bounds,
-    entity: viewNode.entityInstance(),
-    margin: 8,
-    textAlign: "center",
-    textBounds: bounds.reducedBy(2),
-    groupAttrs: groupAttrs,
-    title: title,
-    desc: desc,
-    entityShape: entityShape,
-    shapeStyle: shapeStyle,
-    entityBadge: entityBadge,
-    entityLabel: entityLabel,
-    selectedHighlight: selectedHighlight,
-    ...customState,
+    viewNode: viewNode,
+    onClicked: customState?.onClicked,
+    selected: customState?.selected || false,
+    x: customState?.x || viewNode.bounds.left,
+    y: customState?.y || viewNode.bounds.top,
+    badge: customState?.badge,
+    backgroundClass:
+      customState?.backgroundClass || defaultBackgroundClass(viewNode),
+    entity: customState?.entity || viewNode.entityInstance(),
+    textAlign: customState?.textAlign || "center",
+    margin: customState?.margin || 8,
+    bounds: customState?.bounds || initialBounds,
+    badgeBounds: customState?.badgeBounds || zeroBounds,
+    textBounds: customState?.textBounds || textBounds,
+    groupAttrs: customState?.groupAttrs || groupAttrs,
+    title: customState?.title || title,
+    desc: customState?.desc || desc,
+    entityShape: customState?.entityShape || entityShape,
+    shapeStyle: customState?.shapeStyle || shapeStyle,
+    entityBadge: customState?.entityBadge || entityBadge,
+    entityLabel: customState?.entityLabel || entityLabel,
+    selectedHighlight: customState?.selectedHighlight || selectedHighlight,
   };
 }
 
-//   useEffect(() => {
-//     if (props.x !== undefined || props.y !== undefined) {
-//       setState(prevState => ({
-//         ...prevState,
-//         badgeBounds: badgeBounds(props.viewNode),
-//         textBounds: textBounds(props.viewNode, props.x, props.y)
-//       }));
-//     }
-//   }, [props.x, props.y]);
-
-export function render(props: IViewNodeProps, state: IViewNodeState) {
+export const ArchimateFC: React.FC<IViewNodeProps> = (props) => {
   return (
-    <g {...state.groupAttrs(props.viewNode, props.onClicked)}>
-      {state.title(props.viewNode)}
-      {state.desc(props.viewNode)}
-      {state.entityShape(
+    <g {...props.groupAttrs(props.viewNode, props.onClicked)}>
+      {props.title(props.viewNode)}
+      {props.desc(props.viewNode)}
+      {props.entityShape(
         props.viewNode,
-        state.backgroundClass,
-        state.shapeStyle(props.viewNode),
+        props.backgroundClass,
+        props.shapeStyle(props.viewNode),
       )}
-      {state.entityBadge(state.badgeBounds, state.badge)}
-      {state.entityLabel(
+      {props.entityBadge(props.badgeBounds(props.viewNode), props.badge)}
+      {props.entityLabel(
         props.viewNode,
-        state.textBounds,
-        state.textAlign || "center",
-        state.badgeBounds,
+        props.textBounds(props.viewNode, props.x, props.y),
+        props.textAlign || "center",
+        props.badgeBounds(props.viewNode),
       )}
-      {state.selectedHighlight(props.viewNode, props.selected)}
+      {props.selectedHighlight(props.viewNode, props.selected)}
     </g>
   );
-}
+};
 
-export function textBounds(viewNode: ViewNode, x?: number, y?: number): Bounds {
-  return new Bounds(
-    x || viewNode.bounds.left,
-    y || viewNode.bounds.top,
-    viewNode.bounds.width,
-    viewNode.bounds.height,
-  ).reducedBy(2);
+export function textBounds(viewNode: ViewNode): Bounds {
+  const bounds = viewNode.absolutePosition();
+  return new Bounds(bounds.x, bounds.y, bounds.width, bounds.height).reducedBy(
+    2,
+  );
 }
 
 export function badgeBounds(): Bounds | undefined {

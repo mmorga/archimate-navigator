@@ -19,9 +19,10 @@ export function path(
 }
 
 export function badgeBounds(viewNode: ViewNode): Bounds | undefined {
+  const absolutePosition = viewNode.absolutePosition();
   return new Bounds(
-    viewNode.absolutePosition().right - 25,
-    viewNode.absolutePosition().top + 5,
+    absolutePosition.right - 25,
+    absolutePosition.top + 5,
     20,
     20,
   );

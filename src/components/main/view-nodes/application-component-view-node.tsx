@@ -1,50 +1,10 @@
 import { Bounds, ViewNode } from "../../../archimate-model";
 import { JSX } from "react";
-import { useState } from "react";
 import * as React from "react";
 import * as BadgedRect from "./badged-rect";
 import * as BaseViewNode from "./base-view-node";
 
-export const ApplicationComponentViewNode: React.FC<BaseViewNode.IViewNodeProps> =
-  React.memo((props) => {
-    function calcStateChanges(props: BaseViewNode.IViewNodeProps) {
-      const badge =
-        props.viewNode.childType === "1"
-          ? "#archimate-app-component-badge"
-          : undefined;
-      const badgeBounds =
-        props.viewNode.childType === "1"
-          ? BadgedRect.badgeBounds(props.viewNode)
-          : undefined;
-      return {
-        badge,
-        badgeBounds,
-        textBounds: textBounds(props.viewNode),
-      };
-    }
-
-    const [state, setState] = useState<BaseViewNode.IViewNodeState>(
-      BaseViewNode.initialState(props.viewNode, {
-        ...calcStateChanges(props),
-        entityShape: entityShape,
-      }),
-    );
-
-    React.useEffect(() => {
-      if (props.x !== undefined || props.y !== undefined) {
-        setState((prevState) => ({
-          ...prevState,
-          ...calcStateChanges(props),
-        }));
-      }
-    }, [props.x, props.y, props.viewNode]);
-
-    return BaseViewNode.render(props, state);
-  });
-
-export default ApplicationComponentViewNode;
-
-function textBounds(viewNode: ViewNode): Bounds {
+export function textBounds(viewNode: ViewNode): Bounds {
   if (viewNode.childType === "1") {
     return BaseViewNode.textBounds(viewNode);
   } else {
@@ -59,7 +19,7 @@ function textBounds(viewNode: ViewNode): Bounds {
   }
 }
 
-function entityShape(
+export function entityShape(
   viewNode: ViewNode,
   backgroundClass: string | undefined,
   shapeStyle: React.CSSProperties | undefined,

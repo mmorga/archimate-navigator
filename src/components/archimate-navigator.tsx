@@ -138,11 +138,8 @@ export default function ArchimateNavigator({
   };
 
   const onSidebarTabSelected = (eventKey: string | null) => {
-    console.log("onSidebarTabSelected eventKey ", eventKey);
     if (eventKey) {
       const idx = parseInt(eventKey);
-      // const tab: SidebarTab = SidebarTab[idx]
-      console.log("onSidebarTabSelected idx ", idx);
       setSidebarTabKey(idx);
     }
   };

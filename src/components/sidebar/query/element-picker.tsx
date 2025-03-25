@@ -31,17 +31,6 @@ interface IProps {
   show: boolean;
 }
 
-interface IState {
-  elementTypeFilter: ElementTypeFilterType;
-  elementTypesFilterElements: List<ElementTypeFilterType>;
-  fuse?: Fuse<FuseElement>;
-  fuseElementTypes?: List<ElementType>;
-  fuseFilteredElements?: List<Element>;
-  layerFilter: Layer | string;
-  results: List<Element>;
-  search: string;
-}
-
 interface FuseElement {
   id: string;
   type: ElementType;
@@ -49,249 +38,248 @@ interface FuseElement {
   documentation?: string;
 }
 
-export default class ElementPicker extends React.PureComponent<IProps, IState> {
-  private allLayers: Array<Layer | string>;
-  private fuseOptions = {
-    distance: 100,
-    keys: ["name", "type"],
-    location: 0,
-    maxPatternLength: 32,
-    shouldSort: true,
-    threshold: 0.6,
-  };
+const ElementPicker: React.FC<IProps> = (props) => {
+  const allLayers = React.useMemo(
+    () =>
+      new Array<Layer | string>().concat(
+        ["All"],
+        Layers.filter((l: Layer) => l !== Layer.None),
+      ),
+    [],
+  );
 
-  constructor(props: IProps) {
-    super(props);
-    this.allLayers = new Array<Layer | string>().concat(
-      ["All"],
-      Layers.filter((l: Layer) => l !== Layer.None),
+  const fuseOptions = React.useMemo(
+    () => ({
+      distance: 100,
+      keys: ["name", "type"],
+      location: 0,
+      maxPatternLength: 32,
+      shouldSort: true,
+      threshold: 0.6,
+    }),
+    [],
+  );
+
+  const elementTypesForLayer = React.useCallback(
+    (layer: Layer | string): List<ElementTypeFilterType> => {
+      return List<ElementTypeFilterType>(
+        layerElements(layer === "All" ? Layer.None : (layer as Layer))
+          .map((v) => v)
+          .sort(),
+      ).unshift("All");
+    },
+    [],
+  );
+
+  const [elementTypeFilter, setElementTypeFilter] =
+    React.useState<ElementTypeFilterType>("All");
+  const [elementTypesFilterElements, setElementTypesFilterElements] =
+    React.useState<List<ElementTypeFilterType>>(
+      elementTypesForLayer(Layer.None),
     );
-    this.state = {
-      elementTypeFilter: "All",
-      elementTypesFilterElements: this.elementTypesForLayer(Layer.None),
-      layerFilter: "All",
-      results: List(),
-      search: "",
-    };
-  }
+  const [layerFilter, setLayerFilter] = React.useState<Layer | string>("All");
+  const [search, setSearch] = React.useState("");
+  const [results, setResults] = React.useState<List<Element>>(List());
+  const [fuse, setFuse] = React.useState<Fuse<FuseElement> | undefined>(
+    undefined,
+  );
 
-  public render() {
-    return (
-      <Modal show={this.props.show} onHide={this.onClose}>
-        <Modal.Header closeButton={true}>
-          <Modal.Title>Add ArchiMate Element</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form>
-            <FormGroup controlId="layerFilter">
-              <Form.Label>Layer Filter</Form.Label>
-              <FormControl
-                as="select"
-                defaultValue={this.state.layerFilter}
-                onChange={this.onLayerFilterChanged}
-              >
-                {this.allLayers.map((v) => (
-                  <option key={v} value={v}>
-                    {v}
-                  </option>
-                ))}
-              </FormControl>
-              <FormControl.Feedback />
-            </FormGroup>
-            <FormGroup controlId="elementTypeFilter">
-              <Form.Label>Element Type Filter</Form.Label>
-              <FormControl
-                as="select"
-                defaultValue={this.state.elementTypeFilter}
-                onChange={this.onElementTypeFilterChanged}
-              >
-                {this.state.elementTypesFilterElements.toArray().map((v) => (
-                  <option key={v} value={v}>
-                    {v}
-                  </option>
-                ))}
-              </FormControl>
-              <FormControl.Feedback />
-            </FormGroup>
-            <FormGroup controlId="search">
-              <Form.Label>Search</Form.Label>
-              <input
-                type="text"
-                value={this.state.search}
-                className="form-control"
-                id="search"
-                placeholder="search"
-                onChange={this.onSearchChanged}
-              />
-              <FormControl.Feedback />
-            </FormGroup>
-            <FormGroup controlId="results">
-              <Form.Label>
-                Results <Badge>{this.state.results.size}</Badge>
-              </Form.Label>
-              <ListGroup>
-                {this.state.results
-                  .toArray()
-                  .slice(0, Math.min(20, this.state.results.size))
-                  .map((el) =>
-                    el ? (
-                      <ListGroupItem key={el.id}>
-                        <div className="pull-right">
-                          {this.addRemoveElement(el)}
-                        </div>
-                        <span className="text-info">{el.type}</span>
-                        {": "}
-                        {el.name ? (
-                          <span className="text-primary">{el.name}</span>
-                        ) : (
-                          <span className="text-muted">unnamed</span>
-                        )}
-                      </ListGroupItem>
-                    ) : undefined,
-                  )}
-              </ListGroup>
-              <FormControl.Feedback />
-            </FormGroup>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button onClick={this.onClose}>Close</Button>
-        </Modal.Footer>
-      </Modal>
-    );
-  }
+  const filteredElementTypes = React.useCallback((): List<ElementType> => {
+    if (elementTypeFilter === "All") {
+      return List(
+        elementTypesFilterElements
+          .filter((et) => et !== "All")
+          .map((et) => et as ElementType),
+      );
+    } else {
+      return List([elementTypeFilter as ElementType]);
+    }
+  }, [elementTypeFilter, elementTypesFilterElements]);
 
-  private onSearchChanged = (event: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({ search: event.target.value });
-    this.calculateResults();
-  };
+  const allElements = React.useCallback(() => {
+    return List<Element>(props.query.model.elements);
+  }, [props.query.model.elements]);
 
-  private onAddClick = (element: Element) => {
-    this.props.onChange(
-      this.props.query.updateQuery({
-        elements: this.props.query.elements.add(element),
-      }),
-    );
-  };
-
-  private onRemoveClick = (element: Element) => {
-    this.props.onChange(
-      this.props.query.updateQuery({
-        elements: this.props.query.elements.remove(element),
-      }),
-    );
-  };
-
-  private onClose = () => {
-    this.props.onClose();
-  };
-
-  private onLayerFilterChanged = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    const layerFilter = event.target.value;
-    const elementTypes = this.elementTypesForLayer(layerFilter);
-    this.setState({
-      elementTypesFilterElements: elementTypes,
-      fuse: undefined,
-      layerFilter,
-      results: List<Element>(),
-    });
-    this.calculateResults();
-  };
-
-  private onElementTypeFilterChanged = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    const elementTypeFilter = event.target.value;
-    this.setState({
-      elementTypeFilter,
-      fuse: undefined,
-      results: List<Element>(),
-    });
-    this.calculateResults();
-  };
-
-  private calculateResults() {
-    if (this.state.fuse === undefined) {
-      const fuseElementTypes = this.filteredElementTypes();
-      const fuseFilteredElements = List<Element>(
-        this.allElements().filter((e) =>
-          e ? fuseElementTypes.some((et) => et === e.type) : false,
+  const calculateResults = React.useCallback(() => {
+    if (fuse === undefined) {
+      const types = filteredElementTypes();
+      const filtered = List<Element>(
+        allElements().filter((e) =>
+          e ? types.some((et) => et === e.type) : false,
         ),
       );
-      this.setState({
-        fuseElementTypes,
-        fuseFilteredElements,
-      });
-      const fuse = new Fuse<FuseElement>(
-        fuseFilteredElements.toJS().map((el) => ({
+      const newFuse = new Fuse<FuseElement>(
+        filtered.toJS().map((el) => ({
           id: el.id,
           type: el.type,
           name: el.name,
           documentation: el.documentation,
         })),
-        this.fuseOptions,
+        fuseOptions,
       );
-      this.setState({ fuse });
+      setFuse(newFuse);
     }
-    const results: List<Element> =
-      this.state.search.length > 0
+
+    const newResults: List<Element> =
+      search.length > 0 && fuse
         ? List<Element>(
-            (this.state.fuse as Fuse<FuseElement>)
-              .search(this.state.search)
+            fuse
+              .search(search)
               .map((result) =>
-                this.props.query.model.elements.find(
+                props.query.model.elements.find(
                   (el) => el.id === result.item.id,
                 ),
               )
               .filter((el): el is Element => el !== undefined),
           )
         : List<Element>();
-    this.setState({ results });
-  }
+    setResults(newResults);
+  }, [
+    fuse,
+    search,
+    filteredElementTypes,
+    allElements,
+    fuseOptions,
+    props.query.model.elements,
+  ]);
 
-  private elementTypesForLayer = (
-    layer: Layer | string,
-  ): List<ElementTypeFilterType> => {
-    return List<ElementTypeFilterType>(
-      layerElements(layer === "All" ? Layer.None : (layer as Layer))
-        .map((v) => v)
-        .sort(),
-    ).unshift("All");
+  React.useEffect(() => {
+    calculateResults();
+  }, [calculateResults]);
+
+  const onSearchChanged = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearch(event.target.value);
   };
 
-  private filteredElementTypes(): List<ElementType> {
-    if (this.state.elementTypeFilter === "All") {
-      return List(
-        this.state.elementTypesFilterElements
-          .filter((et) => et !== "All")
-          .map((et) => et as ElementType),
-      );
-    } else {
-      return List([this.state.elementTypeFilter as ElementType]);
-    }
-  }
+  const onAddClick = (element: Element) => {
+    props.onChange(
+      props.query.updateQuery({
+        elements: props.query.elements.add(element),
+      }),
+    );
+  };
 
-  private addRemoveElement(el: Element): JSX.Element {
-    // TODO: should be working with Immutable v4
-    // const isSelected = this.props.selectedElements.includes(el);
-    const isSelected = this.props.query.elements.some((e) =>
+  const onRemoveClick = (element: Element) => {
+    props.onChange(
+      props.query.updateQuery({
+        elements: props.query.elements.remove(element),
+      }),
+    );
+  };
+
+  const onLayerFilterChanged = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newLayerFilter = event.target.value;
+    const types = elementTypesForLayer(newLayerFilter);
+    setElementTypesFilterElements(types);
+    setFuse(undefined);
+    setLayerFilter(newLayerFilter);
+    setResults(List<Element>());
+  };
+
+  const onElementTypeFilterChanged = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const newElementTypeFilter = event.target.value;
+    setElementTypeFilter(newElementTypeFilter);
+    setFuse(undefined);
+    setResults(List<Element>());
+  };
+
+  const addRemoveElement = (el: Element): JSX.Element => {
+    const isSelected = props.query.elements.some((e) =>
       e ? e.id === el.id : false,
     );
     const bsStyle = isSelected ? "danger" : "primary";
-    const onClick = isSelected
-      ? this.onRemoveClick.bind(this, el)
-      : this.onAddClick.bind(this, el);
+    const onClick = isSelected ? () => onRemoveClick(el) : () => onAddClick(el);
     const icon = isSelected ? <Trash /> : <Plus />;
     return (
       <Button size="sm" variant={bsStyle} onClick={onClick}>
         {icon}
       </Button>
     );
-  }
-
-  private allElements = () => {
-    return List<Element>(this.props.query.model.elements);
   };
-}
+
+  return (
+    <Modal show={props.show} onHide={props.onClose}>
+      <Modal.Header closeButton={true}>
+        <Modal.Title>Add ArchiMate Element</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <Form>
+          <FormGroup controlId="layerFilter">
+            <Form.Label>Layer Filter</Form.Label>
+            <FormControl
+              as="select"
+              value={layerFilter}
+              onChange={onLayerFilterChanged}
+            >
+              {allLayers.map((v) => (
+                <option key={v} value={v}>
+                  {v}
+                </option>
+              ))}
+            </FormControl>
+            <FormControl.Feedback />
+          </FormGroup>
+          <FormGroup controlId="elementTypeFilter">
+            <Form.Label>Element Type Filter</Form.Label>
+            <FormControl
+              as="select"
+              value={elementTypeFilter}
+              onChange={onElementTypeFilterChanged}
+            >
+              {elementTypesFilterElements.toArray().map((v) => (
+                <option key={v} value={v}>
+                  {v}
+                </option>
+              ))}
+            </FormControl>
+            <FormControl.Feedback />
+          </FormGroup>
+          <FormGroup controlId="search">
+            <Form.Label>Search</Form.Label>
+            <input
+              type="text"
+              value={search}
+              className="form-control"
+              id="search"
+              placeholder="search"
+              onChange={onSearchChanged}
+            />
+            <FormControl.Feedback />
+          </FormGroup>
+          <FormGroup controlId="results">
+            <Form.Label>
+              Results <Badge>{results.size}</Badge>
+            </Form.Label>
+            <ListGroup>
+              {results
+                .toArray()
+                .slice(0, Math.min(20, results.size))
+                .map((el) =>
+                  el ? (
+                    <ListGroupItem key={el.id}>
+                      <div className="pull-right">{addRemoveElement(el)}</div>
+                      <span className="text-info">{el.type}</span>
+                      {": "}
+                      {el.name ? (
+                        <span className="text-primary">{el.name}</span>
+                      ) : (
+                        <span className="text-muted">unnamed</span>
+                      )}
+                    </ListGroupItem>
+                  ) : undefined,
+                )}
+            </ListGroup>
+            <FormControl.Feedback />
+          </FormGroup>
+        </Form>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button onClick={props.onClose}>Close</Button>
+      </Modal.Footer>
+    </Modal>
+  );
+};
+
+export default ElementPicker;

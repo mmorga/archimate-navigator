@@ -1,31 +1,8 @@
-import { IViewNodeProps, IViewNodeState } from "./base-view-node";
 import { JSX } from "react";
 import { Point, ViewNode } from "../../../archimate-model";
-import * as BaseViewNode from "./base-view-node";
-import { useEffect, useState } from "react";
 import * as React from "react";
 
-const MeaningViewNode: React.FC<IViewNodeProps> = React.memo((props) => {
-  const [state, setState] = useState<IViewNodeState>(
-    BaseViewNode.initialState(props.viewNode, {
-      entityShape: meaningEntityShape,
-    }),
-  );
-
-  useEffect(() => {
-    if (props.x !== undefined || props.y !== undefined) {
-      setState((prevState) => ({
-        ...prevState,
-        badgeBounds: BaseViewNode.badgeBounds(),
-        textBounds: BaseViewNode.textBounds(props.viewNode, props.x, props.y),
-      }));
-    }
-  }, [props.x, props.y, props.viewNode]);
-
-  return BaseViewNode.render(props, state);
-});
-
-function meaningEntityShape(
+export function meaningEntityShape(
   viewNode: ViewNode,
   backgroundClass: string | undefined,
   shapeStyle: React.CSSProperties | undefined,
@@ -89,5 +66,3 @@ function meaningEntityShape(
     />
   );
 }
-
-export default MeaningViewNode;

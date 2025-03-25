@@ -1,50 +1,10 @@
-import { Bounds, zeroBounds } from "@/archimate-model";
+import { Bounds } from "@/archimate-model";
 import { ViewNode } from "@/archimate-model";
 import * as BadgedRoundedRectViewNode from "./badged-rounded-rect";
-import * as BaseViewNode from "./base-view-node";
-import { useEffect, useState } from "react";
 import * as React from "react";
 import { JSX } from "react";
 
-export const ProcessViewNode: React.FC<BaseViewNode.IViewNodeProps> =
-  React.memo((props) => {
-    function calcStateChanges(props: BaseViewNode.IViewNodeProps) {
-      if (props.viewNode.childType === "1") {
-        return {
-          badgeBounds: zeroBounds(),
-          textBounds: textBounds(props.viewNode),
-        };
-      } else {
-        return {
-          badge: "#archimate-process-badge",
-          badgeBounds: BadgedRoundedRectViewNode.badgeBounds(props.viewNode),
-          textBounds: BaseViewNode.textBounds(props.viewNode),
-        };
-      }
-    }
-
-    const [state, setState] = useState<BaseViewNode.IViewNodeState>(
-      BaseViewNode.initialState(props.viewNode, {
-        ...calcStateChanges(props),
-        entityShape: entityShape,
-      }),
-    );
-
-    useEffect(() => {
-      if (props.x !== undefined || props.y !== undefined) {
-        setState((prevState) => ({
-          ...prevState,
-          ...calcStateChanges(props),
-        }));
-      }
-    }, [props.x, props.y, props.viewNode]);
-
-    return BaseViewNode.render(props, state);
-  });
-
-export default ProcessViewNode;
-
-function entityShape(
+export function entityShape(
   viewNode: ViewNode,
   backgroundClass: string | undefined,
   shapeStyle: React.CSSProperties | undefined,
@@ -60,7 +20,7 @@ function entityShape(
   }
 }
 
-function textBounds(viewNode: ViewNode): Bounds {
+export function textBounds(viewNode: ViewNode): Bounds {
   const bounds = viewNode.absolutePosition();
   const shaftTop = bounds.top + bounds.height * 0.15;
   const shaftBottom = bounds.bottom - bounds.height * 0.15;

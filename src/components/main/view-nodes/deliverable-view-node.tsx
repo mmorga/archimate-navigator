@@ -1,30 +1,6 @@
 import { ViewNode } from "../../../archimate-model";
 import { JSX } from "react";
-import * as BaseViewNode from "./base-view-node";
-import { useEffect, useState } from "react";
 import * as React from "react";
-
-export const DeliverableViewNode: React.FC<BaseViewNode.IViewNodeProps> =
-  React.memo((props) => {
-    const [state, setState] = useState<BaseViewNode.IViewNodeState>(
-      BaseViewNode.initialState(props.viewNode, {
-        badge: "archimate-artifact-badge",
-        textBounds: BaseViewNode.textBounds(props.viewNode, props.x, props.y),
-        entityShape: entityShape,
-      }),
-    );
-
-    useEffect(() => {
-      if (props.x !== undefined || props.y !== undefined) {
-        setState((prevState) => ({
-          ...prevState,
-          textBounds: BaseViewNode.textBounds(props.viewNode, props.x, props.y),
-        }));
-      }
-    }, [props.x, props.y, props.viewNode]);
-
-    return BaseViewNode.render(props, state);
-  });
 
 export function entityShape(
   viewNode: ViewNode,
@@ -65,5 +41,3 @@ export function entityShape(
     </>
   );
 }
-
-export default DeliverableViewNode;

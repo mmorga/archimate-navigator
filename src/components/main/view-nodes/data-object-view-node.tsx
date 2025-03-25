@@ -1,33 +1,9 @@
 import { Bounds, ViewNode } from "../../../archimate-model";
 import { JSX } from "react";
 import * as BaseViewNode from "./base-view-node";
-import { useEffect, useState } from "react";
 import * as React from "react";
 
-const DataObjectViewNode: React.FC<BaseViewNode.IViewNodeProps> = React.memo(
-  (props) => {
-    const [state, setState] = useState<BaseViewNode.IViewNodeState>(
-      BaseViewNode.initialState(props.viewNode, {
-        margin: 8,
-        textBounds: textBounds(props.viewNode, props.x, props.y),
-        entityShape: entityShape,
-      }),
-    );
-
-    useEffect(() => {
-      if (props.x !== undefined || props.y !== undefined) {
-        setState((prevState) => ({
-          ...prevState,
-          textBounds: textBounds(props.viewNode, props.x, props.y),
-        }));
-      }
-    }, [props.x, props.y, props.viewNode]);
-
-    return BaseViewNode.render(props, state);
-  },
-);
-
-function entityShape(
+export function entityShape(
   viewNode: ViewNode,
   backgroundClass: string | undefined,
   shapeStyle: React.CSSProperties | undefined,
@@ -63,8 +39,8 @@ function entityShape(
   );
 }
 
-export function textBounds(viewNode: ViewNode, x?: number, y?: number): Bounds {
-  const textBounds = BaseViewNode.textBounds(viewNode, x, y);
+export function textBounds(viewNode: ViewNode): Bounds {
+  const textBounds = BaseViewNode.textBounds(viewNode);
   const margin: number = 8;
   return new Bounds(
     textBounds.left,
@@ -73,5 +49,3 @@ export function textBounds(viewNode: ViewNode, x?: number, y?: number): Bounds {
     textBounds.height - margin,
   );
 }
-
-export default DataObjectViewNode;

@@ -1,32 +1,7 @@
 import { Bounds } from "../../../archimate-model";
 import { JSX } from "react";
 import { ViewNode } from "@/archimate-model";
-import * as BaseViewNode from "./base-view-node";
-import { useEffect, useState } from "react";
 import * as React from "react";
-
-export const MotivationViewNode: React.FC<BaseViewNode.IViewNodeProps> =
-  React.memo((props) => {
-    const [state, setState] = useState<BaseViewNode.IViewNodeState>(
-      BaseViewNode.initialState(props.viewNode, {
-        badgeBounds: badgeBounds(props.viewNode),
-        textBounds: BaseViewNode.textBounds(props.viewNode),
-        entityShape: entityShape,
-      }),
-    );
-
-    useEffect(() => {
-      if (props.x !== undefined || props.y !== undefined) {
-        setState((prevState) => ({
-          ...prevState,
-          badgeBounds: badgeBounds(props.viewNode),
-          textBounds: BaseViewNode.textBounds(props.viewNode),
-        }));
-      }
-    }, [props.x, props.y, props.viewNode]);
-
-    return BaseViewNode.render(props, state);
-  });
 
 export function entityShape(
   viewNode: ViewNode,
@@ -72,5 +47,3 @@ export function badgeBounds(viewNode: ViewNode): Bounds {
   const bounds = viewNode.absolutePosition();
   return new Bounds(bounds.right - 25, bounds.top + 5, 20, 20);
 }
-
-export default MotivationViewNode;

@@ -36,6 +36,18 @@ export class Bounds implements IBounds {
     this.bottom = this.top + this.height;
   }
 
+  public equals(other: Bounds | undefined) {
+    if (other === undefined) {
+      return false;
+    }
+    return (
+      this.x === other.x &&
+      this.y === other.y &&
+      this.width === other.width &&
+      this.height === other.height
+    );
+  }
+
   public offset(os: Bounds): Bounds {
     return new Bounds(
       this.left + os.left,
@@ -45,7 +57,12 @@ export class Bounds implements IBounds {
     );
   }
 
-  public toString() {
+  public toString(extra?: boolean) {
+    if (extra) {
+      return `Bounds(x: ${this.x}, y: ${this.y}, left: ${this.left}, top: ${this.top}, right: ${this.right}, bottom: ${this.bottom}, width: ${this.width}, height: ${
+        this.height
+      })`;
+    }
     return `Bounds(x: ${this.x}, y: ${this.y}, width: ${this.width}, height: ${
       this.height
     })`;

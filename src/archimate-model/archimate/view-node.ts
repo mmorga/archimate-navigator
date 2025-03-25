@@ -146,12 +146,13 @@ export class ViewNode implements IViewNode, IEntityRef {
 
   // @todo Is this true for all or only Archi models?
   public absolutePosition(): Bounds {
-    return new Bounds(
+    const bounds = new Bounds(
       this.x || this.bounds.left,
       this.y || this.bounds.top,
       this.bounds.width,
       this.bounds.height,
     );
+    return bounds;
   }
 
   public extents(): IExtents {

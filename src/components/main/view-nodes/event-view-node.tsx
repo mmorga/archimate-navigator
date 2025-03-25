@@ -3,44 +3,9 @@ import { JSX } from "react";
 import { ViewNode } from "@/archimate-model";
 import * as BadgedRoundedRectViewNode from "./badged-rounded-rect";
 import * as BaseViewNode from "./base-view-node";
-import { useEffect, useState } from "react";
 import * as React from "react";
 
-export const EventViewNode: React.FC<BaseViewNode.IViewNodeProps> = React.memo(
-  (props) => {
-    function calcStateChanges(props: BaseViewNode.IViewNodeProps) {
-      const badge =
-        props.viewNode.childType === "1" ? undefined : "#archimate-event-badge";
-      return {
-        badge: badge,
-        badgeBounds: badgeBounds(props.viewNode),
-        textBounds: textBounds(props.viewNode),
-      };
-    }
-
-    const [state, setState] = useState<BaseViewNode.IViewNodeState>(
-      BaseViewNode.initialState(props.viewNode, {
-        ...calcStateChanges(props),
-        entityShape: entityShape,
-      }),
-    );
-
-    useEffect(() => {
-      if (props.x !== undefined || props.y !== undefined) {
-        setState((prevState) => ({
-          ...prevState,
-          ...calcStateChanges(props),
-        }));
-      }
-    }, [props.x, props.y, props.viewNode]);
-
-    return BaseViewNode.render(props, state);
-  },
-);
-
-export default EventViewNode;
-
-function entityShape(
+export function entityShape(
   viewNode: ViewNode,
   backgroundClass: string | undefined,
   shapeStyle: React.CSSProperties | undefined,
@@ -56,7 +21,7 @@ function entityShape(
   }
 }
 
-function badgeBounds(viewNode: ViewNode): Bounds | undefined {
+export function badgeBounds(viewNode: ViewNode): Bounds | undefined {
   if (viewNode.childType === "1") {
     return undefined;
   } else {
@@ -64,7 +29,7 @@ function badgeBounds(viewNode: ViewNode): Bounds | undefined {
   }
 }
 
-function textBounds(viewNode: ViewNode): Bounds {
+export function textBounds(viewNode: ViewNode): Bounds {
   if (viewNode.childType === "1") {
     const textBounds = BaseViewNode.textBounds(viewNode);
     const notchX = 18;
