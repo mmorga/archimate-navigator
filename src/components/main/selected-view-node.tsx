@@ -3,9 +3,13 @@ import { Bounds } from "../../archimate-model";
 
 interface IProps {
   bounds: Bounds;
+  selected: boolean;
 }
 
 const SelectedViewNode: React.FC<IProps> = (props) => {
+  if (!props.selected) {
+    return undefined;
+  }
   const b = props.bounds;
   return (
     <rect

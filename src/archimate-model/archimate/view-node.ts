@@ -144,6 +144,15 @@ export class ViewNode implements IViewNode, IEntityRef {
     return this.entity;
   }
 
+  public elementType(): string {
+    const elInst = this.entityInstance();
+    if (elInst) {
+      return elInst.type;
+    } else {
+      return this.type;
+    }
+  }
+
   // @todo Is this true for all or only Archi models?
   public absolutePosition(): Bounds {
     const bounds = new Bounds(

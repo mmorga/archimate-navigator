@@ -71,6 +71,10 @@ export enum ElementType {
   Grouping = "Grouping",
 }
 
+export function elementTypeOfString(type: string): ElementType {
+  return ElementType[type as keyof typeof ElementType];
+}
+
 export const ElementTypes: Readonly<ElementType[]> = [
   ElementType.BusinessActor,
   ElementType.BusinessCollaboration,

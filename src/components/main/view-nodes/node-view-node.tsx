@@ -27,7 +27,7 @@ export function entityShape(
 
 export function textBounds(viewNode: ViewNode): Bounds {
   const textBounds = BaseViewNode.textBounds(viewNode);
-  const margin: number = 12;
+  const margin: number = 14;
   return new Bounds(
     textBounds.left,
     textBounds.top + margin,

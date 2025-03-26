@@ -19,10 +19,9 @@ import {
 import { entityClickedFunc } from "../common";
 import ArchimateConnection from "./archimate-connection";
 import ArchimateSvg from "./archimate-svg";
-import { archimateViewNodeProps } from "./archimate-view-node";
+import { ArchimateViewNode } from "./archimate-view-node";
 import ForceLayout from "./force-layout";
 import SvgPanZoom, { numbersDiffer, zoomIn, zoomOut } from "./svg-pan-zoom";
-import { ArchimateFC } from "./view-nodes/base-view-node";
 
 interface IProps {
   selectedDiagram?: Diagram;
@@ -201,19 +200,15 @@ const ArchimateDiagramView: React.FC<IProps> = (props) => {
               scale={state.scale}
               zoomMode={state.zoomMode}
             >
-              {props.nodes.map((node) =>
-                React.createElement(
-                  ArchimateFC,
-                  archimateViewNodeProps(node, {
-                    key: node.id,
-                    onClicked: props.entityClicked,
-                    selected: nodeIsSelected(node),
-                    viewNode: node,
-                    x: node.x || node.bounds.left,
-                    y: node.y || node.bounds.top,
-                  }),
-                ),
-              )}
+              {props.nodes.map((node) => (
+                <ArchimateViewNode
+                  viewNode={node}
+                  onClicked={props.entityClicked}
+                  selected={nodeIsSelected(node)}
+                  x={node.x || node.bounds.left}
+                  y={node.y || node.bounds.top}
+                />
+              ))}
               {props.connections.map((conn) => (
                 <ArchimateConnection
                   autoLayout={isAutoLayout()}
