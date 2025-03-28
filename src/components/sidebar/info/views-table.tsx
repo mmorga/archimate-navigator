@@ -1,48 +1,38 @@
-import { PureComponent } from "react";
+import * as React from "react";
 import { IDiagram, IEntity } from "../../../archimate-model";
 import { entityClickedFunc } from "../../common";
 import EntityLink from "../entity-link";
-import Panel from "../panel";
+import { Card } from "react-bootstrap";
 
 interface IProps {
   views: IDiagram[];
   entityClicked: entityClickedFunc;
 }
 
-export default class ViewsTable extends PureComponent<IProps> {
-  public render() {
-    const views = this.props.views ? this.props.views : [];
-    let tableRows = null;
-    if (views.length === 0) {
-      tableRows = [
-        <tr key={"views-table-no-views"}>
-          <td colSpan={2}>No Views</td>
-        </tr>,
-      ];
-    } else {
-      tableRows = views.sort(byName).map((view) => (
-        <tr key={view.path}>
-          <td>
-            <EntityLink
-              entity={view}
-              entityClicked={this.props.entityClicked}
-            />
-          </td>
-          <td>{view.viewpoint}</td>
-        </tr>
-      ));
-    }
+const ViewsTable: React.FC<IProps> = React.memo(({ views, entityClicked }) => {
+  const viewsList = views ? views : [];
+  let tableRows = null;
+  if (viewsList.length === 0) {
+    tableRows = [
+      <tr key={"views-table-no-views"}>
+        <td colSpan={2}>No Views</td>
+      </tr>,
+    ];
+  } else {
+    tableRows = viewsList.sort(byName).map((view) => (
+      <tr key={view.path}>
+        <td>
+          <EntityLink entity={view} entityClicked={entityClicked} />
+        </td>
+        <td>{view.viewpoint}</td>
+      </tr>
+    ));
+  }
 
-    const empty = this.props.views.length === 0;
-    const header = !empty ? (
-      "Views"
-    ) : (
-      <>
-        Views <span className="small">(none)</span>
-      </>
-    );
-    return (
-      <Panel header={header} initiallyCollapsed={empty}>
+  return (
+    <Card>
+      <Card.Title>Views</Card.Title>
+      <Card.Body>
         <table className="table archimate-views-table">
           <thead>
             <tr key="views-table-header">
@@ -52,10 +42,10 @@ export default class ViewsTable extends PureComponent<IProps> {
           </thead>
           <tbody>{tableRows}</tbody>
         </table>
-      </Panel>
-    );
-  }
-}
+      </Card.Body>
+    </Card>
+  );
+});
 
 export function byName(a: IEntity, b: IEntity): number {
   if (a === b) {
@@ -85,3 +75,5 @@ export function byOptionalString(
     }
   }
 }
+
+export default ViewsTable;

@@ -1,16 +1,16 @@
-import { PureComponent } from "react";
+import * as React from "react";
 import { Element } from "../../../archimate-model";
 import { entityClickedFunc } from "../../common";
 import EntityLink from "../entity-link";
-import Panel from "../panel";
+import { Card } from "react-bootstrap";
 
 interface IProps {
   elements: Element[];
   elementClicked: entityClickedFunc;
 }
 
-export default class ElementsTable extends PureComponent<IProps> {
-  public render() {
+const ElementsTable: React.FC<IProps> = React.memo(
+  ({ elements, elementClicked }) => {
     let elementRows = [
       <tr key="no-elements">
         <td colSpan={4}>
@@ -19,44 +19,36 @@ export default class ElementsTable extends PureComponent<IProps> {
       </tr>,
     ];
 
-    if (this.props.elements.length > 0) {
-      elementRows = this.props.elements.sort(byTypeAndName).map((element) => {
+    if (elements.length > 0) {
+      elementRows = elements.sort(byTypeAndName).map((element) => {
         return (
           <tr key={element.id}>
             <td>
-              <EntityLink
-                entity={element}
-                entityClicked={this.props.elementClicked}
-              />
+              <EntityLink entity={element} entityClicked={elementClicked} />
             </td>
             <td>{element.type}</td>
           </tr>
         );
       });
     }
-    const empty = this.props.elements.length === 0;
-    const header = !empty ? (
-      "Elements"
-    ) : (
-      <>
-        Elements <span className="small">(none)</span>
-      </>
-    );
     return (
-      <Panel header={header} initiallyCollapsed={empty}>
-        <table className="table archimate-elements-table">
-          <thead>
-            <tr key="elements-header">
-              <th>Element</th>
-              <th>Type</th>
-            </tr>
-          </thead>
-          <tbody>{elementRows}</tbody>
-        </table>
-      </Panel>
+      <Card>
+        <Card.Title>Elements</Card.Title>
+        <Card.Body>
+          <table className="table archimate-elements-table">
+            <thead>
+              <tr key="elements-header">
+                <th>Element</th>
+                <th>Type</th>
+              </tr>
+            </thead>
+            <tbody>{elementRows}</tbody>
+          </table>
+        </Card.Body>
+      </Card>
     );
-  }
-}
+  },
+);
 
 export function byTypeAndName(a: Element, b: Element): number {
   if (a === b) {
@@ -69,3 +61,5 @@ export function byTypeAndName(a: Element, b: Element): number {
     return a.name.localeCompare(b.name);
   }
 }
+
+export default ElementsTable;

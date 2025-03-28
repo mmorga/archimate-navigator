@@ -1,4 +1,5 @@
-import { PureComponent, JSX } from "react";
+import * as React from "react";
+import { JSX } from "react";
 import {
   Diagram,
   Element,
@@ -14,82 +15,73 @@ import EntityIdPanel from "./entity-id-panel";
 import PropertiesPanel from "./properties-panel";
 import RelationshipsTable from "./relationships-table";
 import ViewsTable from "./views-table";
+
 interface IProps {
   entity?: IEntity;
   entityClicked: entityClickedFunc;
 }
 
-export default class InfoTab extends PureComponent<IProps> {
-  public render() {
-    return (
-      <>
-        <EntityIdPanel
-          entity={this.props.entity}
-          entityClicked={this.props.entityClicked}
-        />
-        <DocumentationPanel
-          str={this.props.entity ? this.props.entity.documentation : undefined}
-        />
-        {this.properties()}
-        {this.elements()}
-        {this.relationships()}
-        {this.views()}
-      </>
-    );
-  }
-
-  private elements(): JSX.Element | undefined {
-    if (this.props.entity instanceof Diagram) {
-      const diagram = this.props.entity as Diagram;
+// const InfoTab: React.FC<IProps> = React.memo(({ entity, entityClicked }) => {
+const InfoTab: React.FC<IProps> = ({ entity, entityClicked }) => {
+  const elements = (): JSX.Element | undefined => {
+    if (entity instanceof Diagram) {
+      const diagram = entity as Diagram;
       return (
         <ElementsTable
           elements={diagram.elements()}
-          elementClicked={this.props.entityClicked}
+          elementClicked={entityClicked}
         />
       );
-    } else {
-      return undefined;
     }
-  }
-  private relationships(): JSX.Element | undefined {
-    if (
-      this.props.entity instanceof Diagram ||
-      this.props.entity instanceof Element
-    ) {
+    return undefined;
+  };
+
+  const relationships = (): JSX.Element | undefined => {
+    if (entity instanceof Diagram || entity instanceof Element) {
       return (
         <RelationshipsTable
-          relationships={(
-            this.props.entity as IHasRelationships
-          ).relationships()}
-          entityClicked={this.props.entityClicked}
+          relationships={(entity as IHasRelationships).relationships()}
+          entityClicked={entityClicked}
         />
       );
-    } else {
-      return undefined;
     }
-  }
+    return undefined;
+  };
 
-  private views(): JSX.Element | undefined {
+  const views = (): JSX.Element | undefined => {
     if (
-      this.props.entity instanceof Diagram ||
-      this.props.entity instanceof Element ||
-      this.props.entity instanceof Relationship
+      entity instanceof Diagram ||
+      entity instanceof Element ||
+      entity instanceof Relationship
     ) {
-      const viewsEntity = this.props.entity as IHasViews;
+      const viewsEntity = entity as IHasViews;
       return (
         <ViewsTable
           views={viewsEntity.diagrams()}
-          entityClicked={this.props.entityClicked}
+          entityClicked={entityClicked}
         />
       );
-    } else {
+    }
+    return undefined;
+  };
+
+  const properties = (): JSX.Element | undefined => {
+    if (entity === undefined) {
       return undefined;
     }
-  }
-  private properties(): JSX.Element | undefined {
-    if (this.props.entity === undefined) {
-      return undefined;
-    }
-    return <PropertiesPanel properties={this.props.entity.properties || []} />;
-  }
-}
+    return <PropertiesPanel properties={entity.properties || []} />;
+  };
+
+  return (
+    <>
+      <EntityIdPanel entity={entity} entityClicked={entityClicked} />
+      <DocumentationPanel str={entity ? entity.documentation : undefined} />
+      {properties()}
+      {elements()}
+      {relationships()}
+      {views()}
+    </>
+  );
+};
+
+export default InfoTab;

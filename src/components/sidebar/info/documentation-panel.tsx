@@ -1,28 +1,21 @@
 import "github-markdown-css/github-markdown.css";
-import { PureComponent } from "react";
+import * as React from "react";
 import ReactMarkdown from "react-markdown";
-import Panel from "../panel";
+import { Card } from "react-bootstrap";
 
 interface IProps {
-  str: string | undefined;
-  header?: string;
+  str?: string | undefined;
 }
 
-export default class DocumentationPanel extends PureComponent<IProps> {
-  public render() {
-    const hasContent = this.props.str && this.props.str.trim().length > 0;
-    const title = this.props.header || "Documentation";
-    const header = hasContent ? (
-      title
-    ) : (
-      <>
-        {title} <span className="small">(none)</span>
-      </>
-    );
-    return (
-      <Panel header={header} initiallyCollapsed={!hasContent}>
-        <ReactMarkdown>{this.props.str || "No Documentation"}</ReactMarkdown>
-      </Panel>
-    );
-  }
-}
+const DocumentationPanel: React.FC<IProps> = React.memo(({ str }) => {
+  return (
+    <Card>
+      <Card.Title>Documentation</Card.Title>
+      <Card.Body>
+        <ReactMarkdown>{str || "No Documentation"}</ReactMarkdown>
+      </Card.Body>
+    </Card>
+  );
+});
+
+export default DocumentationPanel;

@@ -1,43 +1,43 @@
 import "github-markdown-css/github-markdown.css";
-import { PureComponent } from "react";
+import * as React from "react";
 import ReactMarkdown from "react-markdown";
 import { Property } from "../../../archimate-model";
-import Panel from "../panel";
 import { byOptionalString } from "./views-table";
+import { Card } from "react-bootstrap";
 
 interface IProps {
   properties: Property[];
 }
 
-export default class PropertiesPanel extends PureComponent<IProps> {
-  public render() {
-    const properties = this.props.properties ? this.props.properties : [];
-    let tableRows = null;
-    if (properties.length === 0) {
-      tableRows = [
-        <tr key={"no-properties"}>
-          <td colSpan={2}>No Properties</td>
-        </tr>,
-      ];
-    } else {
-      tableRows = properties.sort(byKeyAndValue).map((property) => (
-        <tr key={property.key}>
-          <td>{property.key}</td>
-          <td>{this.value(property.value)}</td>
-        </tr>
-      ));
+const PropertiesPanel: React.FC<IProps> = React.memo(({ properties }) => {
+  const value = (v: string | undefined) => {
+    if (v) {
+      return <ReactMarkdown>{v}</ReactMarkdown>;
     }
+    return <i>undefined</i>;
+  };
 
-    const propertiesEmpty = this.props.properties.length === 0;
-    const header = !propertiesEmpty ? (
-      "Properties"
-    ) : (
-      <>
-        Properties <span className="small">(none)</span>
-      </>
-    );
-    return (
-      <Panel header={header} initiallyCollapsed={propertiesEmpty}>
+  const propertiesList = properties ? properties : [];
+  let tableRows = null;
+  if (propertiesList.length === 0) {
+    tableRows = [
+      <tr key={"no-properties"}>
+        <td colSpan={2}>No Properties</td>
+      </tr>,
+    ];
+  } else {
+    tableRows = propertiesList.sort(byKeyAndValue).map((property) => (
+      <tr key={property.key}>
+        <td>{property.key}</td>
+        <td>{value(property.value)}</td>
+      </tr>
+    ));
+  }
+
+  return (
+    <Card>
+      <Card.Title>Properties</Card.Title>
+      <Card.Body>
         <table className="table">
           <thead>
             <tr key="properties-header">
@@ -47,18 +47,10 @@ export default class PropertiesPanel extends PureComponent<IProps> {
           </thead>
           <tbody id="element-properties">{tableRows}</tbody>
         </table>
-      </Panel>
-    );
-  }
-
-  private value(v: string | undefined) {
-    if (v) {
-      return <ReactMarkdown>{v}</ReactMarkdown>;
-    }
-
-    return <i>undefined</i>;
-  }
-}
+      </Card.Body>
+    </Card>
+  );
+});
 
 export function byKeyAndValue(a: Property, b: Property): number {
   if (a === b) {
@@ -71,3 +63,5 @@ export function byKeyAndValue(a: Property, b: Property): number {
     return byOptionalString(a.value, b.value);
   }
 }
+
+export default PropertiesPanel;

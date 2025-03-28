@@ -76,3 +76,7 @@ table .checkbox {
 table .checkbox input {
   margin-top: 2px;
 }
+
+.card {
+  overflow-x: scroll;
+}

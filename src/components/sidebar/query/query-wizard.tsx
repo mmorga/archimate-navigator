@@ -7,6 +7,7 @@ import {
   Badge,
   Button,
   Card,
+  Collapse,
   Form,
   FormControl,
   FormGroup,
@@ -27,9 +28,6 @@ import {
   ViewpointType,
 } from "../../../archimate-model";
 import ElementTypeFilter from "./query-wizard-form/element-type-filter";
-import LayerCheckbox from "./query-wizard-form/layer-checkbox";
-
-// type ElementTypeFilterType = ElementType | string;
 
 interface FuseElement {
   id: string;
@@ -209,8 +207,8 @@ export default function QueryWizard({ query, onQueryChanged }: IProps) {
                   ))}
               </Form.Select>
             </FormGroup>
-            <FormGroup controlId="layerFilter">
-              <Form.Label>
+            <FormGroup>
+              <div className="form-label">
                 Layer Filter
                 {"  "}
                 {layerFilterCollapsed ? (
@@ -218,27 +216,30 @@ export default function QueryWizard({ query, onQueryChanged }: IProps) {
                 ) : (
                   <CaretDownFill onClick={onLayerFilterCollapse} />
                 )}
-              </Form.Label>
-              {layerFilterCollapsed ? null : (
+              </div>
+              <Collapse in={!layerFilterCollapsed}>
                 <Card body className="small">
                   <div style={{ columns: 2 }}>
                     {DisplayLayers.map((layer) => (
-                      <LayerCheckbox
+                      <Form.Check
                         key={layer}
-                        layer={layer}
+                        id={layer}
                         checked={layerChecked(layer)}
-                        onChange={onLayerFilterChanged}
+                        onChange={() => {
+                          onLayerFilterChanged(layer, !layerChecked(layer));
+                        }}
+                        label={layer}
                       />
                     ))}
                   </div>
                 </Card>
-              )}
+              </Collapse>
             </FormGroup>
             <ElementTypeFilter query={query} onQueryChanged={onQueryChanged} />
             <FormGroup>
-              <Form.Label>Max Path Depth</Form.Label>
+              <Form.Label htmlFor="pathDepth">Max Path Depth</Form.Label>
               <FormControl
-                id="max-path-depth"
+                id="pathDepth"
                 type="number"
                 min="0"
                 max="100"
@@ -261,10 +262,10 @@ export default function QueryWizard({ query, onQueryChanged }: IProps) {
                 onChange={onSearchChanged}
               />
             </FormGroup>
-            <FormGroup controlId="results">
-              <Form.Label>
+            <FormGroup>
+              <div className="form-label">
                 Results <Badge>{results.size}</Badge>
-              </Form.Label>
+              </div>
               <ListGroup id="results">
                 {results
                   .toArray()

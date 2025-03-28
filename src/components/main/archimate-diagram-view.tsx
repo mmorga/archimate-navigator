@@ -202,6 +202,7 @@ const ArchimateDiagramView: React.FC<IProps> = (props) => {
             >
               {props.nodes.map((node) => (
                 <ArchimateViewNode
+                  key={node.id}
                   viewNode={node}
                   onClicked={props.entityClicked}
                   selected={nodeIsSelected(node)}
