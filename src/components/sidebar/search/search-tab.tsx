@@ -12,16 +12,18 @@ import { IEntity, Model } from "../../../archimate-model";
 import { entityClickedFunc } from "../../common";
 import SearchResult from "./search-result";
 
-interface IProps {
-  model: Model;
+export default function SearchTab({
+  model,
+  resultClicked,
+  searchText,
+}: {
+  model: Model | undefined;
   resultClicked: entityClickedFunc;
   searchText?: string;
-}
-
-const SearchTab: React.FC<IProps> = (props) => {
+}) {
   const [fuse, setFuse] = React.useState<Fuse<IEntity> | null>(null);
   const [results, setResults] = React.useState<FuseResult<IEntity>[]>([]);
-  const [search, setSearch] = React.useState(props.searchText || "");
+  const [search, setSearch] = React.useState(searchText || "");
 
   const fuseOptions = {
     distance: 100,
@@ -33,8 +35,8 @@ const SearchTab: React.FC<IProps> = (props) => {
   };
 
   React.useEffect(() => {
-    setFuse(new Fuse<IEntity>(props.model.entities(), fuseOptions));
-  }, [props.model]);
+    setFuse(new Fuse<IEntity>(model ? model.entities() : [], fuseOptions));
+  }, [model]);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
@@ -61,7 +63,7 @@ const SearchTab: React.FC<IProps> = (props) => {
       <SearchResult
         key={result.item.id}
         entity={result.item}
-        resultClicked={props.resultClicked}
+        resultClicked={resultClicked}
       />
     ));
 
@@ -88,6 +90,4 @@ const SearchTab: React.FC<IProps> = (props) => {
       </Card.Body>
     </Card>
   );
-};
-
-export default SearchTab;
+}

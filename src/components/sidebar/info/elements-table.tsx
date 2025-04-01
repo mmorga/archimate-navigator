@@ -2,15 +2,16 @@ import * as React from "react";
 import { Element } from "../../../archimate-model";
 import { entityClickedFunc } from "../../common";
 import EntityLink from "../entity-link";
-import { Card } from "react-bootstrap";
+import { Card, Table } from "react-bootstrap";
 
-interface IProps {
-  elements: Element[];
-  elementClicked: entityClickedFunc;
-}
-
-const ElementsTable: React.FC<IProps> = React.memo(
-  ({ elements, elementClicked }) => {
+const ElementsTable = React.memo(
+  ({
+    elements,
+    elementClicked,
+  }: {
+    elements: Element[];
+    elementClicked: entityClickedFunc;
+  }) => {
     let elementRows = [
       <tr key="no-elements">
         <td colSpan={4}>
@@ -35,7 +36,7 @@ const ElementsTable: React.FC<IProps> = React.memo(
       <Card>
         <Card.Title>Elements</Card.Title>
         <Card.Body>
-          <table className="table archimate-elements-table">
+          <Table borderless={true} hover={true} size="sm" striped="columns">
             <thead>
               <tr key="elements-header">
                 <th>Element</th>
@@ -43,7 +44,7 @@ const ElementsTable: React.FC<IProps> = React.memo(
               </tr>
             </thead>
             <tbody>{elementRows}</tbody>
-          </table>
+          </Table>
         </Card.Body>
       </Card>
     );

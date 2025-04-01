@@ -1,0 +1,10 @@
+.archimate-zoombar {
+  opacity: 0.4;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.archimate-zoombar:hover {
+  opacity: 1;
+}

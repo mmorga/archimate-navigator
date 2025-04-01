@@ -1,7 +1,3 @@
-import Fuse from "fuse.js";
-import { List, Set } from "immutable";
-import * as React from "react";
-import { useState } from "react";
 import {
   Accordion,
   Badge,
@@ -27,104 +23,114 @@ import {
   Viewpoints,
   ViewpointType,
 } from "../../../archimate-model";
+import { List, Set } from "immutable";
+import { useState } from "react";
+import * as React from "react";
 import ElementTypeFilter from "./query-wizard-form/element-type-filter";
+import Fuse from "fuse.js";
 
-interface FuseElement {
+type FuseElement = {
   id: string;
   type: ElementType;
   name: string;
   documentation?: string;
-}
+};
 
-interface IProps {
-  model: Model;
+export default function QueryWizard({
+  model,
+  query,
+  onQueryChanged,
+}: {
+  model: Model | undefined;
   selectedDiagram: Diagram | undefined;
-  query: Query;
+  query: Query | undefined;
   onQueryChanged: (query: Query) => void;
-}
-
-export default function QueryWizard({ query, onQueryChanged }: IProps) {
-  // const [elementTypeFilter] = useState<ElementTypeFilterType>("All");
-  // const [elementTypeFilterCollapsed, setElementTypeFilterCollapsed] = useState(true);
-  const [fuse, setFuse] = useState<Fuse<FuseElement>>();
-  // const [fuseElementTypes, setFuseElementTypes] = useState<Set<ElementType>>();
-  // const [fuseFilteredElements, setFuseFilteredElements] = useState<Set<Element>>();
+}) {
   const [layerFilterCollapsed, setLayerFilterCollapsed] = useState(true);
   const [results, setResults] = useState<List<Element>>(List());
   const [search, setSearch] = useState("");
 
-  const fuseOptions = {
-    distance: 100,
-    keys: ["name", "type"],
-    location: 0,
-    maxPatternLength: 32,
-    shouldSort: true,
-    threshold: 0.6,
-  };
-
   const onQueryNameChanged = (event: React.ChangeEvent<HTMLInputElement>) => {
-    onQueryChanged(query.updateQuery({ name: event.target.value }));
+    if (query) {
+      onQueryChanged(query.updateQuery({ name: event.target.value }));
+    }
   };
 
   const onViewpointChanged = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const viewpointType = event.target.value as ViewpointType;
-    onQueryChanged(
-      query.updateQuery({
-        elementTypes: Set<ElementType>(
-          elementTypesForViewpoint(viewpointType, query.elementTypes),
-        ),
-        viewpointType,
-      }),
-    );
+    if (query) {
+      const viewpointType = event.target.value as ViewpointType;
+      onQueryChanged(
+        query.updateQuery({
+          elementTypes: Set<ElementType>(
+            elementTypesForViewpoint(viewpointType, query.elementTypes),
+          ),
+          viewpointType,
+        }),
+      );
+    }
   };
 
   const onPathDepthChanged = (event: React.ChangeEvent<HTMLInputElement>) => {
-    onQueryChanged(
-      query.updateQuery({
-        pathDepth: Number.parseInt(event.target.value, 10),
-      }),
-    );
+    if (query) {
+      onQueryChanged(
+        query.updateQuery({
+          pathDepth: Number.parseInt(event.target.value, 10),
+        }),
+      );
+    }
   };
 
   const onLayerFilterChanged = (layer: Layer, checked: boolean) => {
-    let layerFilter;
-    if (checked) {
-      layerFilter = query.layerFilter.add(layer);
-    } else {
-      layerFilter = query.layerFilter.remove(layer);
+    if (query) {
+      let layerFilter;
+      if (checked) {
+        layerFilter = query.layerFilter.add(layer);
+      } else {
+        layerFilter = query.layerFilter.remove(layer);
+      }
+      onQueryChanged(query.updateQuery({ layerFilter }));
     }
-    onQueryChanged(query.updateQuery({ layerFilter }));
   };
 
   const layerChecked = (layer: Layer): boolean => {
-    return query.layerFilter.includes(layer);
+    return query ? query.layerFilter.includes(layer) : false;
   };
 
   const onAddClick = (element: Element) => {
-    onQueryChanged(
-      query.updateQuery({
-        elements: query.elements.add(element),
-      }),
-    );
+    if (query) {
+      onQueryChanged(
+        query.updateQuery({
+          elements: query.elements.add(element),
+        }),
+      );
+    }
   };
 
   const onRemoveClick = (element: Element) => {
-    onQueryChanged(
-      query.updateQuery({
-        elements: query.elements.remove(element),
-      }),
-    );
+    if (query) {
+      onQueryChanged(
+        query.updateQuery({
+          elements: query.elements.remove(element),
+        }),
+      );
+    }
   };
 
   const addRemoveElement = (el: Element) => {
-    const isSelected = query.elements.some((e) => (e ? e.id === el.id : false));
-    const onClick = isSelected ? () => onRemoveClick(el) : () => onAddClick(el);
-    const variant = isSelected ? "danger" : "primary";
-    return (
-      <Button size="sm" variant={variant} onClick={onClick}>
-        {isSelected ? <Trash /> : <Plus />}
-      </Button>
-    );
+    if (query) {
+      const isSelected = query.elements.some((e) =>
+        e ? e.id === el.id : false,
+      );
+      const onClick = isSelected
+        ? () => onRemoveClick(el)
+        : () => onAddClick(el);
+      const variant = isSelected ? "danger" : "primary";
+      return (
+        <Button size="sm" variant={variant} onClick={onClick}>
+          {isSelected ? <Trash /> : <Plus />}
+        </Button>
+      );
+    }
   };
 
   const onSearchChanged = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -132,45 +138,51 @@ export default function QueryWizard({ query, onQueryChanged }: IProps) {
     calculateResults(event.target.value);
   };
 
-  const calculateResults = (searchValue: string) => {
-    if (fuse === undefined) {
-      const newFuseElementTypes = query.elementTypes;
-      const newFuseFilteredElements = Set<Element>(
-        allElements().filter((e) =>
-          e ? newFuseElementTypes.some((et) => et === e.type) : false,
-        ),
-      );
-      // setFuseElementTypes(newFuseElementTypes);
-      // setFuseFilteredElements(newFuseFilteredElements);
-
-      const newFuse = new Fuse<FuseElement>(
-        newFuseFilteredElements.toJS().map((el) => ({
-          id: el.id,
-          type: el.type,
-          name: el.name,
-          documentation: el.documentation,
-        })),
-        fuseOptions,
-      );
-      setFuse(newFuse);
+  function fuseObj() {
+    if (query === undefined || model === undefined) {
+      return undefined;
     }
+    const fuseOptions = {
+      distance: 100,
+      keys: ["name", "type"],
+      location: 0,
+      maxPatternLength: 32,
+      shouldSort: true,
+      threshold: 0.6,
+    };
 
-    const newResults: List<Element> =
-      searchValue.length > 0
-        ? List<Element>(
-            (fuse as Fuse<FuseElement>)
-              .search(searchValue)
-              .map((result) =>
-                query.model.elements.find((el) => el.id === result.item.id),
-              )
-              .filter((el): el is Element => el !== undefined),
+    const newFuseFilteredElements = Set<Element>(
+      List<Element>(model.elements).filter((e) =>
+        e ? query.elementTypes.some((et) => et === e.type) : false,
+      ),
+    );
+
+    const newFuse = new Fuse<FuseElement>(
+      newFuseFilteredElements.toJS().map((el) => ({
+        id: el.id,
+        type: el.type,
+        name: el.name,
+        documentation: el.documentation,
+      })),
+      fuseOptions,
+    );
+    return newFuse;
+  }
+
+  const calculateResults = (searchValue: string) => {
+    const fuse = fuseObj();
+    let newResults: List<Element> = List();
+    if (fuse && model && searchValue.length > 0) {
+      newResults = List<Element>(
+        fuse
+          .search(searchValue)
+          .map((result) =>
+            model.elements.find((el) => el.id === result.item.id),
           )
-        : List<Element>();
+          .filter((el): el is Element => el !== undefined),
+      );
+    }
     setResults(newResults);
-  };
-
-  const allElements = () => {
-    return List<Element>(query.model.elements);
   };
 
   const onLayerFilterCollapse = () => {
@@ -187,7 +199,7 @@ export default function QueryWizard({ query, onQueryChanged }: IProps) {
               <Form.Label>Name</Form.Label>
               <FormControl
                 type="text"
-                value={query.name}
+                value={query ? query.name : ""}
                 placeholder="Query Name"
                 onChange={onQueryNameChanged}
               />
@@ -196,7 +208,7 @@ export default function QueryWizard({ query, onQueryChanged }: IProps) {
               <Form.Label>Viewpoint</Form.Label>
               <Form.Select
                 onChange={onViewpointChanged}
-                value={query.viewpointType}
+                value={query ? query.viewpointType : ""}
               >
                 {Viewpoints.map((v) => v)
                   .sort()
@@ -244,7 +256,7 @@ export default function QueryWizard({ query, onQueryChanged }: IProps) {
                 min="0"
                 max="100"
                 step="1"
-                value={query.pathDepth}
+                value={query ? query.pathDepth : 0}
                 onChange={onPathDepthChanged}
               />
               <Form.Text muted>

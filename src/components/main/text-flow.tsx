@@ -1,47 +1,44 @@
-import * as React from "react";
-import { Bounds } from "../../archimate-model";
 import "./archimate-svg.css";
+import { Bounds } from "../../archimate-model";
+import * as React from "react";
 
-interface ILine {
+type TextLine = {
   text: string;
   maxWidth: number;
   calcWidth: number;
-}
+};
 
-interface IProps {
+export default function TextFlow({
+  text,
+  bounds,
+  badgeBounds,
+  style,
+}: {
   text: string;
   bounds: Bounds;
   badgeBounds: Bounds;
   style: React.CSSProperties;
-}
-
-const TextFlow: React.FC<IProps> = (props) => {
-  const [lines, setLines] = React.useState<ILine[]>([]);
-
+}) {
   const getMaxLineWidth = (): number => {
-    if (props.badgeBounds && props.badgeBounds.width > 0) {
-      return props.bounds.width - (props.badgeBounds.width + 2);
+    if (badgeBounds && badgeBounds.width > 0) {
+      return bounds.width - (badgeBounds.width + 2);
     } else {
-      return props.bounds.width;
+      return bounds.width;
     }
   };
 
-  React.useEffect(() => {
-    setLines(calculateLines());
-  }, [props.text, props.bounds, props.badgeBounds]);
-
-  const calculateLines = (): ILine[] => {
-    const width = textWidth(props.text);
+  const calculateLines = (): TextLine[] => {
+    const width = textWidth(text);
     const maxWidth = getMaxLineWidth();
     if (width <= maxWidth) {
-      return [{ text: props.text, maxWidth, calcWidth: width }];
+      return [{ text: text, maxWidth, calcWidth: width }];
     }
-    const words = props.text.split(" ");
+    const words = text.split(" ");
     if (words.length === 1) {
       // TODO: split at maxWidth
       return [{ text: words[0], maxWidth, calcWidth: width }];
     } else {
-      const lines: ILine[] = [];
+      const lines: TextLine[] = [];
       while (words.length > 0) {
         let line = words.shift() as string;
         let calcLineWidth = 0;
@@ -89,36 +86,36 @@ const TextFlow: React.FC<IProps> = (props) => {
   };
 
   const lineX = (idx = 0): number => {
-    if (props.bounds === undefined) {
+    if (bounds === undefined) {
       return 0;
     }
-    const textBounds = props.bounds as Bounds;
-    switch (props.style.textAnchor) {
+    const textBounds = bounds as Bounds;
+    switch (style.textAnchor) {
       case "start":
         return textBounds.left;
       case "end":
         if (idx > 0) {
           return textBounds.right;
         } else {
-          return textBounds.right - props.badgeBounds.width;
+          return textBounds.right - badgeBounds.width;
         }
       default:
         if (idx > 0) {
           return textBounds.center().x;
         } else {
-          return textBounds.center().x - props.badgeBounds.width / 2.0;
+          return textBounds.center().x - badgeBounds.width / 2.0;
         }
     }
   };
 
   return (
     <>
-      {lines.map((line, idx) => (
+      {calculateLines().map((line, idx) => (
         <tspan
           x={lineX(idx)}
           dy="1.1em"
           className="entity-name"
-          style={props.style}
+          style={style}
           key={idx}
         >
           {line.text}
@@ -126,6 +123,4 @@ const TextFlow: React.FC<IProps> = (props) => {
       ))}
     </>
   );
-};
-
-export default TextFlow;
+}

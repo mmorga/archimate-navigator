@@ -2,15 +2,16 @@ import * as React from "react";
 import { IEntity, IRelationship, Relationship } from "../../../archimate-model";
 import { entityClickedFunc } from "../../common";
 import EntityLink from "../entity-link";
-import { Card } from "react-bootstrap";
+import { Card, Table } from "react-bootstrap";
 
-interface IProps {
-  relationships: IRelationship[];
-  entityClicked: entityClickedFunc;
-}
-
-const RelationshipsTable: React.FC<IProps> = React.memo(
-  ({ relationships, entityClicked }) => {
+const RelationshipsTable = React.memo(
+  ({
+    relationships,
+    entityClicked,
+  }: {
+    relationships: IRelationship[];
+    entityClicked: entityClickedFunc;
+  }) => {
     const relationshipRefLink = (refMaybe: IEntity | undefined) => {
       if (refMaybe === undefined) {
         return "";
@@ -63,7 +64,7 @@ const RelationshipsTable: React.FC<IProps> = React.memo(
       <Card>
         <Card.Title>Relationships</Card.Title>
         <Card.Body>
-          <table className="table">
+          <Table borderless={true} hover={true} size="sm" striped="columns">
             <thead>
               <tr key="relationships-header">
                 <th>Relationship Type</th>
@@ -72,7 +73,7 @@ const RelationshipsTable: React.FC<IProps> = React.memo(
               </tr>
             </thead>
             <tbody id="element-relationships">{tableRows}</tbody>
-          </table>
+          </Table>
         </Card.Body>
       </Card>
     );

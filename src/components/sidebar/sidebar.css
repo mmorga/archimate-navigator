@@ -1,0 +1,18 @@
+.archimate-view-nav {
+  background: #f5f5f5;
+  flex: 0 0 385px;
+  height: 98vh;
+  margin-top: 0;
+  overflow: scroll;
+  padding-top: 9px;
+  padding: 9px 15px;
+}
+
+.archimate-organization-list {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.archimate-organization-list li {
+  padding-left: 0.5em;
+}

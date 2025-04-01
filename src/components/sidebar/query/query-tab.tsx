@@ -1,6 +1,6 @@
+import { Diagram, Model, Query } from "../../../archimate-model";
 import { List } from "immutable";
 import * as React from "react";
-import { Diagram, Model, Query } from "../../../archimate-model";
 import QueryPicker from "./query-picker";
 import QueryWizard from "./query-wizard";
 
@@ -9,46 +9,43 @@ export type autoLayoutToggledFunc = (
   event?: React.ChangeEvent<HTMLInputElement>,
 ) => void;
 
-interface IProps {
-  model: Model;
+export default function QueryTab({
+  model,
+  query,
+  selectedDiagram,
+  onDiagramUpdated,
+}: {
+  model: Model | undefined;
+  query: Query | undefined;
   selectedDiagram: Diagram | undefined;
   onDiagramUpdated: (diagram: Diagram) => void;
-}
-
-const QueryTab: React.FC<IProps> = (props) => {
-  const initialQuery = React.useMemo(
-    () => new Query(props.model),
-    [props.model],
+}) {
+  const [selectedQuery, setSelectedQuery] = React.useState<Query | undefined>(
+    query,
   );
-
   const [queries, setQueries] = React.useState<List<Query>>(
-    List([initialQuery]),
+    selectedQuery ? List([selectedQuery]) : List(),
   );
-  const [selectedQuery, setSelectedQuery] = React.useState<Query>(initialQuery);
-
-  React.useEffect(() => {
-    const query = new Query(props.model);
-    setQueries(List([query]));
-    setSelectedQuery(query);
-  }, [props.model]);
 
   const onQuerySelected = React.useCallback((query: Query) => {
     setSelectedQuery(query);
   }, []);
 
   const onNewQuery = React.useCallback(() => {
-    const newQuery = new Query(props.model);
-    setQueries((prevQueries) => prevQueries.push(newQuery));
-    setSelectedQuery(newQuery);
-  }, [props.model]);
+    if (model) {
+      const newQuery = new Query(model);
+      setQueries((prevQueries) => prevQueries.push(newQuery));
+      setSelectedQuery(newQuery);
+    }
+  }, [model]);
 
   const onQueryChanged = React.useCallback(
     (query: Query) => {
       const diagram = query.run();
       setSelectedQuery(query);
-      props.onDiagramUpdated(diagram);
+      onDiagramUpdated(diagram);
     },
-    [props.onDiagramUpdated],
+    [onDiagramUpdated],
   );
 
   return (
@@ -57,16 +54,14 @@ const QueryTab: React.FC<IProps> = (props) => {
         onNewQuery={onNewQuery}
         onQuerySelected={onQuerySelected}
         queries={queries}
-        selectedQuery={selectedQuery}
+        selectedQuery={query}
       />
       <QueryWizard
-        model={props.model}
-        selectedDiagram={props.selectedDiagram}
-        query={selectedQuery}
+        model={model}
+        selectedDiagram={selectedDiagram}
+        query={query}
         onQueryChanged={onQueryChanged}
       />
     </>
   );
-};
-
-export default QueryTab;
+}

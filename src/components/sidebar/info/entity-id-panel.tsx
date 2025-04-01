@@ -8,15 +8,16 @@ import {
 } from "../../../archimate-model";
 import { entityClickedFunc } from "../../common";
 import EntityLink from "../entity-link";
-import { Card } from "react-bootstrap";
+import { Card, Table } from "react-bootstrap";
 
-interface IProps {
-  entity: IEntity | undefined;
-  entityClicked: entityClickedFunc;
-}
-
-const EntityIdPanel: React.FC<IProps> = React.memo(
-  ({ entity, entityClicked }) => {
+const EntityIdPanel = React.memo(
+  ({
+    entity,
+    entityClicked,
+  }: {
+    entity: IEntity | undefined;
+    entityClicked: entityClickedFunc;
+  }) => {
     const relationshipRefLink = (refMaybe: IEntity | undefined) => {
       if (refMaybe === undefined) {
         return "";
@@ -92,7 +93,7 @@ const EntityIdPanel: React.FC<IProps> = React.memo(
     return (
       <Card>
         <Card.Body>
-          <table className="table">
+          <Table borderless={true} hover={true} size="sm" striped="columns">
             <tbody>
               <tr key="entity-name">
                 <th>Name</th>
@@ -100,7 +101,7 @@ const EntityIdPanel: React.FC<IProps> = React.memo(
               </tr>
               {entityContent()}
             </tbody>
-          </table>
+          </Table>
         </Card.Body>
       </Card>
     );

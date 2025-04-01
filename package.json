@@ -5,6 +5,7 @@
   "private": true,
   "type": "module",
   "dependencies": {
+    "@column-resizer/react": "^1.3.1",
     "@types/d3-force": "^3.0.10",
     "@types/jest": "^29.5.14",
     "@types/lodash-es": "^4.17.12",
@@ -59,7 +60,9 @@
     "build-site": "export BASE_URL='/archimate-navigator' && npm run build && rm -rf docs && cp -a dist/ docs",
     "electron": "electron .",
     "serve": "npm run build && serve -s dist",
-    "prepare": "husky"
+    "prepare": "husky",
+    "prettier": "npx prettier --write .",
+    "lint": "npx eslint . --fix"
   },
   "browserslist": {
     "production": [

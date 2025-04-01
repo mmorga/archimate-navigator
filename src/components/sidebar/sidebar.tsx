@@ -1,13 +1,7 @@
-import { useState } from "react";
-import { Button, ButtonGroup, Tab, Tabs } from "react-bootstrap";
-import {
-  ArrowsAngleContract,
-  Window,
-  ArrowsAngleExpand,
-} from "react-bootstrap-icons";
-import { Diagram, IEntity, Model } from "../../archimate-model";
-import "../archimate-navigator.css";
+import "./sidebar.css";
+import { Diagram, IEntity, Model, Query } from "../../archimate-model";
 import { entityClickedFunc } from "../common";
+import { Tab, Tabs } from "react-bootstrap";
 import InfoTab from "./info/info-tab";
 import ModelInfo from "./model-info";
 import QueryTab from "./query/query-tab";
@@ -21,74 +15,31 @@ export enum SidebarTab {
   GraphTab,
 }
 
-export enum SidebarWidth {
-  Normal = 385,
-  Collapsed = 115,
-  Wide = 600,
-}
-
-interface IProps {
-  diagramLinkClicked: entityClickedFunc;
-  entityClicked: entityClickedFunc;
-  model: Model;
-  onDiagramUpdated: (diagram: Diagram) => void;
-  onTabSelected: (eventKey: string | null) => void;
-  selectedDiagram?: Diagram;
-  selectedEntity?: IEntity;
-  sidebarTabKey: SidebarTab;
-}
-
 export default function Sidebar({
   diagramLinkClicked,
   entityClicked,
   model,
+  query,
   onDiagramUpdated,
   onTabSelected,
   selectedDiagram,
   selectedEntity,
   sidebarTabKey,
-}: IProps) {
-  const [sidebarWidth, setSidebarWidth] = useState<number>(SidebarWidth.Normal);
-
-  const widthStyle = (width: SidebarWidth): string | undefined => {
-    return sidebarWidth === width ? "primary" : undefined;
-  };
-
-  const onSizeButtonClick = (width: SidebarWidth) => {
-    if (sidebarWidth !== width) {
-      setSidebarWidth(width);
-    }
-  };
-
+}: {
+  diagramLinkClicked: entityClickedFunc;
+  entityClicked: entityClickedFunc;
+  model: Model | undefined;
+  query: Query | undefined;
+  onDiagramUpdated: (diagram: Diagram) => void;
+  onTabSelected: (eventKey: string | null) => void;
+  selectedDiagram?: Diagram;
+  selectedEntity?: IEntity;
+  sidebarTabKey: SidebarTab;
+}) {
   return (
-    <div
-      className="archimate-view-nav"
-      style={{
-        flexBasis: `${sidebarWidth}px`,
-      }}
-    >
-      <ButtonGroup size="sm">
-        <Button
-          onClick={() => onSizeButtonClick(SidebarWidth.Collapsed)}
-          variant={widthStyle(SidebarWidth.Collapsed)}
-        >
-          <ArrowsAngleContract />
-        </Button>
-        <Button
-          onClick={() => onSizeButtonClick(SidebarWidth.Normal)}
-          variant={widthStyle(SidebarWidth.Normal)}
-        >
-          <Window />
-        </Button>
-        <Button
-          onClick={() => onSizeButtonClick(SidebarWidth.Wide)}
-          variant={widthStyle(SidebarWidth.Wide)}
-        >
-          <ArrowsAngleExpand />
-        </Button>
-      </ButtonGroup>
+    <div className="archimate-view-nav">
       <ModelInfo
-        modelName={model.name}
+        modelName={model?.name}
         diagramName={selectedDiagram?.name}
         diagramViewpoint={selectedDiagram?.viewpointDescription()}
       />
@@ -100,8 +51,8 @@ export default function Sidebar({
       >
         <Tab eventKey={SidebarTab.DiagramTreeTab} title="Views">
           <ViewsTab
-            organizations={model.viewOrganization().organizations}
-            items={model.viewOrganization().itemEntities()}
+            organizations={model ? model.viewOrganization().organizations : []}
+            items={model ? model.viewOrganization().itemEntities() : []}
             selectedEntity={selectedDiagram}
             entityClicked={diagramLinkClicked}
           />
@@ -115,6 +66,7 @@ export default function Sidebar({
         <Tab eventKey={SidebarTab.GraphTab} title="Query">
           <QueryTab
             model={model}
+            query={query}
             selectedDiagram={selectedDiagram}
             onDiagramUpdated={onDiagramUpdated}
           />

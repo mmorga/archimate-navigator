@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "react-bootstrap";
 import {
   ArrowsFullscreen,
@@ -23,29 +23,11 @@ import { ArchimateViewNode } from "./archimate-view-node";
 import ForceLayout from "./force-layout";
 import SvgPanZoom, { numbersDiffer, zoomIn, zoomOut } from "./svg-pan-zoom";
 
-interface IProps {
-  selectedDiagram?: Diagram;
-  nodes: ViewNode[];
-  connections: Connection[];
-  selectedEntity?: IEntity;
-  entityClicked: entityClickedFunc;
-  diagramClicked: entityClickedFunc;
-}
-
 enum ZoomMode {
   OneToOne,
   FitToWindow,
   FitToWindowWidth,
   UserZoom,
-}
-
-interface IState {
-  maxX: number;
-  maxY: number;
-  minX: number;
-  minY: number;
-  scale: number;
-  zoomMode: ZoomMode;
 }
 
 const diagramExtents = (dia: Diagram | undefined): IExtents => {
@@ -54,93 +36,99 @@ const diagramExtents = (dia: Diagram | undefined): IExtents => {
     : { maxX: 0, maxY: 0, minX: 0, minY: 0 };
 };
 
-const ArchimateDiagramView: React.FC<IProps> = (props) => {
-  const svgTopGroup = React.useRef<SVGGElement | null>(null);
-  const ext = diagramExtents(props.selectedDiagram);
-  const [state, setState] = React.useState<IState>({
+export default function ArchimateDiagramView({
+  selectedDiagram,
+  nodes,
+  connections,
+  selectedEntity,
+  entityClicked,
+}: {
+  selectedDiagram?: Diagram;
+  nodes: ViewNode[];
+  connections: Connection[];
+  selectedEntity?: IEntity;
+  entityClicked: entityClickedFunc;
+}) {
+  const svgTopGroup = useRef<SVGGElement | null>(null);
+  const ext = diagramExtents(selectedDiagram);
+  const [zoomMode, setZoomMode] = useState(ZoomMode.FitToWindow);
+  const [scale, setScale] = useState(1);
+  const [extents, setExtents] = useState<IExtents>({
     maxX: ext.maxX,
     maxY: ext.maxY,
     minX: ext.minX,
     minY: ext.minY,
-    scale: 1,
-    zoomMode: ZoomMode.FitToWindow,
   });
 
   const isAutoLayout = () => {
     return (
-      (props.selectedDiagram &&
-        props.selectedDiagram.type === DiagramType.ModelQuery) ||
+      (selectedDiagram && selectedDiagram.type === DiagramType.ModelQuery) ||
       false
     );
   };
 
   const nodeIsSelected = (node: IEntityRef): boolean => {
-    if (props.selectedEntity === undefined) {
+    if (selectedEntity === undefined) {
       return false;
     }
     const nodeElement = node.entityInstance();
     if (nodeElement === undefined) {
       return false;
     }
-    return props.selectedEntity.id === nodeElement.id;
+    return selectedEntity.id === nodeElement.id;
   };
 
   const onFitToWindow = () => {
-    setState((prev) => ({ ...prev, zoomMode: ZoomMode.FitToWindow }));
+    setZoomMode(ZoomMode.FitToWindow);
   };
 
   const onFitToWidth = () => {
-    setState((prev) => ({ ...prev, zoomMode: ZoomMode.FitToWindowWidth }));
+    setZoomMode(ZoomMode.FitToWindowWidth);
   };
 
   const onOneHundredPercent = () => {
-    setState((prev) => ({ ...prev, zoomMode: ZoomMode.OneToOne }));
+    setZoomMode(ZoomMode.OneToOne);
   };
 
   const onZoomIn = () => {
-    setState((prev) => ({
-      ...prev,
-      scale: zoomIn(prev.scale),
-      zoomMode: ZoomMode.UserZoom,
-    }));
+    setZoomMode(ZoomMode.UserZoom);
+    setScale(zoomIn(scale));
   };
 
   const onZoomOut = () => {
-    setState((prev) => ({
-      ...prev,
-      scale: zoomOut(prev.scale),
-      zoomMode: ZoomMode.UserZoom,
-    }));
+    setZoomMode(ZoomMode.UserZoom);
+    setScale(zoomOut(scale));
   };
 
   const onForceLayoutTick = () => {
     onFitToWindow();
   };
 
-  const onZoom = (scale: number) => {
-    if (state.scale !== scale || state.zoomMode !== ZoomMode.UserZoom) {
-      setState((prev) => ({ ...prev, scale, zoomMode: ZoomMode.UserZoom }));
+  const onZoom = (toScale: number) => {
+    if (toScale !== scale || zoomMode !== ZoomMode.UserZoom) {
+      setScale(toScale);
+      setZoomMode(ZoomMode.UserZoom);
     }
   };
 
   const viewBox = (): SVGRect => {
     return new DOMRect(
-      state.minX,
-      state.minY,
-      state.maxY - state.minY,
-      state.maxX - state.minX,
+      extents.minX,
+      extents.minY,
+      extents.maxY - extents.minY,
+      extents.maxX - extents.minX,
     );
   };
 
-  React.useEffect(() => {
-    const ext = diagramExtents(props.selectedDiagram);
+  useEffect(() => {
+    const ext = diagramExtents(selectedDiagram);
     if (
-      numbersDiffer(state.maxX, ext.maxX) ||
-      numbersDiffer(state.maxY, ext.maxY) ||
-      numbersDiffer(state.minX, ext.minX) ||
-      numbersDiffer(state.minY, ext.minY)
+      numbersDiffer(extents.maxX, ext.maxX) ||
+      numbersDiffer(extents.maxY, ext.maxY) ||
+      numbersDiffer(extents.minX, ext.minX) ||
+      numbersDiffer(extents.minY, ext.minY)
     ) {
-      setState((prev) => ({
+      setExtents((prev) => ({
         ...prev,
         maxX: ext.maxX,
         maxY: ext.maxY,
@@ -148,9 +136,9 @@ const ArchimateDiagramView: React.FC<IProps> = (props) => {
         minY: ext.minY,
       }));
     }
-  }, [props.selectedDiagram]);
+  }, [selectedDiagram, extents]);
 
-  if (props.selectedDiagram) {
+  if (selectedDiagram) {
     return (
       <>
         <div
@@ -174,48 +162,48 @@ const ArchimateDiagramView: React.FC<IProps> = (props) => {
           </Button>
           <small>
             {"  "}
-            {(state.scale * 100).toFixed(0)}%
+            {(scale * 100).toFixed(0)}%
           </small>
         </div>
         <ArchimateSvg
-          key={props.selectedDiagram.id}
-          diagramName={props.selectedDiagram ? props.selectedDiagram.name : ""}
+          key={selectedDiagram.id}
+          diagramName={selectedDiagram ? selectedDiagram.name : ""}
           viewBox={viewBox()}
         >
           <ForceLayout
-            centerX={(state.maxX - state.minX) / 2}
-            centerY={(state.maxY - state.minY) / 2}
-            connections={props.connections}
+            centerX={(extents.maxX - extents.minX) / 2}
+            centerY={(extents.maxY - extents.minY) / 2}
+            connections={connections}
             autoLayout={isAutoLayout()}
-            nodes={props.nodes}
+            nodes={nodes}
             onForceLayoutTick={onForceLayoutTick}
           >
             <SvgPanZoom
-              maxX={state.maxX}
-              maxY={state.maxY}
-              minX={state.minX}
-              minY={state.minY}
+              maxX={extents.maxX}
+              maxY={extents.maxY}
+              minX={extents.minX}
+              minY={extents.minY}
               onZoom={onZoom}
               svgPanZoomRef={svgTopGroup}
-              scale={state.scale}
-              zoomMode={state.zoomMode}
+              scale={scale}
+              zoomMode={zoomMode}
             >
-              {props.nodes.map((node) => (
+              {nodes.map((node) => (
                 <ArchimateViewNode
                   key={node.id}
                   viewNode={node}
-                  onClicked={props.entityClicked}
+                  onClicked={entityClicked}
                   selected={nodeIsSelected(node)}
                   x={node.x || node.bounds.left}
                   y={node.y || node.bounds.top}
                 />
               ))}
-              {props.connections.map((conn) => (
+              {connections.map((conn) => (
                 <ArchimateConnection
                   autoLayout={isAutoLayout()}
                   key={conn.id}
                   connection={conn}
-                  onClicked={props.entityClicked}
+                  onClicked={entityClicked}
                   selected={nodeIsSelected(conn)}
                   fromX={conn.sourceBounds().left}
                   fromY={conn.sourceBounds().top}
@@ -242,6 +230,4 @@ const ArchimateDiagramView: React.FC<IProps> = (props) => {
       </div>
     );
   }
-};
-
-export default ArchimateDiagramView;
+}

@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
+import "./archimate-navigator.css";
 import { Alert, Button, Modal } from "react-bootstrap";
+import { Container, Section, Bar } from "@column-resizer/react";
 import {
   Diagram,
   IEntity,
@@ -7,71 +8,68 @@ import {
   Model,
   parse,
   ParserError,
+  Query,
   UnsupportedFormat,
   ViewNode,
 } from "../archimate-model";
-import "./archimate-navigator.css";
+import { useState, useEffect } from "react";
 import ArchimateDiagramView from "./main/archimate-diagram-view";
 import Sidebar, { SidebarTab } from "./sidebar/sidebar";
-
-interface IProps {
-  modelUrl: string; // URL of model to load
-  selectedDiagramId?: string; // diagram id to load from model
-  selectedEntityId?: string; // entity id to select
-}
 
 export default function ArchimateNavigator({
   modelUrl,
   selectedDiagramId,
   selectedEntityId,
-}: IProps) {
-  const initialModel = new Model();
-  const initialDiagramId =
-    selectedDiagramId || window.location.hash.replace(/^#/, "");
-  const initialDiagram = initialModel.lookupDiagram(initialDiagramId);
-  const initialEntity = initialModel.lookup(selectedEntityId) || initialDiagram;
-
+}: {
+  modelUrl: string; // URL of model to load
+  selectedDiagramId?: string; // diagram id to load from model
+  selectedEntityId?: string; // entity id to select
+}) {
   const [error, setError] = useState<string | Error>();
-  // const [loadStart, setLoadStart] = useState<number>();
-  // const [loadTime, setLoadTime] = useState<number>();
-  const [model, setModel] = useState<Model>(initialModel);
-  // const [parseDone, setParseDone] = useState<number>();
-  // const [parseTime, setParseTime] = useState<number>();
-  // const [parseStart, setParseStart] = useState<number>();
+  const [model, setModel] = useState<Model | undefined>(undefined);
+  const [query, setQuery] = useState<Query | undefined>(undefined);
   const [selectedDiagram, setSelectedDiagram] = useState<Diagram | undefined>(
-    initialDiagram,
+    undefined,
   );
   const [selectedEntity, setSelectedEntity] = useState<IEntity | undefined>(
-    initialEntity,
+    undefined,
   );
   const [sidebarTabKey, setSidebarTabKey] = useState<SidebarTab>(
     SidebarTab.DiagramTreeTab,
   );
-  // const [sidebarWidth] = useState<number>(385);
   const [working, setWorking] = useState<string>();
 
   useEffect(() => {
     const parser = new DOMParser();
-    // setLoadStart(Date.now());
-    // setLoadTime(undefined);
-    // setParseDone(undefined);
-    // setParseStart(undefined);
-    // setParseTime(undefined);
     setWorking("Loading ArchiMate Model");
 
     fetch(modelUrl)
       .then((response: Response) => response.text())
       .then(
-        (str: string) => {
-          // setLoadTime((Date.now() - (loadStart as number)) / 1000.0);
-          // setParseStart(Date.now());
+        (modelXml: string) => {
           setWorking("Parsing ArchiMate Model");
 
-          const xmlDocument = parser.parseFromString(str, "application/xml");
-          let parsedModel;
+          const xmlDocument = parser.parseFromString(
+            modelXml,
+            "application/xml",
+          );
           try {
             if (xmlDocument.children[0].ownerDocument) {
-              parsedModel = parse(xmlDocument.children[0].ownerDocument);
+              const parsedModel = parse(xmlDocument.children[0].ownerDocument);
+              if (parsedModel) {
+                const newSelectedDiagram = parsedModel.lookupDiagram(
+                  selectedDiagramId || window.location.hash.replace(/^#/, ""),
+                );
+                const newSelectedEntity =
+                  parsedModel.lookup(selectedEntityId) ||
+                  newSelectedDiagram ||
+                  parsedModel;
+
+                setModel(parsedModel);
+                setQuery(new Query(parsedModel));
+                setSelectedDiagram(newSelectedDiagram);
+                setSelectedEntity(newSelectedEntity);
+              }
             } else {
               setError("ArchiMate Model Document was null");
             }
@@ -85,24 +83,10 @@ export default function ArchimateNavigator({
               throw err;
             }
           }
-
-          // setParseDone(Date.now());
-          // setParseTime((Date.now() - (parseStart as number)) / 1000.0);
           setWorking(undefined);
-
-          const curModel: Model = parsedModel || model;
-          const newSelectedDiagram = curModel.lookupDiagram(
-            selectedDiagramId || window.location.hash.replace(/^#/, ""),
-          );
-          const newSelectedEntity =
-            curModel.lookup(selectedEntityId) || newSelectedDiagram || curModel;
-
-          setModel(parsedModel || model);
-          setSelectedDiagram(newSelectedDiagram);
-          setSelectedEntity(newSelectedEntity);
         },
-        (error) => {
-          setError(error);
+        (err) => {
+          setError(err);
           setWorking(undefined);
         },
       );
@@ -193,39 +177,47 @@ export default function ArchimateNavigator({
     <>
       {exceptionView()}
       {workingView()}
-      <div className="archimate-row">
-        <Sidebar
-          diagramLinkClicked={onDiagramLinkClick}
-          entityClicked={onEntityClick}
-          model={model}
-          onDiagramUpdated={onDiagramLinkClick}
-          onTabSelected={onSidebarTabSelected}
-          selectedDiagram={selectedDiagram}
-          selectedEntity={selectedEntity}
-          sidebarTabKey={sidebarTabKey}
+      <Container>
+        <Section minSize={0} defaultSize={385}>
+          <Sidebar
+            diagramLinkClicked={onDiagramLinkClick}
+            entityClicked={onEntityClick}
+            model={model}
+            query={query}
+            onDiagramUpdated={onDiagramLinkClick}
+            onTabSelected={onSidebarTabSelected}
+            selectedDiagram={selectedDiagram}
+            selectedEntity={selectedEntity}
+            sidebarTabKey={sidebarTabKey}
+          />
+        </Section>
+        <Bar
+          size={10}
+          style={{ background: "currentColor", cursor: "col-resize" }}
         />
-        <div className="archimate-diagram-view">
-          <div className="archimate-svg-container">
-            <ArchimateDiagramView
-              key={
-                selectedDiagram ? selectedDiagram.id : "archimate-no-diagram"
-              }
-              selectedEntity={selectedEntity}
-              selectedDiagram={selectedDiagram}
-              nodes={selectedDiagram ? selectedDiagram.nodes : []}
-              connections={
-                selectedDiagram
-                  ? selectedDiagram.connections.filter(
-                      (c) => c.targetViewNode() instanceof ViewNode,
-                    )
-                  : []
-              }
-              entityClicked={onEntityClick}
-              diagramClicked={onDiagramLinkClick}
-            />
+        <Section minSize={100}>
+          <div className="archimate-diagram-view">
+            <div className="archimate-svg-container">
+              <ArchimateDiagramView
+                key={
+                  selectedDiagram ? selectedDiagram.id : "archimate-no-diagram"
+                }
+                selectedEntity={selectedEntity}
+                selectedDiagram={selectedDiagram}
+                nodes={selectedDiagram ? selectedDiagram.nodes : []}
+                connections={
+                  selectedDiagram
+                    ? selectedDiagram.connections.filter(
+                        (c) => c.targetViewNode() instanceof ViewNode,
+                      )
+                    : []
+                }
+                entityClicked={onEntityClick}
+              />
+            </div>
           </div>
-        </div>
-      </div>
+        </Section>
+      </Container>
     </>
   );
 }
