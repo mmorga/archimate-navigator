@@ -11,45 +11,37 @@ interface ISearchQueueItem {
   depth: number;
 }
 
-export class QueryRunner {
-  public query: Query;
+// Using a Breadth First Search approach
+// Changes from a visit pattern to something that generates query results
+export function runQuery(query: Query): [Element[], Relationship[]] {
+  const visited = Set<Element>(query.elements);
+  const queue: ISearchQueueItem[] = Array.from(query.elements).map((el) => ({
+    element: el,
+    depth: 1,
+  }));
+  const resultElements: Element[] = [];
+  const resultRelationships: Relationship[] = [];
 
-  constructor(query: Query) {
-    this.query = query;
-  }
-
-  // Using a Breadth First Search approach
-  // Changes from a visit pattern to something that generates query results
-  public run(): [Element[], Relationship[]] {
-    const visited = Set<Element>(this.query.elements);
-    const queue: ISearchQueueItem[] = Array.from(this.query.elements).map(
-      (el) => ({ element: el, depth: 1 }),
-    );
-
-    const resultElements: Element[] = [];
-    const resultRelationships: Relationship[] = [];
-
-    while (queue.length > 0) {
-      const item = queue.pop();
-      if (!item) {
-        throw new LogicError("queue shouldn't be undefined");
-      }
-      resultElements.push(item.element);
-      item.element
-        .relationships()
-        .filter((rel) => rel.source && rel.target)
-        .filter(relationshipTypesFilter(this.query.relationshipTypes))
-        .filter(relationshipElementTypesFilter(this.query.elementTypes))
-        .reduce(spiderRelationships, {
-          maxPathDepth: this.query.pathDepth,
-          queue,
-          relationships: resultRelationships,
-          searchQueueItem: item,
-          visited,
-        });
+  while (queue.length > 0) {
+    const item = queue.pop();
+    if (!item) {
+      throw new LogicError("queue shouldn't be undefined");
     }
-    return [resultElements, resultRelationships];
+    resultElements.push(item.element);
+    item.element
+      .relationships()
+      .filter((rel) => rel.source && rel.target)
+      .filter(relationshipTypesFilter(query.relationshipTypes))
+      .filter(relationshipElementTypesFilter(query.elementTypes))
+      .reduce(spiderRelationships, {
+        maxPathDepth: query.pathDepth,
+        queue,
+        relationships: resultRelationships,
+        searchQueueItem: item,
+        visited,
+      });
   }
+  return [resultElements, resultRelationships];
 }
 
 interface ISpiderAccumulator {

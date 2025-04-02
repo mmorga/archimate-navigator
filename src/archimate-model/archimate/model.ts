@@ -71,6 +71,22 @@ export class Model implements IModel {
     }
   }
 
+  public deleteDiagram(id: string): void {
+    this.indexHash.delete(id);
+    const index = this.diagrams.findIndex(
+      (diagram: Diagram) => diagram.id == id,
+    );
+    if (index > -1) {
+      // only splice array when item is found
+      this.diagrams.splice(index, 1); // 2nd parameter means remove one item only
+    }
+    const idx2 = this.viewOrganization().items.indexOf(id);
+    if (idx2 > -1) {
+      // only splice array when item is found
+      this.viewOrganization().items.splice(idx2, 1); // 2nd parameter means remove one item only
+    }
+  }
+
   public viewOrganization(): Organization {
     const viewOrg = this.organizations.find((o) =>
       o && o.type === "diagrams" ? true : false,

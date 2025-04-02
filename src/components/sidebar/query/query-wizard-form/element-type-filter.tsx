@@ -1,36 +1,16 @@
 import { useState } from "react";
 import { Collapse, Form, InputGroup, Table } from "react-bootstrap";
 import { CaretDownFill, CaretUpFill } from "react-bootstrap-icons";
-import {
-  ElementType,
-  Query,
-  viewpointForElementTypes,
-} from "../../../../archimate-model";
+import { ElementType, Query } from "../../../../archimate-model";
 
 export default function ElementTypeFilter({
-  onQueryChanged,
+  onChanged,
   query,
 }: {
-  onQueryChanged: (query: Query) => void;
+  onChanged: (elementType: ElementType) => void;
   query: Query | undefined;
 }) {
   const [state, setState] = useState({ filterCollapsed: true });
-
-  function onToggle(elementType: ElementType) {
-    console.log("onToggle elementType ", elementType);
-    if (query) {
-      console.log("query includes ", query.elementTypes.includes(elementType));
-      const elementTypes = query.elementTypes.includes(elementType)
-        ? query.elementTypes.delete(elementType)
-        : query.elementTypes.add(elementType);
-      onQueryChanged(
-        query.updateQuery({
-          elementTypes,
-          viewpointType: viewpointForElementTypes(elementTypes),
-        }),
-      );
-    }
-  }
 
   function checkboxes(...elementTypes: ElementType[]) {
     return elementTypes.map((elementType) => {
@@ -40,7 +20,7 @@ export default function ElementTypeFilter({
           key={elementType}
           type="checkbox"
           checked={query ? query.elementTypes.includes(elementType) : true}
-          onChange={() => onToggle(elementType)}
+          onChange={() => onChanged(elementType)}
           label={elementType}
         />
       );

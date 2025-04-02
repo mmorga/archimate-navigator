@@ -15,6 +15,7 @@ import {
   IEntityRef,
   IExtents,
   ViewNode,
+  calculateMaxExtents,
 } from "../../archimate-model";
 import { entityClickedFunc } from "../common";
 import ArchimateConnection from "./archimate-connection";
@@ -23,18 +24,12 @@ import { ArchimateViewNode } from "./archimate-view-node";
 import ForceLayout from "./force-layout";
 import SvgPanZoom, { numbersDiffer, zoomIn, zoomOut } from "./svg-pan-zoom";
 
-enum ZoomMode {
+export enum ZoomMode {
   OneToOne,
   FitToWindow,
   FitToWindowWidth,
   UserZoom,
 }
-
-const diagramExtents = (dia: Diagram | undefined): IExtents => {
-  return dia
-    ? dia.calculateMaxExtents()
-    : { maxX: 0, maxY: 0, minX: 0, minY: 0 };
-};
 
 export default function ArchimateDiagramView({
   selectedDiagram,
@@ -50,15 +45,11 @@ export default function ArchimateDiagramView({
   entityClicked: entityClickedFunc;
 }) {
   const svgTopGroup = useRef<SVGGElement | null>(null);
-  const ext = diagramExtents(selectedDiagram);
   const [zoomMode, setZoomMode] = useState(ZoomMode.FitToWindow);
   const [scale, setScale] = useState(1);
-  const [extents, setExtents] = useState<IExtents>({
-    maxX: ext.maxX,
-    maxY: ext.maxY,
-    minX: ext.minX,
-    minY: ext.minY,
-  });
+  const [extents, setExtents] = useState(
+    calculateMaxExtents(nodes, connections),
+  );
 
   const isAutoLayout = () => {
     return (
@@ -102,6 +93,7 @@ export default function ArchimateDiagramView({
 
   const onForceLayoutTick = () => {
     onFitToWindow();
+    setChangedExtents();
   };
 
   const onZoom = (toScale: number) => {
@@ -120,22 +112,15 @@ export default function ArchimateDiagramView({
     );
   };
 
-  useEffect(() => {
-    const ext = diagramExtents(selectedDiagram);
-    if (
-      numbersDiffer(extents.maxX, ext.maxX) ||
-      numbersDiffer(extents.maxY, ext.maxY) ||
-      numbersDiffer(extents.minX, ext.minX) ||
-      numbersDiffer(extents.minY, ext.minY)
-    ) {
-      setExtents((prev) => ({
-        ...prev,
-        maxX: ext.maxX,
-        maxY: ext.maxY,
-        minX: ext.minX,
-        minY: ext.minY,
-      }));
+  const setChangedExtents = () => {
+    const ext = calculateMaxExtents(nodes, connections);
+    if (extentsDiffer(extents, ext)) {
+      setExtents(ext);
     }
+  };
+
+  useEffect(() => {
+    setChangedExtents();
   }, [selectedDiagram, extents]);
 
   if (selectedDiagram) {
@@ -230,4 +215,13 @@ export default function ArchimateDiagramView({
       </div>
     );
   }
+}
+
+export function extentsDiffer(a: IExtents, b: IExtents) {
+  return (
+    numbersDiffer(a.maxX, b.maxX) ||
+    numbersDiffer(a.maxY, b.maxY) ||
+    numbersDiffer(a.minX, b.minX) ||
+    numbersDiffer(a.minY, b.minY)
+  );
 }

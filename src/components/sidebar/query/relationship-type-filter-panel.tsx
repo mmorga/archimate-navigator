@@ -15,6 +15,7 @@ import {
   Query,
   RelationshipType,
   RelationshipTypes,
+  updateQuery,
 } from "../../../archimate-model";
 import CollapsibleFormGroup, {
   ValidationState,
@@ -115,7 +116,7 @@ export default class RelationshipTypeFilterPanel extends PureComponent<
 
   private onSelectAll = () => {
     this.props.onQueryChanged(
-      this.props.query.updateQuery({
+      updateQuery(this.props.query.model, this.props.query, {
         relationshipTypes: Set<RelationshipType>(RelationshipTypes),
       }),
     );
@@ -123,7 +124,7 @@ export default class RelationshipTypeFilterPanel extends PureComponent<
 
   private onSelectNone = () => {
     this.props.onQueryChanged(
-      this.props.query.updateQuery({
+      updateQuery(this.props.query.model, this.props.query, {
         relationshipTypes: Set<RelationshipType>(),
       }),
     );
@@ -131,7 +132,7 @@ export default class RelationshipTypeFilterPanel extends PureComponent<
 
   private onAddClick = (relationshipType: RelationshipType) => {
     this.props.onQueryChanged(
-      this.props.query.updateQuery({
+      updateQuery(this.props.query.model, this.props.query, {
         relationshipTypes:
           this.props.query.relationshipTypes.add(relationshipType),
       }),
@@ -140,7 +141,7 @@ export default class RelationshipTypeFilterPanel extends PureComponent<
 
   private onRemoveClick = (relationshipType: RelationshipType) => {
     this.props.onQueryChanged(
-      this.props.query.updateQuery({
+      updateQuery(this.props.query.model, this.props.query, {
         relationshipTypes:
           this.props.query.relationshipTypes.remove(relationshipType),
       }),
@@ -149,7 +150,7 @@ export default class RelationshipTypeFilterPanel extends PureComponent<
 
   private onDerivedRelationsToggle = () => {
     this.props.onQueryChanged(
-      this.props.query.updateQuery({
+      updateQuery(this.props.query.model, this.props.query, {
         includeDerivedRelations: !this.props.query.includeDerivedRelations,
       }),
     );

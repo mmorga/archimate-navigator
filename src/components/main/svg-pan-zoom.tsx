@@ -1,6 +1,7 @@
 import * as React from "react";
 import * as wheel from "wheel";
 import { LogicError, Point } from "../../archimate-model";
+import { ZoomMode } from "./archimate-diagram-view";
 
 interface IProps {
   maxX: number;
@@ -14,17 +15,9 @@ interface IProps {
   children?: React.ReactNode;
 }
 
-enum ZoomMode {
-  OneToOne,
-  FitToWindow,
-  FitToWindowWidth,
-  UserZoom,
-}
-
 interface IState {
   clientHeight: number;
   clientWidth: number;
-  scale: number;
   tx: number;
   ty: number;
 }
@@ -47,7 +40,6 @@ export default class SvgPanZoom extends React.PureComponent<IProps, IState> {
     this.state = {
       clientHeight: 0,
       clientWidth: 0,
-      scale: props.scale,
       tx: 0,
       ty: 0,
     };
@@ -58,10 +50,16 @@ export default class SvgPanZoom extends React.PureComponent<IProps, IState> {
       <g
         onKeyDown={this.onKeyDown}
         ref={this.props.svgPanZoomRef}
-        transform={`matrix(${this.state.scale}, 0, 0, ${this.state.scale}, ${
+        transform={`matrix(${this.props.scale}, 0, 0, ${this.props.scale}, ${
           this.state.tx
         }, ${this.state.ty})`}
       >
+        {/* <circle cx={0} cy={0} r={10} style={{ stroke: "red", fill: "red" }} /> */}
+        {/*<rect x={this.props.minX}
+          y={this.props.minY}
+          width={this.props.maxX - this.props.minX}
+          height={this.props.maxY - this.props.minY}
+          style={{ stroke: "green", fill: "none" }} />*/}
         {this.props.children}
       </g>
     );
@@ -69,7 +67,7 @@ export default class SvgPanZoom extends React.PureComponent<IProps, IState> {
 
   public componentDidMount() {
     window.addEventListener("resize", this.onSvgResize);
-    this.svgSize();
+    this.updateClientSizeState();
     if (
       this.props.svgPanZoomRef.current &&
       this.props.svgPanZoomRef.current.ownerSVGElement
@@ -80,53 +78,35 @@ export default class SvgPanZoom extends React.PureComponent<IProps, IState> {
     }
   }
 
-  public componentDidUpdate(prevProps: IProps) {
-    if (
-      prevProps.scale !== this.props.scale &&
-      numbersDiffer(this.props.scale, this.state.scale)
-    ) {
-      this.setState({ scale: this.props.scale });
-    }
-    this.calculateTransform();
-  }
-
-  public componentWillUnmount() {
-    window.removeEventListener("resize", this.onSvgResize);
-    if (
-      this.props.svgPanZoomRef.current &&
-      this.props.svgPanZoomRef.current.ownerSVGElement
-    ) {
-      const svg = this.props.svgPanZoomRef.current.ownerSVGElement;
-      svg.removeEventListener("mousedown", this.onMouseDown);
-      wheel.removeWheelListener(svg, this.onWheel);
-    }
-  }
-
-  private calculateTransform = () => {
+  public componentDidUpdate() {
     const width = this.props.maxX - this.props.minX;
     const height = this.props.maxY - this.props.minY;
     const scalex = this.state.clientWidth / (width + DIAGRAM_MARGIN);
     const scaley = this.state.clientHeight / (height + DIAGRAM_MARGIN);
-    let scale = this.state.scale;
+    let scale = this.props.scale;
     let tx = this.state.tx;
     let ty = this.state.ty;
-    // const minScaleX = (this.state.clientWidth - DIAGRAM_MARGIN) / VIEW_NODE_WIDTH;
-    // const maxScaleX = (this.state.clientWidth - DIAGRAM_MARGIN) / (width * 4);
-    // const minScaleY = (this.state.clientHeight - DIAGRAM_MARGIN) / VIEW_NODE_HEIGHT;
-    // const maxScaleY = (this.state.clientHeight - DIAGRAM_MARGIN) / (height * 4);
     switch (this.props.zoomMode) {
       case ZoomMode.FitToWindow:
         scale = Math.min(scalex, scaley);
-        tx = (this.state.clientWidth - scale * width) / 2 - this.props.minX;
-        ty = (this.state.clientHeight - scale * height) / 2 - this.props.minY;
+        tx =
+          (this.state.clientWidth - scale * width) / 2 -
+          this.props.minX * scale; // + DIAGRAM_MARGIN);
+        ty =
+          (this.state.clientHeight - scale * height) / 2 -
+          this.props.minY * scale; //  * scale + DIAGRAM_MARGIN);
         break;
       case ZoomMode.FitToWindowWidth:
         scale = scalex;
-        tx = (this.state.clientWidth - scale * width) / 2 - this.props.minX;
+        tx =
+          (this.state.clientWidth - scale * width) / 2 -
+          this.props.minX * scale;
         if (height * scale + DIAGRAM_MARGIN > this.state.clientHeight) {
           ty = DIAGRAM_MARGIN / 2 - this.props.minY;
         } else {
-          ty = (this.state.clientHeight - scale * height) / 2 - this.props.minY;
+          ty =
+            (this.state.clientHeight - scale * height) / 2 -
+            this.props.minY * scale;
         }
         break;
       case ZoomMode.OneToOne:
@@ -145,8 +125,7 @@ export default class SvgPanZoom extends React.PureComponent<IProps, IState> {
       case ZoomMode.UserZoom:
       default:
     }
-    if (numbersDiffer(this.state.scale, scale)) {
-      this.setState({ scale });
+    if (numbersDiffer(this.props.scale, scale)) {
       this.props.onZoom(scale);
     }
     if (numbersDiffer(this.state.tx, tx)) {
@@ -155,7 +134,19 @@ export default class SvgPanZoom extends React.PureComponent<IProps, IState> {
     if (numbersDiffer(this.state.ty, ty)) {
       this.setState({ ty });
     }
-  };
+  }
+
+  public componentWillUnmount() {
+    window.removeEventListener("resize", this.onSvgResize);
+    if (
+      this.props.svgPanZoomRef.current &&
+      this.props.svgPanZoomRef.current.ownerSVGElement
+    ) {
+      const svg = this.props.svgPanZoomRef.current.ownerSVGElement;
+      svg.removeEventListener("mousedown", this.onMouseDown);
+      wheel.removeWheelListener(svg, this.onWheel);
+    }
+  }
 
   private onMouseDown = (e: MouseEvent) => {
     // for IE, left click == 1
@@ -282,21 +273,21 @@ export default class SvgPanZoom extends React.PureComponent<IProps, IState> {
       throw new Error("zoom requires valid numbers");
     }
 
-    const newScale = this.state.scale * ratio;
+    const newScale = this.props.scale * ratio;
 
     if (newScale < this.minZoom) {
-      if (this.state.scale === this.minZoom) {
+      if (this.props.scale === this.minZoom) {
         return;
       }
 
-      ratio = this.minZoom / this.state.scale;
+      ratio = this.minZoom / this.props.scale;
     }
     if (newScale > this.maxZoom) {
-      if (this.state.scale === this.maxZoom) {
+      if (this.props.scale === this.maxZoom) {
         return;
       }
 
-      ratio = this.maxZoom / this.state.scale;
+      ratio = this.maxZoom / this.props.scale;
     }
 
     const size = this.transformToScreen(clientX, clientY);
@@ -307,10 +298,7 @@ export default class SvgPanZoom extends React.PureComponent<IProps, IState> {
     });
 
     this.keepTransformInsideBounds();
-    const scale = this.state.scale * ratio;
-    if (numbersDiffer(this.state.scale, scale)) {
-      this.setState({ scale });
-    }
+    const scale = this.props.scale * ratio;
     this.props.onZoom(scale);
   }
 
@@ -336,7 +324,7 @@ export default class SvgPanZoom extends React.PureComponent<IProps, IState> {
     diff = boundingBox.top - clientRect.bottom;
     if (diff > 0) {
       // we adjust transform, so that it matches exactly our bounding box:
-      // this.state.ty = boundingBox.top - (boundingBox.height + boundingBox.y) * this.state.scale =>
+      // this.state.ty = boundingBox.top - (boundingBox.height + boundingBox.y) * this.props.scale =>
       // this.state.ty = boundingBox.top - (clientRect.bottom - this.state.ty) =>
       // this.state.ty = diff + this.state.ty =>
       this.setState({ ty: this.state.ty + diff });
@@ -357,17 +345,17 @@ export default class SvgPanZoom extends React.PureComponent<IProps, IState> {
     const leftTop = this.client(bbox.x, bbox.y);
 
     return {
-      bottom: bbox.height * this.state.scale + leftTop.y,
+      bottom: bbox.height * this.props.scale + leftTop.y,
       left: leftTop.x,
-      right: bbox.width * this.state.scale + leftTop.x,
+      right: bbox.width * this.props.scale + leftTop.x,
       top: leftTop.y,
     };
   }
 
   private client(x: number, y: number) {
     return {
-      x: x * this.state.scale + this.state.tx,
-      y: y * this.state.scale + this.state.ty,
+      x: x * this.props.scale + this.state.tx,
+      y: y * this.props.scale + this.state.ty,
     };
   }
 
@@ -426,10 +414,10 @@ export default class SvgPanZoom extends React.PureComponent<IProps, IState> {
   }
 
   private onSvgResize = () => {
-    this.svgSize();
+    this.updateClientSizeState();
   };
 
-  private svgSize = () => {
+  private updateClientSizeState = () => {
     if (
       this.props.svgPanZoomRef &&
       this.props.svgPanZoomRef.current &&

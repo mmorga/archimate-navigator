@@ -104,35 +104,42 @@ export class Diagram implements IDiagram {
   }
 
   public calculateMaxExtents(): IExtents {
-    const viewConcepts: IViewConceptType[] = (
-      this.nodes as IViewConceptType[]
-    ).concat(this.connections);
+    return calculateMaxExtents(this.nodes, this.connections);
+  }
+}
 
-    if (viewConcepts.length < 1) {
-      return {
-        maxX: 0,
-        maxY: 0,
-        minX: 0,
-        minY: 0,
-      };
-    }
+export function calculateMaxExtents(
+  nodes: ViewNode[],
+  connections: Connection[],
+): IExtents {
+  const viewConcepts: IViewConceptType[] = (nodes as IViewConceptType[]).concat(
+    connections,
+  );
 
-    const extents: IExtents = viewConcepts
-      .map((vc) => vc.extents())
-      .reduce((accExtents: IExtents, vcExtents: IExtents) => {
-        return {
-          maxX: Math.max(vcExtents.maxX, accExtents.maxX),
-          maxY: Math.max(vcExtents.maxY, accExtents.maxY),
-          minX: Math.min(vcExtents.minX, accExtents.minX),
-          minY: Math.min(vcExtents.minY, accExtents.minY),
-        };
-      }, InitExtents);
-
+  if (viewConcepts.length < 1) {
     return {
-      maxX: extents.maxX + DIAGRAM_MARGIN * 2,
-      maxY: extents.maxY + DIAGRAM_MARGIN * 2,
-      minX: extents.minX - DIAGRAM_MARGIN,
-      minY: extents.minY - DIAGRAM_MARGIN,
+      maxX: 0,
+      maxY: 0,
+      minX: 0,
+      minY: 0,
     };
   }
+
+  const extents: IExtents = viewConcepts
+    .map((vc) => vc.extents())
+    .reduce((accExtents: IExtents, vcExtents: IExtents) => {
+      return {
+        maxX: Math.max(vcExtents.maxX, accExtents.maxX),
+        maxY: Math.max(vcExtents.maxY, accExtents.maxY),
+        minX: Math.min(vcExtents.minX, accExtents.minX),
+        minY: Math.min(vcExtents.minY, accExtents.minY),
+      };
+    }, InitExtents);
+
+  return {
+    maxX: extents.maxX + DIAGRAM_MARGIN * 2,
+    maxY: extents.maxY + DIAGRAM_MARGIN * 2,
+    minX: extents.minX - DIAGRAM_MARGIN,
+    minY: extents.minY - DIAGRAM_MARGIN,
+  };
 }

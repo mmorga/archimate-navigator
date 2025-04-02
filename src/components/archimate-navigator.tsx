@@ -3,18 +3,27 @@ import { Alert, Button, Modal } from "react-bootstrap";
 import { Container, Section, Bar } from "@column-resizer/react";
 import {
   Diagram,
+  Element,
+  ElementType,
+  elementTypesForViewpoint,
   IEntity,
+  initQuery,
+  Layer,
   LogicError,
   Model,
   parse,
   ParserError,
   Query,
+  run,
   UnsupportedFormat,
   ViewNode,
+  viewpointForElementTypes,
+  ViewpointType,
 } from "../archimate-model";
 import { useState, useEffect } from "react";
 import ArchimateDiagramView from "./main/archimate-diagram-view";
 import Sidebar, { SidebarTab } from "./sidebar/sidebar";
+import { Set } from "immutable";
 
 export default function ArchimateNavigator({
   modelUrl,
@@ -66,7 +75,7 @@ export default function ArchimateNavigator({
                   parsedModel;
 
                 setModel(parsedModel);
-                setQuery(new Query(parsedModel));
+                setQuery(initQuery(parsedModel));
                 setSelectedDiagram(newSelectedDiagram);
                 setSelectedEntity(newSelectedEntity);
               }
@@ -91,6 +100,94 @@ export default function ArchimateNavigator({
         },
       );
   }, [modelUrl]);
+
+  const onQueryNameChanged = (name: string) => {
+    if (query) {
+      setQuery({
+        ...query,
+        name: name,
+      });
+    }
+  };
+
+  const onViewpointChanged = (viewpointType: ViewpointType) => {
+    if (query) {
+      onQueryChanged({
+        ...query,
+        elementTypes: Set<ElementType>(
+          elementTypesForViewpoint(viewpointType, query.elementTypes),
+        ),
+        viewpointType,
+      });
+    }
+  };
+
+  const onPathDepthChanged = (depth: number) => {
+    if (query) {
+      onQueryChanged({
+        ...query,
+        pathDepth: depth,
+      });
+    }
+  };
+
+  const onLayerFilterChanged = (layer: Layer, checked: boolean) => {
+    if (query) {
+      let layerFilter;
+      if (checked) {
+        layerFilter = query.layerFilter.add(layer);
+      } else {
+        layerFilter = query.layerFilter.remove(layer);
+      }
+      onQueryChanged({
+        ...query,
+        layerFilter,
+      });
+    }
+  };
+
+  const onElementTypeFilterChanged = (elementType: ElementType) => {
+    if (query) {
+      const elementTypes = query.elementTypes.includes(elementType)
+        ? query.elementTypes.delete(elementType)
+        : query.elementTypes.add(elementType);
+      onQueryChanged({
+        ...query,
+        elementTypes,
+        viewpointType: viewpointForElementTypes(elementTypes),
+      });
+    }
+  };
+
+  const onAddElement = (element: Element) => {
+    if (query) {
+      onQueryChanged({
+        ...query,
+        elements: query.elements.add(element),
+      });
+    }
+  };
+
+  const onRemoveElement = (element: Element) => {
+    if (query) {
+      onQueryChanged({
+        ...query,
+        elements: query.elements.remove(element),
+      });
+    }
+  };
+
+  const onQueryChanged = (queryUpdate: Query) => {
+    if (queryUpdate && model) {
+      setQuery(queryUpdate);
+      const diagram = run(queryUpdate, model);
+      // setSelectedQuery(query);
+      // onDiagramUpdated(diagram);
+      // setSelectedDiagram(diagram);
+      // setSelectedEntity(diagram);
+      onDiagramLinkClick(diagram);
+    }
+  };
 
   const onCloseException = () => setError(undefined);
 
@@ -184,11 +281,17 @@ export default function ArchimateNavigator({
             entityClicked={onEntityClick}
             model={model}
             query={query}
-            onDiagramUpdated={onDiagramLinkClick}
             onTabSelected={onSidebarTabSelected}
             selectedDiagram={selectedDiagram}
             selectedEntity={selectedEntity}
             sidebarTabKey={sidebarTabKey}
+            onQueryNameChanged={onQueryNameChanged}
+            onViewpointChanged={onViewpointChanged}
+            onPathDepthChanged={onPathDepthChanged}
+            onLayerFilterChanged={onLayerFilterChanged}
+            onElementTypeFilterChanged={onElementTypeFilterChanged}
+            onAddElement={onAddElement}
+            onRemoveElement={onRemoveElement}
           />
         </Section>
         <Bar

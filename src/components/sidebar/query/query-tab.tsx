@@ -1,4 +1,13 @@
-import { Diagram, Model, Query } from "../../../archimate-model";
+import {
+  Diagram,
+  Element,
+  ElementType,
+  Layer,
+  Model,
+  ViewpointType,
+  Query,
+  initQuery,
+} from "../../../archimate-model";
 import { List } from "immutable";
 import * as React from "react";
 import QueryPicker from "./query-picker";
@@ -13,12 +22,24 @@ export default function QueryTab({
   model,
   query,
   selectedDiagram,
-  onDiagramUpdated,
+  onQueryNameChanged,
+  onViewpointChanged,
+  onPathDepthChanged,
+  onLayerFilterChanged,
+  onElementTypeFilterChanged,
+  onAddElement,
+  onRemoveElement,
 }: {
   model: Model | undefined;
   query: Query | undefined;
   selectedDiagram: Diagram | undefined;
-  onDiagramUpdated: (diagram: Diagram) => void;
+  onQueryNameChanged: (name: string) => void;
+  onViewpointChanged: (viewpointType: ViewpointType) => void;
+  onPathDepthChanged: (depth: number) => void;
+  onLayerFilterChanged: (layer: Layer, checked: boolean) => void;
+  onElementTypeFilterChanged: (elementType: ElementType) => void;
+  onAddElement: (element: Element) => void;
+  onRemoveElement: (element: Element) => void;
 }) {
   const [selectedQuery, setSelectedQuery] = React.useState<Query | undefined>(
     query,
@@ -33,20 +54,11 @@ export default function QueryTab({
 
   const onNewQuery = React.useCallback(() => {
     if (model) {
-      const newQuery = new Query(model);
+      const newQuery = initQuery(model);
       setQueries((prevQueries) => prevQueries.push(newQuery));
       setSelectedQuery(newQuery);
     }
   }, [model]);
-
-  const onQueryChanged = React.useCallback(
-    (query: Query) => {
-      const diagram = query.run();
-      setSelectedQuery(query);
-      onDiagramUpdated(diagram);
-    },
-    [onDiagramUpdated],
-  );
 
   return (
     <>
@@ -60,7 +72,13 @@ export default function QueryTab({
         model={model}
         selectedDiagram={selectedDiagram}
         query={query}
-        onQueryChanged={onQueryChanged}
+        onQueryNameChanged={onQueryNameChanged}
+        onViewpointChanged={onViewpointChanged}
+        onPathDepthChanged={onPathDepthChanged}
+        onLayerFilterChanged={onLayerFilterChanged}
+        onElementTypeFilterChanged={onElementTypeFilterChanged}
+        onAddElement={onAddElement}
+        onRemoveElement={onRemoveElement}
       />
     </>
   );

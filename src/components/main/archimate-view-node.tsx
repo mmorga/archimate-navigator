@@ -1,6 +1,6 @@
 import type * as CSS from "csstype";
 import * as React from "react";
-import { JSX } from "react";
+import { JSX, useEffect, useState } from "react";
 import "./archimate-svg.css";
 import {
   Bounds,
@@ -49,7 +49,7 @@ interface IArchimateViewNodeProps {
 }
 
 export const ArchimateViewNode: React.FC<IArchimateViewNodeProps> = (props) => {
-  const attrs: React.SVGProps<SVGGElement> = { id: props.viewNode.id };
+  const attrs: React.SVGProps<SVGGElement> = {};
   if (props.viewNode.type && props.viewNode.type.length > 0) {
     attrs.className = `archimate-${props.viewNode.elementType()}`;
   }
@@ -57,10 +57,30 @@ export const ArchimateViewNode: React.FC<IArchimateViewNodeProps> = (props) => {
     attrs.onClick = props.onClicked.bind(null, props.viewNode.entityInstance());
   }
 
-  const archimateProps = archimateViewNodeProps(props.viewNode);
+  const [archimateProps, setArchimateProps] = useState(
+    archimateViewNodeProps(props.viewNode),
+  );
+  const [bounds, setBounds] = useState(props.viewNode.absolutePosition());
+
+  useEffect(() => {
+    const curBounds = props.viewNode.absolutePosition();
+    if (!bounds.equals(curBounds)) {
+      setBounds(curBounds);
+      setArchimateProps(archimateViewNodeProps(props.viewNode));
+    }
+  }, [archimateProps]);
 
   return (
-    <g {...attrs}>
+    <g
+      id={props.viewNode.id}
+      className={
+        props.viewNode.type && props.viewNode.type.length > 0
+          ? `archimate-${props.viewNode.elementType()}`
+          : undefined
+      }
+      onClick={() => props.onClicked(props.viewNode.entityInstance())}
+      {...attrs}
+    >
       <Title name={props.viewNode.name} />
       <Documentation documentation={props.viewNode.documentation} />
       {archimateProps.entityShape(

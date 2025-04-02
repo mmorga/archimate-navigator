@@ -1,5 +1,14 @@
 import "./sidebar.css";
-import { Diagram, IEntity, Model, Query } from "../../archimate-model";
+import {
+  Diagram,
+  Element,
+  ElementType,
+  IEntity,
+  Layer,
+  Model,
+  Query,
+  ViewpointType,
+} from "../../archimate-model";
 import { entityClickedFunc } from "../common";
 import { Tab, Tabs } from "react-bootstrap";
 import InfoTab from "./info/info-tab";
@@ -20,21 +29,33 @@ export default function Sidebar({
   entityClicked,
   model,
   query,
-  onDiagramUpdated,
   onTabSelected,
   selectedDiagram,
   selectedEntity,
   sidebarTabKey,
+  onQueryNameChanged,
+  onViewpointChanged,
+  onPathDepthChanged,
+  onLayerFilterChanged,
+  onElementTypeFilterChanged,
+  onAddElement,
+  onRemoveElement,
 }: {
   diagramLinkClicked: entityClickedFunc;
   entityClicked: entityClickedFunc;
   model: Model | undefined;
   query: Query | undefined;
-  onDiagramUpdated: (diagram: Diagram) => void;
   onTabSelected: (eventKey: string | null) => void;
   selectedDiagram?: Diagram;
   selectedEntity?: IEntity;
   sidebarTabKey: SidebarTab;
+  onQueryNameChanged: (name: string) => void;
+  onViewpointChanged: (viewpointType: ViewpointType) => void;
+  onPathDepthChanged: (depth: number) => void;
+  onLayerFilterChanged: (layer: Layer, checked: boolean) => void;
+  onElementTypeFilterChanged: (elementType: ElementType) => void;
+  onAddElement: (element: Element) => void;
+  onRemoveElement: (element: Element) => void;
 }) {
   return (
     <div className="archimate-view-nav">
@@ -68,7 +89,13 @@ export default function Sidebar({
             model={model}
             query={query}
             selectedDiagram={selectedDiagram}
-            onDiagramUpdated={onDiagramUpdated}
+            onQueryNameChanged={onQueryNameChanged}
+            onViewpointChanged={onViewpointChanged}
+            onPathDepthChanged={onPathDepthChanged}
+            onLayerFilterChanged={onLayerFilterChanged}
+            onElementTypeFilterChanged={onElementTypeFilterChanged}
+            onAddElement={onAddElement}
+            onRemoveElement={onRemoveElement}
           />
         </Tab>
       </Tabs>

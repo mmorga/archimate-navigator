@@ -16,7 +16,6 @@ import {
   DisplayLayers,
   Element,
   ElementType,
-  elementTypesForViewpoint,
   Layer,
   Model,
   Query,
@@ -39,81 +38,31 @@ type FuseElement = {
 export default function QueryWizard({
   model,
   query,
-  onQueryChanged,
+  onQueryNameChanged,
+  onViewpointChanged,
+  onPathDepthChanged,
+  onLayerFilterChanged,
+  onElementTypeFilterChanged,
+  onAddElement,
+  onRemoveElement,
 }: {
   model: Model | undefined;
   selectedDiagram: Diagram | undefined;
   query: Query | undefined;
-  onQueryChanged: (query: Query) => void;
+  onQueryNameChanged: (name: string) => void;
+  onViewpointChanged: (viewpointType: ViewpointType) => void;
+  onPathDepthChanged: (depth: number) => void;
+  onLayerFilterChanged: (layer: Layer, checked: boolean) => void;
+  onElementTypeFilterChanged: (elementType: ElementType) => void;
+  onAddElement: (element: Element) => void;
+  onRemoveElement: (element: Element) => void;
 }) {
   const [layerFilterCollapsed, setLayerFilterCollapsed] = useState(true);
   const [results, setResults] = useState<List<Element>>(List());
   const [search, setSearch] = useState("");
 
-  const onQueryNameChanged = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (query) {
-      onQueryChanged(query.updateQuery({ name: event.target.value }));
-    }
-  };
-
-  const onViewpointChanged = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    if (query) {
-      const viewpointType = event.target.value as ViewpointType;
-      onQueryChanged(
-        query.updateQuery({
-          elementTypes: Set<ElementType>(
-            elementTypesForViewpoint(viewpointType, query.elementTypes),
-          ),
-          viewpointType,
-        }),
-      );
-    }
-  };
-
-  const onPathDepthChanged = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (query) {
-      onQueryChanged(
-        query.updateQuery({
-          pathDepth: Number.parseInt(event.target.value, 10),
-        }),
-      );
-    }
-  };
-
-  const onLayerFilterChanged = (layer: Layer, checked: boolean) => {
-    if (query) {
-      let layerFilter;
-      if (checked) {
-        layerFilter = query.layerFilter.add(layer);
-      } else {
-        layerFilter = query.layerFilter.remove(layer);
-      }
-      onQueryChanged(query.updateQuery({ layerFilter }));
-    }
-  };
-
   const layerChecked = (layer: Layer): boolean => {
     return query ? query.layerFilter.includes(layer) : false;
-  };
-
-  const onAddClick = (element: Element) => {
-    if (query) {
-      onQueryChanged(
-        query.updateQuery({
-          elements: query.elements.add(element),
-        }),
-      );
-    }
-  };
-
-  const onRemoveClick = (element: Element) => {
-    if (query) {
-      onQueryChanged(
-        query.updateQuery({
-          elements: query.elements.remove(element),
-        }),
-      );
-    }
   };
 
   const addRemoveElement = (el: Element) => {
@@ -122,8 +71,8 @@ export default function QueryWizard({
         e ? e.id === el.id : false,
       );
       const onClick = isSelected
-        ? () => onRemoveClick(el)
-        : () => onAddClick(el);
+        ? () => onRemoveElement(el)
+        : () => onAddElement(el);
       const variant = isSelected ? "danger" : "primary";
       return (
         <Button size="sm" variant={variant} onClick={onClick}>
@@ -201,13 +150,17 @@ export default function QueryWizard({
                 type="text"
                 value={query ? query.name : ""}
                 placeholder="Query Name"
-                onChange={onQueryNameChanged}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                  onQueryNameChanged(event.target.value)
+                }
               />
             </FormGroup>
             <FormGroup controlId="viewpointType">
               <Form.Label>Viewpoint</Form.Label>
               <Form.Select
-                onChange={onViewpointChanged}
+                onChange={(event: React.ChangeEvent<HTMLSelectElement>) =>
+                  onViewpointChanged(event.target.value as ViewpointType)
+                }
                 value={query ? query.viewpointType : ""}
               >
                 {Viewpoints.map((v) => v)
@@ -247,7 +200,10 @@ export default function QueryWizard({
                 </Card>
               </Collapse>
             </FormGroup>
-            <ElementTypeFilter query={query} onQueryChanged={onQueryChanged} />
+            <ElementTypeFilter
+              query={query}
+              onChanged={onElementTypeFilterChanged}
+            />
             <FormGroup>
               <Form.Label htmlFor="pathDepth">Max Path Depth</Form.Label>
               <FormControl
@@ -257,7 +213,9 @@ export default function QueryWizard({
                 max="100"
                 step="1"
                 value={query ? query.pathDepth : 0}
-                onChange={onPathDepthChanged}
+                onChange={(event) =>
+                  onPathDepthChanged(Number.parseInt(event.target.value, 10))
+                }
               />
               <Form.Text muted>
                 Maximum number of connections to include

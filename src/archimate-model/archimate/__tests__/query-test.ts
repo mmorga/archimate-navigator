@@ -3,7 +3,7 @@ import { Diagram } from "../diagram";
 import { Element } from "../element";
 import { ElementType } from "../element-type";
 import { Model } from "../model";
-import { Query } from "../query";
+import { initQuery, run } from "../query";
 import { Relationship } from "../relationship";
 import { RelationshipType } from "../relationship-type";
 import { ViewpointType } from "../viewpoint-type";
@@ -42,11 +42,11 @@ function createTestModel(): Model {
 
 test("diagram", () => {
   const model = createTestModel();
-  const subject = new Query(model);
+  const subject = initQuery(model);
   subject.viewpointType = ViewpointType.Application_cooperation;
   subject.elements = Set<Element>(model.elements);
   subject.relationships = Set<Relationship>(model.relationships);
-  const result = subject.run();
+  const result = run(subject, model);
   expect(result).toBeInstanceOf(Diagram);
   expect(result.name).toBe(subject.name);
   expect(result.id).toBe(subject.id);

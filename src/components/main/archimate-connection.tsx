@@ -4,18 +4,7 @@ import { Connection, Path } from "../../archimate-model";
 import { entityClickedFunc } from "../common";
 import "./archimate-svg.css";
 
-interface IProps {
-  connection: Connection;
-  onClicked?: entityClickedFunc;
-  selected: boolean;
-  autoLayout?: boolean;
-  fromX: number;
-  fromY: number;
-  toX: number;
-  toY: number;
-}
-
-const ArchimateConnection: React.FC<IProps> = ({
+export default function ArchimateConnection({
   connection,
   onClicked,
   selected,
@@ -24,7 +13,16 @@ const ArchimateConnection: React.FC<IProps> = ({
   fromY,
   toX,
   toY,
-}) => {
+}: {
+  connection: Connection;
+  onClicked?: entityClickedFunc;
+  selected: boolean;
+  autoLayout?: boolean;
+  fromX: number;
+  fromY: number;
+  toX: number;
+  toY: number;
+}) {
   const [path, setPath] = React.useState(
     () => new Path(connection, autoLayout),
   );
@@ -179,6 +177,4 @@ const ArchimateConnection: React.FC<IProps> = ({
       {lineText()}
     </g>
   );
-};
-
-export default ArchimateConnection;
+}

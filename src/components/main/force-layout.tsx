@@ -42,10 +42,7 @@ export default class ForceLayout extends React.PureComponent<IProps> {
       .distance(this.adjustLinkDistance);
     this.simulation = d3force
       .forceSimulation(this.props.nodes)
-      .force(
-        "center",
-        d3force.forceCenter(this.props.centerX, this.props.centerY),
-      )
+      .force("center", d3force.forceCenter(0, 0))
       .force("collide", d3force.forceCollide(VIEW_NODE_WIDTH))
       .force("link", this.forceLink)
       .force("charge", d3force.forceManyBody())
@@ -127,10 +124,10 @@ export default class ForceLayout extends React.PureComponent<IProps> {
    */
   private ticked = () => {
     if (this.simulation) {
-      this.simulation.force(
-        "center",
-        d3force.forceCenter(this.props.centerX, this.props.centerY),
-      );
+      // this.simulation.force(
+      //   "center",
+      //   d3force.forceCenter(this.props.centerX, this.props.centerY),
+      // );
       if (this.props.onForceLayoutTick) {
         this.props.onForceLayoutTick();
       }
