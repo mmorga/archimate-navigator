@@ -1,4 +1,3 @@
-import { PureComponent } from "react";
 import {
   Diagram,
   Element,
@@ -8,26 +7,14 @@ import {
 import { entityClickedFunc } from "../../common";
 import EntityLink from "../entity-link";
 
-interface IProps {
+type IProps = {
   entity: IEntity;
   resultClicked: entityClickedFunc;
-}
+};
 
-export default class SearchResult extends PureComponent<IProps> {
-  public render() {
-    return (
-      <li>
-        <EntityLink
-          entity={this.props.entity}
-          entityClicked={this.props.resultClicked}
-          text={`${this.props.entity.name} (${this.entityType()})`}
-        />
-      </li>
-    );
-  }
-
-  private entityType(): string {
-    const entity = this.props.entity;
+export default function SearchResult(props: IProps) {
+  const entityType = (): string => {
+    const entity = props.entity;
     let entityType = entity.type;
     if (entity instanceof Element) {
       entityType = entity.type || entityType;
@@ -37,5 +24,15 @@ export default class SearchResult extends PureComponent<IProps> {
       entityType = entity.viewpoint || "Total";
     }
     return entityType;
-  }
+  };
+
+  return (
+    <li>
+      <EntityLink
+        entity={props.entity}
+        entityClicked={props.resultClicked}
+        text={`${props.entity.name} (${entityType()})`}
+      />
+    </li>
+  );
 }

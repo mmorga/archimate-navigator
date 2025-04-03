@@ -1,8 +1,8 @@
-import * as React from "react";
+import { memo } from "react";
 import { Card, Table } from "react-bootstrap";
 import "../archimate-navigator.css";
 
-const ModelInfo = React.memo(function modelInfo({
+const ModelInfo = memo(function modelInfo({
   modelName,
   diagramName,
   diagramViewpoint,

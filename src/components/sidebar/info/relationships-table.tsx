@@ -1,10 +1,10 @@
-import * as React from "react";
+import { memo } from "react";
 import { IEntity, IRelationship, Relationship } from "../../../archimate-model";
 import { entityClickedFunc } from "../../common";
 import EntityLink from "../entity-link";
 import { Card, Table } from "react-bootstrap";
 
-const RelationshipsTable = React.memo(
+const RelationshipsTable = memo(
   ({
     relationships,
     entityClicked,

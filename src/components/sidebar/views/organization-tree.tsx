@@ -1,11 +1,10 @@
-import * as React from "react";
-import { useState } from "react";
+import { memo, MouseEvent, useState } from "react";
 import { IEntity, Organization } from "../../../archimate-model";
 import "../../archimate-navigator.css";
 import { entityClickedFunc } from "../../common";
 import OrganizationContent from "./organization-content";
 
-interface IProps {
+type IProps = {
   // model: Model;
   // organization: Organization;
   organizationName: string | undefined;
@@ -14,11 +13,11 @@ interface IProps {
   items: IEntity[];
   entityClicked: entityClickedFunc;
   selectedEntity: IEntity | undefined;
-}
+};
 
 // TODO: save the open closed state to localStorage
 // (https://developer.mozilla.org/en-US/docs/Web/API/Web_Storage_API/Using_the_Web_Storage_API)
-const OrganizationTree: React.FC<IProps> = React.memo(
+const OrganizationTree = memo(
   ({
     organizationName,
     organizationId,
@@ -26,10 +25,10 @@ const OrganizationTree: React.FC<IProps> = React.memo(
     items,
     entityClicked,
     selectedEntity,
-  }) => {
+  }: IProps) => {
     const [collapse, setCollapse] = useState(true);
 
-    const handleClick = (event: React.MouseEvent<Element>) => {
+    const handleClick = (event: MouseEvent<Element>) => {
       event.preventDefault();
       setCollapse(!collapse);
     };

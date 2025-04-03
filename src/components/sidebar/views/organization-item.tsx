@@ -1,19 +1,19 @@
-import * as React from "react";
+import { CSSProperties, memo } from "react";
 import { IEntity } from "../../../archimate-model";
 import "../../archimate-navigator.css";
 import { entityClickedFunc } from "../../common";
 import EntityLink from "../entity-link";
 
-interface IProps {
+type IProps = {
   entity: IEntity;
   entityClicked: entityClickedFunc;
   selectedEntity: IEntity | undefined;
-}
+};
 
 // Displays the list of organizations and entities that belong to the given organization
-const OrganizationItem: React.FC<IProps> = React.memo(
-  ({ entity, entityClicked, selectedEntity }) => {
-    const selectedItemIconStyle = (item: IEntity): React.CSSProperties => {
+const OrganizationItem = memo(
+  ({ entity, entityClicked, selectedEntity }: IProps) => {
+    const selectedItemIconStyle = (item: IEntity): CSSProperties => {
       if (selectedEntity && selectedEntity.id === item.id) {
         return { color: "white" };
       }

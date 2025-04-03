@@ -1,4 +1,3 @@
-import * as React from "react";
 import { JSX } from "react";
 import {
   Diagram,
@@ -16,13 +15,12 @@ import PropertiesPanel from "./properties-panel";
 import RelationshipsTable from "./relationships-table";
 import ViewsTable from "./views-table";
 
-interface IProps {
+type IProps = {
   entity?: IEntity;
   entityClicked: entityClickedFunc;
-}
+};
 
-// const InfoTab: React.FC<IProps> = React.memo(({ entity, entityClicked }) => {
-const InfoTab: React.FC<IProps> = ({ entity, entityClicked }) => {
+const InfoTab = ({ entity, entityClicked }: IProps) => {
   const elements = (): JSX.Element | undefined => {
     if (entity instanceof Diagram) {
       const diagram = entity as Diagram;

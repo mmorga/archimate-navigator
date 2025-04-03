@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Button } from "react-bootstrap";
 import {
   ArrowsFullscreen,
@@ -112,16 +112,16 @@ export default function ArchimateDiagramView({
     );
   };
 
-  const setChangedExtents = () => {
+  const setChangedExtents = useCallback(() => {
     const ext = calculateMaxExtents(nodes, connections);
     if (extentsDiffer(extents, ext)) {
       setExtents(ext);
     }
-  };
+  }, [connections, extents, nodes]);
 
   useEffect(() => {
     setChangedExtents();
-  }, [selectedDiagram, extents]);
+  }, [selectedDiagram, extents, setChangedExtents]);
 
   if (selectedDiagram) {
     return (

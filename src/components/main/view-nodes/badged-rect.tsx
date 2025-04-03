@@ -1,10 +1,10 @@
-import { JSX } from "react";
+import { CSSProperties, JSX } from "react";
 import { Bounds, ViewNode } from "../../../archimate-model";
 
 export function path(
   bounds: Bounds,
   backgroundClass: string | undefined,
-  style: React.CSSProperties | undefined,
+  style: CSSProperties | undefined,
 ): JSX.Element {
   return (
     <rect
@@ -31,7 +31,7 @@ export function badgeBounds(viewNode: ViewNode): Bounds | undefined {
 export function entityShape(
   viewNode: ViewNode,
   backgroundClass: string | undefined,
-  shapeStyle: React.CSSProperties | undefined,
+  shapeStyle: CSSProperties | undefined,
 ): JSX.Element {
   const bounds = viewNode.absolutePosition();
   return (

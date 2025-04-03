@@ -1,25 +1,24 @@
 import { isEqual } from "lodash-es";
 import memoizeOne from "memoize-one";
-import * as React from "react";
-import { useMemo, useState, useEffect } from "react";
+import { memo, useMemo, useState, useEffect } from "react";
 import { IEntity, Organization } from "../../../archimate-model";
 import "../../archimate-navigator.css";
 import { entityClickedFunc } from "../../common";
 import OrganizationItem from "./organization-item";
 import OrganizationTree from "./organization-tree";
 
-interface IProps {
+type IProps = {
   // model: Model;
   // organization: Organization;
   organizations: Organization[];
   items: IEntity[];
   entityClicked: entityClickedFunc;
   selectedEntity: IEntity | undefined;
-}
+};
 
 // Displays the list of organizations and entities that belong to the given organization
-const OrganizationContent: React.FC<IProps> = React.memo(
-  ({ organizations, items, entityClicked, selectedEntity }) => {
+const OrganizationContent = memo(
+  ({ organizations, items, entityClicked, selectedEntity }: IProps) => {
     const [itemEntities, setItemEntities] = useState<string[]>([]);
 
     // Replicate getDerivedStateFromProps using useEffect
@@ -28,7 +27,7 @@ const OrganizationContent: React.FC<IProps> = React.memo(
       if (!isEqual(newItemEntities, itemEntities)) {
         setItemEntities(newItemEntities);
       }
-    }, [items]);
+    }, [itemEntities, items]);
 
     // Memoize sorted organizations
     const sortedOrganizations = useMemo(() => {

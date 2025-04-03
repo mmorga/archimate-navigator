@@ -1,6 +1,5 @@
 import { ViewNode } from "@/archimate-model";
-import { JSX } from "react";
-import * as React from "react";
+import { CSSProperties, JSX } from "react";
 
 export function entityLabel() {
   return undefined;
@@ -9,7 +8,7 @@ export function entityLabel() {
 export function entityShape(
   viewNode: ViewNode,
   backgroundClass: string | undefined,
-  shapeStyle: React.CSSProperties | undefined,
+  shapeStyle: CSSProperties | undefined,
 ): JSX.Element {
   const bounds = viewNode.absolutePosition();
   const center = bounds.center();

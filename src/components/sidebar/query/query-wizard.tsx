@@ -23,8 +23,7 @@ import {
   ViewpointType,
 } from "../../../archimate-model";
 import { List, Set } from "immutable";
-import { useState } from "react";
-import * as React from "react";
+import { ChangeEvent, useState } from "react";
 import ElementTypeFilter from "./query-wizard-form/element-type-filter";
 import Fuse from "fuse.js";
 
@@ -82,7 +81,7 @@ export default function QueryWizard({
     }
   };
 
-  const onSearchChanged = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const onSearchChanged = (event: ChangeEvent<HTMLInputElement>) => {
     setSearch(event.target.value);
     calculateResults(event.target.value);
   };
@@ -150,7 +149,7 @@ export default function QueryWizard({
                 type="text"
                 value={query ? query.name : ""}
                 placeholder="Query Name"
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                onChange={(event: ChangeEvent<HTMLInputElement>) =>
                   onQueryNameChanged(event.target.value)
                 }
               />
@@ -158,7 +157,7 @@ export default function QueryWizard({
             <FormGroup controlId="viewpointType">
               <Form.Label>Viewpoint</Form.Label>
               <Form.Select
-                onChange={(event: React.ChangeEvent<HTMLSelectElement>) =>
+                onChange={(event: ChangeEvent<HTMLSelectElement>) =>
                   onViewpointChanged(event.target.value as ViewpointType)
                 }
                 value={query ? query.viewpointType : ""}
@@ -236,21 +235,35 @@ export default function QueryWizard({
               <div className="form-label">
                 Results <Badge>{results.size}</Badge>
               </div>
-              <ListGroup id="results">
+              <ListGroup id="results" variant="flush">
                 {results
                   .toArray()
                   .slice(0, Math.min(20, results.size))
                   .map((el) =>
                     el ? (
                       <ListGroupItem key={el.id}>
-                        <div className="pull-right">{addRemoveElement(el)}</div>
-                        <span className="text-info">{el.type}</span>
-                        {": "}
+                        <div className="pull-right" style={{ float: "right" }}>
+                          {addRemoveElement(el)}
+                        </div>
                         {el.name ? (
-                          <span className="text-primary">{el.name}</span>
+                          <span
+                            className="text-primary"
+                            style={{ fontSize: "85%" }}
+                          >
+                            {el.name}
+                          </span>
                         ) : (
-                          <span className="text-muted">unnamed</span>
+                          <span
+                            className="text-muted"
+                            style={{ fontSize: "85%" }}
+                          >
+                            unnamed
+                          </span>
                         )}
+                        <br />
+                        <span className="text-info" style={{ fontSize: "75%" }}>
+                          &lt;{el.type}&gt;
+                        </span>
                       </ListGroupItem>
                     ) : undefined,
                   )}

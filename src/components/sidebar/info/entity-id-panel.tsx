@@ -1,5 +1,4 @@
-import * as React from "react";
-import { JSX } from "react";
+import { JSX, memo } from "react";
 import {
   Diagram,
   Element,
@@ -10,7 +9,7 @@ import { entityClickedFunc } from "../../common";
 import EntityLink from "../entity-link";
 import { Card, Table } from "react-bootstrap";
 
-const EntityIdPanel = React.memo(
+const EntityIdPanel = memo(
   ({
     entity,
     entityClicked,

@@ -1,14 +1,13 @@
-import { JSX } from "react";
+import { CSSProperties, JSX } from "react";
 import { Bounds, ViewNode } from "../../../archimate-model";
 import * as BadgedNodeViewNode from "./badged-node-view-node";
 import * as BadgedRect from "./badged-rect";
-import * as React from "react";
 import * as BaseViewNode from "./base-view-node";
 
 export function entityShape(
   viewNode: ViewNode,
   backgroundClass: string | undefined,
-  shapeStyle: React.CSSProperties | undefined,
+  shapeStyle: CSSProperties | undefined,
 ): JSX.Element {
   if (viewNode.childType === "1") {
     return BadgedRect.path(

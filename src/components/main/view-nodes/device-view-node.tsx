@@ -1,12 +1,11 @@
 import { Bounds, ViewNode } from "../../../archimate-model";
-import { JSX } from "react";
+import { CSSProperties, JSX } from "react";
 import * as BadgedNodeViewNode from "./badged-node-view-node";
-import * as React from "react";
 
 function path(
   viewNodeBounds: Bounds,
   backgroundClass: string | undefined,
-  style: React.CSSProperties | undefined,
+  style: CSSProperties | undefined,
 ): JSX.Element {
   const bounds = viewNodeBounds;
   const margin = 10;
@@ -46,7 +45,7 @@ function path(
 export function entityShape(
   viewNode: ViewNode,
   backgroundClass: string | undefined,
-  shapeStyle: React.CSSProperties | undefined,
+  shapeStyle: CSSProperties | undefined,
 ): JSX.Element {
   if (viewNode.childType === "1") {
     return BadgedNodeViewNode.entityShape(

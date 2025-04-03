@@ -1,22 +1,22 @@
-import type * as CSS from "csstype";
-import * as React from "react";
 import { Bounds, ViewNode } from "../../archimate-model";
+import { CSSProperties, useEffect, useState } from "react";
 import TextFlow from "./text-flow";
+import type * as CSS from "csstype";
 
-interface IProps {
+type IProps = {
   child: ViewNode;
   label: string;
   textBounds: Bounds;
   textAlign?: CSS.Property.TextAlign;
   badgeBounds: Bounds;
-}
+};
 
-const EntityLabel: React.FC<IProps> = (props) => {
+const EntityLabel = (props: IProps) => {
   const [textAnchor, setTextAnchor] =
-    React.useState<CSS.Property.TextAnchor>("middle");
+    useState<CSS.Property.TextAnchor>("middle");
   // const lineHeight = 12; // TODO: This needs to be calculated
 
-  React.useEffect(() => {
+  useEffect(() => {
     switch (props.textAlign) {
       case "left":
         setTextAnchor("start");
@@ -97,9 +97,7 @@ const EntityLabel: React.FC<IProps> = (props) => {
     }
   };
 
-  const textStyle = (
-    textAnchor?: CSS.Property.TextAnchor,
-  ): React.CSSProperties => {
+  const textStyle = (textAnchor?: CSS.Property.TextAnchor): CSSProperties => {
     const style = props.child.style;
     if (style === undefined) {
       return {
@@ -107,7 +105,7 @@ const EntityLabel: React.FC<IProps> = (props) => {
         textAnchor: "middle",
       };
     }
-    const cssStyle: React.CSSProperties = {};
+    const cssStyle: CSSProperties = {};
     if (style.fontColor) {
       cssStyle.fill = style.fontColor.toRGBA();
     }

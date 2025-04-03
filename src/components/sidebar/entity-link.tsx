@@ -1,17 +1,17 @@
-import * as React from "react";
+import { memo, ReactNode } from "react";
 import { IEntity } from "../../archimate-model";
 import { entityClickedFunc } from "../common";
 
-interface IProps {
+type IProps = {
   entity: IEntity | undefined;
   entityClicked: entityClickedFunc;
   text?: string;
   textClass?: string;
-  children?: React.ReactNode;
-}
+  children?: ReactNode;
+};
 
-const EntityLink: React.FC<IProps> = React.memo(
-  ({ entity, entityClicked, text, textClass, children }) => {
+const EntityLink = memo(
+  ({ entity, entityClicked, text, textClass, children }: IProps) => {
     const handleClick = () => entityClicked(entity);
 
     if (!entity) {

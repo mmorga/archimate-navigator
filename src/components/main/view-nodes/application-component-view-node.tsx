@@ -1,6 +1,5 @@
 import { Bounds, ViewNode } from "../../../archimate-model";
-import { JSX } from "react";
-import * as React from "react";
+import { CSSProperties, JSX } from "react";
 import * as BadgedRect from "./badged-rect";
 import * as BaseViewNode from "./base-view-node";
 
@@ -22,7 +21,7 @@ export function textBounds(viewNode: ViewNode): Bounds {
 export function entityShape(
   viewNode: ViewNode,
   backgroundClass: string | undefined,
-  shapeStyle: React.CSSProperties | undefined,
+  shapeStyle: CSSProperties | undefined,
 ): JSX.Element {
   if (viewNode.childType === "1") {
     return BadgedRect.entityShape(viewNode, backgroundClass, shapeStyle);
@@ -61,7 +60,7 @@ function componentDecoration(
   left: number,
   top: number,
   backgroundClass: string | undefined,
-  shapeStyle: React.CSSProperties | undefined,
+  shapeStyle: CSSProperties | undefined,
 ) {
   return (
     <>

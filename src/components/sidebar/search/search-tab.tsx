@@ -1,5 +1,5 @@
 import Fuse, { FuseResult } from "fuse.js";
-import * as React from "react";
+import { ChangeEvent, MouseEvent, useEffect, useState } from "react";
 import {
   Button,
   Card,
@@ -21,31 +21,31 @@ export default function SearchTab({
   resultClicked: entityClickedFunc;
   searchText?: string;
 }) {
-  const [fuse, setFuse] = React.useState<Fuse<IEntity> | null>(null);
-  const [results, setResults] = React.useState<FuseResult<IEntity>[]>([]);
-  const [search, setSearch] = React.useState(searchText || "");
+  const [fuse, setFuse] = useState<Fuse<IEntity> | null>(null);
+  const [results, setResults] = useState<FuseResult<IEntity>[]>([]);
+  const [search, setSearch] = useState(searchText || "");
 
-  const fuseOptions = {
-    distance: 100,
-    keys: ["name", "type", "documentation", "properties"],
-    location: 0,
-    maxPatternLength: 32,
-    shouldSort: true,
-    threshold: 0.6,
-  };
+  useEffect(() => {
+    const fuseOptions = {
+      distance: 100,
+      keys: ["name", "type", "documentation", "properties"],
+      location: 0,
+      maxPatternLength: 32,
+      shouldSort: true,
+      threshold: 0.6,
+    };
 
-  React.useEffect(() => {
     setFuse(new Fuse<IEntity>(model ? model.entities() : [], fuseOptions));
   }, [model]);
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     if (search.length > 0 && fuse) {
       setResults(fuse.search(search));
     }
   };
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const newSearch = event.currentTarget.value;
     setSearch(newSearch);
     if (newSearch.length > 0 && fuse) {

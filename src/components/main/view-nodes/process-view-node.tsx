@@ -1,13 +1,12 @@
 import { Bounds } from "@/archimate-model";
 import { ViewNode } from "@/archimate-model";
 import * as BadgedRoundedRectViewNode from "./badged-rounded-rect";
-import * as React from "react";
-import { JSX } from "react";
+import { CSSProperties, JSX } from "react";
 
 export function entityShape(
   viewNode: ViewNode,
   backgroundClass: string | undefined,
-  shapeStyle: React.CSSProperties | undefined,
+  shapeStyle: CSSProperties | undefined,
 ): JSX.Element {
   if (viewNode.childType === "1") {
     return processPath(viewNode, backgroundClass, shapeStyle);
@@ -37,7 +36,7 @@ export function textBounds(viewNode: ViewNode): Bounds {
 function processPath(
   viewNode: ViewNode,
   backgroundClass: string | undefined,
-  shapeStyle: React.CSSProperties | undefined,
+  shapeStyle: CSSProperties | undefined,
 ): JSX.Element {
   const bounds = viewNode.absolutePosition();
   const top = bounds.top;

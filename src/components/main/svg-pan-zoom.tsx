@@ -1,26 +1,26 @@
-import * as React from "react";
+import { KeyboardEvent, PureComponent, ReactNode, RefObject } from "react";
 import * as wheel from "wheel";
 import { LogicError, Point } from "../../archimate-model";
 import { ZoomMode } from "./archimate-diagram-view";
 
-interface IProps {
+type IProps = {
   maxX: number;
   maxY: number;
   minX: number;
   minY: number;
   onZoom: (scale: number) => void;
   scale: number;
-  svgPanZoomRef: React.RefObject<SVGGElement | null>;
+  svgPanZoomRef: RefObject<SVGGElement | null>;
   zoomMode: ZoomMode;
-  children?: React.ReactNode;
-}
+  children?: ReactNode;
+};
 
-interface IState {
+type IState = {
   clientHeight: number;
   clientWidth: number;
   tx: number;
   ty: number;
-}
+};
 
 const DIAGRAM_MARGIN = 24;
 
@@ -28,7 +28,7 @@ const MOUSE_WHEEL_SPEED = 0.065;
 
 const BOUNDS_PADDING = 0.05;
 
-export default class SvgPanZoom extends React.PureComponent<IProps, IState> {
+export default class SvgPanZoom extends PureComponent<IProps, IState> {
   private minZoom: number = 0;
   private maxZoom: number = Number.POSITIVE_INFINITY;
   private storedCTMResult?: Point;
@@ -202,7 +202,7 @@ export default class SvgPanZoom extends React.PureComponent<IProps, IState> {
     }
   };
 
-  private onKeyDown = (e: React.KeyboardEvent<SVGGElement>) => {
+  private onKeyDown = (e: KeyboardEvent<SVGGElement>) => {
     let x = 0;
     let y = 0;
     let z = 0;

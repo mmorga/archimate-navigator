@@ -27,13 +27,14 @@ import { Set } from "immutable";
 
 export default function ArchimateNavigator({
   modelUrl,
-  selectedDiagramId,
-  selectedEntityId,
 }: {
   modelUrl: string; // URL of model to load
-  selectedDiagramId?: string; // diagram id to load from model
-  selectedEntityId?: string; // entity id to select
 }) {
+  const [windowHash, setWindowHash] = useState(window.location.hash);
+  window.addEventListener("hashchange", () => {
+    setWindowHash(window.location.hash);
+  });
+
   const [error, setError] = useState<string | Error>();
   const [model, setModel] = useState<Model | undefined>(undefined);
   const [query, setQuery] = useState<Query | undefined>(undefined);
@@ -67,17 +68,13 @@ export default function ArchimateNavigator({
               const parsedModel = parse(xmlDocument.children[0].ownerDocument);
               if (parsedModel) {
                 const newSelectedDiagram = parsedModel.lookupDiagram(
-                  selectedDiagramId || window.location.hash.replace(/^#/, ""),
+                  windowHash.replace(/^#/, ""),
                 );
-                const newSelectedEntity =
-                  parsedModel.lookup(selectedEntityId) ||
-                  newSelectedDiagram ||
-                  parsedModel;
 
                 setModel(parsedModel);
                 setQuery(initQuery(parsedModel));
                 setSelectedDiagram(newSelectedDiagram);
-                setSelectedEntity(newSelectedEntity);
+                setSelectedEntity(newSelectedDiagram);
               }
             } else {
               setError("ArchiMate Model Document was null");
@@ -99,7 +96,11 @@ export default function ArchimateNavigator({
           setWorking(undefined);
         },
       );
-  }, [modelUrl]);
+  }, [modelUrl, windowHash]);
+
+  useEffect(() => {
+    window.location.hash = windowHash;
+  }, [windowHash]);
 
   const onQueryNameChanged = (name: string) => {
     if (query) {
@@ -181,10 +182,6 @@ export default function ArchimateNavigator({
     if (queryUpdate && model) {
       setQuery(queryUpdate);
       const diagram = run(queryUpdate, model);
-      // setSelectedQuery(query);
-      // onDiagramUpdated(diagram);
-      // setSelectedDiagram(diagram);
-      // setSelectedEntity(diagram);
       onDiagramLinkClick(diagram);
     }
   };
@@ -202,7 +199,8 @@ export default function ArchimateNavigator({
     setSelectedDiagram(diagram);
     setSelectedEntity(diagram);
     if (diagram && diagram.id && diagram.id.length > 0) {
-      window.location.hash = `#${diagram.id}`;
+      setWindowHash(`#${diagram.id}`);
+      // window.location.hash = `#${diagram.id}`;
     }
   };
 

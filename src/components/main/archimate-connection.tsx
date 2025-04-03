@@ -1,5 +1,4 @@
-import * as React from "react";
-import { JSX } from "react";
+import { CSSProperties, JSX, SVGProps, useEffect, useState } from "react";
 import { Connection, Path } from "../../archimate-model";
 import { entityClickedFunc } from "../common";
 import "./archimate-svg.css";
@@ -23,13 +22,11 @@ export default function ArchimateConnection({
   toX: number;
   toY: number;
 }) {
-  const [path, setPath] = React.useState(
-    () => new Path(connection, autoLayout),
-  );
+  const [path, setPath] = useState(() => new Path(connection, autoLayout));
   const sourceEntity = connection.sourceViewNode();
   const targetEntity = connection.targetViewNode();
 
-  React.useEffect(() => {
+  useEffect(() => {
     setPath(new Path(connection, autoLayout));
   }, [connection, autoLayout, fromX, fromY, toX, toY]);
 
@@ -51,8 +48,8 @@ export default function ArchimateConnection({
     return <path {...attrs} />;
   };
 
-  const groupAttrs = (): React.SVGProps<SVGGElement> => {
-    const attrs: React.SVGProps<SVGGElement> = { id: connection.id };
+  const groupAttrs = (): SVGProps<SVGGElement> => {
+    const attrs: SVGProps<SVGGElement> = { id: connection.id };
     if (onClicked) {
       attrs.onClick = onClicked.bind(null, connection.entityInstance());
     }
@@ -79,12 +76,12 @@ export default function ArchimateConnection({
     );
   };
 
-  const lineStyle = (): React.CSSProperties => {
+  const lineStyle = (): CSSProperties => {
     const style = connection.style;
     if (style === undefined) {
       return {};
     }
-    const cssStyle: React.CSSProperties = {};
+    const cssStyle: CSSProperties = {};
     if (style.lineColor) {
       cssStyle.stroke = style.lineColor.toRGBA();
     }
@@ -94,12 +91,12 @@ export default function ArchimateConnection({
     return cssStyle;
   };
 
-  const textStyle = (): React.CSSProperties => {
+  const textStyle = (): CSSProperties => {
     const style = connection.style;
     if (style === undefined) {
       return {};
     }
-    const cssStyle: React.CSSProperties = {};
+    const cssStyle: CSSProperties = {};
     if (style.fontColor) {
       cssStyle.fill = style.fontColor.toRGBA();
       cssStyle.color = style.fontColor.toRGBA();
@@ -134,7 +131,7 @@ export default function ArchimateConnection({
     }
   };
 
-  const pathAttrs = (): React.SVGProps<SVGPathElement> => {
+  const pathAttrs = (): SVGProps<SVGPathElement> => {
     return {
       className: pathClass(),
       d: path.d(),

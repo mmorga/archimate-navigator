@@ -1,6 +1,5 @@
 import type * as CSS from "csstype";
-import * as React from "react";
-import { JSX, useEffect, useState } from "react";
+import { CSSProperties, JSX, SVGProps, useEffect, useState } from "react";
 import "./archimate-svg.css";
 import {
   Bounds,
@@ -40,16 +39,16 @@ import * as ValueViewNode from "./view-nodes/value-view-node";
 import SelectedViewNode from "./selected-view-node";
 import EntityBadge from "./view-nodes/entity-badge";
 
-interface IArchimateViewNodeProps {
+type IArchimateViewNodeProps = {
   viewNode: ViewNode;
   onClicked: entityClickedFunc;
   selected: boolean;
   x: number;
   y: number;
-}
+};
 
-export const ArchimateViewNode: React.FC<IArchimateViewNodeProps> = (props) => {
-  const attrs: React.SVGProps<SVGGElement> = {};
+export const ArchimateViewNode = (props: IArchimateViewNodeProps) => {
+  const attrs: SVGProps<SVGGElement> = {};
   if (props.viewNode.type && props.viewNode.type.length > 0) {
     attrs.className = `archimate-${props.viewNode.elementType()}`;
   }
@@ -58,7 +57,7 @@ export const ArchimateViewNode: React.FC<IArchimateViewNodeProps> = (props) => {
   }
 
   const [archimateProps, setArchimateProps] = useState(
-    archimateViewNodeProps(props.viewNode),
+    archimateViewNodeState(props.viewNode),
   );
   const [bounds, setBounds] = useState(props.viewNode.absolutePosition());
 
@@ -66,9 +65,9 @@ export const ArchimateViewNode: React.FC<IArchimateViewNodeProps> = (props) => {
     const curBounds = props.viewNode.absolutePosition();
     if (!bounds.equals(curBounds)) {
       setBounds(curBounds);
-      setArchimateProps(archimateViewNodeProps(props.viewNode));
+      setArchimateProps(archimateViewNodeState(props.viewNode));
     }
-  }, [archimateProps]);
+  }, [bounds, props.viewNode, archimateProps]);
 
   return (
     <g
@@ -124,7 +123,7 @@ function Documentation({
   return undefined;
 }
 
-export interface IArchimateViewNodeInstProps {
+type IArchimateViewNodeState = {
   badge: string | undefined;
   backgroundClass: string;
   entity: IEntity | undefined;
@@ -134,7 +133,7 @@ export interface IArchimateViewNodeInstProps {
   entityShape(
     viewNode: ViewNode,
     backgroundClass: string | undefined,
-    shapeStyle: React.CSSProperties | undefined,
+    shapeStyle: CSSProperties | undefined,
   ): JSX.Element | undefined;
   entityLabel(
     viewNode: ViewNode,
@@ -142,11 +141,9 @@ export interface IArchimateViewNodeInstProps {
     textAlign: CSS.Property.TextAlign,
     badgeBounds: Bounds | undefined,
   ): JSX.Element | undefined;
-}
+};
 
-function archimateViewNodeProps(
-  viewNode: ViewNode,
-): IArchimateViewNodeInstProps {
+function archimateViewNodeState(viewNode: ViewNode): IArchimateViewNodeState {
   return {
     badge: undefined,
     backgroundClass: layerClassName(
@@ -165,7 +162,7 @@ function archimateViewNodeProps(
 function entityShape(
   viewNode: ViewNode,
   backgroundClass: string | undefined,
-  shapeStyle: React.CSSProperties | undefined,
+  shapeStyle: CSSProperties | undefined,
 ) {
   const bounds = viewNode.absolutePosition();
   return (
@@ -180,12 +177,12 @@ function entityShape(
   );
 }
 
-function shapeStyle(viewNode: ViewNode): React.CSSProperties {
+function shapeStyle(viewNode: ViewNode): CSSProperties {
   const style = viewNode.style;
   if (style === undefined) {
     return {};
   }
-  const cssStyle: React.CSSProperties = {};
+  const cssStyle: CSSProperties = {};
   if (style.fillColor) {
     cssStyle.fill = style.fillColor.toRGBA();
   }
@@ -198,9 +195,7 @@ function shapeStyle(viewNode: ViewNode): React.CSSProperties {
   return cssStyle;
 }
 
-function elementProps(
-  viewNode: ViewNode,
-): Partial<IArchimateViewNodeInstProps> {
+function elementProps(viewNode: ViewNode): Partial<IArchimateViewNodeState> {
   switch (viewNode.elementType()) {
     case "AndJunction":
     case "Junction":

@@ -6,10 +6,10 @@ import { Query } from "./query";
 import { Relationship } from "./relationship";
 import { RelationshipType } from "./relationship-type";
 
-interface ISearchQueueItem {
+type ISearchQueueItem = {
   element: Element;
   depth: number;
-}
+};
 
 // Using a Breadth First Search approach
 // Changes from a visit pattern to something that generates query results
@@ -44,13 +44,13 @@ export function runQuery(query: Query): [Element[], Relationship[]] {
   return [resultElements, resultRelationships];
 }
 
-interface ISpiderAccumulator {
+type ISpiderAccumulator = {
   maxPathDepth: number;
   queue: ISearchQueueItem[];
   relationships: Relationship[];
   searchQueueItem: ISearchQueueItem;
   visited: Set<Element>;
-}
+};
 
 export function spiderRelationships(
   acc: ISpiderAccumulator,

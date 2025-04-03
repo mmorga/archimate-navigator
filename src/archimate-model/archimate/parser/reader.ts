@@ -1,9 +1,9 @@
 import { UnsupportedFormat } from "../interfaces";
 import { ArchiFileReader } from "./archi/archi-file-reader";
 
-export interface IUnsupportedFormat {
+export type IUnsupportedFormat = {
   xmlns?: string;
-}
+};
 
 export function parse(doc: XMLDocument) {
   const nsAttr = doc.children[0].attributes.getNamedItem("xmlns");

@@ -1,17 +1,16 @@
 import { Bounds, ViewNode } from "../../../archimate-model";
-import { JSX } from "react";
+import { CSSProperties, JSX } from "react";
 import * as BaseViewNode from "./base-view-node";
-import * as React from "react";
 
 export function entityShape(
   viewNode: ViewNode,
   backgroundClass: string | undefined,
-  shapeStyle: React.CSSProperties | undefined,
+  shapeStyle: CSSProperties | undefined,
 ): JSX.Element {
   const bounds = viewNode.absolutePosition();
   const style = shapeStyle;
   const margin = 8;
-  const decorStyle: React.CSSProperties = {
+  const decorStyle: CSSProperties = {
     stroke: style?.stroke,
     strokeWidth: style?.strokeWidth,
   };

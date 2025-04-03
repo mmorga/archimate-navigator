@@ -1,13 +1,12 @@
-import * as React from "react";
-import { useState } from "react";
+import { DragEventHandler, memo, useState } from "react";
 import "./archimate-navigator.css";
 
-interface IProps {
+type IProps = {
   initialX: number;
   onChange: (position: number) => void;
-}
+};
 
-const DragSizer: React.FC<IProps> = React.memo(({ initialX, onChange }) => {
+const DragSizer = memo(({ initialX, onChange }: IProps) => {
   const [state, setState] = useState({
     clientX: initialX,
     color: "gray",
@@ -15,7 +14,7 @@ const DragSizer: React.FC<IProps> = React.memo(({ initialX, onChange }) => {
     dragState: "",
   });
 
-  const onDrag: React.DragEventHandler<HTMLDivElement> = (ev) => {
+  const onDrag: DragEventHandler<HTMLDivElement> = (ev) => {
     setState((prev) => ({
       ...prev,
       clientX: ev.clientX,
@@ -25,7 +24,7 @@ const DragSizer: React.FC<IProps> = React.memo(({ initialX, onChange }) => {
     onChange(ev.clientX);
   };
 
-  const onDragStart: React.DragEventHandler<HTMLDivElement> = () => {
+  const onDragStart: DragEventHandler<HTMLDivElement> = () => {
     // Commented out as in original
     // setState(prev => ({
     //   ...prev,
@@ -36,7 +35,7 @@ const DragSizer: React.FC<IProps> = React.memo(({ initialX, onChange }) => {
     // ev.dataTransfer.setData('text/plain', ev.clientX.toString());
   };
 
-  const onDragEnd: React.DragEventHandler<HTMLDivElement> = (ev) => {
+  const onDragEnd: DragEventHandler<HTMLDivElement> = (ev) => {
     setState((prev) => ({
       ...prev,
       clientX: ev.clientX,
@@ -46,7 +45,7 @@ const DragSizer: React.FC<IProps> = React.memo(({ initialX, onChange }) => {
     onChange(ev.clientX);
   };
 
-  const onDragExit: React.DragEventHandler<HTMLDivElement> = () => {
+  const onDragExit: DragEventHandler<HTMLDivElement> = () => {
     setState((prev) => ({
       ...prev,
       color: "gray",

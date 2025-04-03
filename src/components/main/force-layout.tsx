@@ -1,21 +1,21 @@
 import * as d3force from "d3-force";
 import { is, Set } from "immutable";
-import * as React from "react";
+import { PureComponent, ReactNode } from "react";
 import { Connection, VIEW_NODE_WIDTH, ViewNode } from "../../archimate-model";
 
-interface IProps {
+type IProps = {
   centerX: number;
   centerY: number;
   connections: Connection[];
   autoLayout: boolean;
   nodes: ViewNode[];
   onForceLayoutTick?: () => void;
-  children?: React.ReactNode;
-}
+  children?: ReactNode;
+};
 
 const DEFAULT_DISTANCE = 30; // Default distance for D3 Force simulations
 
-export default class ForceLayout extends React.PureComponent<IProps> {
+export default class ForceLayout extends PureComponent<IProps> {
   private forceLink?: d3force.ForceLink<ViewNode, Connection>;
   private simulation?: d3force.Simulation<ViewNode, Connection>;
   private prevNodes: Set<string>;

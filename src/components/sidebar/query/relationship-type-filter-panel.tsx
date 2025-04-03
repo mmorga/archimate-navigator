@@ -1,5 +1,5 @@
 import { Set } from "immutable";
-import { PureComponent, JSX } from "react";
+import { JSX, useCallback, useEffect, useState } from "react";
 import {
   Button,
   ButtonGroup,
@@ -21,160 +21,91 @@ import CollapsibleFormGroup, {
   ValidationState,
 } from "./collapsible-form-group";
 
-interface IProps {
+type IProps = {
   query: Query;
   onQueryChanged: (query: Query) => void;
-}
+};
 
-interface IState {
-  validationState: ValidationState;
-}
+export default function RelationshipTypeFilterPanel({
+  query,
+  onQueryChanged,
+}: IProps) {
+  const [validationState, setValidationState] =
+    useState<ValidationState>("error");
+  const [prevQuery, setPrevQuery] = useState(query);
 
-export default class RelationshipTypeFilterPanel extends PureComponent<
-  IProps,
-  IState
-> {
-  constructor(props: IProps) {
-    super(props);
-    this.state = {
-      validationState: this.validationState(),
-    };
-  }
-
-  public render() {
-    const noneTooltip = (
-      <Tooltip id="relationship-type-none-tooltip">
-        Unselect all Relationship Types
-      </Tooltip>
-    );
-    const allTooltip = (
-      <Tooltip id="relationship-type-all-tooltip">
-        Select all Relationship Types
-      </Tooltip>
-    );
-    return (
-      <CollapsibleFormGroup
-        label={this.label()}
-        labelStyle={
-          this.props.query.relationshipTypes.size === 0 ? "danger" : "info"
-        }
-        defaultExpanded={false}
-        title="Relationship Types Filter"
-        validationState={this.state.validationState}
-      >
-        <FormGroup>
-          <Form.Check
-            type="checkbox"
-            onChange={this.onDerivedRelationsToggle}
-            label="Include Derived Relations"
-          />
-        </FormGroup>
-
-        <ButtonGroup>
-          <OverlayTrigger placement="top" overlay={allTooltip}>
-            <Button onClick={this.onSelectAll}>All</Button>
-          </OverlayTrigger>
-          <OverlayTrigger placement="top" overlay={noneTooltip}>
-            <Button onClick={this.onSelectNone}>None</Button>
-          </OverlayTrigger>
-        </ButtonGroup>
-        <ListGroup>
-          {RelationshipTypes.sort().map((el) =>
-            el ? (
-              <ListGroupItem key={el}>
-                <div className="pull-right">
-                  {this.addRemoveRelationshipType(el)}
-                </div>
-                {<span className="text-primary">{el}</span>}
-              </ListGroupItem>
-            ) : undefined,
-          )}
-        </ListGroup>
-        <Form.Text muted>Relationship Types to include in the query</Form.Text>
-      </CollapsibleFormGroup>
-    );
-  }
-
-  public componentDidUpdate(prevProps: IProps, prevState: IState) {
-    if (
-      this.props.query.relationshipTypes !== prevProps.query.relationshipTypes
-    ) {
-      const newValidationState = this.validationState();
-      if (newValidationState !== prevState.validationState) {
-        this.setState({ validationState: newValidationState });
-      }
-    }
-  }
-
-  private validationState(): ValidationState {
-    if (this.props.query.relationshipTypes.size === 0) {
+  const calcValidationState = useCallback((): ValidationState => {
+    if (query.relationshipTypes.size === 0) {
       return "error";
     } else {
       return null;
     }
-  }
+  }, [query.relationshipTypes]);
 
-  private onSelectAll = () => {
-    this.props.onQueryChanged(
-      updateQuery(this.props.query.model, this.props.query, {
+  useEffect(() => {
+    if (query.relationshipTypes !== prevQuery.relationshipTypes) {
+      setValidationState(calcValidationState());
+      setPrevQuery(query);
+    }
+  }, [calcValidationState, prevQuery.relationshipTypes, query]);
+
+  const onSelectAll = () => {
+    onQueryChanged(
+      updateQuery(query.model, query, {
         relationshipTypes: Set<RelationshipType>(RelationshipTypes),
       }),
     );
   };
 
-  private onSelectNone = () => {
-    this.props.onQueryChanged(
-      updateQuery(this.props.query.model, this.props.query, {
+  const onSelectNone = () => {
+    onQueryChanged(
+      updateQuery(query.model, query, {
         relationshipTypes: Set<RelationshipType>(),
       }),
     );
   };
 
-  private onAddClick = (relationshipType: RelationshipType) => {
-    this.props.onQueryChanged(
-      updateQuery(this.props.query.model, this.props.query, {
-        relationshipTypes:
-          this.props.query.relationshipTypes.add(relationshipType),
+  const onAddClick = (relationshipType: RelationshipType) => {
+    onQueryChanged(
+      updateQuery(query.model, query, {
+        relationshipTypes: query.relationshipTypes.add(relationshipType),
       }),
     );
   };
 
-  private onRemoveClick = (relationshipType: RelationshipType) => {
-    this.props.onQueryChanged(
-      updateQuery(this.props.query.model, this.props.query, {
-        relationshipTypes:
-          this.props.query.relationshipTypes.remove(relationshipType),
+  const onRemoveClick = (relationshipType: RelationshipType) => {
+    onQueryChanged(
+      updateQuery(query.model, query, {
+        relationshipTypes: query.relationshipTypes.remove(relationshipType),
       }),
     );
   };
 
-  private onDerivedRelationsToggle = () => {
-    this.props.onQueryChanged(
-      updateQuery(this.props.query.model, this.props.query, {
-        includeDerivedRelations: !this.props.query.includeDerivedRelations,
+  const onDerivedRelationsToggle = () => {
+    onQueryChanged(
+      updateQuery(query.model, query, {
+        includeDerivedRelations: !query.includeDerivedRelations,
       }),
     );
   };
 
-  private addRemoveRelationshipType(el: RelationshipType): JSX.Element {
+  function addRemoveRelationshipType(el: RelationshipType): JSX.Element {
     // TODO: should be working with Immutable v4
-    // const isSelected = this.props.query.relationshipTypes.includes(el);
-    const isSelected = this.props.query.relationshipTypes.some((e) =>
+    // const isSelected = query.relationshipTypes.includes(el);
+    const isSelected = query.relationshipTypes.some((e) =>
       e ? e === el : false,
     );
-    const onClick = isSelected
-      ? this.onRemoveClick.bind(this, el)
-      : this.onAddClick.bind(this, el);
+    const onClick = isSelected ? onRemoveClick : onAddClick;
     const bsStyle = isSelected ? "danger" : "primary";
     return (
-      <Button size="sm" variant={bsStyle} onClick={onClick}>
+      <Button size="sm" variant={bsStyle} onClick={() => onClick(el)}>
         {isSelected ? <Trash /> : <Plus />}
       </Button>
     );
   }
 
-  private label() {
-    const count = this.props.query.relationshipTypes.size;
+  function label() {
+    const count = query.relationshipTypes.size;
     switch (count) {
       case RelationshipTypes.length:
         return "All";
@@ -184,4 +115,54 @@ export default class RelationshipTypeFilterPanel extends PureComponent<
         return count.toString(10);
     }
   }
+
+  const noneTooltip = (
+    <Tooltip id="relationship-type-none-tooltip">
+      Unselect all Relationship Types
+    </Tooltip>
+  );
+
+  const allTooltip = (
+    <Tooltip id="relationship-type-all-tooltip">
+      Select all Relationship Types
+    </Tooltip>
+  );
+
+  return (
+    <CollapsibleFormGroup
+      label={label()}
+      labelStyle={query.relationshipTypes.size === 0 ? "danger" : "info"}
+      defaultExpanded={false}
+      title="Relationship Types Filter"
+      validationState={validationState}
+    >
+      <FormGroup>
+        <Form.Check
+          type="checkbox"
+          onChange={onDerivedRelationsToggle}
+          label="Include Derived Relations"
+        />
+      </FormGroup>
+
+      <ButtonGroup>
+        <OverlayTrigger placement="top" overlay={allTooltip}>
+          <Button onClick={onSelectAll}>All</Button>
+        </OverlayTrigger>
+        <OverlayTrigger placement="top" overlay={noneTooltip}>
+          <Button onClick={onSelectNone}>None</Button>
+        </OverlayTrigger>
+      </ButtonGroup>
+      <ListGroup>
+        {RelationshipTypes.sort().map((el) =>
+          el ? (
+            <ListGroupItem key={el}>
+              <div className="pull-right">{addRemoveRelationshipType(el)}</div>
+              {<span className="text-primary">{el}</span>}
+            </ListGroupItem>
+          ) : undefined,
+        )}
+      </ListGroup>
+      <Form.Text muted>Relationship Types to include in the query</Form.Text>
+    </CollapsibleFormGroup>
+  );
 }

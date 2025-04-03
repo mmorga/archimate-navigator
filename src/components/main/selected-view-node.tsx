@@ -1,12 +1,11 @@
-import * as React from "react";
 import { Bounds } from "../../archimate-model";
 
-interface IProps {
+type IProps = {
   bounds: Bounds;
   selected: boolean;
-}
+};
 
-const SelectedViewNode: React.FC<IProps> = (props) => {
+const SelectedViewNode = (props: IProps) => {
   if (!props.selected) {
     return undefined;
   }

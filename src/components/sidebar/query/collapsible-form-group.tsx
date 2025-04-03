@@ -1,10 +1,9 @@
-import * as React from "react";
-import { JSX } from "react";
+import { ReactNode, JSX } from "react";
 import { Accordion, Badge } from "react-bootstrap";
 
 export type ValidationState = "success" | "warning" | "error" | null;
 
-interface IProps {
+type IProps = {
   label?: string | JSX.Element;
   labelStyle?:
     | "primary"
@@ -16,10 +15,10 @@ interface IProps {
   defaultExpanded?: boolean;
   title: string | JSX.Element;
   validationState?: ValidationState;
-  children?: React.ReactNode;
-}
+  children?: ReactNode;
+};
 
-const CollapsibleFormGroup: React.FC<IProps> = (props) => {
+const CollapsibleFormGroup = (props: IProps) => {
   const titleClass = (): string | undefined => {
     switch (props.validationState) {
       case "success":

@@ -9,13 +9,13 @@ import {
   initQuery,
 } from "../../../archimate-model";
 import { List } from "immutable";
-import * as React from "react";
+import { ChangeEvent, useCallback, useState } from "react";
 import QueryPicker from "./query-picker";
 import QueryWizard from "./query-wizard";
 
 export type autoLayoutToggledFunc = (
   autoLayout: boolean,
-  event?: React.ChangeEvent<HTMLInputElement>,
+  event?: ChangeEvent<HTMLInputElement>,
 ) => void;
 
 export default function QueryTab({
@@ -41,18 +41,16 @@ export default function QueryTab({
   onAddElement: (element: Element) => void;
   onRemoveElement: (element: Element) => void;
 }) {
-  const [selectedQuery, setSelectedQuery] = React.useState<Query | undefined>(
-    query,
-  );
-  const [queries, setQueries] = React.useState<List<Query>>(
+  const [selectedQuery, setSelectedQuery] = useState<Query | undefined>(query);
+  const [queries, setQueries] = useState<List<Query>>(
     selectedQuery ? List([selectedQuery]) : List(),
   );
 
-  const onQuerySelected = React.useCallback((query: Query) => {
+  const onQuerySelected = useCallback((query: Query) => {
     setSelectedQuery(query);
   }, []);
 
-  const onNewQuery = React.useCallback(() => {
+  const onNewQuery = useCallback(() => {
     if (model) {
       const newQuery = initQuery(model);
       setQueries((prevQueries) => prevQueries.push(newQuery));

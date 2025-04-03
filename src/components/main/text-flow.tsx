@@ -1,6 +1,6 @@
 import "./archimate-svg.css";
 import { Bounds } from "../../archimate-model";
-import * as React from "react";
+import { CSSProperties } from "react";
 
 type TextLine = {
   text: string;
@@ -17,7 +17,7 @@ export default function TextFlow({
   text: string;
   bounds: Bounds;
   badgeBounds: Bounds;
-  style: React.CSSProperties;
+  style: CSSProperties;
 }) {
   const getMaxLineWidth = (): number => {
     if (badgeBounds && badgeBounds.width > 0) {

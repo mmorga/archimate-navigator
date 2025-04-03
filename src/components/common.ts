@@ -1,6 +1,7 @@
 import { IEntity } from "../archimate-model";
+import { MouseEvent } from "react";
 
 export type entityClickedFunc = (
   entity: IEntity | undefined,
-  event?: React.MouseEvent<Element>,
+  event?: MouseEvent<Element>,
 ) => void;

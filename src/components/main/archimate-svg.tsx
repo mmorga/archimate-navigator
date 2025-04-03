@@ -1,28 +1,28 @@
-import * as React from "react";
+import { ReactNode, CSSProperties } from "react";
 import "./archimate-svg.css";
 
-interface IProps {
+type IProps = {
   diagramName: string | undefined;
   viewBox: SVGRect | undefined;
-  children?: React.ReactNode;
-}
+  children?: ReactNode;
+};
 
-const ArchimateSvg: React.FC<IProps> = (props) => {
-  const style2: React.CSSProperties = {
+const ArchimateSvg = (props: IProps) => {
+  const style2: CSSProperties = {
     fill: "none",
     stroke: "inherit",
     strokeLinecap: "butt",
     strokeLinejoin: "miter",
     strokeWidth: 1,
   };
-  const style3: React.CSSProperties = {
+  const style3: CSSProperties = {
     fill: "none",
     stroke: "inherit",
     strokeLinecap: "round",
     strokeLinejoin: "round",
     strokeWidth: 1,
   };
-  const style4: React.CSSProperties = {
+  const style4: CSSProperties = {
     fill: "none",
     stroke: "inherent",
     strokeWidth: 0.7,

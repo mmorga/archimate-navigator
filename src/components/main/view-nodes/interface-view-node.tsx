@@ -1,12 +1,11 @@
-import * as React from "react";
 import * as BadgedRect from "./badged-rect";
-import { JSX } from "react";
+import { CSSProperties, JSX } from "react";
 import { ViewNode } from "../../../archimate-model";
 
 function elipsePath(
   viewNode: ViewNode,
   backgroundClass: string | undefined,
-  shapeStyle: React.CSSProperties | undefined,
+  shapeStyle: CSSProperties | undefined,
 ): JSX.Element {
   const bounds = viewNode.absolutePosition();
   return (
@@ -24,7 +23,7 @@ function elipsePath(
 export function interfaceEntityShape(
   viewNode: ViewNode,
   backgroundClass: string | undefined,
-  shapeStyle: React.CSSProperties | undefined,
+  shapeStyle: CSSProperties | undefined,
 ): JSX.Element {
   if (viewNode.childType === "1") {
     return elipsePath(viewNode, backgroundClass, shapeStyle);
