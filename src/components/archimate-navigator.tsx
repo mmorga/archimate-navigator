@@ -30,10 +30,10 @@ export default function ArchimateNavigator({
 }: {
   modelUrl: string; // URL of model to load
 }) {
-  const [windowHash, setWindowHash] = useState(window.location.hash);
-  window.addEventListener("hashchange", () => {
-    setWindowHash(window.location.hash);
-  });
+  // const [windowHash, setWindowHash] = useState(window.location.hash);
+  // window.addEventListener("hashchange", () => {
+  //   setWindowHash(window.location.hash);
+  // });
 
   const [error, setError] = useState<string | Error>();
   const [model, setModel] = useState<Model | undefined>(undefined);
@@ -67,9 +67,10 @@ export default function ArchimateNavigator({
             if (xmlDocument.children[0].ownerDocument) {
               const parsedModel = parse(xmlDocument.children[0].ownerDocument);
               if (parsedModel) {
-                const newSelectedDiagram = parsedModel.lookupDiagram(
-                  windowHash.replace(/^#/, ""),
-                );
+                const newSelectedDiagram = undefined;
+                // parsedModel.lookupDiagram(
+                //   windowHash.replace(/^#/, ""),
+                // );
 
                 setModel(parsedModel);
                 setQuery(initQuery(parsedModel));
@@ -96,11 +97,11 @@ export default function ArchimateNavigator({
           setWorking(undefined);
         },
       );
-  }, [modelUrl, windowHash]);
+  }, [modelUrl]);
 
-  useEffect(() => {
-    window.location.hash = windowHash;
-  }, [windowHash]);
+  // useEffect(() => {
+  //   window.location.hash = windowHash;
+  // }, [windowHash]);
 
   const onQueryNameChanged = (name: string) => {
     if (query) {
@@ -198,10 +199,10 @@ export default function ArchimateNavigator({
     const diagram = entity as Diagram;
     setSelectedDiagram(diagram);
     setSelectedEntity(diagram);
-    if (diagram && diagram.id && diagram.id.length > 0) {
-      setWindowHash(`#${diagram.id}`);
-      // window.location.hash = `#${diagram.id}`;
-    }
+    // if (diagram && diagram.id && diagram.id.length > 0) {
+    //   setWindowHash(`#${diagram.id}`);
+    //   // window.location.hash = `#${diagram.id}`;
+    // }
   };
 
   const onEntityClick = (entity: IEntity | undefined) => {

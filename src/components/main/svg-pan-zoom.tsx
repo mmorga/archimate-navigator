@@ -1,5 +1,5 @@
 import { KeyboardEvent, PureComponent, ReactNode, RefObject } from "react";
-import * as wheel from "wheel";
+import wheel from "wheel";
 import { LogicError, Point } from "../../archimate-model";
 import { ZoomMode } from "./archimate-diagram-view";
 
