@@ -156,8 +156,6 @@ export default function ArchimateDiagramView({
           viewBox={viewBox()}
         >
           <ForceLayout
-            centerX={(extents.maxX - extents.minX) / 2}
-            centerY={(extents.maxY - extents.minY) / 2}
             connections={connections}
             autoLayout={isAutoLayout()}
             nodes={nodes}
