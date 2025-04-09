@@ -1,25 +1,36 @@
 import { Bounds } from "@/archimate-model";
 import { ViewNode } from "@/archimate-model";
-import * as BadgedRoundedRectViewNode from "./badged-rounded-rect";
-import { CSSProperties, JSX } from "react";
+import BadgedRoundedRectShape from "./badged-rounded-rect-shape";
+import type {
+  EntityShapeComponent,
+  IEntityShapeProps,
+} from "./entity-shape-component";
 
-export function entityShape(
-  viewNode: ViewNode,
-  backgroundClass: string | undefined,
-  shapeStyle: CSSProperties | undefined,
-): JSX.Element {
+const ProcessShape: EntityShapeComponent = ({
+  viewNode,
+  backgroundClass,
+  shapeStyle,
+}: IEntityShapeProps) => {
   if (viewNode.childType === "1") {
-    return processPath(viewNode, backgroundClass, shapeStyle);
+    return (
+      <ProcessPath
+        viewNode={viewNode}
+        backgroundClass={backgroundClass}
+        shapeStyle={shapeStyle}
+      />
+    );
   } else {
-    return BadgedRoundedRectViewNode.entityShape(
-      viewNode,
-      backgroundClass,
-      shapeStyle,
+    return (
+      <BadgedRoundedRectShape
+        viewNode={viewNode}
+        backgroundClass={backgroundClass}
+        shapeStyle={shapeStyle}
+      />
     );
   }
-}
+};
 
-export function textBounds(viewNode: ViewNode): Bounds {
+export function processTextBounds(viewNode: ViewNode): Bounds {
   const bounds = viewNode.absolutePosition();
   const shaftTop = bounds.top + bounds.height * 0.15;
   const shaftBottom = bounds.bottom - bounds.height * 0.15;
@@ -33,11 +44,11 @@ export function textBounds(viewNode: ViewNode): Bounds {
   return textBounds.reducedBy(2);
 }
 
-function processPath(
-  viewNode: ViewNode,
-  backgroundClass: string | undefined,
-  shapeStyle: CSSProperties | undefined,
-): JSX.Element {
+const ProcessPath: EntityShapeComponent = ({
+  viewNode,
+  backgroundClass,
+  shapeStyle,
+}: IEntityShapeProps) => {
   const bounds = viewNode.absolutePosition();
   const top = bounds.top;
   const shaftTop = bounds.top + bounds.height * 0.15;
@@ -78,4 +89,6 @@ function processPath(
       style={shapeStyle}
     />
   );
-}
+};
+
+export default ProcessShape;

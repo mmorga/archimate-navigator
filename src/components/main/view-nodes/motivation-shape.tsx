@@ -1,12 +1,13 @@
-import { Bounds } from "../../../archimate-model";
-import { CSSProperties, JSX } from "react";
-import { ViewNode } from "@/archimate-model";
+import type {
+  EntityShapeComponent,
+  IEntityShapeProps,
+} from "./entity-shape-component";
 
-export function entityShape(
-  viewNode: ViewNode,
-  backgroundClass: string | undefined,
-  shapeStyle: CSSProperties | undefined,
-): JSX.Element {
+const MotivationShape: EntityShapeComponent = ({
+  viewNode,
+  backgroundClass,
+  shapeStyle,
+}: IEntityShapeProps) => {
   const bounds = viewNode.absolutePosition();
   const margin = 10;
   const width = bounds.width - margin * 2;
@@ -40,9 +41,6 @@ export function entityShape(
       style={shapeStyle}
     />
   );
-}
+};
 
-export function badgeBounds(viewNode: ViewNode): Bounds {
-  const bounds = viewNode.absolutePosition();
-  return new Bounds(bounds.right - 25, bounds.top + 5, 20, 20);
-}
+export default MotivationShape;

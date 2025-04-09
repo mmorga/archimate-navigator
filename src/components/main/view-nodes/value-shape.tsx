@@ -1,7 +1,10 @@
 import { Bounds, ViewNode } from "../../../archimate-model";
-import { JSX } from "react";
+import type {
+  EntityShapeComponent,
+  IEntityShapeProps,
+} from "./entity-shape-component";
 
-export function textBounds(viewNode: ViewNode): Bounds {
+export function valueTextBounds(viewNode: ViewNode): Bounds {
   const bounds = viewNode.absolutePosition();
   return new Bounds(
     bounds.left + 10,
@@ -11,10 +14,10 @@ export function textBounds(viewNode: ViewNode): Bounds {
   );
 }
 
-export function entityShape(
-  viewNode: ViewNode,
-  backgroundClass: string | undefined,
-): JSX.Element {
+const ValueShape: EntityShapeComponent = ({
+  viewNode,
+  backgroundClass,
+}: IEntityShapeProps) => {
   const bounds = viewNode.absolutePosition();
   const cx = bounds.left + bounds.width / 2.0;
   const rx = bounds.width / 2.0 - 1;
@@ -34,4 +37,6 @@ export function entityShape(
       }}
     />
   );
-}
+};
+
+export default ValueShape;

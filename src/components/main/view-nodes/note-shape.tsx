@@ -1,10 +1,12 @@
-import { JSX } from "react";
-import { ViewNode } from "../../../archimate-model";
+import type {
+  EntityShapeComponent,
+  IEntityShapeProps,
+} from "./entity-shape-component";
 
-export function entityShape(
-  viewNode: ViewNode,
-  backgroundClass: string | undefined,
-): JSX.Element {
+const NoteShape: EntityShapeComponent = ({
+  viewNode,
+  backgroundClass,
+}: IEntityShapeProps) => {
   const bounds = viewNode.absolutePosition();
   return (
     <path
@@ -31,4 +33,6 @@ export function entityShape(
       }}
     />
   );
-}
+};
+
+export default NoteShape;

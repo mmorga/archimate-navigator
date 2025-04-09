@@ -1,5 +1,6 @@
 import { Bounds, zeroBounds } from "./bounds";
 import { Connection } from "./connection";
+import { CSSProperties } from "react";
 import { Diagram } from "./diagram";
 import {
   IEntity,
@@ -200,6 +201,38 @@ export class ViewNode implements IViewNode, IEntityRef {
 
   public center() {
     return this.bounds!.center();
+  }
+
+  public label(): string | undefined {
+    if (this.content && this.content.length > 0) {
+      return this.content;
+    }
+    if (this.name && this.name.length > 0) {
+      return this.name;
+    }
+    const el = this.entityInstance();
+    if (el === undefined) {
+      return undefined;
+    }
+    return el.name;
+  }
+
+  public shapeStyle(): CSSProperties {
+    const style = this.style;
+    if (style === undefined) {
+      return {};
+    }
+    const cssStyle: CSSProperties = {};
+    if (style.fillColor) {
+      cssStyle.fill = style.fillColor.toRGBA();
+    }
+    if (style.lineColor) {
+      cssStyle.stroke = style.lineColor.toRGBA();
+    }
+    if (style.lineWidth) {
+      cssStyle.strokeWidth = style.lineWidth;
+    }
+    return cssStyle;
   }
 }
 

@@ -1,11 +1,13 @@
-import { ViewNode } from "../../../archimate-model";
-import { CSSProperties, JSX } from "react";
+import type {
+  EntityShapeComponent,
+  IEntityShapeProps,
+} from "./entity-shape-component";
 
-export function entityShape(
-  viewNode: ViewNode,
-  backgroundClass: string | undefined,
-  shapeStyle: CSSProperties | undefined,
-): JSX.Element {
+const DeliverableShape: EntityShapeComponent = ({
+  viewNode,
+  backgroundClass,
+  shapeStyle,
+}: IEntityShapeProps) => {
   const bounds = viewNode.absolutePosition();
   return (
     <>
@@ -39,4 +41,6 @@ export function entityShape(
       />
     </>
   );
-}
+};
+
+export default DeliverableShape;

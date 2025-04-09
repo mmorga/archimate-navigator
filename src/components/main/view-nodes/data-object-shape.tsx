@@ -1,12 +1,16 @@
 import { Bounds, ViewNode } from "../../../archimate-model";
-import { CSSProperties, JSX } from "react";
-import * as BaseViewNode from "./base-view-node";
+import { CSSProperties } from "react";
+import * as BaseViewNode from "./base-shape";
+import type {
+  EntityShapeComponent,
+  IEntityShapeProps,
+} from "./entity-shape-component";
 
-export function entityShape(
-  viewNode: ViewNode,
-  backgroundClass: string | undefined,
-  shapeStyle: CSSProperties | undefined,
-): JSX.Element {
+const DataObjectShape: EntityShapeComponent = ({
+  viewNode,
+  backgroundClass,
+  shapeStyle,
+}: IEntityShapeProps) => {
   const bounds = viewNode.absolutePosition();
   const style = shapeStyle;
   const margin = 8;
@@ -36,10 +40,10 @@ export function entityShape(
       />
     </g>
   );
-}
+};
 
-export function textBounds(viewNode: ViewNode): Bounds {
-  const textBounds = BaseViewNode.textBounds(viewNode);
+export function dataObjectTextBounds(viewNode: ViewNode): Bounds {
+  const textBounds = BaseViewNode.defaultTextBounds(viewNode);
   const margin: number = 8;
   return new Bounds(
     textBounds.left,
@@ -48,3 +52,5 @@ export function textBounds(viewNode: ViewNode): Bounds {
     textBounds.height - margin,
   );
 }
+
+export default DataObjectShape;

@@ -1,23 +1,22 @@
-import { Bounds } from "../../archimate-model";
+import { Bounds } from "../../../archimate-model";
 
 type IProps = {
   bounds: Bounds;
   selected: boolean;
 };
 
-const SelectedViewNode = (props: IProps) => {
-  if (!props.selected) {
+const SelectedViewNode = ({ bounds, selected }: IProps) => {
+  if (!selected) {
     return undefined;
   }
-  const b = props.bounds;
   return (
     <rect
       className="archimate-selected-element-highlight"
       style={{ display: "inherit" }}
-      x={b.x}
-      y={b.y}
-      width={b.width}
-      height={b.height}
+      x={bounds.x}
+      y={bounds.y}
+      width={bounds.width}
+      height={bounds.height}
     />
   );
 };

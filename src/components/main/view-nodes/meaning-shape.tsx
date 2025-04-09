@@ -1,11 +1,14 @@
-import { CSSProperties, JSX } from "react";
-import { Point, ViewNode } from "../../../archimate-model";
+import { Point } from "../../../archimate-model";
+import type {
+  EntityShapeComponent,
+  IEntityShapeProps,
+} from "./entity-shape-component";
 
-export function meaningEntityShape(
-  viewNode: ViewNode,
-  backgroundClass: string | undefined,
-  shapeStyle: CSSProperties | undefined,
-): JSX.Element {
+const MeaningShape: EntityShapeComponent = ({
+  viewNode,
+  backgroundClass,
+  shapeStyle,
+}: IEntityShapeProps) => {
   const bounds = viewNode.absolutePosition();
   const pts = [
     new Point(
@@ -64,4 +67,6 @@ export function meaningEntityShape(
       style={shapeStyle}
     />
   );
-}
+};
+
+export default MeaningShape;

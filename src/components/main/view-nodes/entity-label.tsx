@@ -1,57 +1,51 @@
-import { Bounds, ViewNode } from "../../archimate-model";
-import { CSSProperties, useEffect, useState } from "react";
-import TextFlow from "./text-flow";
+import { Bounds, ViewNode } from "../../../archimate-model";
+import { CSSProperties } from "react";
+import TextFlow from "../text-flow";
 import type * as CSS from "csstype";
 
 type IProps = {
-  child: ViewNode;
-  label: string;
+  viewNode: ViewNode;
   textBounds: Bounds;
   textAlign?: CSS.Property.TextAlign;
   badgeBounds: Bounds;
 };
 
-const EntityLabel = (props: IProps) => {
-  const [textAnchor, setTextAnchor] =
-    useState<CSS.Property.TextAnchor>("middle");
+const EntityLabel = ({
+  viewNode,
+  textBounds,
+  textAlign,
+  badgeBounds,
+}: IProps) => {
+  const textAnchor = calcTextAnchor(textAlign);
   // const lineHeight = 12; // TODO: This needs to be calculated
+  const label = viewNode.label();
 
-  useEffect(() => {
-    switch (props.textAlign) {
-      case "left":
-        setTextAnchor("start");
-        break;
-      case "right":
-        setTextAnchor("end");
-        break;
-      default:
-        setTextAnchor("middle");
-    }
-  }, [props.textAlign]);
-
-  if (!props.label || props.label.length === 0) {
+  if (
+    ["AndJunction", "Junction"].includes(viewNode.elementType()) ||
+    !label ||
+    label.length === 0
+  ) {
     return undefined;
   }
 
   const clipPathD = () => {
-    const tb = props.textBounds;
-    if (props.badgeBounds && props.badgeBounds.height + 2 < tb.height) {
-      const bb = props.badgeBounds;
+    if (badgeBounds && badgeBounds.height + 2 < textBounds.height) {
+      const bb = badgeBounds;
       const badgeNotchHeight = bb.height + 2;
       return [
         "M",
-        tb.left,
-        tb.top,
+        textBounds.left,
+        textBounds.top,
         "h",
-        tb.width - bb.width - 2,
+        textBounds.width - bb.width - 2,
         "v",
         badgeNotchHeight,
         "h",
         bb.width + 2,
         "v",
-        tb.height - badgeNotchHeight,
+        textBounds.height - badgeNotchHeight,
         "h",
-        -tb.width,
+        -textBounds.width,
         "z",
       ]
         .map((i) => i.toString())
@@ -59,14 +53,14 @@ const EntityLabel = (props: IProps) => {
     } else {
       return [
         "M",
-        tb.left,
-        tb.top,
+        textBounds.left,
+        textBounds.top,
         "h",
-        tb.width,
+        textBounds.width,
         "v",
-        tb.height,
+        textBounds.height,
         "h",
-        -tb.width,
+        -textBounds.width,
         "z",
       ]
         .map((i) => i.toString())
@@ -75,10 +69,9 @@ const EntityLabel = (props: IProps) => {
   };
 
   const lineX = (idx = 0) => {
-    if (props.textBounds === undefined) {
+    if (textBounds === undefined) {
       return 0;
     }
-    const textBounds = props.textBounds as Bounds;
     switch (textAnchor) {
       case "start":
         return textBounds.left;
@@ -86,19 +79,19 @@ const EntityLabel = (props: IProps) => {
         if (idx > 0) {
           return textBounds.right;
         } else {
-          return textBounds.right - props.badgeBounds.width;
+          return textBounds.right - badgeBounds.width;
         }
       default:
         if (idx > 0) {
           return textBounds.center().x;
         } else {
-          return textBounds.center().x - props.badgeBounds.width / 2.0;
+          return textBounds.center().x - badgeBounds.width / 2.0;
         }
     }
   };
 
   const textStyle = (textAnchor?: CSS.Property.TextAnchor): CSSProperties => {
-    const style = props.child.style;
+    const style = viewNode.style;
     if (style === undefined) {
       return {
         textAlign: "center",
@@ -115,8 +108,8 @@ const EntityLabel = (props: IProps) => {
     if (style.font && style.font.size) {
       cssStyle.fontSize = style.font.size;
     }
-    if (props.textAlign) {
-      cssStyle.textAlign = props.textAlign;
+    if (textAlign) {
+      cssStyle.textAlign = textAlign;
     }
     if (style.textAlignment) {
       cssStyle.textAlign = style.textAlignment;
@@ -125,8 +118,7 @@ const EntityLabel = (props: IProps) => {
     return cssStyle;
   };
 
-  const tb = props.textBounds;
-  const clipPathId = `${props.child.id}-clip-path`;
+  const clipPathId = `${viewNode.id}-clip-path`;
 
   return (
     <>
@@ -136,18 +128,33 @@ const EntityLabel = (props: IProps) => {
       <text
         clipPath={`url(#${clipPathId})`}
         x={lineX()}
-        y={tb.y}
+        y={textBounds.y}
         style={textStyle()}
       >
         <TextFlow
-          text={props.label}
-          bounds={props.textBounds}
-          badgeBounds={props.badgeBounds}
+          text={label}
+          bounds={textBounds}
+          badgeBounds={badgeBounds}
           style={textStyle(textAnchor)}
         />
       </text>
     </>
   );
 };
+
+function calcTextAnchor(
+  textAlign: CSS.Property.TextAlign | undefined,
+): CSS.Property.TextAnchor {
+  switch (textAlign) {
+    case "left":
+      return "start";
+      break;
+    case "right":
+      return "end";
+      break;
+    default:
+      return "middle";
+  }
+}
 
 export default EntityLabel;

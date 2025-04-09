@@ -1,11 +1,14 @@
 import { Bounds, ViewNode } from "../../../archimate-model";
-import { CSSProperties, JSX } from "react";
+import type {
+  EntityShapeComponent,
+  IEntityShapeProps,
+} from "./entity-shape-component";
 
-export function entityShape(
-  viewNode: ViewNode,
-  backgroundClass: string | undefined,
-  shapeStyle: CSSProperties | undefined,
-): JSX.Element {
+const BadgedNodeShape: EntityShapeComponent = ({
+  viewNode,
+  backgroundClass,
+  shapeStyle,
+}: IEntityShapeProps) => {
   const bounds = viewNode.absolutePosition();
   const margin = 14;
   const nodeBoxHeight = bounds.height - margin;
@@ -79,9 +82,9 @@ export function entityShape(
       />
     </g>
   );
-}
+};
 
-export function badgeBounds(viewNode: ViewNode): Bounds {
+export function badgedNodeBadgeBounds(viewNode: ViewNode): Bounds {
   const bounds = viewNode.absolutePosition();
   const margin = 14;
   return new Bounds(
@@ -92,7 +95,7 @@ export function badgeBounds(viewNode: ViewNode): Bounds {
   );
 }
 
-export function textBounds(viewNode: ViewNode): Bounds {
+export function badgedNodeTextBounds(viewNode: ViewNode): Bounds {
   const bounds = viewNode.absolutePosition();
   const margin = 14;
   const nodeBoxHeight = bounds.height - margin;
@@ -104,3 +107,5 @@ export function textBounds(viewNode: ViewNode): Bounds {
     nodeBoxHeight - 2,
   );
 }
+
+export default BadgedNodeShape;

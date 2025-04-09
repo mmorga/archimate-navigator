@@ -4,8 +4,6 @@ import { PureComponent, ReactNode } from "react";
 import { Connection, VIEW_NODE_WIDTH, ViewNode } from "../../archimate-model";
 
 type IProps = {
-  centerX: number;
-  centerY: number;
   connections: Connection[];
   autoLayout: boolean;
   nodes: ViewNode[];

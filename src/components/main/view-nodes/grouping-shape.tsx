@@ -1,11 +1,13 @@
-import { CSSProperties, JSX } from "react";
-import { ViewNode } from "../../../archimate-model";
+import type {
+  EntityShapeComponent,
+  IEntityShapeProps,
+} from "./entity-shape-component";
 
-export function entityShape(
-  viewNode: ViewNode,
-  backgroundClass: string | undefined,
-  shapeStyle: CSSProperties | undefined,
-): JSX.Element {
+const GroupingShape: EntityShapeComponent = ({
+  viewNode,
+  backgroundClass,
+  shapeStyle,
+}: IEntityShapeProps) => {
   const bounds = viewNode.absolutePosition();
   const groupHeaderHeight = 21;
   return (
@@ -35,4 +37,6 @@ export function entityShape(
       />
     </>
   );
-}
+};
+
+export default GroupingShape;
