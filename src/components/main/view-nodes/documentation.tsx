@@ -9,4 +9,14 @@ const Documentation = ({
   return undefined;
 };
 
+export const enterDocumentation = (
+  documentation: string | undefined,
+): SVGDescElement | undefined => {
+  if (documentation) {
+    const desc = document.createElementNS("http://www.w3.org/2000/svg", "desc");
+    desc.textContent = documentation;
+    return desc;
+  }
+};
+
 export default Documentation;

@@ -1,5 +1,6 @@
-import { Bounds } from "../../../archimate-model";
-import { ViewNode } from "../../../archimate-model";
+import { Bounds, ViewNode } from "../../../archimate-model";
+import { CSSProperties } from "react";
+import { svgRect } from "./base-shape";
 import type {
   EntityShapeComponent,
   IEntityShapeProps,
@@ -40,6 +41,41 @@ const GroupShape: EntityShapeComponent = ({
       />
       )
     </>
+  );
+};
+
+export const enterGroupShape = (
+  g: SVGGElement,
+  viewNode: ViewNode,
+  backgroundClass: string | undefined,
+  shapeStyle?: CSSProperties | undefined,
+): void => {
+  const bounds = viewNode.absolutePosition();
+  svgRect(
+    g,
+    bounds.left,
+    bounds.top + groupHeaderHeight,
+    bounds.width,
+    bounds.height - groupHeaderHeight,
+    backgroundClass,
+    shapeStyle,
+  );
+  svgRect(
+    g,
+    bounds.left,
+    bounds.top,
+    bounds.width / 2.0,
+    groupHeaderHeight,
+    backgroundClass,
+    shapeStyle,
+  );
+  svgRect(
+    g,
+    bounds.left,
+    bounds.top,
+    bounds.width / 2.0,
+    groupHeaderHeight,
+    "archimate-decoration",
   );
 };
 

@@ -1,3 +1,6 @@
+import { CSSProperties } from "react";
+import { svgRect } from "./base-shape";
+import { ViewNode } from "../../../archimate-model";
 import type {
   EntityShapeComponent,
   IEntityShapeProps,
@@ -20,6 +23,26 @@ const BadgedRoundedRectShape: EntityShapeComponent = ({
       className={backgroundClass}
       style={shapeStyle}
     />
+  );
+};
+
+export const enterBadgedRoundedRectShape = (
+  g: SVGGElement,
+  viewNode: ViewNode,
+  backgroundClass: string | undefined,
+  shapeStyle?: CSSProperties | undefined,
+): void => {
+  const bounds = viewNode.absolutePosition();
+  svgRect(
+    g,
+    bounds.left,
+    bounds.top,
+    bounds.width,
+    bounds.height,
+    backgroundClass,
+    shapeStyle,
+    5,
+    5,
   );
 };
 

@@ -1,3 +1,6 @@
+import { CSSProperties } from "react";
+import { svgPath, svgRect } from "./base-shape";
+import { Bounds, ViewNode } from "../../../archimate-model";
 import type {
   EntityShapeComponent,
   IEntityShapeProps,
@@ -13,30 +16,7 @@ const RepresentationShape: EntityShapeComponent = ({
   return (
     <>
       <path
-        d={[
-          "M",
-          bounds.left,
-          bounds.top,
-          "v",
-          bounds.height - 8,
-          "c",
-          0.167 * bounds.width,
-          0.133 * bounds.height,
-          0.336 * bounds.width,
-          0.133 * bounds.height,
-          bounds.width * 0.508,
-          0,
-          "c",
-          0.0161 * bounds.width,
-          -0.0778 * bounds.height,
-          0.322 * bounds.width,
-          -0.0778 * bounds.height,
-          bounds.width * 0.475,
-          0,
-          "v",
-          -(bounds.height - 8),
-          "z",
-        ].join(" ")}
+        d={representationPathD(bounds).join(" ")}
         className={backgroundClass}
         style={shapeStyle}
       />
@@ -51,5 +31,52 @@ const RepresentationShape: EntityShapeComponent = ({
     </>
   );
 };
+
+export const enterRepresentationShape = (
+  g: SVGGElement,
+  viewNode: ViewNode,
+  backgroundClass: string | undefined,
+  shapeStyle?: CSSProperties | undefined,
+): void => {
+  const bounds = viewNode.absolutePosition();
+  const margin = 8;
+  svgPath(g, representationPathD(bounds), backgroundClass, shapeStyle);
+  svgRect(
+    g,
+    // key="data-decoration"
+    bounds.left,
+    bounds.top,
+    bounds.width,
+    margin,
+    "archimate-decoration",
+  );
+};
+
+function representationPathD(bounds: Bounds) {
+  return [
+    "M",
+    bounds.left,
+    bounds.top,
+    "v",
+    bounds.height - 8,
+    "c",
+    0.167 * bounds.width,
+    0.133 * bounds.height,
+    0.336 * bounds.width,
+    0.133 * bounds.height,
+    bounds.width * 0.508,
+    0,
+    "c",
+    0.0161 * bounds.width,
+    -0.0778 * bounds.height,
+    0.322 * bounds.width,
+    -0.0778 * bounds.height,
+    bounds.width * 0.475,
+    0,
+    "v",
+    -(bounds.height - 8),
+    "z",
+  ];
+}
 
 export default RepresentationShape;

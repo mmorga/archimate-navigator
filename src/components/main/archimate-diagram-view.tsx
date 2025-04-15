@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { Button } from "react-bootstrap";
 import {
   ArrowsFullscreen,
@@ -11,18 +11,20 @@ import {
   Connection,
   Diagram,
   DiagramType,
+  // DiagramType,
   IEntity,
-  IEntityRef,
+  // IEntityRef,
   IExtents,
   ViewNode,
   calculateMaxExtents,
 } from "../../archimate-model";
 import { entityClickedFunc } from "../common";
-import ArchimateConnection from "./archimate-connection";
+// import ArchimateConnection from "./archimate-connection";
 import ArchimateSvg from "./archimate-svg";
-import { ArchimateViewNode } from "./archimate-view-node";
-import ForceLayout from "./force-layout";
+// import { ArchimateViewNode } from "./archimate-view-node";
+// import ForceLayout from "./force-layout";
 import SvgPanZoom, { numbersDiffer, zoomIn, zoomOut } from "./svg-pan-zoom";
+import Graph from "./graph";
 
 export enum ZoomMode {
   OneToOne,
@@ -58,16 +60,16 @@ export default function ArchimateDiagramView({
     );
   };
 
-  const nodeIsSelected = (node: IEntityRef): boolean => {
-    if (selectedEntity === undefined) {
-      return false;
-    }
-    const nodeElement = node.entityInstance();
-    if (nodeElement === undefined) {
-      return false;
-    }
-    return selectedEntity.id === nodeElement.id;
-  };
+  // const nodeIsSelected = (node: IEntityRef): boolean => {
+  //   if (selectedEntity === undefined) {
+  //     return false;
+  //   }
+  //   const nodeElement = node.entityInstance();
+  //   if (nodeElement === undefined) {
+  //     return false;
+  //   }
+  //   return selectedEntity.id === nodeElement.id;
+  // };
 
   const onFitToWindow = () => {
     setZoomMode(ZoomMode.FitToWindow);
@@ -119,9 +121,12 @@ export default function ArchimateDiagramView({
     }
   }, [connections, extents, nodes]);
 
-  useEffect(() => {
-    setChangedExtents();
-  }, [selectedDiagram, extents, setChangedExtents]);
+  // useEffect(() => {
+  //   // setChangedExtents();
+  //   // setScale(1);
+  //   setZoomMode(ZoomMode.FitToWindow);
+  //   console.log(zoomMode);
+  // }, [selectedDiagram, extents, setChangedExtents, zoomMode]);
 
   if (selectedDiagram) {
     return (
@@ -155,23 +160,36 @@ export default function ArchimateDiagramView({
           diagramName={selectedDiagram ? selectedDiagram.name : ""}
           viewBox={viewBox()}
         >
-          <ForceLayout
+          {/* <ForceLayout
             connections={connections}
             autoLayout={isAutoLayout()}
             nodes={nodes}
             onForceLayoutTick={onForceLayoutTick}
+          > */}
+          <SvgPanZoom
+            maxX={extents.maxX}
+            maxY={extents.maxY}
+            minX={extents.minX}
+            minY={extents.minY}
+            onZoom={onZoom}
+            svgPanZoomRef={svgTopGroup}
+            scale={scale}
+            zoomMode={zoomMode}
+            autoLayout={isAutoLayout()}
+            nodes={nodes}
+            connections={connections}
+            selectedEntity={selectedEntity}
+            entityClicked={entityClicked}
           >
-            <SvgPanZoom
-              maxX={extents.maxX}
-              maxY={extents.maxY}
-              minX={extents.minX}
-              minY={extents.minY}
-              onZoom={onZoom}
-              svgPanZoomRef={svgTopGroup}
-              scale={scale}
-              zoomMode={zoomMode}
-            >
-              {nodes.map((node) => (
+            <Graph
+              nodes={nodes}
+              links={connections}
+              onForceLayoutTick={onForceLayoutTick}
+              autoLayout={isAutoLayout()}
+              selectedEntity={selectedEntity}
+              entityClicked={entityClicked}
+            />
+            {/* {nodes.map((node) => (
                 <ArchimateViewNode
                   key={node.id}
                   viewNode={node}
@@ -193,9 +211,9 @@ export default function ArchimateDiagramView({
                   toX={conn.targetBounds().left}
                   toY={conn.targetBounds().top}
                 />
-              ))}
-            </SvgPanZoom>
-          </ForceLayout>
+              ))} */}
+          </SvgPanZoom>
+          {/* </ForceLayout> */}
         </ArchimateSvg>
       </>
     );

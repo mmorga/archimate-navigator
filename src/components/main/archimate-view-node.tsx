@@ -8,7 +8,10 @@ import {
 } from "../../archimate-model";
 import { useEffect, useState } from "react";
 import { entityClickedFunc } from "../common";
-import BaseShape, { defaultTextBounds } from "./view-nodes/base-shape";
+import BaseShape, {
+  defaultTextBounds,
+  enterBaseShape,
+} from "./view-nodes/base-shape";
 import Documentation from "./view-nodes/documentation";
 import archimateElementTypeProps, {
   IArchimateViewNodeState,
@@ -45,6 +48,7 @@ export const ArchimateViewNode = ({
     badgeBounds: zeroBounds,
     textBounds: defaultTextBounds,
     EntityShape: BaseShape,
+    enterEntityShapeFunc: enterBaseShape,
     ...archimateElementTypeProps(viewNode),
   };
 
@@ -73,12 +77,6 @@ export const ArchimateViewNode = ({
         backgroundClass={archimateViewNodeState.backgroundClass}
         shapeStyle={viewNode.shapeStyle()}
       />
-      {/* {archimateViewNodeState.EntityShape({
-        viewNode: viewNode,
-        backgroundClass: archimateViewNodeState.backgroundClass,
-        shapeStyle: viewNode.shapeStyle(),
-      }
-      )} */}
       <EntityBadge
         bounds={archimateViewNodeState.badgeBounds(viewNode)}
         badge={archimateViewNodeState.badge}

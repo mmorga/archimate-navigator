@@ -1,5 +1,6 @@
 import { Bounds, ViewNode } from "../../../archimate-model";
 import { CSSProperties } from "react";
+import { svgG, svgRect } from "./base-shape";
 import * as BaseViewNode from "./base-shape";
 import type {
   EntityShapeComponent,
@@ -41,6 +42,43 @@ const DataObjectShape: EntityShapeComponent = ({
     </g>
   );
 };
+
+export function enterDataObjectShape(
+  g: SVGGElement,
+  viewNode: ViewNode,
+  backgroundClass: string | undefined,
+  shapeStyle?: CSSProperties | undefined,
+): void {
+  const bounds = viewNode.absolutePosition();
+  const style = shapeStyle;
+  const margin = 8;
+  const decorStyle: CSSProperties = {
+    stroke: style?.stroke,
+    strokeWidth: style?.strokeWidth,
+  };
+  const ag = svgG(g, backgroundClass);
+  svgRect(
+    ag,
+    // key="data-background"
+    bounds.left,
+    bounds.top,
+    bounds.width,
+    bounds.height,
+    backgroundClass,
+    style,
+  );
+
+  svgRect(
+    ag,
+    // key="data-decoration"
+    bounds.left,
+    bounds.top,
+    bounds.width,
+    margin,
+    "archimate-decoration",
+    decorStyle,
+  );
+}
 
 export function dataObjectTextBounds(viewNode: ViewNode): Bounds {
   const textBounds = BaseViewNode.defaultTextBounds(viewNode);

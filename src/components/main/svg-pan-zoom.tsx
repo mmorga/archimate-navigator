@@ -1,7 +1,14 @@
 import { KeyboardEvent, PureComponent, ReactNode, RefObject } from "react";
 import wheel from "wheel";
-import { LogicError, Point } from "../../archimate-model";
+import {
+  Connection,
+  IEntity,
+  LogicError,
+  Point,
+  ViewNode,
+} from "../../archimate-model";
 import { ZoomMode } from "./archimate-diagram-view";
+import { entityClickedFunc } from "../common";
 
 type IProps = {
   maxX: number;
@@ -13,6 +20,11 @@ type IProps = {
   svgPanZoomRef: RefObject<SVGGElement | null>;
   zoomMode: ZoomMode;
   children?: ReactNode;
+  autoLayout: boolean;
+  nodes: ViewNode[];
+  connections: Connection[];
+  selectedEntity?: IEntity;
+  entityClicked: entityClickedFunc;
 };
 
 type IState = {

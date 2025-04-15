@@ -1,3 +1,6 @@
+import { ViewNode } from "../../../archimate-model";
+import { CSSProperties } from "react";
+import { svgPath, svgRect } from "./base-shape";
 import type {
   EntityShapeComponent,
   IEntityShapeProps,
@@ -36,6 +39,41 @@ const GroupingShape: EntityShapeComponent = ({
         style={shapeStyle}
       />
     </>
+  );
+};
+
+export const enterGroupingShape = (
+  g: SVGGElement,
+  viewNode: ViewNode,
+  backgroundClass: string | undefined,
+  shapeStyle?: CSSProperties | undefined,
+): void => {
+  const bounds = viewNode.absolutePosition();
+  const groupHeaderHeight = 21;
+  svgRect(
+    g,
+    bounds.left,
+    bounds.top + groupHeaderHeight,
+    bounds.width,
+    bounds.height - groupHeaderHeight,
+    backgroundClass,
+    shapeStyle,
+  );
+  svgPath(
+    g,
+    [
+      "M",
+      bounds.left,
+      bounds.top + groupHeaderHeight - 1,
+      "v",
+      -(groupHeaderHeight - 1),
+      "h",
+      bounds.width / 2,
+      "v",
+      groupHeaderHeight - 1,
+    ],
+    backgroundClass,
+    shapeStyle,
   );
 };
 

@@ -1,4 +1,5 @@
 import { Bounds } from "../../../archimate-model";
+import { svgRect } from "./base-shape";
 
 type IProps = {
   bounds: Bounds;
@@ -18,6 +19,18 @@ const SelectedViewNode = ({ bounds, selected }: IProps) => {
       width={bounds.width}
       height={bounds.height}
     />
+  );
+};
+
+export const enterSelectedViewNode = (g: SVGGElement, bounds: Bounds): void => {
+  svgRect(
+    g,
+    bounds.x,
+    bounds.y,
+    bounds.width,
+    bounds.height,
+    undefined,
+    undefined,
   );
 };
 

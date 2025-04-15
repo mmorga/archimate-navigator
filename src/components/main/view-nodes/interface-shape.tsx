@@ -1,8 +1,11 @@
-import BadgedRectShape from "./badged-rect-shape";
+import BadgedRectShape, { enterBadgedRectShape } from "./badged-rect-shape";
 import type {
   EntityShapeComponent,
   IEntityShapeProps,
 } from "./entity-shape-component";
+import { ViewNode } from "../../../archimate-model";
+import { CSSProperties } from "react";
+import { svgEllipse } from "./base-shape";
 
 const ElipsePath: EntityShapeComponent = ({
   viewNode,
@@ -19,6 +22,24 @@ const ElipsePath: EntityShapeComponent = ({
       className={backgroundClass}
       style={shapeStyle}
     />
+  );
+};
+
+export const enterEllipsePath = (
+  g: SVGGElement,
+  viewNode: ViewNode,
+  backgroundClass: string | undefined,
+  shapeStyle?: CSSProperties | undefined,
+): void => {
+  const bounds = viewNode.absolutePosition();
+  svgEllipse(
+    g,
+    bounds.left + bounds.width / 2.0,
+    bounds.top + bounds.height / 2.0,
+    bounds.width / 2.0,
+    bounds.height / 2.0,
+    backgroundClass,
+    shapeStyle,
   );
 };
 
@@ -43,6 +64,19 @@ const InterfaceShape: EntityShapeComponent = ({
         shapeStyle={shapeStyle}
       />
     );
+  }
+};
+
+export const enterInterfaceShape = (
+  g: SVGGElement,
+  viewNode: ViewNode,
+  backgroundClass: string | undefined,
+  shapeStyle?: CSSProperties | undefined,
+): void => {
+  if (viewNode.childType === "1") {
+    enterEllipsePath(g, viewNode, backgroundClass, shapeStyle);
+  } else {
+    enterBadgedRectShape(g, viewNode, backgroundClass, shapeStyle);
   }
 };
 
