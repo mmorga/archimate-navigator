@@ -1,4 +1,4 @@
-import { Bounds } from "@/archimate-model";
+import { Bounds, IViewNode } from "@/archimate-model";
 import { CSSProperties } from "react";
 import { svgRect } from "./base-shape";
 import { ViewNode } from "@/archimate-model";
@@ -47,7 +47,7 @@ export function enterServiceShape(
   }
 }
 
-export function serviceTextBounds(viewNode: ViewNode): Bounds {
+export function serviceTextBounds(viewNode: IViewNode): Bounds {
   const bounds = viewNode.absolutePosition();
   return new Bounds(
     bounds.left + 7,

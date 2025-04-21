@@ -105,6 +105,7 @@ export interface IViewConceptType extends IEntity {
 export interface IViewNode
   extends IViewConceptType,
     d3force.SimulationNodeDatum {
+  absolutePosition(): Bounds;
   // @todo document where this comes from
   content?: string;
 
@@ -165,7 +166,7 @@ export interface IHasOrganizations extends IIdentifiable {
   organizations: IOrganization[];
 }
 
-export class ExtendableError extends Error {
+class ExtendableError extends Error {
   constructor(message: string) {
     super(message);
     this.name = this.constructor.name;
@@ -217,8 +218,4 @@ export interface IModel extends IEntity, IHasOrganizations {
   lookup(id: string | undefined): IEntity | undefined;
   makeUniqueId(): string;
   register(entity: IEntity): void;
-}
-
-export function inodeKeyFunc(this: SVGGElement, datum: IViewNode) {
-  return datum.id;
 }

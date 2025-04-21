@@ -24,7 +24,7 @@ const TextFlow = ({
     <>
       {calculateLines(text, bounds, badgeBounds).map((line, idx) => (
         <tspan
-          x={lineX(bounds, badgeBounds, style, idx)}
+          x={textFlowLineX(bounds, badgeBounds, style, idx)}
           dy="1.1em"
           className="entity-name"
           style={style}
@@ -49,22 +49,15 @@ export const enterTextFlow = (
       "http://www.w3.org/2000/svg",
       "tspan",
     );
-    tspan.setAttribute("x", lineX(bounds, badgeBounds, style, idx).toString());
+    // tspan.setAttribute("x", textFlowLineX(bounds, badgeBounds, style, idx).toString());
+    tspan.setAttribute("x", "0%");
+    tspan.setAttribute("dx", "0");
     tspan.setAttribute("dy", "1.1em");
     tspan.setAttribute("class", "entity-name");
     tspan.setAttribute("style", cssPropertiesToString(style));
     tspan.setAttribute("key", idx.toString());
     tspan.textContent = line.text;
     parent.appendChild(tspan);
-    // <tspan
-    //   x={lineX(bounds, badgeBounds, style, idx)}
-    //   dy="1.1em"
-    //   className="entity-name"
-    //   style={style}
-    //   key={idx}
-    // >
-    //   {line.text}
-    // </tspan>
   });
 };
 
@@ -127,7 +120,7 @@ function textWidth(str: string): number {
   return 0;
 }
 
-function lineX(
+export function textFlowLineX(
   bounds: Bounds,
   badgeBounds: Bounds,
   style: CSSProperties,

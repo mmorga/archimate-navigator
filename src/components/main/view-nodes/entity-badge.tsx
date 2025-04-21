@@ -1,4 +1,4 @@
-import { Bounds } from "../../../archimate-model";
+import { Bounds, ViewNode } from "../../../archimate-model";
 
 function EntityBadge({
   bounds,
@@ -13,7 +13,8 @@ function EntityBadge({
   return <use href={badge} {...bounds} />;
 }
 
-export const d3EntityBadge = (
+export const enterEntityBadge = (
+  g: SVGGElement,
   bounds: Bounds | undefined,
   badge: string | undefined,
 ): SVGUseElement | undefined => {
@@ -26,7 +27,23 @@ export const d3EntityBadge = (
   use.setAttribute("y", (bounds.y || 0).toString());
   use.setAttribute("width", bounds.width.toString());
   use.setAttribute("height", bounds.height.toString());
+  g.appendChild(use);
   return use;
+};
+
+export const updateEntityBadge = (
+  selection: d3.Selection<SVGUseElement, ViewNode, SVGGElement, undefined>,
+) => {
+  selection
+    .attr("x", (d) => {
+      const b = d.badgeBounds(d);
+      return b ? b.x : 0;
+    })
+    .attr("y", (d) => {
+      const b = d.badgeBounds(d);
+      return b ? b.y : 0;
+    });
+  return this;
 };
 
 export default EntityBadge;

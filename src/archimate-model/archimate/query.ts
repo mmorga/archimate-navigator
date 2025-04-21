@@ -155,11 +155,15 @@ function diagramNodesAndConnections(
 // Then nodes are the reduction of the set of paths' elements mapped to ViewNodes
 // And connections are the reduction of the set of paths' relationships mapped to Connections
 function viewNodeFor(model: Model, el: Element, diagram: Diagram): ViewNode {
-  const vn = new ViewNode(model, diagram);
-  vn.type = "archimate:DiagramObject";
-  vn.bounds = new Bounds(700, 700, VIEW_NODE_WIDTH, VIEW_NODE_HEIGHT);
-  vn.element = el.id;
-  vn.diagram = diagram;
+  const vn = new ViewNode(model, diagram, {
+    type: "archimate:DiagramObject",
+    bounds: new Bounds(700, 700, VIEW_NODE_WIDTH, VIEW_NODE_HEIGHT),
+    element: el.id,
+  });
+  // vn.type = "archimate:DiagramObject";
+  // vn.bounds = new Bounds(700, 700, VIEW_NODE_WIDTH, VIEW_NODE_HEIGHT);
+  // vn.element = el.id;
+  // vn.diagram = diagram;
   return vn;
 }
 

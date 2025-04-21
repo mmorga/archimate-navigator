@@ -1,11 +1,11 @@
 import { svgEllipse } from "./base-shape";
-import { Bounds, ViewNode } from "../../../archimate-model";
+import { Bounds, IViewNode, ViewNode } from "../../../archimate-model";
 import type {
   EntityShapeComponent,
   IEntityShapeProps,
 } from "./entity-shape-component";
 
-export function valueTextBounds(viewNode: ViewNode): Bounds {
+export function valueTextBounds(viewNode: IViewNode): Bounds {
   const bounds = viewNode.absolutePosition();
   return new Bounds(
     bounds.left + 10,

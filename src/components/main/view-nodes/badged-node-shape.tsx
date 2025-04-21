@@ -1,4 +1,4 @@
-import { Bounds, ViewNode } from "../../../archimate-model";
+import { Bounds, IViewNode, ViewNode } from "../../../archimate-model";
 import { CSSProperties } from "react";
 import { svgG, svgPath } from "./base-shape";
 import type {
@@ -169,7 +169,7 @@ export function enterBadgedNodeShape(
   );
 }
 
-export function badgedNodeBadgeBounds(viewNode: ViewNode): Bounds {
+export function badgedNodeBadgeBounds(viewNode: IViewNode): Bounds {
   const bounds = viewNode.absolutePosition();
   const margin = 14;
   return new Bounds(
@@ -180,7 +180,7 @@ export function badgedNodeBadgeBounds(viewNode: ViewNode): Bounds {
   );
 }
 
-export function badgedNodeTextBounds(viewNode: ViewNode): Bounds {
+export function badgedNodeTextBounds(viewNode: IViewNode): Bounds {
   const bounds = viewNode.absolutePosition();
   const margin = 14;
   const nodeBoxHeight = bounds.height - margin;

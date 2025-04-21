@@ -1,7 +1,7 @@
 {
   "name": "archimate-navigator",
   "version": "0.2.0",
-  "main": "electron-starter.js",
+  "main": "src/index.tsx",
   "private": true,
   "type": "module",
   "dependencies": {
@@ -20,7 +20,6 @@
     "d3": "^7.9.0",
     "d3-force": "^3.0.0",
     "d3-selection": "^3.0.0",
-    "electron": "^35.0.2",
     "fuse.js": "^7.1.0",
     "github-markdown-css": "^5.8.1",
     "immutable": "^5.0.3",
@@ -65,7 +64,6 @@
     "preview": "vite preview",
     "test": "vitest",
     "build-site": "export BASE_URL='/archimate-navigator' && npm run build && rm -rf docs && cp -a dist/ docs",
-    "electron": "electron .",
     "serve": "npm run build && serve -s dist",
     "prepare": "husky",
     "prettier": "npx prettier --write .",

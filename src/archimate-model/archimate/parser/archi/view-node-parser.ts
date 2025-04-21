@@ -42,28 +42,30 @@ export class ViewNodeParser {
   }
 
   private createViewNode = (child: Element): ViewNode[] => {
-    const viewNode = new ViewNode(this.model, this.diagram);
-    viewNode.id = getStringAttribute(child, "id") || this.model.makeUniqueId();
-    viewNode.name = getStringAttribute(child, "name");
-    viewNode.documentation = this.documentationParser.value(child);
-    viewNode.type = (
-      getNSStringAttribute(
-        child,
-        "type",
-        "http://www.w3.org/2001/XMLSchema-instance",
-      ) || ""
-    ).replace("archimate:", "");
-
-    viewNode.style = this.styleParser.style(child);
-    viewNode.viewRefs = getStringAttribute(child, "model");
-    viewNode.content = this.contentParser.content(child);
+    let parent = undefined;
     if (child.parentElement!.nodeName === "child") {
       const parentEl = child.parentElement as Element;
-      viewNode.parent = getStringAttribute(parentEl, "id");
+      parent = getStringAttribute(parentEl, "id");
     }
-    viewNode.bounds = this.boundsParser.bounds(child)!.offset(this.offset);
-    viewNode.element = getStringAttribute(child, "archimateElement");
-    viewNode.childType = getStringAttribute(child, "type");
+    const viewNode = new ViewNode(this.model, this.diagram, {
+      id: getStringAttribute(child, "id") || this.model.makeUniqueId(),
+      name: getStringAttribute(child, "name"),
+      documentation: this.documentationParser.value(child),
+      type: (
+        getNSStringAttribute(
+          child,
+          "type",
+          "http://www.w3.org/2001/XMLSchema-instance",
+        ) || ""
+      ).replace("archimate:", ""),
+      style: this.styleParser.style(child),
+      viewRefs: getStringAttribute(child, "model"),
+      content: this.contentParser.content(child),
+      parent: parent,
+      bounds: this.boundsParser.bounds(child)!.offset(this.offset),
+      element: getStringAttribute(child, "archimateElement"),
+      childType: getStringAttribute(child, "type"),
+    });
     this.diagram.nodes.push(viewNode);
     this.model.register(viewNode);
     const connectionParser = new ConnectionParser(

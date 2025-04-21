@@ -1,4 +1,4 @@
-import { Bounds } from "@/archimate-model";
+import { Bounds, IViewNode } from "@/archimate-model";
 import { ViewNode } from "@/archimate-model";
 import { CSSProperties } from "react";
 import { svgPath } from "./base-shape";
@@ -47,7 +47,7 @@ export function enterProcessShape(
   }
 }
 
-export function processTextBounds(viewNode: ViewNode): Bounds {
+export function processTextBounds(viewNode: IViewNode): Bounds {
   const bounds = viewNode.absolutePosition();
   const shaftTop = bounds.top + bounds.height * 0.15;
   const shaftBottom = bounds.bottom - bounds.height * 0.15;

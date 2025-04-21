@@ -1,21 +1,8 @@
 import "./archimate-svg.css";
-import {
-  elementTypeLayer,
-  elementTypeOfString,
-  layerClassName,
-  ViewNode,
-  zeroBounds,
-} from "../../archimate-model";
+import { ViewNode, zeroBounds } from "../../archimate-model";
 import { useEffect, useState } from "react";
 import { entityClickedFunc } from "../common";
-import BaseShape, {
-  defaultTextBounds,
-  enterBaseShape,
-} from "./view-nodes/base-shape";
 import Documentation from "./view-nodes/documentation";
-import archimateElementTypeProps, {
-  IArchimateViewNodeState,
-} from "./view-nodes/archimate-element-type-props";
 import EntityBadge from "./view-nodes/entity-badge";
 import EntityLabel from "./view-nodes/entity-label";
 import SelectedViewNode from "./view-nodes/selected-view-node";
@@ -38,20 +25,6 @@ export const ArchimateViewNode = ({
 }: IArchimateViewNodeProps) => {
   const [bounds, setBounds] = useState(viewNode.absolutePosition());
 
-  const archimateViewNodeState: IArchimateViewNodeState = {
-    badge: undefined,
-    backgroundClass: layerClassName(
-      elementTypeLayer(elementTypeOfString(viewNode.elementType())),
-    ),
-    entity: viewNode.entityInstance(),
-    textAlign: "center",
-    badgeBounds: zeroBounds,
-    textBounds: defaultTextBounds,
-    EntityShape: BaseShape,
-    enterEntityShapeFunc: enterBaseShape,
-    ...archimateElementTypeProps(viewNode),
-  };
-
   const className =
     viewNode.type && viewNode.type.length > 0
       ? `archimate-${viewNode.elementType()}`
@@ -72,22 +45,20 @@ export const ArchimateViewNode = ({
     >
       <Title name={viewNode.name} />
       <Documentation documentation={viewNode.documentation} />
-      <archimateViewNodeState.EntityShape
+      <viewNode.EntityShape
         viewNode={viewNode}
-        backgroundClass={archimateViewNodeState.backgroundClass}
+        backgroundClass={viewNode.backgroundClass}
         shapeStyle={viewNode.shapeStyle()}
       />
       <EntityBadge
-        bounds={archimateViewNodeState.badgeBounds(viewNode)}
-        badge={archimateViewNodeState.badge}
+        bounds={viewNode.badgeBounds(viewNode)}
+        badge={viewNode.badge}
       />
       <EntityLabel
         viewNode={viewNode}
-        textBounds={archimateViewNodeState.textBounds(viewNode, x, y)}
-        textAlign={archimateViewNodeState.textAlign || "center"}
-        badgeBounds={
-          archimateViewNodeState.badgeBounds(viewNode) || zeroBounds()
-        }
+        textBounds={viewNode.textBounds(viewNode, x, y)}
+        textAlign={viewNode.textAlign || "center"}
+        badgeBounds={viewNode.badgeBounds(viewNode) || zeroBounds()}
       />
       <SelectedViewNode
         bounds={viewNode.absolutePosition()}

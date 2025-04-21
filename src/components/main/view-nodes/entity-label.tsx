@@ -1,6 +1,7 @@
-import { Bounds, ViewNode } from "../../../archimate-model";
+import { Bounds, ViewNode, zeroBounds } from "../../../archimate-model";
 import { CSSProperties } from "react";
 import { cssPropertiesToString } from "./style-utils";
+import { svgG } from "./base-shape";
 import TextFlow, { enterTextFlow } from "../text-flow";
 import type * as CSS from "csstype";
 
@@ -74,6 +75,8 @@ export const enterEntityLabel = (
 
   const clipPathId = `${viewNode.id}-clip-path`;
 
+  const labelG = svgG(g, "g-archimate-label");
+
   const clipPath = document.createElementNS(
     "http://www.w3.org/2000/svg",
     "clipPath",
@@ -82,7 +85,7 @@ export const enterEntityLabel = (
   const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
   path.setAttribute("d", clipPathD(badgeBounds, textBounds));
   clipPath.appendChild(path);
-  g.appendChild(clipPath);
+  labelG.appendChild(clipPath);
 
   const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
   text.setAttribute("clipPath", `url(#${clipPathId})`);
@@ -99,7 +102,46 @@ export const enterEntityLabel = (
     badgeBounds,
     textStyle(viewNode, textAlign, textAnchor),
   );
-  g.appendChild(text);
+  labelG.appendChild(text);
+};
+
+export const updateEntityLabel = (
+  selection: d3.Selection<SVGGElement, ViewNode, SVGGElement, undefined>,
+) => {
+  const labelGSelection = selection.select<SVGGElement>(".g-archimate-label");
+  labelGSelection.select<SVGClipPathElement>("clipPath path").attr("d", (d) => {
+    const badgeBounds = d.badgeBounds(d);
+    const textBounds = d.textBounds(d);
+    return clipPathD(badgeBounds || zeroBounds(), textBounds);
+  });
+  labelGSelection
+    .select<SVGTextElement>("text")
+    .attr("x", (d) => {
+      const badgeBounds = d.badgeBounds(d);
+      const textBounds = d.textBounds(d);
+      const textAnchor = calcTextAnchor(d.textAlign);
+      const x = lineX(
+        badgeBounds || zeroBounds(),
+        textBounds,
+        textAnchor,
+      ).toString();
+      // selection.selectAll<SVGTSpanElement, undefined>("tspan")
+      //   .attr("x", x);
+      return x;
+    })
+    .attr("y", (d) => {
+      const textBounds = d.textBounds(d);
+      return (textBounds.y || 0).toString();
+    });
+  // .selectAll<SVGTSpanElement, ViewNode>("tspan")
+  // .attr("x", (d, i) => {
+  //   console.log(d, i);
+  //   const textBounds = d.textBounds(d);
+  //   const badgeBounds = d.badgeBounds(d) || zeroBounds();
+  //   const textAnchor = calcTextAnchor(d.textAlign);
+  //   const style = textStyle(d, d.textAlign, textAnchor);
+  //   return textFlowLineX(textBounds, badgeBounds, style, i);
+  // });
 };
 
 function textStyle(

@@ -1,4 +1,4 @@
-import { Bounds, ViewNode } from "../../../archimate-model";
+import { Bounds, IViewNode, ViewNode } from "../../../archimate-model";
 import { CSSProperties } from "react";
 import { svgRect } from "./base-shape";
 import type {
@@ -6,7 +6,7 @@ import type {
   IEntityShapeProps,
 } from "./entity-shape-component";
 
-export function badgedRectBadgeBounds(viewNode: ViewNode): Bounds | undefined {
+export function badgedRectBadgeBounds(viewNode: IViewNode): Bounds | undefined {
   const absolutePosition = viewNode.absolutePosition();
   return new Bounds(
     absolutePosition.right - 25,

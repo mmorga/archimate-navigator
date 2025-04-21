@@ -1,4 +1,4 @@
-import { Bounds, ViewNode } from "../../../archimate-model";
+import { Bounds, IViewNode, ViewNode } from "../../../archimate-model";
 import { CSSProperties } from "react";
 import { svgRect } from "./base-shape";
 import type {
@@ -79,7 +79,7 @@ export const enterGroupShape = (
   );
 };
 
-export function groupTextBounds(viewNode: ViewNode): Bounds {
+export function groupTextBounds(viewNode: IViewNode): Bounds {
   const bounds = viewNode.absolutePosition();
   return new Bounds(
     bounds.left + 3,

@@ -1,4 +1,4 @@
-import { Bounds, ViewNode } from "../../../archimate-model";
+import { Bounds, IViewNode, ViewNode } from "../../../archimate-model";
 import { CSSProperties } from "react";
 import { svgG, svgRect } from "./base-shape";
 import * as BaseViewNode from "./base-shape";
@@ -80,7 +80,7 @@ export function enterDataObjectShape(
   );
 }
 
-export function dataObjectTextBounds(viewNode: ViewNode): Bounds {
+export function dataObjectTextBounds(viewNode: IViewNode): Bounds {
   const textBounds = BaseViewNode.defaultTextBounds(viewNode);
   const margin: number = 8;
   return new Bounds(

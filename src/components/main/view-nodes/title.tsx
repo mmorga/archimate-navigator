@@ -6,6 +6,7 @@ const Title = ({ name }: { name: string | undefined }) => {
 };
 
 export const enterTitle = (
+  g: SVGGElement,
   name: string | undefined,
 ): SVGTitleElement | undefined => {
   if (name && name.length > 0) {
@@ -14,6 +15,7 @@ export const enterTitle = (
       "title",
     );
     title.textContent = name;
+    g.appendChild(title);
     return title;
   }
 };

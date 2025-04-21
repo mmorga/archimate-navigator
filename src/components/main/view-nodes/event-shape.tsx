@@ -1,4 +1,4 @@
-import { Bounds } from "@/archimate-model";
+import { Bounds, IViewNode } from "@/archimate-model";
 import { ViewNode } from "@/archimate-model";
 import { CSSProperties } from "react";
 import { defaultTextBounds, svgPath } from "./base-shape";
@@ -48,7 +48,7 @@ export const enterEventShape = (
   }
 };
 
-export function eventBadgeBounds(viewNode: ViewNode): Bounds | undefined {
+export function eventBadgeBounds(viewNode: IViewNode): Bounds | undefined {
   if (viewNode.childType === "1") {
     return undefined;
   } else {
@@ -56,7 +56,7 @@ export function eventBadgeBounds(viewNode: ViewNode): Bounds | undefined {
   }
 }
 
-export function eventTextBounds(viewNode: ViewNode): Bounds {
+export function eventTextBounds(viewNode: IViewNode): Bounds {
   if (viewNode.childType === "1") {
     const textBounds = defaultTextBounds(viewNode);
     const notchX = 18;

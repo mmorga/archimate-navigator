@@ -11,8 +11,8 @@ export class Bounds implements IBounds {
     return new Bounds(0, 0, 0, 0);
   }
 
-  public readonly x?: number;
-  public readonly y?: number;
+  public readonly x: number;
+  public readonly y: number;
   public readonly width: number;
   public readonly height: number;
   public readonly top: number;
@@ -20,12 +20,7 @@ export class Bounds implements IBounds {
   public readonly right: number;
   public readonly bottom: number;
 
-  constructor(
-    x: number | undefined,
-    y: number | undefined,
-    width: number,
-    height: number,
-  ) {
+  constructor(x: number, y: number, width: number, height: number) {
     this.x = x;
     this.y = y;
     this.width = width;

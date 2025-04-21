@@ -1,4 +1,4 @@
-import { Bounds, ViewNode } from "../../../archimate-model";
+import { Bounds, IViewNode, ViewNode } from "../../../archimate-model";
 import { CSSProperties } from "react";
 import { defaultTextBounds, svgRect } from "./base-shape";
 import BadgedNodeShape, { enterBadgedNodeShape } from "./badged-node-shape";
@@ -83,7 +83,7 @@ function enterNodePath(
   );
 }
 
-export function nodeTextBounds(viewNode: ViewNode): Bounds {
+export function nodeTextBounds(viewNode: IViewNode): Bounds {
   const textBounds = defaultTextBounds(viewNode);
   const margin: number = 14;
   return new Bounds(

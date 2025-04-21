@@ -1,4 +1,4 @@
-import { Bounds, ViewNode } from "../../../archimate-model";
+import { Bounds, IViewNode, ViewNode } from "../../../archimate-model";
 import { CSSProperties } from "react";
 import { svgRect } from "./base-shape";
 import * as BaseViewNode from "./base-shape";
@@ -8,7 +8,7 @@ import type {
   IEntityShapeProps,
 } from "./entity-shape-component";
 
-export function applicationComponentTextBounds(viewNode: ViewNode): Bounds {
+export function applicationComponentTextBounds(viewNode: IViewNode): Bounds {
   if (viewNode.childType === "1") {
     return BaseViewNode.defaultTextBounds(viewNode);
   } else {

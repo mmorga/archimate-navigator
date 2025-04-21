@@ -8,7 +8,10 @@ import { useEffect, useRef } from "react";
 import { BaseType, select, ValueFn } from "d3-selection";
 import * as d3 from "d3";
 import * as d3force from "d3-force";
-import { enterArchimateViewNode } from "./d3-archimate-view-node";
+import {
+  enterArchimateViewNode,
+  updateArchimateViewNode,
+} from "./d3-archimate-view-node";
 import { entityClickedFunc } from "../common";
 
 const DEFAULT_DISTANCE = 30; // Default distance for D3 Force simulations
@@ -53,12 +56,12 @@ const adjustLinkDistance = (d: Connection): number => {
 //     .text((d) => d.id);
 // };
 
-const updateNode = (
-  selection: d3.Selection<SVGGElement, ViewNode, SVGGElement, undefined>,
-) => {
-  // selection.attr("transform", (d) => "translate(" + d.x + "," + d.y + ")");
-  console.log("updateNode: ", selection);
-};
+// const updateNode = (
+//   selection: d3.Selection<SVGGElement, ViewNode, SVGGElement, undefined>,
+// ) => {
+//   // selection.attr("transform", (d) => "translate(" + d.x + "," + d.y + ")");
+//   console.log("updateNode: ", selection);
+// };
 
 const enterLink = (
   selection: d3.Selection<SVGLineElement, Connection, SVGGElement, undefined>,
@@ -79,7 +82,9 @@ const updateLink = (
 const updateGraph = (
   selection: d3.Selection<SVGGElement, undefined, null, undefined>,
 ) => {
-  selection.selectAll<SVGGElement, ViewNode>(".node").call(updateNode);
+  selection
+    .selectAll<SVGGElement, ViewNode>(".node")
+    .call(updateArchimateViewNode);
   selection.selectAll<SVGLineElement, Connection>(".link").call(updateLink);
 };
 
@@ -139,7 +144,7 @@ const Graph = ({
         .enter()
         .call(enterArchimateViewNode.bind(null, entityClicked, selectedEntity));
       d3Nodes.exit().remove();
-      d3Nodes.call(updateNode);
+      d3Nodes.call(updateArchimateViewNode);
 
       const d3Links = d3Graph
         .selectAll<SVGLineElement, Connection>(".link")

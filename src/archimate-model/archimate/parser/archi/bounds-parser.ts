@@ -16,7 +16,12 @@ export class BoundsParser {
     const width = getIntAttribute(boundsEl, "width");
     const height = getIntAttribute(boundsEl, "height");
 
-    if (width === undefined || height === undefined) {
+    if (
+      x === undefined ||
+      y === undefined ||
+      width === undefined ||
+      height === undefined
+    ) {
       throw new ParserError("Invalid value for width or height");
     }
     return new Bounds(x, y, width as number, height as number);

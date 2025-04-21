@@ -1,3 +1,4 @@
+import type * as CSS from "csstype";
 import { Bounds, zeroBounds } from "./bounds";
 import { Connection } from "./connection";
 import { CSSProperties } from "react";
@@ -11,9 +12,36 @@ import {
   IViewNode,
 } from "./interfaces";
 import { Style } from "./style";
+import { elementTypeLayer, layerClassName } from "./layers";
+import { elementTypeOfString } from "./element-type";
+import BaseShape, {
+  defaultTextBounds,
+  enterBaseShape,
+} from "../../components/main/view-nodes/base-shape";
+import {
+  EntityShapeComponent,
+  EnterEntityShapeFunc,
+} from "../../components/main/view-nodes/entity-shape-component";
+import archimateElementTypeProps from "../../components/main/view-nodes/archimate-element-type-props";
 
 export const VIEW_NODE_WIDTH = 120; // TODO: this should be from the SVG diagram settings
 export const VIEW_NODE_HEIGHT = 55; // TODO: this should be from the SVG diagram settings
+
+type badgeBoundsFunc = (viewNode: IViewNode) => Bounds | undefined;
+type textBoundsFunc = (viewNode: IViewNode, x?: number, y?: number) => Bounds;
+type IViewNodeCtorParams = {
+  type: string;
+  bounds: Bounds;
+  element: string | undefined;
+  id?: string;
+  name?: string | undefined;
+  documentation?: string;
+  style?: Style | undefined;
+  viewRefs?: string | undefined;
+  content?: string | undefined;
+  parent?: string | undefined;
+  childType?: string | undefined;
+};
 
 // Graphical node type. It can contain child node types.
 // This can be specialized as Label and Container
@@ -118,15 +146,67 @@ export class ViewNode implements IViewNode, IEntityRef {
    */
   public fy?: number | null;
 
-  private model: IModel;
-  private entity?: IEntity;
+  public badge: string | undefined;
+  public backgroundClass: string;
+  public entity: IEntity | undefined;
+  public textAlign: CSS.Property.TextAlign;
+  public badgeBounds: badgeBoundsFunc = zeroBounds;
+  public textBounds: textBoundsFunc = defaultTextBounds;
+  public EntityShape: EntityShapeComponent = BaseShape;
+  public enterEntityShapeFunc: EnterEntityShapeFunc = enterBaseShape;
 
-  constructor(model: IModel, diagram: Diagram) {
+  private model: IModel;
+  private defaultParams: IViewNodeCtorParams = {
+    type: "ViewNode",
+    bounds: zeroBounds(),
+    element: undefined,
+    // id?: string;
+    // name: string;
+    // documentation: string;
+    // style: string;
+    // viewRefs: string,
+    // content: string;
+    // parent: string;
+    // childType: string;
+  };
+  constructor(model: IModel, diagram: Diagram, params?: IViewNodeCtorParams) {
     this.model = model;
-    this.id = this.model.makeUniqueId();
     this.diagram = diagram;
-    this.type = "ViewNode";
-    this.bounds = zeroBounds();
+    const p = {
+      ...this.defaultParams,
+      ...(params || {}),
+    };
+    this.type = p.type;
+    this.bounds = p.bounds;
+    this.element = p.element;
+    this.id = p.id || this.model.makeUniqueId();
+    if (p.name) {
+      this.name = p.name;
+    }
+    if (p.documentation) {
+      this.documentation = p.documentation;
+    }
+    if (p.style) {
+      this.style = p.style;
+    }
+    if (p.viewRefs) {
+      this.viewRefs = p.viewRefs;
+    }
+    if (p.content) {
+      this.content = p.content;
+    }
+    if (p.parent) {
+      this.parent = p.parent;
+    }
+    if (p.childType) {
+      this.childType = p.childType;
+    }
+    this.entity = this.entityInstance();
+    this.backgroundClass = layerClassName(
+      elementTypeLayer(elementTypeOfString(this.elementType())),
+    );
+    this.textAlign = "center";
+    archimateElementTypeProps(this);
   }
 
   public toString() {
@@ -156,6 +236,16 @@ export class ViewNode implements IViewNode, IEntityRef {
 
   // @todo Is this true for all or only Archi models?
   public absolutePosition(): Bounds {
+    if (this.x === undefined || this.y === undefined) {
+      console.log(
+        "bad position",
+        this.element,
+        this.x,
+        this.y,
+        this.bounds.left,
+        this.bounds.top,
+      );
+    }
     const bounds = new Bounds(
       this.x || this.bounds.left,
       this.y || this.bounds.top,

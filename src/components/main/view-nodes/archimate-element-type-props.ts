@@ -1,9 +1,4 @@
-import {
-  Bounds,
-  IEntity,
-  ViewNode,
-  zeroBounds,
-} from "../../../archimate-model";
+import { ViewNode, zeroBounds } from "../../../archimate-model";
 import { defaultTextBounds as defaultTextBounds } from "./base-shape";
 import ApplicationComponentShape, {
   applicationComponentTextBounds,
@@ -54,373 +49,302 @@ import ServiceShape, {
   enterServiceShape,
   serviceTextBounds,
 } from "./service-shape";
-import type {
-  EnterEntityShapeFunc,
-  EntityShapeComponent,
-} from "./entity-shape-component";
-import type * as CSS from "csstype";
 import ValueShape, { enterValueShape, valueTextBounds } from "./value-shape";
 
-export type IArchimateViewNodeState = {
-  badge: string | undefined;
-  backgroundClass: string;
-  entity: IEntity | undefined;
-  textAlign: CSS.Property.TextAlign;
-  badgeBounds(viewNode: ViewNode): Bounds | undefined;
-  textBounds(viewNode: ViewNode, x?: number, y?: number): Bounds;
-  EntityShape: EntityShapeComponent;
-  enterEntityShapeFunc: EnterEntityShapeFunc;
-};
-
-export default function archimateElementTypeProps(
-  viewNode: ViewNode,
-): Partial<IArchimateViewNodeState> {
-  switch (viewNode.elementType()) {
+export default function archimateElementTypeProps(vn: ViewNode): void {
+  switch (vn.elementType()) {
     case "AndJunction":
     case "Junction":
-      return {
-        backgroundClass: "archimate-junction-background",
-        EntityShape: JunctionShape,
-        enterEntityShapeFunc: enterJunctionShape,
-      };
+      vn.backgroundClass = "archimate-junction-background";
+      vn.EntityShape = JunctionShape;
+      vn.enterEntityShapeFunc = enterJunctionShape;
+      break;
     case "OrJunction":
-      return {
-        backgroundClass: "archimate-or-junction-background",
-        EntityShape: JunctionShape,
-        enterEntityShapeFunc: enterJunctionShape,
-      };
+      vn.backgroundClass = "archimate-or-junction-background";
+      vn.EntityShape = JunctionShape;
+      vn.enterEntityShapeFunc = enterJunctionShape;
+      break;
     case "ApplicationCollaboration":
     case "BusinessCollaboration":
     case "TechnologyCollaboration":
-      return {
-        badge: "#archimate-collaboration-badge",
-        badgeBounds: badgedRectBadgeBounds,
-        EntityShape: BadgedRectShape,
-        enterEntityShapeFunc: enterBadgedRectShape,
-      };
+      vn.badge = "#archimate-collaboration-badge";
+      vn.badgeBounds = badgedRectBadgeBounds;
+      vn.EntityShape = BadgedRectShape;
+      vn.enterEntityShapeFunc = enterBadgedRectShape;
+      break;
     case "ApplicationComponent":
-      return {
-        badge:
-          viewNode.childType === "1"
-            ? "#archimate-app-component-badge"
-            : undefined,
-        badgeBounds:
-          viewNode.childType === "1" ? badgedRectBadgeBounds : zeroBounds,
-        textBounds: applicationComponentTextBounds,
-        EntityShape: ApplicationComponentShape,
-        enterEntityShapeFunc: enterApplicationComponentShape,
-      };
+      vn.badge =
+        vn.childType === "1" ? "#archimate-app-component-badge" : undefined;
+      vn.badgeBounds =
+        vn.childType === "1" ? badgedRectBadgeBounds : zeroBounds;
+      vn.textBounds = applicationComponentTextBounds;
+      vn.EntityShape = ApplicationComponentShape;
+      vn.enterEntityShapeFunc = enterApplicationComponentShape;
+      break;
     case "ApplicationEvent":
     case "BusinessEvent":
     case "TechnologyEvent":
-      return {
-        EntityShape: EventShape,
-        enterEntityShapeFunc: enterEventShape,
-        badge:
-          viewNode.childType === "1" ? undefined : "#archimate-event-badge",
-        badgeBounds: eventBadgeBounds,
-        textBounds: eventTextBounds,
-      };
+      vn.EntityShape = EventShape;
+      vn.enterEntityShapeFunc = enterEventShape;
+      vn.badge = vn.childType === "1" ? undefined : "#archimate-event-badge";
+      vn.badgeBounds = eventBadgeBounds;
+      vn.textBounds = eventTextBounds;
+      break;
     case "ApplicationFunction":
     case "BusinessFunction":
     case "TechnologyFunction":
-      return {
-        badge: "#archimate-function-badge",
-        badgeBounds: badgedRectBadgeBounds,
-        EntityShape: BadgedRoundedRectShape,
-        enterEntityShapeFunc: enterBadgedRoundedRectShape,
-      };
+      vn.badge = "#archimate-function-badge";
+      vn.badgeBounds = badgedRectBadgeBounds;
+      vn.EntityShape = BadgedRoundedRectShape;
+      vn.enterEntityShapeFunc = enterBadgedRoundedRectShape;
+      break;
     case "ApplicationInteraction":
     case "BusinessInteraction":
     case "TechnologyInteraction":
-      return {
-        badge: "#archimate-interaction-badge",
-        badgeBounds: badgedRectBadgeBounds,
-        EntityShape: BadgedRoundedRectShape,
-        enterEntityShapeFunc: enterBadgedRoundedRectShape,
-      };
+      vn.badge = "#archimate-interaction-badge";
+      vn.badgeBounds = badgedRectBadgeBounds;
+      vn.EntityShape = BadgedRoundedRectShape;
+      vn.enterEntityShapeFunc = enterBadgedRoundedRectShape;
+      break;
     case "ApplicationInterface":
     case "BusinessInterface":
     case "TechnologyInterface":
-      return {
-        badge:
-          viewNode.childType === "1" ? undefined : "#archimate-interface-badge",
-        badgeBounds:
-          viewNode.childType === "1" ? undefined : badgedRectBadgeBounds,
-        EntityShape: InterfaceShape,
-        enterEntityShapeFunc: enterInterfaceShape,
-      };
+      vn.badge =
+        vn.childType === "1" ? undefined : "#archimate-interface-badge";
+      vn.badgeBounds =
+        vn.childType === "1" ? zeroBounds : badgedRectBadgeBounds;
+      vn.EntityShape = InterfaceShape;
+      vn.enterEntityShapeFunc = enterInterfaceShape;
+      break;
     case "ApplicationProcess":
     case "BusinessProcess":
     case "TechnologyProcess":
-      return {
-        badge:
-          viewNode.childType === "1" ? undefined : "#archimate-process-badge",
-        badgeBounds:
-          viewNode.childType === "1" ? zeroBounds : badgedRectBadgeBounds,
-        textBounds:
-          viewNode.childType === "1" ? processTextBounds : defaultTextBounds,
-        EntityShape: ProcessShape,
-        enterEntityShapeFunc: enterProcessShape,
-      };
+      vn.badge = vn.childType === "1" ? undefined : "#archimate-process-badge";
+      vn.badgeBounds =
+        vn.childType === "1" ? zeroBounds : badgedRectBadgeBounds;
+      vn.textBounds =
+        vn.childType === "1" ? processTextBounds : defaultTextBounds;
+      vn.EntityShape = ProcessShape;
+      vn.enterEntityShapeFunc = enterProcessShape;
+      break;
     case "ApplicationService":
     case "BusinessService":
     case "TechnologyService":
-      return {
-        badge:
-          viewNode.childType === "1" ? undefined : "#archimate-service-badge",
-        badgeBounds:
-          viewNode.childType === "1" ? zeroBounds : badgedRectBadgeBounds,
-        textBounds:
-          viewNode.childType === "1" ? serviceTextBounds : defaultTextBounds,
-        EntityShape: ServiceShape,
-        enterEntityShapeFunc: enterServiceShape,
-      };
+      vn.badge = vn.childType === "1" ? undefined : "#archimate-service-badge";
+      vn.badgeBounds =
+        vn.childType === "1" ? zeroBounds : badgedRectBadgeBounds;
+      vn.textBounds =
+        vn.childType === "1" ? serviceTextBounds : defaultTextBounds;
+      vn.EntityShape = ServiceShape;
+      vn.enterEntityShapeFunc = enterServiceShape;
+      break;
     case "BusinessActor":
-      return {
-        badge: "#archimate-actor-badge",
-        badgeBounds: badgedRectBadgeBounds,
-        EntityShape: BadgedRectShape,
-        enterEntityShapeFunc: enterBadgedRectShape,
-      };
+      vn.badge = "#archimate-actor-badge";
+      vn.badgeBounds = badgedRectBadgeBounds;
+      vn.EntityShape = BadgedRectShape;
+      vn.enterEntityShapeFunc = enterBadgedRectShape;
+      break;
     case "Artifact":
-      return {
-        badge: "archimate-artifact-badge",
-        badgeBounds: badgedRectBadgeBounds,
-        EntityShape: ArtifactShape,
-        enterEntityShapeFunc: enterArtifactShape,
-      };
+      vn.badge = "archimate-artifact-badge";
+      vn.badgeBounds = badgedRectBadgeBounds;
+      vn.EntityShape = ArtifactShape;
+      vn.enterEntityShapeFunc = enterArtifactShape;
+      break;
     case "Assessment":
-      return {
-        badge: "#archimate-assessment-badge",
-        badgeBounds: badgedRectBadgeBounds,
-        EntityShape: MotivationShape,
-        enterEntityShapeFunc: enterMotivationShape,
-      };
+      vn.badge = "#archimate-assessment-badge";
+      vn.badgeBounds = badgedRectBadgeBounds;
+      vn.EntityShape = MotivationShape;
+      vn.enterEntityShapeFunc = enterMotivationShape;
+      break;
     case "Driver":
-      return {
-        badge: "#archimate-driver-badge",
-        badgeBounds: badgedRectBadgeBounds,
-        EntityShape: MotivationShape,
-        enterEntityShapeFunc: enterMotivationShape,
-      };
+      vn.badge = "#archimate-driver-badge";
+      vn.badgeBounds = badgedRectBadgeBounds;
+      vn.EntityShape = MotivationShape;
+      vn.enterEntityShapeFunc = enterMotivationShape;
+      break;
     case "Constraint":
-      return {
-        badge: "#archimate-constraint-badge",
-        badgeBounds: badgedRectBadgeBounds,
-        EntityShape: MotivationShape,
-        enterEntityShapeFunc: enterMotivationShape,
-      };
+      vn.badge = "#archimate-constraint-badge";
+      vn.badgeBounds = badgedRectBadgeBounds;
+      vn.EntityShape = MotivationShape;
+      vn.enterEntityShapeFunc = enterMotivationShape;
+      break;
     case "Goal":
-      return {
-        badge: "#archimate-goal-badge",
-        badgeBounds: badgedRectBadgeBounds,
-        EntityShape: MotivationShape,
-        enterEntityShapeFunc: enterMotivationShape,
-      };
+      vn.badge = "#archimate-goal-badge";
+      vn.badgeBounds = badgedRectBadgeBounds;
+      vn.EntityShape = MotivationShape;
+      vn.enterEntityShapeFunc = enterMotivationShape;
+      break;
     case "Outcome":
-      return {
-        badge: "#archimate-outcome-badge",
-        badgeBounds: badgedRectBadgeBounds,
-        EntityShape: MotivationShape,
-        enterEntityShapeFunc: enterMotivationShape,
-      };
+      vn.badge = "#archimate-outcome-badge";
+      vn.badgeBounds = badgedRectBadgeBounds;
+      vn.EntityShape = MotivationShape;
+      vn.enterEntityShapeFunc = enterMotivationShape;
+      break;
     case "Principle":
-      return {
-        badge: "#archimate-principle-badge",
-        badgeBounds: badgedRectBadgeBounds,
-        EntityShape: MotivationShape,
-        enterEntityShapeFunc: enterMotivationShape,
-      };
+      vn.badge = "#archimate-principle-badge";
+      vn.badgeBounds = badgedRectBadgeBounds;
+      vn.EntityShape = MotivationShape;
+      vn.enterEntityShapeFunc = enterMotivationShape;
+      break;
     case "Requirement":
-      return {
-        badge: "#archimate-requirement-badge",
-        badgeBounds: badgedRectBadgeBounds,
-        EntityShape: MotivationShape,
-        enterEntityShapeFunc: enterMotivationShape,
-      };
+      vn.badge = "#archimate-requirement-badge";
+      vn.badgeBounds = badgedRectBadgeBounds;
+      vn.EntityShape = MotivationShape;
+      vn.enterEntityShapeFunc = enterMotivationShape;
+      break;
     case "Stakeholder":
-      return {
-        badge: "#archimate-stakeholder-badge",
-        badgeBounds: badgedRectBadgeBounds,
-        EntityShape: MotivationShape,
-        enterEntityShapeFunc: enterMotivationShape,
-      };
+      vn.badge = "#archimate-stakeholder-badge";
+      vn.badgeBounds = badgedRectBadgeBounds;
+      vn.EntityShape = MotivationShape;
+      vn.enterEntityShapeFunc = enterMotivationShape;
+      break;
     case "BusinessObject":
     case "DataObject":
-      return {
-        textBounds: dataObjectTextBounds,
-        EntityShape: DataObjectShape,
-        enterEntityShapeFunc: enterDataObjectShape,
-      };
+      vn.textBounds = dataObjectTextBounds;
+      vn.EntityShape = DataObjectShape;
+      vn.enterEntityShapeFunc = enterDataObjectShape;
+      break;
     case "BusinessRole":
-      return {
-        badge: "#archimate-role-badge",
-        badgeBounds: badgedRectBadgeBounds,
-        EntityShape: BadgedRectShape,
-        enterEntityShapeFunc: enterBadgedRectShape,
-      };
+      vn.badge = "#archimate-role-badge";
+      vn.badgeBounds = badgedRectBadgeBounds;
+      vn.EntityShape = BadgedRectShape;
+      vn.enterEntityShapeFunc = enterBadgedRectShape;
+      break;
     case "Contract":
-      return {
-        textBounds: dataObjectTextBounds,
-        EntityShape: ContractShape,
-        enterEntityShapeFunc: enterContractShape,
-      };
+      vn.textBounds = dataObjectTextBounds;
+      vn.EntityShape = ContractShape;
+      vn.enterEntityShapeFunc = enterContractShape;
+      break;
     case "Deliverable":
-      return {
-        badge: "archimate-artifact-badge",
-        EntityShape: DeliverableShape,
-        enterEntityShapeFunc: enterDeliverableShape,
-      };
+      vn.badge = "archimate-artifact-badge";
+      vn.EntityShape = DeliverableShape;
+      vn.enterEntityShapeFunc = enterDeliverableShape;
+      break;
     case "Gap":
-      return {
-        backgroundClass: "archimate-implementation2-background",
-        badge: "#archimate-gap-badge",
-        badgeBounds: badgedRectBadgeBounds,
-        EntityShape: DeliverableShape,
-        enterEntityShapeFunc: enterDeliverableShape,
-      };
+      vn.backgroundClass = "archimate-implementation2-background";
+      vn.badge = "#archimate-gap-badge";
+      vn.badgeBounds = badgedRectBadgeBounds;
+      vn.EntityShape = DeliverableShape;
+      vn.enterEntityShapeFunc = enterDeliverableShape;
+      break;
     case "DiagramModelReference":
     case "ArchimateDiagramModel":
     case "DiagramModel":
-      return {
-        backgroundClass: "archimate-diagram-model-reference-background",
-        badgeBounds: badgedRectBadgeBounds,
-        EntityShape: BadgedRectShape,
-        enterEntityShapeFunc: enterBadgedRectShape,
-      };
+      vn.backgroundClass = "archimate-diagram-model-reference-background";
+      vn.badgeBounds = badgedRectBadgeBounds;
+      vn.EntityShape = BadgedRectShape;
+      vn.enterEntityShapeFunc = enterBadgedRectShape;
+      break;
     case "Device":
-      return {
-        badge:
-          viewNode.childType === "1" ? "#archimate-device-badge" : undefined,
-        badgeBounds:
-          viewNode.childType === "1" ? badgedNodeBadgeBounds : zeroBounds,
-        textBounds:
-          viewNode.childType === "1" ? nodeTextBounds : defaultTextBounds,
-        EntityShape: DeviceShape,
-        enterEntityShapeFunc: enterDeviceShape,
-      };
+      vn.badge = vn.childType === "1" ? "#archimate-device-badge" : undefined;
+      vn.badgeBounds =
+        vn.childType === "1" ? badgedNodeBadgeBounds : zeroBounds;
+      vn.textBounds = vn.childType === "1" ? nodeTextBounds : defaultTextBounds;
+      vn.EntityShape = DeviceShape;
+      vn.enterEntityShapeFunc = enterDeviceShape;
+      break;
     case "Plateau":
-      return {
-        backgroundClass: "archimate-implementation2-background",
-        badge: "#archimate-plateau-badge",
-        EntityShape: BadgedNodeShape,
-        enterEntityShapeFunc: enterBadgedNodeShape,
-        badgeBounds: badgedNodeBadgeBounds,
-        textBounds: nodeTextBounds,
-      };
+      vn.backgroundClass = "archimate-implementation2-background";
+      vn.badge = "#archimate-plateau-badge";
+      vn.EntityShape = BadgedNodeShape;
+      vn.enterEntityShapeFunc = enterBadgedNodeShape;
+      vn.badgeBounds = badgedNodeBadgeBounds;
+      vn.textBounds = nodeTextBounds;
+      break;
     case "Node":
-      return {
-        badge: viewNode.childType === "1" ? "#archimate-node-badge" : undefined,
-        badgeBounds:
-          viewNode.childType === "1" ? badgedRectBadgeBounds : zeroBounds,
-        textBounds:
-          viewNode.childType === "1" ? badgedNodeTextBounds : nodeTextBounds,
-        EntityShape: NodeShape,
-        enterEntityShapeFunc: enterNodeShape,
-      };
+      vn.badge = vn.childType === "1" ? "#archimate-node-badge" : undefined;
+      vn.badgeBounds =
+        vn.childType === "1" ? badgedRectBadgeBounds : zeroBounds;
+      vn.textBounds =
+        vn.childType === "1" ? badgedNodeTextBounds : nodeTextBounds;
+      vn.EntityShape = NodeShape;
+      vn.enterEntityShapeFunc = enterNodeShape;
+      break;
     case "DistributionNetwork":
-      return {
-        badge: "#archimate-distribution-network-badge",
-        badgeBounds: badgedRectBadgeBounds,
-        EntityShape: BadgedRectShape,
-        enterEntityShapeFunc: enterBadgedRectShape,
-      };
+      vn.badge = "#archimate-distribution-network-badge";
+      vn.badgeBounds = badgedRectBadgeBounds;
+      vn.EntityShape = BadgedRectShape;
+      vn.enterEntityShapeFunc = enterBadgedRectShape;
+      break;
     case "Group":
-      return {
-        backgroundClass: "archimate-group-background",
-        textAlign: "left",
-        textBounds: groupTextBounds,
-        EntityShape: GroupShape,
-        enterEntityShapeFunc: enterGroupShape,
-      };
+      vn.backgroundClass = "archimate-group-background";
+      vn.textAlign = "left";
+      vn.textBounds = groupTextBounds;
+      vn.EntityShape = GroupShape;
+      vn.enterEntityShapeFunc = enterGroupShape;
+      break;
     case "Grouping":
-      return {
-        backgroundClass: "archimate-grouping-background",
-        textAlign: "left",
-        textBounds: groupTextBounds,
-        EntityShape: GroupingShape,
-        enterEntityShapeFunc: enterGroupingShape,
-      };
+      vn.backgroundClass = "archimate-grouping-background";
+      vn.textAlign = "left";
+      vn.textBounds = groupTextBounds;
+      vn.EntityShape = GroupingShape;
+      vn.enterEntityShapeFunc = enterGroupingShape;
+      break;
     case "Location":
-      return {
-        backgroundClass: "archimate-location-background",
-        badge: "#archimate-location-badge",
-        badgeBounds: badgedRectBadgeBounds,
-        EntityShape: BadgedRectShape,
-        enterEntityShapeFunc: enterBadgedRectShape,
-      };
+      vn.backgroundClass = "archimate-location-background";
+      vn.badge = "#archimate-location-badge";
+      vn.badgeBounds = badgedRectBadgeBounds;
+      vn.EntityShape = BadgedRectShape;
+      vn.enterEntityShapeFunc = enterBadgedRectShape;
+      break;
     case "Meaning":
-      return {
-        EntityShape: MeaningShape,
-        enterEntityShapeFunc: enterMeaningShape,
-      };
+      vn.EntityShape = MeaningShape;
+      vn.enterEntityShapeFunc = enterMeaningShape;
+      break;
     case "CommunicationNetwork":
     case "Network":
-      return {
-        badge: "#archimate-network-badge",
-        badgeBounds: badgedRectBadgeBounds,
-        EntityShape: BadgedRectShape,
-        enterEntityShapeFunc: enterBadgedRectShape,
-      };
+      vn.badge = "#archimate-network-badge";
+      vn.badgeBounds = badgedRectBadgeBounds;
+      vn.EntityShape = BadgedRectShape;
+      vn.enterEntityShapeFunc = enterBadgedRectShape;
+      break;
     case "Path":
-      return {
-        badge: "#archimate-communication-path-badge",
-        badgeBounds: badgedRectBadgeBounds,
-        EntityShape: BadgedRectShape,
-        enterEntityShapeFunc: enterBadgedRectShape,
-      };
+      vn.badge = "#archimate-communication-path-badge";
+      vn.badgeBounds = badgedRectBadgeBounds;
+      vn.EntityShape = BadgedRectShape;
+      vn.enterEntityShapeFunc = enterBadgedRectShape;
+      break;
     case "Resource":
-      return {
-        badge: "#archimate-resource-badge",
-        badgeBounds: badgedRectBadgeBounds,
-        EntityShape: BadgedRectShape,
-        enterEntityShapeFunc: enterBadgedRectShape,
-      };
+      vn.badge = "#archimate-resource-badge";
+      vn.badgeBounds = badgedRectBadgeBounds;
+      vn.EntityShape = BadgedRectShape;
+      vn.enterEntityShapeFunc = enterBadgedRectShape;
+      break;
     case "SystemSoftware":
-      return {
-        badge: "#archimate-system-software-badge",
-        badgeBounds: badgedRectBadgeBounds,
-        EntityShape: BadgedRectShape,
-        enterEntityShapeFunc: enterBadgedRectShape,
-      };
+      vn.badge = "#archimate-system-software-badge";
+      vn.badgeBounds = badgedRectBadgeBounds;
+      vn.EntityShape = BadgedRectShape;
+      vn.enterEntityShapeFunc = enterBadgedRectShape;
+      break;
     case "DiagramObject":
     case "Note":
-      return {
-        backgroundClass: "archimate-note-background",
-        textAlign: "left",
-        EntityShape: NoteShape,
-        enterEntityShapeFunc: enterNoteShape,
-      };
+      vn.backgroundClass = "archimate-note-background";
+      vn.textAlign = "left";
+      vn.EntityShape = NoteShape;
+      vn.enterEntityShapeFunc = enterNoteShape;
+      break;
     case "Product":
-      return {
-        textBounds: dataObjectTextBounds,
-        EntityShape: ProductShape,
-        enterEntityShapeFunc: enterProductShape,
-      };
+      vn.textBounds = dataObjectTextBounds;
+      vn.EntityShape = ProductShape;
+      vn.enterEntityShapeFunc = enterProductShape;
+      break;
     case "Representation":
-      return {
-        textBounds: dataObjectTextBounds,
-        EntityShape: RepresentationShape,
-        enterEntityShapeFunc: enterRepresentationShape,
-      };
+      vn.textBounds = dataObjectTextBounds;
+      vn.EntityShape = RepresentationShape;
+      vn.enterEntityShapeFunc = enterRepresentationShape;
+      break;
     case "SketchModelSticky":
-      return {
-        backgroundClass: "archimate-sticky-background",
-      };
+      vn.backgroundClass = "archimate-sticky-background";
+      break;
     case "Value":
-      return {
-        textBounds: valueTextBounds,
-        backgroundClass: "archimate-motivation-background",
-        EntityShape: ValueShape,
-        enterEntityShapeFunc: enterValueShape,
-      };
+      vn.textBounds = valueTextBounds;
+      vn.backgroundClass = "archimate-motivation-background";
+      vn.EntityShape = ValueShape;
+      vn.enterEntityShapeFunc = enterValueShape;
+      break;
     case "WorkPackage":
-      return {
-        EntityShape: BadgedRoundedRectShape,
-        enterEntityShapeFunc: enterBadgedRoundedRectShape,
-      };
-    default:
-      return {};
+      vn.EntityShape = BadgedRoundedRectShape;
+      vn.enterEntityShapeFunc = enterBadgedRoundedRectShape;
+      break;
   }
 }

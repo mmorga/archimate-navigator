@@ -1,4 +1,4 @@
-import { Bounds, ViewNode } from "../../../archimate-model";
+import { Bounds, IViewNode, ViewNode } from "../../../archimate-model";
 import { CSSProperties } from "react";
 import { cssPropertiesToString } from "./style-utils";
 import type {
@@ -6,7 +6,7 @@ import type {
   IEntityShapeProps,
 } from "./entity-shape-component";
 
-export function defaultTextBounds(viewNode: ViewNode): Bounds {
+export function defaultTextBounds(viewNode: IViewNode): Bounds {
   const bounds = viewNode.absolutePosition();
   return new Bounds(bounds.x, bounds.y, bounds.width, bounds.height).reducedBy(
     2,
@@ -49,6 +49,16 @@ export const enterBaseShape = (
   );
 };
 
+export const updateBaseShape = (
+  selection: d3.Selection<SVGGElement, ViewNode, SVGGElement, undefined>,
+  // vn: ViewNode,
+) => {
+  selection
+    .select<SVGRectElement>(".g-archimate-shape rect")
+    .attr("x", (d) => d.x || 0)
+    .attr("y", (d) => d.y || 0);
+};
+
 export function svgG(
   g: SVGGElement,
   backgroundClass: string | undefined,
@@ -63,6 +73,10 @@ export function svgG(
   }
   g.appendChild(child);
   return child;
+}
+
+export function svgShapeGroup(g: SVGGElement) {
+  return svgG(g, "g-archimate-shape");
 }
 
 export function svgRect(

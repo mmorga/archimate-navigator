@@ -33,6 +33,7 @@ export const enterBadgedRoundedRectShape = (
   shapeStyle?: CSSProperties | undefined,
 ): void => {
   const bounds = viewNode.absolutePosition();
+
   svgRect(
     g,
     bounds.left,
@@ -44,6 +45,17 @@ export const enterBadgedRoundedRectShape = (
     5,
     5,
   );
+};
+
+export const updateBadgedRoundedRectShape = (
+  selection: d3.Selection<SVGGElement, ViewNode, SVGGElement, undefined>,
+  vn: ViewNode,
+) => {
+  const bounds = vn.absolutePosition();
+  selection
+    .select(".g-archimate-shape rect")
+    .attr("x", bounds.left)
+    .attr("y", bounds.top);
 };
 
 export default BadgedRoundedRectShape;

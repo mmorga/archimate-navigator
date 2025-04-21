@@ -52,7 +52,7 @@ type ISpiderAccumulator = {
   visited: Set<Element>;
 };
 
-export function spiderRelationships(
+function spiderRelationships(
   acc: ISpiderAccumulator,
   relationship: IRelationship,
 ): ISpiderAccumulator {
