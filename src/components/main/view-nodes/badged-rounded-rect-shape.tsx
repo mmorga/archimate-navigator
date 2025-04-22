@@ -1,6 +1,3 @@
-import { CSSProperties } from "react";
-import { svgRect } from "./base-shape";
-import { ViewNode } from "../../../archimate-model";
 import type {
   EntityShapeComponent,
   IEntityShapeProps,
@@ -24,38 +21,6 @@ const BadgedRoundedRectShape: EntityShapeComponent = ({
       style={shapeStyle}
     />
   );
-};
-
-export const enterBadgedRoundedRectShape = (
-  g: SVGGElement,
-  viewNode: ViewNode,
-  backgroundClass: string | undefined,
-  shapeStyle?: CSSProperties | undefined,
-): void => {
-  const bounds = viewNode.absolutePosition();
-
-  svgRect(
-    g,
-    bounds.left,
-    bounds.top,
-    bounds.width,
-    bounds.height,
-    backgroundClass,
-    shapeStyle,
-    5,
-    5,
-  );
-};
-
-export const updateBadgedRoundedRectShape = (
-  selection: d3.Selection<SVGGElement, ViewNode, SVGGElement, undefined>,
-  vn: ViewNode,
-) => {
-  const bounds = vn.absolutePosition();
-  selection
-    .select(".g-archimate-shape rect")
-    .attr("x", bounds.left)
-    .attr("y", bounds.top);
 };
 
 export default BadgedRoundedRectShape;

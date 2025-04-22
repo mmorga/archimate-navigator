@@ -1,4 +1,3 @@
-import { svgPath } from "./base-shape";
 import { ViewNode } from "../../../archimate-model";
 import type {
   EntityShapeComponent,
@@ -20,18 +19,6 @@ const NoteShape: EntityShapeComponent = ({
       }}
     />
   );
-};
-
-export const enterNoteShape = (
-  g: SVGGElement,
-  viewNode: ViewNode,
-  backgroundClass: string | undefined,
-): void => {
-  svgPath(g, nodePathD(viewNode), backgroundClass, {
-    fill: viewNode.style?.fillColor?.toRGBA(),
-    stroke: viewNode.style?.lineColor?.toRGBA(),
-    strokeWidth: viewNode.style?.lineWidth,
-  });
 };
 
 function nodePathD(viewNode: ViewNode): (string | number)[] {

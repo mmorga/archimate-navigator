@@ -1,9 +1,6 @@
-import { Bounds, IViewNode, ViewNode } from "@/archimate-model";
-import { CSSProperties } from "react";
-import { defaultTextBounds, svgPath } from "./base-shape";
-import BadgedRoundedRectShape, {
-  enterBadgedRoundedRectShape,
-} from "./badged-rounded-rect-shape";
+import { Bounds, IViewNode } from "@/archimate-model";
+import { defaultTextBounds } from "./base-shape";
+import BadgedRoundedRectShape from "./badged-rounded-rect-shape";
 import { badgedRectBadgeBounds } from "./badged-rect-shape";
 import type {
   EntityShapeComponent,
@@ -31,19 +28,6 @@ const EventShape: EntityShapeComponent = ({
         shapeStyle={shapeStyle}
       />
     );
-  }
-};
-
-export const enterEventShape = (
-  g: SVGGElement,
-  viewNode: ViewNode,
-  backgroundClass: string | undefined,
-  shapeStyle?: CSSProperties | undefined,
-): void => {
-  if (viewNode.childType === "1") {
-    enterEventPath(g, viewNode, backgroundClass, shapeStyle);
-  } else {
-    enterBadgedRoundedRectShape(g, viewNode, backgroundClass, shapeStyle);
   }
 };
 
@@ -104,41 +88,5 @@ const EventPath: EntityShapeComponent = ({
   ].join(" ");
   return <path d={d} className={backgroundClass} style={shapeStyle} />;
 };
-
-function enterEventPath(
-  g: SVGGElement,
-  viewNode: ViewNode,
-  backgroundClass: string | undefined,
-  shapeStyle?: CSSProperties | undefined,
-): void {
-  const bounds = viewNode.absolutePosition();
-  const notchX = 18;
-  const notchHeight = bounds.height / 2.0;
-  const eventWidth = bounds.width * 0.85;
-  const rx = 17;
-  const d = [
-    "M",
-    bounds.left,
-    bounds.top,
-    "l",
-    notchX,
-    notchHeight,
-    "l",
-    -notchX,
-    notchHeight,
-    "h",
-    eventWidth,
-    "a",
-    rx,
-    notchHeight,
-    0,
-    0,
-    0,
-    0,
-    -bounds.height,
-    "z",
-  ];
-  svgPath(g, d, backgroundClass, shapeStyle);
-}
 
 export default EventShape;

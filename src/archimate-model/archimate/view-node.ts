@@ -16,12 +16,8 @@ import { elementTypeLayer, layerClassName } from "./layers";
 import { elementTypeOfString } from "./element-type";
 import BaseShape, {
   defaultTextBounds,
-  enterBaseShape,
 } from "../../components/main/view-nodes/base-shape";
-import {
-  EntityShapeComponent,
-  EnterEntityShapeFunc,
-} from "../../components/main/view-nodes/entity-shape-component";
+import { EntityShapeComponent } from "../../components/main/view-nodes/entity-shape-component";
 import archimateElementTypeProps from "../../components/main/view-nodes/archimate-element-type-props";
 
 export const VIEW_NODE_WIDTH = 120; // TODO: this should be from the SVG diagram settings
@@ -153,7 +149,6 @@ export class ViewNode implements IViewNode, IEntityRef {
   public badgeBounds: badgeBoundsFunc = zeroBounds;
   public textBounds: textBoundsFunc = defaultTextBounds;
   public EntityShape: EntityShapeComponent = BaseShape;
-  public enterEntityShapeFunc: EnterEntityShapeFunc = enterBaseShape;
 
   private model: IModel;
   private defaultParams: IViewNodeCtorParams = {

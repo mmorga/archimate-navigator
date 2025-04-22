@@ -8,9 +8,3 @@ export type IEntityShapeProps = {
 };
 
 export type EntityShapeComponent = React.FC<IEntityShapeProps>;
-export type EnterEntityShapeFunc = (
-  g: SVGGElement,
-  viewNode: ViewNode,
-  backgroundClass: string | undefined,
-  shapeStyle?: CSSProperties | undefined,
-) => void;

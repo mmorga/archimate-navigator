@@ -1,8 +1,7 @@
-import { Bounds, IViewNode, ViewNode } from "../../../archimate-model";
+import { Bounds, IViewNode } from "../../../archimate-model";
 import { CSSProperties } from "react";
-import { svgRect } from "./base-shape";
 import * as BaseViewNode from "./base-shape";
-import BadgedRectShape, { enterBadgedRectShape } from "./badged-rect-shape";
+import BadgedRectShape from "./badged-rect-shape";
 import type {
   EntityShapeComponent,
   IEntityShapeProps,
@@ -64,34 +63,6 @@ const ApplicationComponentShape: EntityShapeComponent = ({
         />
       </>
     );
-  }
-};
-
-export const enterApplicationComponentShape = (
-  g: SVGGElement,
-  viewNode: ViewNode,
-  backgroundClass: string | undefined,
-  shapeStyle?: CSSProperties | undefined,
-): void => {
-  if (viewNode.childType === "1") {
-    enterBadgedRectShape(g, viewNode, backgroundClass, shapeStyle);
-  } else {
-    const bounds = viewNode.absolutePosition();
-    const mainBoxX = bounds.left + 21.0 / 2;
-    const mainBoxWidth = bounds.width - 21 / 2;
-    svgRect(
-      g,
-      mainBoxX,
-      bounds.top,
-      mainBoxWidth,
-      bounds.height,
-      backgroundClass,
-      shapeStyle,
-    );
-
-    const decorClass = `${backgroundClass} archimate-decoration`;
-    svgRect(g, bounds.left, bounds.top + 10, 21, 13, decorClass, shapeStyle);
-    svgRect(g, bounds.left, bounds.top + 30, 21, 13, decorClass, shapeStyle);
   }
 };
 

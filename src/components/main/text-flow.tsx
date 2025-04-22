@@ -1,7 +1,6 @@
 import "./archimate-svg.css";
 import { Bounds } from "../../archimate-model";
 import { CSSProperties } from "react";
-import { cssPropertiesToString } from "./view-nodes/style-utils";
 
 type TextLine = {
   text: string;
@@ -35,30 +34,6 @@ const TextFlow = ({
       ))}
     </>
   );
-};
-
-export const enterTextFlow = (
-  parent: SVGTextElement,
-  text: string,
-  bounds: Bounds,
-  badgeBounds: Bounds,
-  style: CSSProperties,
-) => {
-  calculateLines(text, bounds, badgeBounds).map((line, idx) => {
-    const tspan = document.createElementNS(
-      "http://www.w3.org/2000/svg",
-      "tspan",
-    );
-    // tspan.setAttribute("x", textFlowLineX(bounds, badgeBounds, style, idx).toString());
-    tspan.setAttribute("x", "0%");
-    tspan.setAttribute("dx", "0");
-    tspan.setAttribute("dy", "1.1em");
-    tspan.setAttribute("class", "entity-name");
-    tspan.setAttribute("style", cssPropertiesToString(style));
-    tspan.setAttribute("key", idx.toString());
-    tspan.textContent = line.text;
-    parent.appendChild(tspan);
-  });
 };
 
 function calculateLines(

@@ -1,5 +1,4 @@
-import { svgEllipse } from "./base-shape";
-import { Bounds, IViewNode, ViewNode } from "../../../archimate-model";
+import { Bounds, IViewNode } from "../../../archimate-model";
 import type {
   EntityShapeComponent,
   IEntityShapeProps,
@@ -38,23 +37,6 @@ const ValueShape: EntityShapeComponent = ({
       }}
     />
   );
-};
-
-export const enterValueShape = (
-  g: SVGGElement,
-  viewNode: ViewNode,
-  backgroundClass: string | undefined,
-): void => {
-  const bounds = viewNode.absolutePosition();
-  const cx = bounds.left + bounds.width / 2.0;
-  const rx = bounds.width / 2.0 - 1;
-  const cy = bounds.top + bounds.height / 2.0;
-  const ry = bounds.height / 2.0 - 1;
-  svgEllipse(g, cx, cy, rx, ry, backgroundClass, {
-    fill: viewNode.style?.fillColor?.toRGBA(),
-    stroke: viewNode.style?.lineColor?.toRGBA(),
-    strokeWidth: viewNode.style?.lineWidth,
-  });
 };
 
 export default ValueShape;

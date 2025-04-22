@@ -1,9 +1,5 @@
-import { Bounds, IViewNode, ViewNode } from "@/archimate-model";
-import { CSSProperties } from "react";
-import { svgRect } from "./base-shape";
-import BadgedRoundedRectShape, {
-  enterBadgedRoundedRectShape,
-} from "./badged-rounded-rect-shape";
+import { Bounds, IViewNode } from "@/archimate-model";
+import BadgedRoundedRectShape from "./badged-rounded-rect-shape";
 import type {
   EntityShapeComponent,
   IEntityShapeProps,
@@ -32,19 +28,6 @@ const ServiceShape: EntityShapeComponent = ({
     );
   }
 };
-
-export function enterServiceShape(
-  g: SVGGElement,
-  viewNode: ViewNode,
-  backgroundClass: string | undefined,
-  shapeStyle?: CSSProperties | undefined,
-): void {
-  if (viewNode.childType === "1") {
-    enterServicePath(g, viewNode, backgroundClass, shapeStyle);
-  } else {
-    enterBadgedRoundedRectShape(g, viewNode, backgroundClass, shapeStyle);
-  }
-}
 
 export function serviceTextBounds(viewNode: IViewNode): Bounds {
   const bounds = viewNode.absolutePosition();
@@ -75,25 +58,5 @@ const ServicePath: EntityShapeComponent = ({
     />
   );
 };
-
-function enterServicePath(
-  g: SVGGElement,
-  viewNode: ViewNode,
-  backgroundClass: string | undefined,
-  shapeStyle?: CSSProperties | undefined,
-): void {
-  const bounds = viewNode.absolutePosition();
-  svgRect(
-    g,
-    bounds.left,
-    bounds.top,
-    bounds.width,
-    bounds.height,
-    backgroundClass,
-    shapeStyle,
-    bounds.height / 2.0,
-    bounds.height / 2.0,
-  );
-}
 
 export default ServiceShape;

@@ -1,7 +1,7 @@
-import { Bounds, IViewNode, ViewNode } from "../../../archimate-model";
+import { Bounds, IViewNode } from "../../../archimate-model";
 import { CSSProperties } from "react";
-import { defaultTextBounds, svgRect } from "./base-shape";
-import BadgedNodeShape, { enterBadgedNodeShape } from "./badged-node-shape";
+import { defaultTextBounds } from "./base-shape";
+import BadgedNodeShape from "./badged-node-shape";
 import type {
   EntityShapeComponent,
   IEntityShapeProps,
@@ -31,19 +31,6 @@ const NodeShape: EntityShapeComponent = ({
   }
 };
 
-export const enterNodeShape = (
-  g: SVGGElement,
-  viewNode: ViewNode,
-  backgroundClass: string | undefined,
-  shapeStyle?: CSSProperties | undefined,
-): void => {
-  if (viewNode.childType === "1") {
-    enterNodePath(g, viewNode, backgroundClass, shapeStyle);
-  } else {
-    enterBadgedNodeShape(g, viewNode, backgroundClass, shapeStyle);
-  }
-};
-
 function NodePath({
   bounds,
   backgroundClass,
@@ -62,24 +49,6 @@ function NodePath({
       className={backgroundClass}
       style={style}
     />
-  );
-}
-
-function enterNodePath(
-  g: SVGGElement,
-  viewNode: ViewNode,
-  backgroundClass: string | undefined,
-  shapeStyle?: CSSProperties | undefined,
-): void {
-  const bounds = viewNode.absolutePosition();
-  svgRect(
-    g,
-    bounds.x,
-    bounds.y,
-    bounds.width,
-    bounds.height,
-    backgroundClass,
-    shapeStyle,
   );
 }
 

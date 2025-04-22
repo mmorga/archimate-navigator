@@ -1,6 +1,4 @@
-import { Bounds, IViewNode, ViewNode } from "../../../archimate-model";
-import { CSSProperties } from "react";
-import { svgG, svgPath } from "./base-shape";
+import { Bounds, IViewNode } from "../../../archimate-model";
 import type {
   EntityShapeComponent,
   IEntityShapeProps,
@@ -85,89 +83,6 @@ const BadgedNodeShape: EntityShapeComponent = ({
     </g>
   );
 };
-
-export function enterBadgedNodeShape(
-  g: SVGGElement,
-  viewNode: ViewNode,
-  backgroundClass: string | undefined,
-  shapeStyle?: CSSProperties | undefined,
-): void {
-  const bounds = viewNode.absolutePosition();
-  const margin = 14;
-  const nodeBoxHeight = bounds.height - margin;
-  const nodeBoxWidth = bounds.width - margin;
-  const ag = svgG(g, backgroundClass, shapeStyle);
-  svgPath(
-    ag,
-    [
-      "M",
-      bounds.left,
-      bounds.bottom,
-      "v",
-      -nodeBoxHeight,
-      "l",
-      margin,
-      -margin,
-      "h",
-      nodeBoxWidth,
-      "v",
-      nodeBoxHeight,
-      "l",
-      -margin,
-      margin,
-      "z",
-    ],
-    undefined,
-  );
-  svgPath(
-    ag,
-    [
-      "M",
-      bounds.left,
-      bounds.top + margin,
-      "l",
-      margin,
-      -margin,
-      "h",
-      nodeBoxWidth,
-      "v",
-      nodeBoxHeight,
-      "l",
-      -margin,
-      margin,
-      "v",
-      -nodeBoxHeight,
-      "z",
-      "M",
-      bounds.right,
-      bounds.top,
-      "l",
-      -margin,
-      margin,
-    ],
-    "archimate-decoration",
-  );
-  svgPath(
-    ag,
-    [
-      "M",
-      bounds.left,
-      bounds.top + margin,
-      "h",
-      nodeBoxWidth,
-      "l",
-      margin,
-      -margin,
-      "M",
-      bounds.left + nodeBoxWidth,
-      bounds.bottom,
-      "v",
-      -nodeBoxHeight,
-    ],
-    undefined,
-    { fill: "none", stroke: "inherit" },
-  );
-}
 
 export function badgedNodeBadgeBounds(viewNode: IViewNode): Bounds {
   const bounds = viewNode.absolutePosition();

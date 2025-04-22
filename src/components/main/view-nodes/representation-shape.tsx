@@ -1,6 +1,4 @@
-import { CSSProperties } from "react";
-import { svgPath, svgRect } from "./base-shape";
-import { Bounds, ViewNode } from "../../../archimate-model";
+import { Bounds } from "../../../archimate-model";
 import type {
   EntityShapeComponent,
   IEntityShapeProps,
@@ -29,26 +27,6 @@ const RepresentationShape: EntityShapeComponent = ({
         className="archimate-decoration"
       />
     </>
-  );
-};
-
-export const enterRepresentationShape = (
-  g: SVGGElement,
-  viewNode: ViewNode,
-  backgroundClass: string | undefined,
-  shapeStyle?: CSSProperties | undefined,
-): void => {
-  const bounds = viewNode.absolutePosition();
-  const margin = 8;
-  svgPath(g, representationPathD(bounds), backgroundClass, shapeStyle);
-  svgRect(
-    g,
-    // key="data-decoration"
-    bounds.left,
-    bounds.top,
-    bounds.width,
-    margin,
-    "archimate-decoration",
   );
 };
 

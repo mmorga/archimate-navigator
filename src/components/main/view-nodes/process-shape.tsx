@@ -1,9 +1,5 @@
-import { Bounds, IViewNode, ViewNode } from "@/archimate-model";
-import { CSSProperties } from "react";
-import { svgPath } from "./base-shape";
-import BadgedRoundedRectShape, {
-  enterBadgedRoundedRectShape,
-} from "./badged-rounded-rect-shape";
+import { Bounds, IViewNode } from "@/archimate-model";
+import BadgedRoundedRectShape from "./badged-rounded-rect-shape";
 import type {
   EntityShapeComponent,
   IEntityShapeProps,
@@ -32,19 +28,6 @@ const ProcessShape: EntityShapeComponent = ({
     );
   }
 };
-
-export function enterProcessShape(
-  g: SVGGElement,
-  viewNode: ViewNode,
-  backgroundClass: string | undefined,
-  shapeStyle?: CSSProperties | undefined,
-): void {
-  if (viewNode.childType === "1") {
-    enterProcessPath(g, viewNode, backgroundClass, shapeStyle);
-  } else {
-    enterBadgedRoundedRectShape(g, viewNode, backgroundClass, shapeStyle);
-  }
-}
 
 export function processTextBounds(viewNode: IViewNode): Bounds {
   const bounds = viewNode.absolutePosition();
@@ -106,52 +89,5 @@ const ProcessPath: EntityShapeComponent = ({
     />
   );
 };
-
-function enterProcessPath(
-  g: SVGGElement,
-  viewNode: ViewNode,
-  backgroundClass: string | undefined,
-  shapeStyle?: CSSProperties | undefined,
-): void {
-  const bounds = viewNode.absolutePosition();
-  const top = bounds.top;
-  const shaftTop = bounds.top + bounds.height * 0.15;
-  const middle = bounds.top + bounds.height * 0.5;
-  const shaftBottom = bounds.bottom - bounds.height * 0.15;
-  const bottom = bounds.bottom;
-
-  const left = bounds.left;
-  const arrowBack = bounds.right - bounds.height * 0.5;
-  const right = bounds.right;
-  svgPath(
-    g,
-    [
-      "M",
-      left,
-      shaftTop,
-      "L",
-      arrowBack,
-      shaftTop,
-      "L",
-      arrowBack,
-      top,
-      "L",
-      right,
-      middle,
-      "L",
-      arrowBack,
-      bottom,
-      "L",
-      arrowBack,
-      shaftBottom,
-      "L",
-      left,
-      shaftBottom,
-      "z",
-    ],
-    backgroundClass,
-    shapeStyle,
-  );
-}
 
 export default ProcessShape;

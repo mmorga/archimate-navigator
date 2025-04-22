@@ -1,5 +1,3 @@
-import { CSSProperties } from "react";
-import { svgPath } from "./base-shape";
 import { Point, ViewNode } from "../../../archimate-model";
 import type {
   EntityShapeComponent,
@@ -18,15 +16,6 @@ const MeaningShape: EntityShapeComponent = ({
       style={shapeStyle}
     />
   );
-};
-
-export const enterMeaningShape = (
-  g: SVGGElement,
-  viewNode: ViewNode,
-  backgroundClass: string | undefined,
-  shapeStyle?: CSSProperties | undefined,
-): void => {
-  svgPath(g, meaningPathD(viewNode), backgroundClass, shapeStyle);
 };
 
 function meaningPathD(viewNode: ViewNode): (string | number)[] {

@@ -23,7 +23,6 @@ import ArchimateSvg from "./archimate-svg";
 import { ArchimateViewNode } from "./archimate-view-node";
 import ForceLayout from "./force-layout";
 import SvgPanZoom, { numbersDiffer, zoomIn, zoomOut } from "./svg-pan-zoom";
-// import Graph from "./graph";
 
 export enum ZoomMode {
   OneToOne,
@@ -180,14 +179,6 @@ export default function ArchimateDiagramView({
               selectedEntity={selectedEntity}
               entityClicked={entityClicked}
             >
-              {/* <Graph
-              nodes={nodes}
-              links={connections}
-              onForceLayoutTick={onForceLayoutTick}
-              autoLayout={isAutoLayout()}
-              selectedEntity={selectedEntity}
-              entityClicked={entityClicked}
-            /> */}
               {nodes.map((node) => (
                 <ArchimateViewNode
                   key={node.id}
