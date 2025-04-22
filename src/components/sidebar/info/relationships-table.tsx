@@ -80,7 +80,7 @@ const RelationshipsTable = memo(
   },
 );
 
-export function byType(a: IEntity, b: IEntity): number {
+function byType(a: IEntity, b: IEntity): number {
   if (a === b) {
     return 0;
   }

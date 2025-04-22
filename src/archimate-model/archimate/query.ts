@@ -5,17 +5,14 @@ import { Diagram } from "./diagram";
 import { DiagramType } from "./diagram-type";
 import { Element } from "./element";
 import { ElementType, ElementTypes } from "./element-type";
-import { IRelationship, LogicError } from "./interfaces";
+import { LogicError } from "./interfaces";
 import { Layer, Layers } from "./layers";
 import { Model } from "./model";
 import { runQuery } from "./query-runner";
 import { Relationship } from "./relationship";
 import { RelationshipType, RelationshipTypes } from "./relationship-type";
 import { VIEW_NODE_HEIGHT, VIEW_NODE_WIDTH, ViewNode } from "./view-node";
-import { ViewpointType, ViewpointTypeElementTypes } from "./viewpoint-type";
-
-export type RelationshipFilter = (relationship: IRelationship) => boolean;
-export const EmptyElementTypeSet = Set<ElementType>();
+import { ViewpointType } from "./viewpoint-type";
 
 export type Query = {
   elements: Set<Element>;
@@ -61,25 +58,26 @@ export function updateQuery(
 // * Selected Viewpoint <Done>
 // * Selected Layer
 // * Active/Passive Structure or Behavior
-export function availableElementTypes(
-  viewpointType: ViewpointType | undefined,
-): Set<ElementType> {
-  return Set<ElementType>(
-    ViewpointTypeElementTypes.get(viewpointType || ViewpointType.Total) ||
-      ElementTypes,
-  );
-}
+// export function availableElementTypes(
+//   viewpointType: ViewpointType | undefined,
+// ): Set<ElementType> {
+//   return Set<ElementType>(
+//     ViewpointTypeElementTypes.get(viewpointType || ViewpointType.Total) ||
+//       ElementTypes,
+//   );
+// }
 
-export function unselectedElementTypes(
-  query: Query,
-  viewpointType: ViewpointType | undefined,
-): Set<ElementType> {
-  return Set<ElementType>(
-    availableElementTypes(viewpointType).filter(
-      (et) => query.elementTypes.find((vet) => vet === et) === undefined,
-    ),
-  );
-}
+// Saving this implementation for the future
+// function unselectedElementTypes(
+//   query: Query,
+//   viewpointType: ViewpointType | undefined,
+// ): Set<ElementType> {
+//   return Set<ElementType>(
+//     availableElementTypes(viewpointType).filter(
+//       (et) => query.elementTypes.find((vet) => vet === et) === undefined,
+//     ),
+//   );
+// }
 
 export function run(query: Query, model: Model): Diagram {
   const diagram = findOrCreateDiagram(query, model);

@@ -50,7 +50,7 @@ const ViewsTable = memo(
   },
 );
 
-export function byName(a: IEntity, b: IEntity): number {
+function byName(a: IEntity, b: IEntity): number {
   if (a === b) {
     return 0;
   }

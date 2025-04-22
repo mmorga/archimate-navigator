@@ -9,14 +9,9 @@ import {
   initQuery,
 } from "../../../archimate-model";
 import { List } from "immutable";
-import { ChangeEvent, useCallback, useState } from "react";
+import { useCallback, useState } from "react";
 import QueryPicker from "./query-picker";
 import QueryWizard from "./query-wizard";
-
-export type autoLayoutToggledFunc = (
-  autoLayout: boolean,
-  event?: ChangeEvent<HTMLInputElement>,
-) => void;
 
 export default function QueryTab({
   model,

@@ -55,7 +55,7 @@ export interface IProperty {
   value?: string;
 }
 
-export interface IHasProperties {
+interface IHasProperties {
   properties: IProperty[];
 }
 
@@ -85,7 +85,7 @@ export interface IHasRelationships {
   relationships(): IRelationship[];
 }
 
-export interface IElement extends IEntity, IHasRelationships {
+interface IElement extends IEntity, IHasRelationships {
   href?: string;
 }
 

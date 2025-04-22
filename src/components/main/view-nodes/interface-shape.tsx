@@ -25,7 +25,7 @@ const ElipsePath: EntityShapeComponent = ({
   );
 };
 
-export const enterEllipsePath = (
+const enterEllipsePath = (
   g: SVGGElement,
   viewNode: ViewNode,
   backgroundClass: string | undefined,

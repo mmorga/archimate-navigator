@@ -1,14 +1,16 @@
-import "github-markdown-css/github-markdown.css";
-import { memo } from "react";
-import ReactMarkdown from "react-markdown";
 import { Card } from "react-bootstrap";
+import { memo } from "react";
+import Markdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 const DocumentationPanel = memo(({ str }: { str: string | undefined }) => {
   return (
     <Card>
       <Card.Title>Documentation</Card.Title>
       <Card.Body>
-        <ReactMarkdown>{str || "No Documentation"}</ReactMarkdown>
+        <Markdown remarkPlugins={[remarkGfm]}>
+          {str || "No Documentation"}
+        </Markdown>
       </Card.Body>
     </Card>
   );

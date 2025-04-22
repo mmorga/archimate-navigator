@@ -1,5 +1,4 @@
-import { Bounds, IViewNode } from "@/archimate-model";
-import { ViewNode } from "@/archimate-model";
+import { Bounds, IViewNode, ViewNode } from "@/archimate-model";
 import { CSSProperties } from "react";
 import { defaultTextBounds, svgPath } from "./base-shape";
 import BadgedRoundedRectShape, {

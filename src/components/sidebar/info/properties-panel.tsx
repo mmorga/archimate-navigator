@@ -1,14 +1,14 @@
-import "github-markdown-css/github-markdown.css";
-import { memo } from "react";
-import ReactMarkdown from "react-markdown";
-import { Property } from "../../../archimate-model";
 import { byOptionalString } from "./views-table";
 import { Card, Table } from "react-bootstrap";
+import { memo } from "react";
+import { Property } from "../../../archimate-model";
+import Markdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 const PropertiesPanel = memo(({ properties }: { properties: Property[] }) => {
   const value = (v: string | undefined) => {
     if (v) {
-      return <ReactMarkdown>{v}</ReactMarkdown>;
+      return <Markdown remarkPlugins={[remarkGfm]}>{v}</Markdown>;
     }
     return <i>undefined</i>;
   };
@@ -48,7 +48,7 @@ const PropertiesPanel = memo(({ properties }: { properties: Property[] }) => {
   );
 });
 
-export function byKeyAndValue(a: Property, b: Property): number {
+function byKeyAndValue(a: Property, b: Property): number {
   if (a === b) {
     return 0;
   }

@@ -10,7 +10,7 @@ import * as d3 from "d3";
 import { enterEntityBadge, updateEntityBadge } from "./view-nodes/entity-badge";
 import { svgShapeGroup, updateBaseShape } from "./view-nodes/base-shape";
 
-const enterArchimateViewNode = (
+export const enterArchimateViewNode = (
   onClicked: entityClickedFunc,
   selectedEntity: IEntity | undefined,
   selection: d3.Selection<EnterElement, ViewNode, SVGGElement, undefined>,
@@ -99,5 +99,3 @@ function viewNodeSvgGroup(
 
   return g;
 }
-
-export default enterArchimateViewNode;

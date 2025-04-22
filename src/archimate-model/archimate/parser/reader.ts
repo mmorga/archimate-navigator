@@ -1,10 +1,6 @@
 import { UnsupportedFormat } from "../interfaces";
 import { ArchiFileReader } from "./archi/archi-file-reader";
 
-export type IUnsupportedFormat = {
-  xmlns?: string;
-};
-
 export function parse(doc: XMLDocument) {
   const nsAttr = doc.children[0].attributes.getNamedItem("xmlns");
   const ns = nsAttr ? (nsAttr as Attr).value : undefined;

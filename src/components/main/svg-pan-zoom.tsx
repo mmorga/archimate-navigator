@@ -1,5 +1,5 @@
 import { KeyboardEvent, PureComponent, ReactNode, RefObject } from "react";
-import wheel from "wheel";
+import * as wheel from "wheel";
 import {
   Connection,
   IEntity,

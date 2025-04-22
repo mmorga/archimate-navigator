@@ -1,13 +1,13 @@
 import { Set } from "immutable";
-import { ElementType, RelationshipType } from "../..";
-import { Element } from "../element";
-import { Model } from "../model";
+import { ElementType, RelationshipType } from "..";
+import { Element } from "./element";
+import { Model } from "./model";
 import {
   elementTypeFilter,
   relationshipElementTypesFilter,
   relationshipTypesFilter,
-} from "../query-runner";
-import { Relationship } from "../relationship";
+} from "./query-runner";
+import { Relationship } from "./relationship";
 
 test("elementTypeFilter", () => {
   const filter = elementTypeFilter(Set<ElementType>([ElementType.Artifact]));

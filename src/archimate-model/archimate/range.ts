@@ -1,6 +1,6 @@
 import { IRange } from "./interfaces";
 
-export default class Range implements IRange {
+export class Range implements IRange {
   public begin: number;
   public end: number;
 

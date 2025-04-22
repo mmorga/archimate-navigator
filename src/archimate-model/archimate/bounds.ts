@@ -1,6 +1,6 @@
 import { IBounds, IPoint } from "./interfaces";
 import { Point } from "./point";
-import Range from "./range";
+import { Range } from "./range";
 
 export class Bounds implements IBounds {
   public static fromPoint(location: IPoint): Bounds {

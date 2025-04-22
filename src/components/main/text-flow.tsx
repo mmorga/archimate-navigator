@@ -120,7 +120,7 @@ function textWidth(str: string): number {
   return 0;
 }
 
-export function textFlowLineX(
+function textFlowLineX(
   bounds: Bounds,
   badgeBounds: Bounds,
   style: CSSProperties,

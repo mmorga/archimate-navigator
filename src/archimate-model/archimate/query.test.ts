@@ -1,12 +1,12 @@
 import { Set } from "immutable";
-import { Diagram } from "../diagram";
-import { Element } from "../element";
-import { ElementType } from "../element-type";
-import { Model } from "../model";
-import { initQuery, run } from "../query";
-import { Relationship } from "../relationship";
-import { RelationshipType } from "../relationship-type";
-import { ViewpointType } from "../viewpoint-type";
+import { Diagram } from "./diagram";
+import { Element } from "./element";
+import { ElementType } from "./element-type";
+import { Model } from "./model";
+import { initQuery, run } from "./query";
+import { Relationship } from "./relationship";
+import { RelationshipType } from "./relationship-type";
+import { ViewpointType } from "./viewpoint-type";
 
 function createTestElement(model: Model): Element {
   const element = new Element(model, ElementType.ApplicationComponent);

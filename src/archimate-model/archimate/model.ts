@@ -10,7 +10,7 @@ import { Organization } from "./organization";
 import { Property } from "./property";
 import { Relationship } from "./relationship";
 
-export type AdjacencyList = Map<Element, Relationship[]>;
+type AdjacencyList = Map<Element, Relationship[]>;
 
 // This is the root model type.
 // It is a container for the elements, relationships, diagrams and

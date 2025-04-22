@@ -1,5 +1,4 @@
-import { Bounds, IViewNode } from "@/archimate-model";
-import { ViewNode } from "@/archimate-model";
+import { Bounds, IViewNode, ViewNode } from "@/archimate-model";
 import { CSSProperties } from "react";
 import { svgPath } from "./base-shape";
 import BadgedRoundedRectShape, {
@@ -108,7 +107,7 @@ const ProcessPath: EntityShapeComponent = ({
   );
 };
 
-export function enterProcessPath(
+function enterProcessPath(
   g: SVGGElement,
   viewNode: ViewNode,
   backgroundClass: string | undefined,

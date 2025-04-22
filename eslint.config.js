@@ -1,7 +1,10 @@
+// import { createTypeScriptImportResolver } from "eslint-import-resolver-typescript";
 import { defineConfig } from "eslint/config";
 import eslint from "@eslint/js";
 import eslintConfigPrettier from "eslint-config-prettier/flat";
 import globals from "globals";
+import importPlugin from "eslint-plugin-import";
+import pluginPromise from "eslint-plugin-promise";
 import react from "eslint-plugin-react";
 import reactCompiler from "eslint-plugin-react-compiler";
 import reactHooks from "eslint-plugin-react-hooks";
@@ -49,29 +52,45 @@ export default defineConfig([
         { name: "MyLink", linkAttribute: "to" },
         { name: "Link", linkAttribute: ["to", "href"] }, // allows specifying multiple properties if necessary
       ],
+      "import/resolver": {
+        typescript: {
+          alwaysTryTypes: true, // always try to resolve types under `<root>@types` directory even it doesn't contain any source code, like `@types/unist`
+
+          bun: true, // resolve Bun modules https://github.com/import-js/eslint-import-resolver-typescript#bun
+
+          // Choose from one of the "project" configs below or omit to use <root>/tsconfig.json or <root>/jsconfig.json by default
+
+          // use <root>/path/to/folder/tsconfig.json or <root>/path/to/folder/jsconfig.json
+          // project: "path/to/folder",
+
+          // Multiple tsconfigs/jsconfigs (Useful for monorepos, but discouraged in favor of `references` supported)
+
+          // use a glob pattern
+          // project: "packages/*/{ts,js}config.json",
+
+          // use an array
+          // project: [
+          //   "packages/module-a/tsconfig.json",
+          //   "packages/module-b/jsconfig.json",
+          // ],
+
+          // use an array of glob patterns
+          // project: [
+          //   "packages/*/tsconfig.json",
+          //   "other-packages/*/jsconfig.json",
+          // ],
+        },
+      },
     },
   },
-  // { files: ["src/**/*.{js,mjs,cjs,ts,jsx,tsx}"] },
-  // {
-  //   files: ["src/**/*.{js,mjs,cjs,ts,jsx,tsx}"],
-  //   languageOptions: { globals: globals.browser },
-  // },
-  // {
-  //   files: ["src/**/*.{js,mjs,cjs,ts,jsx,tsx}"],
-  //   plugins: { eslint },
-  //   extends: ["eslint/recommended"],
-  // },
-  // {
-  //   files: ["src/**/*.{js,mjs,cjs,ts,jsx,tsx}"],
-  //   plugins: { tseslint },
-  //   extends: ["tseslint/recommended"],
-  // },
   {
     files: ["src/**/*.{js,jsx,mjs,cjs,ts,tsx}"],
     plugins: {
       eslint,
       reactHooks,
       tseslint,
+      importPlugin,
+      pluginPromise,
     },
     languageOptions: {
       parserOptions: {
@@ -87,7 +106,21 @@ export default defineConfig([
       "eslint/recommended",
       "tseslint/recommended",
       "reactHooks/recommended-latest",
+      importPlugin.flatConfigs.recommended,
+      importPlugin.flatConfigs.typescript,
+      pluginPromise.configs["flat/recommended"],
     ],
+    settings: {
+      "import/resolver": {
+        // You will also need to install and configure the TypeScript resolver
+        // See also https://github.com/import-js/eslint-import-resolver-typescript#configuration
+        typescript: true,
+        node: true,
+      },
+      "import/ignore": [
+        "\.(scss|less|css)$", // can't parse unprocessed CSS modules, either
+      ],
+    },
   },
   {
     files: ["src/**/*.{js,jsx,mjs,cjs,ts,tsx}"],
@@ -131,6 +164,7 @@ export default defineConfig([
   },
   eslintConfigPrettier,
   {
+    files: ["src/**/*.{js,jsx,mjs,cjs,ts,tsx}"],
     plugins: {
       "react-compiler": reactCompiler,
     },

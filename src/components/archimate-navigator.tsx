@@ -55,48 +55,38 @@ export default function ArchimateNavigator({
 
     fetch(modelUrl)
       .then((response: Response) => response.text())
-      .then(
-        (modelXml: string) => {
-          setWorking("Parsing ArchiMate Model");
+      .then((modelXml: string) => {
+        setWorking("Parsing ArchiMate Model");
 
-          const xmlDocument = parser.parseFromString(
-            modelXml,
-            "application/xml",
-          );
-          try {
-            if (xmlDocument.children[0].ownerDocument) {
-              const parsedModel = parse(xmlDocument.children[0].ownerDocument);
-              if (parsedModel) {
-                const newSelectedDiagram = undefined;
-                // parsedModel.lookupDiagram(
-                //   windowHash.replace(/^#/, ""),
-                // );
+        const xmlDocument = parser.parseFromString(modelXml, "application/xml");
+        let parsedModel: Model | undefined = undefined;
+        if (xmlDocument.children[0].ownerDocument) {
+          parsedModel = parse(xmlDocument.children[0].ownerDocument);
+          if (parsedModel) {
+            const newSelectedDiagram = undefined;
+            // parsedModel.lookupDiagram(
+            //   windowHash.replace(/^#/, ""),
+            // );
 
-                setModel(parsedModel);
-                setQuery(initQuery(parsedModel));
-                setSelectedDiagram(newSelectedDiagram);
-                setSelectedEntity(newSelectedDiagram);
-              }
-            } else {
-              setError("ArchiMate Model Document was null");
-            }
-          } catch (err) {
-            if (
-              err instanceof UnsupportedFormat ||
-              err instanceof ParserError
-            ) {
-              setError(err);
-            } else {
-              throw err;
-            }
+            setModel(parsedModel);
+            setQuery(initQuery(parsedModel));
+            setSelectedDiagram(newSelectedDiagram);
+            setSelectedEntity(newSelectedDiagram);
           }
-          setWorking(undefined);
-        },
-        (err) => {
+        } else {
+          setError("ArchiMate Model Document was null");
+        }
+        setWorking(undefined);
+        return parsedModel;
+      })
+      .catch((err) => {
+        if (err instanceof UnsupportedFormat || err instanceof ParserError) {
           setError(err);
-          setWorking(undefined);
-        },
-      );
+        } else {
+          throw err;
+        }
+        setWorking(undefined);
+      });
   }, [modelUrl]);
 
   // useEffect(() => {

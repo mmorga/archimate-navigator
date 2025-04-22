@@ -51,7 +51,7 @@ const ElementsTable = memo(
   },
 );
 
-export function byTypeAndName(a: Element, b: Element): number {
+function byTypeAndName(a: Element, b: Element): number {
   if (a === b) {
     return 0;
   }
