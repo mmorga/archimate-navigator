@@ -11,7 +11,7 @@ const root = createRoot(container);
 
 root.render(
   <StrictMode>
-    <ArchimateNavigator modelUrl="./archimate/ArchiSurance V3.archimate" />
+    <ArchimateNavigator modelUrl="archimate-navigator/archimate/ArchiSurance V3.archimate" />
   </StrictMode>,
   // <ArchimateNavigator modelUrl="/archimate/everything.archimate" />,
   // <ArchimateNavigator modelUrl="/archimate/sample.archimate" />

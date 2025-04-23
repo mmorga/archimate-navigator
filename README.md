@@ -35,7 +35,7 @@ Launches the [Jest](https://jestjs.io/) test runner in the interactive watch mod
 
 ### `npm run build`
 
-Builds the app for production to the `docs` folder.
+Builds the app for production to the `dist` folder.
 
 It correctly bundles React in production mode and optimizes the build for the best performance.
 

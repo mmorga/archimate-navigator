@@ -4,7 +4,7 @@ import path from "path";
 
 export default defineConfig({
   plugins: [react()],
-  base: process.env.BASE_URL,
+  base: "/archimate-navigator",
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
@@ -13,9 +13,17 @@ export default defineConfig({
   server: {
     port: 3000,
     open: true,
+    proxy: {
+      // string shorthand:
+      // http://localhost:5173/foo
+      //   -> http://localhost:4567/foo
+      "/archimate-navigator/*": {
+        rewrite: (path) => path.replace(/^\/archimate-navigator/, ""),
+      },
+    },
   },
   build: {
-    outDir: "docs",
+    outDir: "dist",
     sourcemap: true,
     manifest: true,
   },
