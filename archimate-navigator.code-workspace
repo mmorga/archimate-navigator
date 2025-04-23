@@ -6,5 +6,8 @@
   ],
   "settings": {
     "cSpell.words": ["Archi", "resizer"],
+    "[markdown]": {
+      "editor.cursorSurroundingLines": 0,
+    },
   },
 }
